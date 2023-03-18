@@ -1,1 +1,16 @@
 // app global css in SCSS form
+
+// Abstract files
+@import 'abstracts/mixins.scss';
+
+// Core files
+@import 'core/reset.scss';
+
+// Components
+@import 'components/buttom.scss';
+
+// Layout
+@import 'layout/footer.scss';
+
+// Pages
+@import 'pages/home.scss';
