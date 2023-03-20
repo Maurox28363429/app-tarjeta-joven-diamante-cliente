@@ -1,9 +1,13 @@
+<script setup>
+import { ref } from 'vue'
+
+const model = ref(null)
+const GENDER_OPTIONS = ['Hombre', 'Mujer']
+</script>
+
 <template>
-  <div class="full-width row justify-center" style="min-height: 100vh">
-    <div
-      class="full-width column items-center q-my-xl q-mx-none"
-      style="max-width: 340px"
-    >
+  <div class="full-width row justify-center registerContainer">
+    <div class="full-width column items-center q-my-xl q-mx-none register">
       <q-img
         src="./../assets/avatar.svg"
         width="74px"
@@ -18,10 +22,7 @@
         @reset="onReset"
         class="q-gutter-md full-width column items-center"
       >
-        <div
-          class="q-ma-none text-dark items-center column"
-          style="width: 260px; gap: 10px"
-        >
+        <div class="inputsContainer q-ma-none text-dark items-center column">
           <div class="q-ma-none full-width">
             <label>
               Nombre
@@ -50,7 +51,7 @@
             outlined
             class="full-width q-ma-none"
             v-model="model"
-            :options="options"
+            :options="GENDER_OPTIONS"
             label="Genero"
           />
         </div>
@@ -71,16 +72,17 @@
   </div>
 </template>
 
-<script>
-import { ref } from 'vue'
-
-export default {
-  name: 'RegisterPage',
-  setup () {
-    return {
-      model: ref(null),
-      options: ['Hombre', 'Mujer']
-    }
-  }
+<style>
+.registerContainer {
+  min-height: 100vh;
 }
-</script>
+
+.register {
+  max-width: 340px;
+}
+
+.inputsContainer {
+  width: 260px;
+  gap: 10px;
+}
+</style>

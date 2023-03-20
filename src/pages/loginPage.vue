@@ -1,9 +1,8 @@
+<script setup></script>
+
 <template>
   <div class="full-width window-height row flex-center">
-    <div
-      class="full-width q-my-xl q-mx-none column items-center"
-      style="max-width: 313px"
-    >
+    <div class="full-width q-my-xl q-mx-none column items-center login">
       <q-img
         src="./../assets/avatar.svg"
         width="130px"
@@ -16,12 +15,10 @@
       <q-form
         @submit="onSubmit"
         @reset="onReset"
-        class="q-gutter-md full-width column items-center"
-        style="display: flex"
+        class="q-gutter-md full-width column items-center loginForm"
       >
         <div
-          class="q-mb-xl q-ma-none text-dark column items-center"
-          style="width: 260px; gap: 10px"
+          class="q-mb-xl q-ma-none text-dark column items-center inputsContainer"
         >
           <div class="full-width">
             <label>
@@ -43,10 +40,7 @@
         </div>
 
         <div class="full-width">
-          <p
-            style="text-decoration: underline"
-            class="text-primary cursor-pointer"
-          >
+          <p class="text-primary cursor-pointer passwordText">
             Olvidé mi contraseña
           </p>
         </div>
@@ -81,8 +75,21 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'LoginPage'
+<style>
+.login {
+  max-width: 313px;
 }
-</script>
+
+.loginForm {
+  display: flex;
+}
+
+.inputsConatiner {
+  width: 260px;
+  gap: 10px;
+}
+
+.passwordText {
+  text-decoration: underline;
+}
+</style>
