@@ -1,4 +1,50 @@
-<script setup></script>
+<script setup>
+import { ref } from 'vue'
+import { loginSchema } from 'src/schemas/loginSchema'
+
+const useFormLoging = ref({
+  email: '',
+  password: ''
+})
+
+const validateMessageLogin = ref({
+  errors: {
+    email: '',
+    password: ''
+  },
+  isvalid: false
+})
+
+const onSubmit = () => {
+  validateForm()
+}
+
+const validateForm = () => {
+  loginSchema
+    .validate(useFormLoging.value, { abortEarly: false })
+    .then(() => (validateMessageLogin.value = { errors: {}, isvalid: true }))
+    .catch((err) => {
+      const errors = err.inner.reduce((acc, error) => {
+        acc[error.path] = error.message
+        return acc
+      }, {})
+      validateMessageLogin.value = {
+        errors,
+        isvalid: false
+      }
+    })
+}
+
+const validatInput = (field) => {
+  loginSchema
+    .validateAt(field, useFormLoging.value)
+    .then(() => (validateMessageLogin.value.errors[field] = ''))
+    .catch((err) => {
+      validateMessageLogin.value.errors[err.path] = err.message
+    })
+  validateForm()
+}
+</script>
 
 <template>
   <div class="full-width window-height row flex-center">
@@ -13,8 +59,7 @@
       </q-img>
 
       <q-form
-        @submit="onSubmit"
-        @reset="onReset"
+        @submit.prevent="onSubmit"
         class="q-gutter-md full-width column items-center loginForm"
       >
         <div
@@ -23,8 +68,19 @@
           <div class="full-width">
             <label>
               Email
-              <q-input type="email" outlined v-model="text" label="Email" />
+              <q-input
+                lazy-rules
+                type="email"
+                outlined
+                v-model="useFormLoging.email"
+                label="Email"
+                @blur="validatInput('email')"
+                @keypress="validatInput('email')"
+              />
             </label>
+            <p class="error" v-if="!!validateMessageLogin.errors.email">
+              {{ validateMessageLogin.errors.email }}
+            </p>
           </div>
           <div class="full-width">
             <label>
@@ -32,10 +88,16 @@
               <q-input
                 type="password"
                 outlined
-                v-model="text"
+                lazy-rules
+                v-model="useFormLoging.password"
                 label="contraseña"
+                @blur="validatInput('password')"
+                @keypress="validatInput('password')"
               />
             </label>
+            <p class="error" v-if="!!validateMessageLogin.errors.password">
+              {{ validateMessageLogin.errors.password }}
+            </p>
           </div>
         </div>
 
@@ -48,6 +110,7 @@
         <div class="row full-width">
           <div class="col-6 q-pr-xs">
             <q-btn
+              :disable="!validateMessageLogin.isvalid"
               label="Login"
               size="14px"
               fill
@@ -61,7 +124,6 @@
             <q-btn
               label="Registrar"
               outline
-              type="reset"
               size="14px"
               height="48px"
               color="primary"
@@ -91,5 +153,10 @@
 
 .passwordText {
   text-decoration: underline;
+}
+
+.error {
+  color: #dd1a1a;
+  font-size: 12px;
 }
 </style>
