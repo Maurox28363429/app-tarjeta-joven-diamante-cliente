@@ -4,11 +4,6 @@ import { registerSchema } from 'src/schemas/registerSchema'
 import registerUser from 'src/api/registerUser'
 
 const GENDER_OPTIONS = ['Hombre', 'Mujer']
-const ROLE_OPTIONS = [
-  { label: 'Administrador', value: 1 },
-  { label: 'Cliente', value: 2 },
-  { label: 'Empresa', value: 3 }
-]
 
 const useForm = ref({
   name: '',
@@ -16,8 +11,7 @@ const useForm = ref({
   last_name: '',
   phone: '',
   sex: GENDER_OPTIONS[0],
-  password: '',
-  role_id: { label: 'Administrador', value: 1 }
+  password: ''
 })
 
 const validateMessage = ref({
@@ -35,10 +29,12 @@ const validateMessage = ref({
 const onSubmit = async (e) => {
   validateForm()
   console.log('onSumit')
+  const roleIdClient = 3
+
   try {
     const { data } = await registerUser({
       ...useForm.value,
-      role_id: useForm.value.role_id.value
+      role_id: roleIdClient
     })
     localStorage.setItem('token', data.token)
     console.log(data, 'res')
@@ -88,7 +84,7 @@ const validatInput = (field) => {
           class="rounded-borders q-mb-md"
         >
         </q-img>
-        <p class="text-h5 text-weight-bold">Crear cuenta</p>
+        <p class="text-h5 q-mb-xl text-weight-bold">Crear cuenta</p>
       </div>
 
       <q-form
@@ -164,7 +160,7 @@ const validatInput = (field) => {
               {{ validateMessage.errors.phone }}
             </p>
           </div>
-          <div class="q-ma-none full-width input">
+          <div class="q-ma-none full-width selectInput">
             <q-select
               outlined
               lazy-rules
@@ -178,16 +174,6 @@ const validatInput = (field) => {
             </p>
           </div>
           <div class="q-ma-none full-width input">
-            <q-select
-              outlined
-              lazy-rules
-              class="full-width q-ma-none"
-              v-model="useForm.role_id"
-              :options="ROLE_OPTIONS"
-              label="Role"
-            />
-          </div>
-          <div class="q-ma-none full-width password input">
             <label class="label-input">
               Password
               <q-input
@@ -206,7 +192,7 @@ const validatInput = (field) => {
           </div>
         </div>
 
-        <div class="q-py-none q-px-lg full-width row">
+        <div class="q-py-none full-width row">
           <q-btn
             :disable="!validateMessage.isvalid"
             type="submit"
@@ -218,8 +204,8 @@ const validatInput = (field) => {
             size="14px"
           />
         </div>
-        <a class="text-link" href="login"
-          >Ya tienes una cuenta?, da click a Login</a
+        <router-link class="text-link" to="/login"
+          >Ya tienes una cuenta?, da click a Login</router-link
         >
       </q-form>
     </div>

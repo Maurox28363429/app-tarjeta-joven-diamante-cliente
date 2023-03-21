@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import { loginSchema } from 'src/schemas/loginSchema'
-// import loginUser from './../api/loginUser'
+import loginUser from 'src/api/loginUser'
 
 const useFormLoging = ref({
   email: '',
@@ -20,9 +20,9 @@ const onSubmit = async () => {
   validateForm()
   console.log('onsubmit')
   try {
-    // const { data } = await loginUser(useFormLoging.value)
-    // localStorage.setItem('token', data.token)
-    // console.log(data, 'data')
+    const { data } = await loginUser(useFormLoging.value)
+    localStorage.setItem('token', data.token)
+    console.log(data, 'data')
   } catch (err) {
     console.error(err)
   }
@@ -59,22 +59,27 @@ const validatInput = (field) => {
 <template>
   <div class="full-width window-height row flex-center loginContainer">
     <div class="full-width q-my-xl q-mx-none column items-center login">
-      <q-img
-        src="./../assets/logo.png"
-        width="130px"
-        height="130px"
-        img-class="my-custom-image"
-        class="rounded-borders q-mb-xl"
-      >
-      </q-img>
+      <div class="column full-width items-center">
+        <q-img
+          src="./../assets/logo.png"
+          width="130px"
+          height="130px"
+          img-class="my-custom-image"
+          class="rounded-borders q-mb-md"
+        >
+        </q-img>
+        <p class="text-h5 q-mb-xl text-weight-bold">
+          ¡Bienvenido de vuelta! :)
+        </p>
+      </div>
 
       <q-form
         @submit.prevent="onSubmit"
         class="q-gutter-md full-width column items-center loginForm"
       >
-        <div class="q-mb-xl q-ma-none text-dark column items-center full-width">
+        <div class="q-mb-md q-ma-none text-dark column items-center full-width">
           <div class="full-width input">
-            <label>
+            <label class="label-input">
               Email
               <q-input
                 lazy-rules
@@ -91,7 +96,7 @@ const validatInput = (field) => {
             </p>
           </div>
           <div class="full-width input">
-            <label>
+            <label class="label-input">
               Contraseña
               <q-input
                 type="password"
@@ -110,11 +115,11 @@ const validatInput = (field) => {
         </div>
 
         <div class="full-width">
-          <p class="text-primary cursor-pointer text-link">
-            Olvidé mi contraseña
-          </p>
+          <router-link class="text-link" to="/">
+            Olvidé mi contraseña</router-link
+          >
         </div>
-        <div class="full-width">
+        <div class="full-width column items-center">
           <q-btn
             :disable="!validateMessageLogin.isvalid"
             label="Login"
@@ -122,9 +127,12 @@ const validatInput = (field) => {
             fill
             height="48px"
             color="primary"
-            class="full-width"
+            class="full-width q-mb-sm"
             type="submit"
           />
+          <router-link class="text-link" to="/register">
+            Aún no tienes cuenta?, registrate</router-link
+          >
         </div>
       </q-form>
     </div>
