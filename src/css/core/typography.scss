@@ -1,0 +1,16 @@
+@use './../quasar.variables.scss';
+
+.error {
+  color: $negative;
+  font-size: 12px;
+}
+
+.text-link {
+  color: #414bb2;
+  text-decoration: none;
+}
+
+.label-input {
+  font-weight: 500;
+  color: $gray;
+}

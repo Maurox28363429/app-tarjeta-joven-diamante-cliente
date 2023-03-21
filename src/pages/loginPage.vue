@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import { loginSchema } from 'src/schemas/loginSchema'
+// import loginUser from './../api/loginUser'
 
 const useFormLoging = ref({
   email: '',
@@ -15,8 +16,16 @@ const validateMessageLogin = ref({
   isvalid: false
 })
 
-const onSubmit = () => {
+const onSubmit = async () => {
   validateForm()
+  console.log('onsubmit')
+  try {
+    // const { data } = await loginUser(useFormLoging.value)
+    // localStorage.setItem('token', data.token)
+    // console.log(data, 'data')
+  } catch (err) {
+    console.error(err)
+  }
 }
 
 const validateForm = () => {
@@ -43,14 +52,15 @@ const validatInput = (field) => {
       validateMessageLogin.value.errors[err.path] = err.message
     })
   validateForm()
+  console.log(useFormLoging.value, 'validate')
 }
 </script>
 
 <template>
-  <div class="full-width window-height row flex-center">
+  <div class="full-width window-height row flex-center loginContainer">
     <div class="full-width q-my-xl q-mx-none column items-center login">
       <q-img
-        src="./../assets/avatar.svg"
+        src="./../assets/logo.png"
         width="130px"
         height="130px"
         img-class="my-custom-image"
@@ -62,10 +72,8 @@ const validatInput = (field) => {
         @submit.prevent="onSubmit"
         class="q-gutter-md full-width column items-center loginForm"
       >
-        <div
-          class="q-mb-xl q-ma-none text-dark column items-center inputsContainer"
-        >
-          <div class="full-width">
+        <div class="q-mb-xl q-ma-none text-dark column items-center full-width">
+          <div class="full-width input">
             <label>
               Email
               <q-input
@@ -82,7 +90,7 @@ const validatInput = (field) => {
               {{ validateMessageLogin.errors.email }}
             </p>
           </div>
-          <div class="full-width">
+          <div class="full-width input">
             <label>
               Contraseña
               <q-input
@@ -102,61 +110,23 @@ const validatInput = (field) => {
         </div>
 
         <div class="full-width">
-          <p class="text-primary cursor-pointer passwordText">
+          <p class="text-primary cursor-pointer text-link">
             Olvidé mi contraseña
           </p>
         </div>
-
-        <div class="row full-width">
-          <div class="col-6 q-pr-xs">
-            <q-btn
-              :disable="!validateMessageLogin.isvalid"
-              label="Login"
-              size="14px"
-              fill
-              height="48px"
-              color="primary"
-              class="full-width"
-              type="submit"
-            />
-          </div>
-          <div class="col-6">
-            <q-btn
-              label="Registrar"
-              outline
-              size="14px"
-              height="48px"
-              color="primary"
-              to="/register"
-              class="full-width"
-            />
-          </div>
+        <div class="full-width">
+          <q-btn
+            :disable="!validateMessageLogin.isvalid"
+            label="Login"
+            size="14px"
+            fill
+            height="48px"
+            color="primary"
+            class="full-width"
+            type="submit"
+          />
         </div>
       </q-form>
     </div>
   </div>
 </template>
-
-<style>
-.login {
-  max-width: 313px;
-}
-
-.loginForm {
-  display: flex;
-}
-
-.inputsConatiner {
-  width: 260px;
-  gap: 10px;
-}
-
-.passwordText {
-  text-decoration: underline;
-}
-
-.error {
-  color: #dd1a1a;
-  font-size: 12px;
-}
-</style>

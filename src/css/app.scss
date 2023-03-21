@@ -4,7 +4,7 @@
 @import 'abstracts/mixins.scss';
 
 // Core files
-@import 'core/reset.scss';
+@import 'core/reset.scss', 'core/typography.scss';
 
 // Components
 @import 'components/buttom.scss';
@@ -13,4 +13,4 @@
 @import 'layout/footer.scss';
 
 // Pages
-@import 'pages/home.scss';
+@import 'pages/home.scss', 'pages/register.scss', 'pages/login.scss';

@@ -2,7 +2,13 @@
 import { ref } from 'vue'
 import { registerSchema } from 'src/schemas/registerSchema'
 import registerUser from 'src/api/registerUser'
+
 const GENDER_OPTIONS = ['Hombre', 'Mujer']
+const ROLE_OPTIONS = [
+  { label: 'Administrador', value: 1 },
+  { label: 'Cliente', value: 2 },
+  { label: 'Empresa', value: 3 }
+]
 
 const useForm = ref({
   name: '',
@@ -10,7 +16,8 @@ const useForm = ref({
   last_name: '',
   phone: '',
   sex: GENDER_OPTIONS[0],
-  password: ''
+  password: '',
+  role_id: { label: 'Administrador', value: 1 }
 })
 
 const validateMessage = ref({
@@ -27,11 +34,16 @@ const validateMessage = ref({
 
 const onSubmit = async (e) => {
   validateForm()
+  console.log('onSumit')
   try {
-    const res = await registerUser(useForm.value)
-    console.log(res, 'res')
+    const { data } = await registerUser({
+      ...useForm.value,
+      role_id: useForm.value.role_id.value
+    })
+    localStorage.setItem('token', data.token)
+    console.log(data, 'res')
   } catch (e) {
-    console.log(e)
+    console.error(e)
   }
 }
 
@@ -60,28 +72,34 @@ const validatInput = (field) => {
     })
 
   validateForm()
+  console.log(validateMessage.value)
 }
 </script>
 
 <template>
   <div class="full-width row justify-center registerContainer">
-    <div class="full-width column items-center q-my-xl q-mx-none register">
-      <q-img
-        src="./../assets/avatar.svg"
-        width="74px"
-        height="74px"
-        img-class="my-custom-image"
-        class="rounded-borders q-mb-md"
-      >
-      </q-img>
+    <div class="column items-center q-my-xl q-mx-none register">
+      <div class="column items-center justify-center">
+        <q-img
+          src="./../assets/logo.png"
+          width="74px"
+          height="74px"
+          img-class="my-custom-image"
+          class="rounded-borders q-mb-md"
+        >
+        </q-img>
+        <p class="text-h5 text-weight-bold">Crear cuenta</p>
+      </div>
 
       <q-form
         @submit.prevent="onSubmit"
         class="q-gutter-md full-width column items-center"
       >
-        <div class="inputsContainer q-ma-none text-dark items-center column">
-          <div class="q-ma-none full-width">
-            <label>
+        <div
+          class="inputsContainer q-ma-none text-dark items-center column form"
+        >
+          <div class="q-ma-none full-width input">
+            <label class="label-input">
               Nombre
               <q-input
                 lazy-rules
@@ -96,8 +114,8 @@ const validatInput = (field) => {
               {{ validateMessage.errors.name }}
             </p>
           </div>
-          <div class="q-ma-none full-width">
-            <label>
+          <div class="q-ma-none full-width input">
+            <label class="label-input">
               Apellido
               <q-input
                 lazy-rules
@@ -112,8 +130,8 @@ const validatInput = (field) => {
               {{ validateMessage.errors.last_name }}
             </p>
           </div>
-          <div class="q-ma-none full-width">
-            <label>
+          <div class="q-ma-none full-width input">
+            <label class="label-input">
               Email
               <q-input
                 lazy-rules
@@ -129,8 +147,8 @@ const validatInput = (field) => {
               {{ validateMessage.errors.email }}
             </p>
           </div>
-          <div class="q-ma-none full-width">
-            <label>
+          <div class="q-ma-none full-width input">
+            <label class="label-input">
               Telefono
               <q-input
                 lazy-rules
@@ -146,16 +164,31 @@ const validatInput = (field) => {
               {{ validateMessage.errors.phone }}
             </p>
           </div>
-          <q-select
-            outlined
-            lazy-rules
-            class="full-width q-ma-none"
-            v-model="useForm.sex"
-            :options="GENDER_OPTIONS"
-            label="Genero"
-          />
-          <div class="q-ma-none full-width">
-            <label>
+          <div class="q-ma-none full-width input">
+            <q-select
+              outlined
+              lazy-rules
+              class="full-width q-ma-none"
+              v-model="useForm.sex"
+              :options="GENDER_OPTIONS"
+              label="Genero"
+            />
+            <p class="error" v-if="!!validateMessage.errors.role_id">
+              {{ validateMessage.errors.sex }}
+            </p>
+          </div>
+          <div class="q-ma-none full-width input">
+            <q-select
+              outlined
+              lazy-rules
+              class="full-width q-ma-none"
+              v-model="useForm.role_id"
+              :options="ROLE_OPTIONS"
+              label="Role"
+            />
+          </div>
+          <div class="q-ma-none full-width password input">
+            <label class="label-input">
               Password
               <q-input
                 lazy-rules
@@ -185,27 +218,10 @@ const validatInput = (field) => {
             size="14px"
           />
         </div>
+        <a class="text-link" href="login"
+          >Ya tienes una cuenta?, da click a Login</a
+        >
       </q-form>
     </div>
   </div>
 </template>
-
-<style>
-.registerContainer {
-  min-height: 100vh;
-}
-
-.register {
-  max-width: 340px;
-}
-
-.inputsContainer {
-  width: 260px;
-  gap: 10px;
-}
-
-.error {
-  color: #dd1a1a;
-  font-size: 12px;
-}
-</style>
