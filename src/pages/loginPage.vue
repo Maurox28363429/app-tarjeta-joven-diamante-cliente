@@ -127,7 +127,7 @@ const validatInput = (field) => {
             fill
             height="48px"
             color="primary"
-            class="full-width q-mb-sm"
+            class="full-width q-mb-md"
             type="submit"
           />
           <router-link class="text-link" to="/register">

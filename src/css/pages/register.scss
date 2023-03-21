@@ -1,4 +1,4 @@
-@use './../quasar.variables.scss';
+@use "./../quasar.variables.scss";
 
 .registerContainer {
   min-height: 100vh;
@@ -18,10 +18,6 @@
 
 .input {
   min-height: 110px;
-}
-
-.selectInput {
-  min-height: 80px;
 }
 
 @media (min-width: $breakpoint-lg) {

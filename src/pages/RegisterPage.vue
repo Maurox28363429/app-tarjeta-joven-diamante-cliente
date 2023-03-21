@@ -160,15 +160,18 @@ const validatInput = (field) => {
               {{ validateMessage.errors.phone }}
             </p>
           </div>
-          <div class="q-ma-none full-width selectInput">
-            <q-select
-              outlined
-              lazy-rules
-              class="full-width q-ma-none"
-              v-model="useForm.sex"
-              :options="GENDER_OPTIONS"
-              label="Genero"
-            />
+          <div class="q-ma-none full-width input">
+            <label class="label-input">
+              Genero
+              <q-select
+                outlined
+                lazy-rules
+                class="full-width q-ma-none"
+                v-model="useForm.sex"
+                :options="GENDER_OPTIONS"
+                label="Genero"
+              />
+            </label>
             <p class="error" v-if="!!validateMessage.errors.role_id">
               {{ validateMessage.errors.sex }}
             </p>
@@ -197,7 +200,7 @@ const validatInput = (field) => {
             :disable="!validateMessage.isvalid"
             type="submit"
             label="Registrar"
-            class="full-width"
+            class="full-width q-mb-md"
             height="48px"
             color="primary"
             fill
@@ -205,7 +208,7 @@ const validatInput = (field) => {
           />
         </div>
         <router-link class="text-link" to="/login"
-          >Ya tienes una cuenta?, da click a Login</router-link
+          >Ya tienes una cuenta?, click a Login</router-link
         >
       </q-form>
     </div>
