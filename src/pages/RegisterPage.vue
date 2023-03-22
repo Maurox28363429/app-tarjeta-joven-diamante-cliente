@@ -73,13 +73,13 @@ const validatInput = (field) => {
 </script>
 
 <template>
-  <div class="full-width row justify-center registerContainer">
+  <div class="full-width items-center row justify-center registerContainer">
     <div class="column items-center q-my-xl q-mx-none register">
       <div class="column items-center justify-center">
         <q-img
-          src="./../assets/logo.png"
-          width="74px"
-          height="74px"
+          src="./../assets/logo.svg"
+          width="100px"
+          height="80px"
           img-class="my-custom-image"
           class="rounded-borders q-mb-md"
         >
@@ -101,7 +101,7 @@ const validatInput = (field) => {
                 lazy-rules
                 outlined
                 v-model="useForm.name"
-                label="Nombre"
+                placeholder="Luis"
                 @blur="validatInput('name')"
                 @keypress="validatInput('name')"
               />
@@ -117,7 +117,7 @@ const validatInput = (field) => {
                 lazy-rules
                 outlined
                 v-model="useForm.last_name"
-                label="Apellido"
+                placeholder="Perez"
                 @blur="validatInput('last_name')"
                 @keypress="validatInput('last_name')"
               />
@@ -134,7 +134,7 @@ const validatInput = (field) => {
                 type="email"
                 outlined
                 v-model="useForm.email"
-                label="Email"
+                placeholder="example@gmail.com"
                 @blur="validatInput('email')"
                 @keypress="validatInput('email')"
               />
@@ -151,7 +151,7 @@ const validatInput = (field) => {
                 type="tel"
                 outlined
                 v-model="useForm.phone"
-                label="Telefono"
+                placeholder="041459789"
                 @blur="validatInput('phone')"
                 @keypress="validatInput('phone')"
               />
@@ -169,7 +169,6 @@ const validatInput = (field) => {
                 class="full-width q-ma-none"
                 v-model="useForm.sex"
                 :options="GENDER_OPTIONS"
-                label="Genero"
               />
             </label>
             <p class="error" v-if="!!validateMessage.errors.role_id">
@@ -184,7 +183,7 @@ const validatInput = (field) => {
                 type="password"
                 outlined
                 v-model="useForm.password"
-                label="Password"
+                placeholder="********"
                 @blur="validatInput('password')"
                 @keypress="validatInput('password')"
               />
@@ -195,20 +194,21 @@ const validatInput = (field) => {
           </div>
         </div>
 
-        <div class="q-py-none full-width row">
+        <div class="q-py-none q-px-md full-width row justify-center">
           <q-btn
             :disable="!validateMessage.isvalid"
             type="submit"
             label="Registrar"
             class="full-width q-mb-md"
             height="48px"
-            color="primary"
+            color="secondary"
             fill
             size="14px"
           />
         </div>
         <router-link class="text-link" to="/login"
-          >Ya tienes una cuenta?, click a Login</router-link
+          >Ya tienes una cuenta?
+          <span class="text-weight-bold">Login</span></router-link
         >
       </q-form>
     </div>

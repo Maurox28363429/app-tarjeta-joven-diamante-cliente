@@ -4,10 +4,6 @@
     <q-btn color="primary" label="Primary" to="register" />
     <q-btn color="secondary" label="Secondary" />
     <q-btn color="amber" glossy label="Amber" />
-    <q-btn color="brown-5" label="Brown 5" />
-    <q-btn color="deep-orange" glossy label="Deep Orange" />
-    <q-btn color="purple" label="Purple" />
-    <q-btn color="black" label="Black" />
   </div>
 </template>
 
