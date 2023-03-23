@@ -58,6 +58,7 @@
               color="secondary"
               label="Comprar"
               class="full-width"
+              to="/payment"
             />
           </div>
         </div>
@@ -107,6 +108,7 @@
               color="secondary"
               label="Comprar"
               class="full-width"
+              to="/payment"
             />
           </div>
         </div>

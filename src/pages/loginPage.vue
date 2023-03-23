@@ -3,8 +3,26 @@ import { loginSchema } from 'src/schemas/loginSchema'
 import loginUser from 'src/api/loginUser'
 import { userAuth } from 'src/composables/userAuth'
 import { useValidateForm } from 'src/composables/useValidateForm'
+import { useQuasar } from 'quasar'
+import { ref } from 'vue'
 
 const { userAuth: auth } = userAuth()
+const loadingButton = ref(false)
+const $q = useQuasar()
+
+const triggerPositive = () => {
+  $q.notify({
+    type: 'positive',
+    message: '¡Estás iniciando sesión  !'
+  })
+}
+
+const triggerWarning = (message) => {
+  $q.notify({
+    type: 'warning',
+    message
+  })
+}
 
 const INITIAL_VALUES = {
   email: '',
@@ -18,13 +36,15 @@ const onSubmit = async () => {
   validateForm()
   console.log('onsubmit')
   try {
+    loadingButton.value = true
     const { data } = await loginUser(useForm.value)
     localStorage.setItem('user', JSON.stringify(data))
+    triggerPositive()
     if (
       auth.value.user.membresia.status === 'activa' ||
       auth.value.user.membresia.days > 0
     ) {
-      this.$router.go({ path: 'dashboard' })
+      // this.$router.go({ path: 'dashboard' })
       console.log('ir a dashboard')
     } else {
       this.$router.go({ path: 'memberships' })
@@ -32,7 +52,17 @@ const onSubmit = async () => {
     }
     console.log('no activo')
   } catch (err) {
+    if (err.response?.status === 400) {
+      triggerWarning(
+        'No se ha encontrado el usuario, por favor verifique sus datos'
+      )
+    }
+    if (err.code === 'ERR_NETWORK') {
+      triggerWarning('Verifique su conexión a internet e intente nuevamente')
+    }
     console.error(err)
+  } finally {
+    loadingButton.value = false
   }
 }
 </script>
@@ -110,6 +140,7 @@ const onSubmit = async () => {
             height="48px"
             color="secondary"
             class="full-width q-mb-md"
+            :loading="loadingButton"
             type="submit"
           />
           <router-link class="text-link" to="/register">

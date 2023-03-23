@@ -2,8 +2,11 @@
 import registerUser from 'src/api/registerUser'
 import { useValidateForm } from 'src/composables/useValidateForm'
 import { registerSchema } from 'src/schemas/registerSchema'
+import { ref } from 'vue'
+import { useQuasar } from 'quasar'
 
 const GENDER_OPTIONS = ['Hombre', 'Mujer']
+const loadingButton = ref(false)
 
 const initialValues = {
   name: '',
@@ -12,6 +15,15 @@ const initialValues = {
   phone: '',
   sex: GENDER_OPTIONS[0],
   password: ''
+}
+
+const $q = useQuasar()
+
+const triggerPositive = () => {
+  $q.notify({
+    type: 'positive',
+    message: '¡Ahora estás registrado!'
+  })
 }
 
 const { useForm, validatInput, validateMessage, validateForm } =
@@ -23,14 +35,18 @@ const onSubmit = async (e) => {
   const roleIdClient = 3
 
   try {
+    loadingButton.value = true
     const { data } = await registerUser({
       ...useForm.value,
       role_id: roleIdClient
     })
+    triggerPositive()
     localStorage.setItem('user', JSON.stringify(data))
     console.log(data, 'res')
   } catch (e) {
     console.error(e)
+  } finally {
+    loadingButton.value = false
   }
 }
 </script>
@@ -165,8 +181,9 @@ const onSubmit = async (e) => {
             class="full-width q-mb-md"
             height="48px"
             color="secondary"
-            fill
+            :loading="loadingButton"
             size="14px"
+            fill
           />
         </div>
         <router-link class="text-link" to="/login"
