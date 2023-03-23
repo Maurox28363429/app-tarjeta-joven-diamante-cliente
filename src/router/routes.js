@@ -10,6 +10,10 @@ const routes = [
         component: () => import('pages/MembershipsPage.vue')
       },
       {
+        path: 'payment',
+        component: () => import('pages/PaymentPage.vue')
+      },
+      {
         path: 'home',
         component: () => import('src/pages/HomePage.vue')
       }
