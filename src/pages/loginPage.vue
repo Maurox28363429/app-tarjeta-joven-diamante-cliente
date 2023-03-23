@@ -44,7 +44,7 @@ const onSubmit = async () => {
       auth.value.user.membresia.status === 'activa' ||
       auth.value.user.membresia.days > 0
     ) {
-      // this.$router.go({ path: 'dashboard' })
+      // this.$router.push({ path: 'dashboard' })
       console.log('ir a dashboard')
     } else {
       this.$router.go({ path: 'memberships' })
