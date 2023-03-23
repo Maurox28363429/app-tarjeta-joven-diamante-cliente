@@ -1,58 +1,39 @@
 <script setup>
-import { ref } from 'vue'
 import { loginSchema } from 'src/schemas/loginSchema'
 import loginUser from 'src/api/loginUser'
+import { userAuth } from 'src/composables/userAuth'
+import { useValidateForm } from 'src/composables/useValidateForm'
 
-const useFormLoging = ref({
+const { userAuth: auth } = userAuth()
+
+const INITIAL_VALUES = {
   email: '',
   password: ''
-})
+}
 
-const validateMessageLogin = ref({
-  errors: {
-    email: '',
-    password: ''
-  },
-  isvalid: false
-})
+const { useForm, validatInput, validateMessage, validateForm } =
+  useValidateForm({ initialValue: INITIAL_VALUES, schema: loginSchema })
 
 const onSubmit = async () => {
   validateForm()
   console.log('onsubmit')
   try {
-    const { data } = await loginUser(useFormLoging.value)
-    localStorage.setItem('token', data.token)
-    console.log(data, 'data')
+    const { data } = await loginUser(useForm.value)
+    localStorage.setItem('user', JSON.stringify(data))
+    if (
+      auth.value.user.membresia.status === 'activa' ||
+      auth.value.user.membresia.days > 0
+    ) {
+      this.$router.go({ path: 'dashboard' })
+      console.log('ir a dashboard')
+    } else {
+      this.$router.go({ path: 'memberships' })
+      console.log('ir a membresias')
+    }
+    console.log('no activo')
   } catch (err) {
     console.error(err)
   }
-}
-
-const validateForm = () => {
-  loginSchema
-    .validate(useFormLoging.value, { abortEarly: false })
-    .then(() => (validateMessageLogin.value = { errors: {}, isvalid: true }))
-    .catch((err) => {
-      const errors = err.inner.reduce((acc, error) => {
-        acc[error.path] = error.message
-        return acc
-      }, {})
-      validateMessageLogin.value = {
-        errors,
-        isvalid: false
-      }
-    })
-}
-
-const validatInput = (field) => {
-  loginSchema
-    .validateAt(field, useFormLoging.value)
-    .then(() => (validateMessageLogin.value.errors[field] = ''))
-    .catch((err) => {
-      validateMessageLogin.value.errors[err.path] = err.message
-    })
-  validateForm()
-  console.log(useFormLoging.value, 'validate')
 }
 </script>
 
@@ -61,11 +42,11 @@ const validatInput = (field) => {
     <div class="full-width q-my-xl q-mx-none column items-center login">
       <div class="column full-width items-center">
         <q-img
-          src="./../assets/logo.png"
-          width="130px"
-          height="130px"
+          src="./../assets/logo.svg"
+          width="100px"
+          height="80px"
           img-class="my-custom-image"
-          class="rounded-borders q-mb-md"
+          class="q-mb-md"
         >
         </q-img>
         <p class="text-h5 q-mb-xl text-weight-bold">
@@ -85,16 +66,17 @@ const validatInput = (field) => {
                 lazy-rules
                 type="email"
                 outlined
-                v-model="useFormLoging.email"
-                label="Email"
+                v-model="useForm.email"
+                placeholder="Example@gmail.com"
                 @blur="validatInput('email')"
                 @keypress="validatInput('email')"
               />
             </label>
-            <p class="error" v-if="!!validateMessageLogin.errors.email">
-              {{ validateMessageLogin.errors.email }}
+            <p class="error" v-if="!!validateMessage.errors.email">
+              {{ validateMessage.errors.email }}
             </p>
           </div>
+
           <div class="full-width input">
             <label class="label-input">
               Contraseña
@@ -102,36 +84,37 @@ const validatInput = (field) => {
                 type="password"
                 outlined
                 lazy-rules
-                v-model="useFormLoging.password"
-                label="contraseña"
+                v-model="useForm.password"
+                placeholder="********"
                 @blur="validatInput('password')"
                 @keypress="validatInput('password')"
               />
             </label>
-            <p class="error" v-if="!!validateMessageLogin.errors.password">
-              {{ validateMessageLogin.errors.password }}
+            <p class="error" v-if="!!validateMessage.errors.password">
+              {{ validateMessage.errors.password }}
             </p>
           </div>
         </div>
 
-        <div class="full-width">
+        <div class="full-width q-ma-none">
           <router-link class="text-link" to="/">
             Olvidé mi contraseña</router-link
           >
         </div>
-        <div class="full-width column items-center">
+        <div class="full-width q-px-md column items-center">
           <q-btn
-            :disable="!validateMessageLogin.isvalid"
+            :disable="!validateMessage.isvalid"
             label="Login"
             size="14px"
             fill
             height="48px"
-            color="primary"
+            color="secondary"
             class="full-width q-mb-md"
             type="submit"
           />
           <router-link class="text-link" to="/register">
-            Aún no tienes cuenta?, registrate</router-link
+            Aún no tienes cuenta?
+            <span class="text-weight-bold">Regístrate</span></router-link
           >
         </div>
       </q-form>
