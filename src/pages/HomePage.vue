@@ -1,13 +1,22 @@
 <template>
   <q-layout view="hHh lpR fFf">
-    <q-header elevated class="bg-primary text-white">
+    <q-header elevated class="bg-white q-py-sm text-white">
       <q-toolbar>
-        <q-btn dense flat round icon="menu" @click="toggleLeftDrawer" />
+        <q-btn
+          dense
+          flat
+          round
+          icon="menu"
+          color="dark"
+          @click="toggleLeftDrawer"
+        />
 
         <q-toolbar-title>
-          <q-avatar>
-            <img src="../assets/isotipo.svg" />
-          </q-avatar>
+          <q-img
+            src="../assets/acronimo.svg"
+            spinner-color="white"
+            style="height: 58px; max-width: 140px"
+          />
           Tarjeta joven Diamante
         </q-toolbar-title>
       </q-toolbar>
