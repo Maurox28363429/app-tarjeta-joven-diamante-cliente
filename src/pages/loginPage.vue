@@ -1,58 +1,39 @@
 <script setup>
-import { ref } from 'vue'
 import { loginSchema } from 'src/schemas/loginSchema'
 import loginUser from 'src/api/loginUser'
+import { userAuth } from 'src/composables/userAuth'
+import { useValidateForm } from 'src/composables/useValidateForm'
 
-const useFormLoging = ref({
+const { userAuth: auth } = userAuth()
+
+const INITIAL_VALUES = {
   email: '',
   password: ''
-})
+}
 
-const validateMessageLogin = ref({
-  errors: {
-    email: '',
-    password: ''
-  },
-  isvalid: false
-})
+const { useForm, validatInput, validateMessage, validateForm } =
+  useValidateForm({ initialValue: INITIAL_VALUES, schema: loginSchema })
 
 const onSubmit = async () => {
   validateForm()
   console.log('onsubmit')
   try {
-    const { data } = await loginUser(useFormLoging.value)
-    localStorage.setItem('token', data.token)
-    console.log(data, 'data')
+    const { data } = await loginUser(useForm.value)
+    localStorage.setItem('user', JSON.stringify(data))
+    if (
+      auth.value.user.membresia.status === 'activa' ||
+      auth.value.user.membresia.days > 0
+    ) {
+      this.$router.go({ path: 'dashboard' })
+      console.log('ir a dashboard')
+    } else {
+      this.$router.go({ path: 'memberships' })
+      console.log('ir a membresias')
+    }
+    console.log('no activo')
   } catch (err) {
     console.error(err)
   }
-}
-
-const validateForm = () => {
-  loginSchema
-    .validate(useFormLoging.value, { abortEarly: false })
-    .then(() => (validateMessageLogin.value = { errors: {}, isvalid: true }))
-    .catch((err) => {
-      const errors = err.inner.reduce((acc, error) => {
-        acc[error.path] = error.message
-        return acc
-      }, {})
-      validateMessageLogin.value = {
-        errors,
-        isvalid: false
-      }
-    })
-}
-
-const validatInput = (field) => {
-  loginSchema
-    .validateAt(field, useFormLoging.value)
-    .then(() => (validateMessageLogin.value.errors[field] = ''))
-    .catch((err) => {
-      validateMessageLogin.value.errors[err.path] = err.message
-    })
-  validateForm()
-  console.log(useFormLoging.value, 'validate')
 }
 </script>
 
@@ -85,14 +66,14 @@ const validatInput = (field) => {
                 lazy-rules
                 type="email"
                 outlined
-                v-model="useFormLoging.email"
+                v-model="useForm.email"
                 placeholder="Example@gmail.com"
                 @blur="validatInput('email')"
                 @keypress="validatInput('email')"
               />
             </label>
-            <p class="error" v-if="!!validateMessageLogin.errors.email">
-              {{ validateMessageLogin.errors.email }}
+            <p class="error" v-if="!!validateMessage.errors.email">
+              {{ validateMessage.errors.email }}
             </p>
           </div>
 
@@ -103,14 +84,14 @@ const validatInput = (field) => {
                 type="password"
                 outlined
                 lazy-rules
-                v-model="useFormLoging.password"
+                v-model="useForm.password"
                 placeholder="********"
                 @blur="validatInput('password')"
                 @keypress="validatInput('password')"
               />
             </label>
-            <p class="error" v-if="!!validateMessageLogin.errors.password">
-              {{ validateMessageLogin.errors.password }}
+            <p class="error" v-if="!!validateMessage.errors.password">
+              {{ validateMessage.errors.password }}
             </p>
           </div>
         </div>
@@ -122,7 +103,7 @@ const validatInput = (field) => {
         </div>
         <div class="full-width q-px-md column items-center">
           <q-btn
-            :disable="!validateMessageLogin.isvalid"
+            :disable="!validateMessage.isvalid"
             label="Login"
             size="14px"
             fill

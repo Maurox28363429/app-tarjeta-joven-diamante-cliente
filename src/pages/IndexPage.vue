@@ -1,9 +1,9 @@
 <template>
   <div class="q-pa-md q-gutter-sm">
     <q-btn color="white" text-color="black" label="login" to="login" />
-    <q-btn color="primary" label="Primary" to="register" />
-    <q-btn color="secondary" label="Secondary" />
-    <q-btn color="amber" glossy label="Amber" />
+    <q-btn color="primary" label="Register" to="register" />
+    <q-btn color="secondary" label="dashboard" to="home" />
+    <q-btn color="amber" glossy label="memberships" to="memberships" />
   </div>
 </template>
 

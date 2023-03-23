@@ -1,30 +1,21 @@
 <script setup>
-import { ref } from 'vue'
-import { registerSchema } from 'src/schemas/registerSchema'
 import registerUser from 'src/api/registerUser'
+import { useValidateForm } from 'src/composables/useValidateForm'
+import { registerSchema } from 'src/schemas/registerSchema'
 
 const GENDER_OPTIONS = ['Hombre', 'Mujer']
 
-const useForm = ref({
+const initialValues = {
   name: '',
   email: '',
   last_name: '',
   phone: '',
   sex: GENDER_OPTIONS[0],
   password: ''
-})
+}
 
-const validateMessage = ref({
-  errors: {
-    name: '',
-    email: '',
-    last_name: '',
-    phone: '',
-    sex: '',
-    password: ''
-  },
-  isvalid: false
-})
+const { useForm, validatInput, validateMessage, validateForm } =
+  useValidateForm({ initialValue: initialValues, schema: registerSchema })
 
 const onSubmit = async (e) => {
   validateForm()
@@ -36,39 +27,11 @@ const onSubmit = async (e) => {
       ...useForm.value,
       role_id: roleIdClient
     })
-    localStorage.setItem('token', data.token)
+    localStorage.setItem('user', JSON.stringify(data))
     console.log(data, 'res')
   } catch (e) {
     console.error(e)
   }
-}
-
-const validateForm = () => {
-  registerSchema
-    .validate(useForm.value, { abortEarly: false })
-    .then(() => (validateMessage.value = { errors: {}, isvalid: true }))
-    .catch((err) => {
-      const errors = err.inner.reduce((acc, error) => {
-        acc[error.path] = error.message
-        return acc
-      }, {})
-      validateForm.value = {
-        errors,
-        isvalid: false
-      }
-    })
-}
-
-const validatInput = (field) => {
-  registerSchema
-    .validateAt(field, useForm.value)
-    .then(() => (validateMessage.value.errors[field] = ''))
-    .catch((err) => {
-      validateMessage.value.errors[err.path] = err.message
-    })
-
-  validateForm()
-  console.log(validateMessage.value)
 }
 </script>
 
