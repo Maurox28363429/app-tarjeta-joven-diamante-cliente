@@ -1,17 +1,10 @@
 <script setup>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-
 import { loginSchema } from 'src/schemas/loginSchema'
-import loginUser from 'src/api/loginUser'
 
 import { useValidateForm } from 'src/composables/useValidateForm'
-import { useToast } from 'src/composables/useToast'
+import { userAuth } from 'src/composables/userAuth'
 
-const { triggerPositive, triggerWarning } = useToast()
-
-const loadingButton = ref(false)
-const router = useRouter()
+const { login, isLoadingLogin } = userAuth()
 
 const INITIAL_VALUES = {
   email: '',
@@ -23,32 +16,7 @@ const { useForm, validatInput, validateMessage, validateForm } =
 
 const onSubmit = async () => {
   validateForm()
-  try {
-    loadingButton.value = true
-    const { data } = await loginUser(useForm.value)
-    localStorage.setItem('user', JSON.stringify(data))
-    triggerPositive('¡Estás iniciando sesión  !')
-    if (
-      data.user.membresia?.status === 'activa' ||
-      data.user.membresia?.days > 0
-    ) {
-      router.push('/home')
-    } else {
-      router.push('/memberships')
-    }
-  } catch (err) {
-    if (err.response?.status === 400) {
-      triggerWarning(
-        'No se ha encontrado el usuario, por favor verifique sus datos'
-      )
-    }
-    if (err.code === 'ERR_NETWORK') {
-      triggerWarning('Verifique su conexión a internet e intente nuevamente')
-    }
-    console.error(err)
-  } finally {
-    loadingButton.value = false
-  }
+  login({ ...useForm.value })
 }
 </script>
 
@@ -125,7 +93,7 @@ const onSubmit = async () => {
             height="48px"
             color="secondary"
             class="full-width q-mb-md"
-            :loading="loadingButton"
+            :loading="isLoadingLogin"
             type="submit"
           />
           <router-link class="text-link" to="/register">

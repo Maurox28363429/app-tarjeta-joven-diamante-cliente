@@ -2,6 +2,9 @@ import { useQuasar } from 'quasar'
 
 export const useToast = () => {
   const $q = useQuasar()
+
+  console.log($q, 'quasar')
+
   const triggerPositive = (message) => {
     $q.notify({
       type: 'positive',
