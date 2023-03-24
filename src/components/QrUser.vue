@@ -16,6 +16,6 @@ import QrcodeVue from 'qrcode.vue'
 import { ref } from 'vue'
 
 const { user } = userAuth()
-const sizeQr = ref(300)
+const sizeQr = ref(284)
 const idUser = user.id.toString()
 </script>
