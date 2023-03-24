@@ -9,6 +9,8 @@ export const userAuth = () => {
   const isLoadingLogin = ref(false)
   const isLoadingRegister = ref(false)
 
+  const { token, user } = authStore
+
   const membershipsIsActive = () => {
     if (
       userAuth?.user.membresia?.status === 'activa' ||
@@ -86,6 +88,8 @@ export const userAuth = () => {
     membershipsIsActive,
     login,
     register,
+    token,
+    user,
     isLoadingLogin,
     isLoadingRegister
   }
