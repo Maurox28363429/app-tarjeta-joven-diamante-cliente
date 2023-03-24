@@ -1,18 +1,24 @@
 <script setup>
-import registerUser from 'src/api/registerUser'
-import { useValidateForm } from 'src/composables/useValidateForm'
-import { registerSchema } from 'src/schemas/registerSchema'
-import { ref } from 'vue'
-import { useQuasar } from 'quasar'
-import { userAuth } from 'src/composables/userAuth'
 import { useRouter } from 'vue-router'
+import { ref } from 'vue'
+
+import registerUser from 'src/api/registerUser'
+import { registerSchema } from 'src/schemas/registerSchema'
+
+import { userAuth } from 'src/composables/userAuth'
+
+import { useValidateForm } from 'src/composables/useValidateForm'
+import { useToast } from 'src/composables/useToast'
+
+const { triggerPositive, triggerWarning } = useToast()
 
 const GENDER_OPTIONS = ['Hombre', 'Mujer']
+
+const { userAuth: auth } = userAuth()
 const loadingButton = ref(false)
 const router = useRouter()
-const { userAuth: auth } = userAuth()
 
-const initialValues = {
+const INITIAL_VALUES = {
   name: '',
   email: '',
   last_name: '',
@@ -21,28 +27,11 @@ const initialValues = {
   password: ''
 }
 
-const $q = useQuasar()
-
-const triggerPositive = () => {
-  $q.notify({
-    type: 'positive',
-    message: '¡Ahora estás registrado!'
-  })
-}
-
-const triggerWarning = (message) => {
-  $q.notify({
-    type: 'warning',
-    message
-  })
-}
-
 const { useForm, validatInput, validateMessage, validateForm } =
-  useValidateForm({ initialValue: initialValues, schema: registerSchema })
+  useValidateForm({ initialValue: INITIAL_VALUES, schema: registerSchema })
 
 const onSubmit = async (e) => {
   validateForm()
-  console.log('onSumit')
   const roleIdClient = 3
 
   try {
@@ -51,20 +40,16 @@ const onSubmit = async (e) => {
       ...useForm.value,
       role_id: roleIdClient
     })
-    triggerPositive()
+    triggerPositive('¡Ahora estás registrado!')
     localStorage.setItem('user', JSON.stringify(data))
-    console.log(data, 'res')
     if (
       auth?.value.user.membresia?.status === 'activa' ||
       auth?.value.user.membresia?.days > 0
     ) {
       router.push('/home')
-      console.log('ir a home')
     } else {
       router.push('/memberships')
-      console.log('ir a membresias')
     }
-    console.log('no activo')
   } catch (err) {
     if (err.response?.status === 400) {
       triggerWarning(

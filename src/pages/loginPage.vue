@@ -1,30 +1,17 @@
 <script setup>
-import { loginSchema } from 'src/schemas/loginSchema'
-import loginUser from 'src/api/loginUser'
-import { userAuth } from 'src/composables/userAuth'
-import { useValidateForm } from 'src/composables/useValidateForm'
-import { useQuasar } from 'quasar'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
-const { userAuth: auth } = userAuth()
+import { loginSchema } from 'src/schemas/loginSchema'
+import loginUser from 'src/api/loginUser'
+
+import { useValidateForm } from 'src/composables/useValidateForm'
+import { useToast } from 'src/composables/useToast'
+
+const { triggerPositive, triggerWarning } = useToast()
+
 const loadingButton = ref(false)
-const $q = useQuasar()
 const router = useRouter()
-
-const triggerPositive = () => {
-  $q.notify({
-    type: 'positive',
-    message: '¡Estás iniciando sesión  !'
-  })
-}
-
-const triggerWarning = (message) => {
-  $q.notify({
-    type: 'warning',
-    message
-  })
-}
 
 const INITIAL_VALUES = {
   email: '',
@@ -36,24 +23,19 @@ const { useForm, validatInput, validateMessage, validateForm } =
 
 const onSubmit = async () => {
   validateForm()
-  console.log('onsubmit')
   try {
     loadingButton.value = true
     const { data } = await loginUser(useForm.value)
     localStorage.setItem('user', JSON.stringify(data))
-    triggerPositive()
-    console.log(auth?.value, 'auth.value')
+    triggerPositive('¡Estás iniciando sesión  !')
     if (
       data.user.membresia?.status === 'activa' ||
       data.user.membresia?.days > 0
     ) {
       router.push('/home')
-      console.log('ir a home')
     } else {
       router.push('/memberships')
-      console.log('ir a membresias')
     }
-    console.log('no activo')
   } catch (err) {
     if (err.response?.status === 400) {
       triggerWarning(
