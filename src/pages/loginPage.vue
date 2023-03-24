@@ -5,10 +5,12 @@ import { userAuth } from 'src/composables/userAuth'
 import { useValidateForm } from 'src/composables/useValidateForm'
 import { useQuasar } from 'quasar'
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 
 const { userAuth: auth } = userAuth()
 const loadingButton = ref(false)
 const $q = useQuasar()
+const router = useRouter()
 
 const triggerPositive = () => {
   $q.notify({
@@ -40,14 +42,15 @@ const onSubmit = async () => {
     const { data } = await loginUser(useForm.value)
     localStorage.setItem('user', JSON.stringify(data))
     triggerPositive()
+    console.log(auth?.value, 'auth.value')
     if (
-      auth.value.user.membresia.status === 'activa' ||
-      auth.value.user.membresia.days > 0
+      data.user.membresia?.status === 'activa' ||
+      data.user.membresia?.days > 0
     ) {
-      // this.$router.push({ path: 'dashboard' })
-      console.log('ir a dashboard')
+      router.push('/home')
+      console.log('ir a home')
     } else {
-      this.$router.go({ path: 'memberships' })
+      router.push('/memberships')
       console.log('ir a membresias')
     }
     console.log('no activo')
