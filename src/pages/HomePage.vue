@@ -74,20 +74,35 @@
           <q-avatar size="56px" class="q-mb-sm">
             <img src="https://cdn.quasar.dev/img/boy-avatar.png" />
           </q-avatar>
-          <div class="text-weight-bold">Razvan Stoenescu</div>
-          <div>@rstoenescu</div>
+          <div class="text-weight-bold">
+            {{ user.name + ' ' + user.last_name }}
+          </div>
+          <div>{{ user.email }}</div>
         </div>
       </q-img>
     </q-drawer>
-
     <q-page-container>
       <router-view />
     </q-page-container>
-     <div class="q-px-sm q-py-lg">
-      <div style='position:fixed;z-index:100;right:24px;bottom:24px'>
+    <q-dialog
+      v-model="show"
+      persistent
+      transition-show="scale"
+      transition-hide="scale"
+    >
+      <q-card>
+        <QrUser />
+        <q-card-actions align="right" class="text-primary">
+          <q-btn flat label="Close" v-close-popup />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+
+    <div class="q-px-sm q-py-lg">
+      <div style="position: fixed; z-index: 100; right: 24px; bottom: 24px">
         <q-fab color="primary" icon="keyboard_arrow_up" direction="up">
-          <q-fab-action color="white">
-            <img src='qr-code-svgrepo-com.svg'/>
+          <q-fab-action color="primary" @click="handleModal">
+            <img src="./../assets/qr.jpg" style="width: 24px; height: 24px" />
           </q-fab-action>
           <q-fab-action color="secondary" icon="alarm" />
         </q-fab>
@@ -99,9 +114,23 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import QrUser from 'src/components/QrUser.vue'
+import { userAuth } from 'src/composables/userAuth'
+
+const { user } = userAuth()
+
+console.log(user.id)
 
 const leftDrawerOpen = ref(false)
 const router = useRouter()
+
+const show = ref(false)
+
+const handleModal = () => {
+  show.value = !show.value
+}
+
+console.log(show.value, 'show')
 
 const handledLogout = (e) => {
   e.preventDefault()
