@@ -15,7 +15,13 @@ const routes = [
       },
       {
         path: 'home',
-        component: () => import('src/pages/HomePage.vue')
+        component: () => import('src/pages/HomePage.vue'),
+        children: [
+          {
+            path: '',
+            component: () => import('pages/DashboardPage.vue')
+          }
+        ]
       }
     ]
   },
