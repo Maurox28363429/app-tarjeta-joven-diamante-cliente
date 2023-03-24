@@ -2,8 +2,15 @@
 import registerUser from 'src/api/registerUser'
 import { useValidateForm } from 'src/composables/useValidateForm'
 import { registerSchema } from 'src/schemas/registerSchema'
+import { ref } from 'vue'
+import { useQuasar } from 'quasar'
+import { userAuth } from 'src/composables/userAuth'
+import { useRouter } from 'vue-router'
 
 const GENDER_OPTIONS = ['Hombre', 'Mujer']
+const loadingButton = ref(false)
+const router = useRouter()
+const { userAuth: auth } = userAuth()
 
 const initialValues = {
   name: '',
@@ -12,6 +19,22 @@ const initialValues = {
   phone: '',
   sex: GENDER_OPTIONS[0],
   password: ''
+}
+
+const $q = useQuasar()
+
+const triggerPositive = () => {
+  $q.notify({
+    type: 'positive',
+    message: '¡Ahora estás registrado!'
+  })
+}
+
+const triggerWarning = (message) => {
+  $q.notify({
+    type: 'warning',
+    message
+  })
 }
 
 const { useForm, validatInput, validateMessage, validateForm } =
@@ -23,14 +46,37 @@ const onSubmit = async (e) => {
   const roleIdClient = 3
 
   try {
+    loadingButton.value = true
     const { data } = await registerUser({
       ...useForm.value,
       role_id: roleIdClient
     })
+    triggerPositive()
     localStorage.setItem('user', JSON.stringify(data))
     console.log(data, 'res')
-  } catch (e) {
-    console.error(e)
+    if (
+      auth?.value.user.membresia?.status === 'activa' ||
+      auth?.value.user.membresia?.days > 0
+    ) {
+      router.push('/home')
+      console.log('ir a home')
+    } else {
+      router.push('/memberships')
+      console.log('ir a membresias')
+    }
+    console.log('no activo')
+  } catch (err) {
+    if (err.response?.status === 400) {
+      triggerWarning(
+        'Ese usuario ya exite, por favor ingrese otro correo o número de teléfono'
+      )
+    }
+    if (err.code === 'ERR_NETWORK') {
+      triggerWarning('Verifique su conexión a internet e intente nuevamente')
+    }
+    console.error(err)
+  } finally {
+    loadingButton.value = false
   }
 }
 </script>
@@ -165,8 +211,9 @@ const onSubmit = async (e) => {
             class="full-width q-mb-md"
             height="48px"
             color="secondary"
-            fill
+            :loading="loadingButton"
             size="14px"
+            fill
           />
         </div>
         <router-link class="text-link" to="/login"

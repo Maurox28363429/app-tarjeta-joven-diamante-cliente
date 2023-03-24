@@ -7,8 +7,10 @@
           Planes flexibles & precios
         </p>
         <p class="text-subtitle1 text-center">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-          suscipit enim nunc, et accumsan lectus egestas nec.
+          Bienvenido a nuestra plataforma de Tarjeta joven diamante, donde
+          puedes encontrar todas tus tiendas favoritas en un solo lugar.Para
+          hacerlo aún más fácil, ofrecemos diferentes planes que se adaptan a
+          tus necesidades y presupuesto.
         </p>
       </div>
       <div class="memberships_plans width-full q-pb-xl">
@@ -58,6 +60,7 @@
               color="secondary"
               label="Comprar"
               class="full-width"
+              to="/payment"
             />
           </div>
         </div>
@@ -107,10 +110,12 @@
               color="secondary"
               label="Comprar"
               class="full-width"
+              to="/payment"
             />
           </div>
         </div>
       </div>
+      <p class="text-h5 text-weight-medium text-center"></p>
     </div>
   </div>
 </template>

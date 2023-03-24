@@ -4,6 +4,7 @@
     <q-btn color="primary" label="Register" to="register" />
     <q-btn color="secondary" label="dashboard" to="home" />
     <q-btn color="amber" glossy label="memberships" to="memberships" />
+    <q-btn color="amber" glossy label="payment" to="payment" />
   </div>
 </template>
 
