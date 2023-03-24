@@ -63,14 +63,16 @@ const val = ref(true)
                   <p class="q-ma-none">Total:</p>
                   <p class="q-ma-none">$15</p>
                 </div>
-                <button class="row items-center buttonPay">
-                  <p class="q-ma-none q-mr-md text-weight-medium">Pagar con</p>
-                  <q-img
-                    src="./../assets/yappyIcon.svg"
-                    spinner-color="white"
-                    style="width: 74.75px; height: 17.92px"
-                  />
-                </button>
+                <router-link to="/home" style="text-decoration: none">
+                  <button class="row items-center buttonPay">
+                    <p class="q-ma-none q-mr-md text-weight-medium" >Pagar con</p>
+                    <q-img
+                      src="./../assets/yappyIcon.svg"
+                      spinner-color="white"
+                      style="width: 74.75px; height: 17.92px"
+                    />
+                  </button>
+                </router-link>
                 <div class="">
                   <q-checkbox
                     right-label

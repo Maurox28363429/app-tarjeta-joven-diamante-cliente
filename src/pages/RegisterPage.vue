@@ -1,22 +1,12 @@
 <script setup>
-import { useRouter } from 'vue-router'
-import { ref } from 'vue'
-
-import registerUser from 'src/api/registerUser'
 import { registerSchema } from 'src/schemas/registerSchema'
 
 import { userAuth } from 'src/composables/userAuth'
-
 import { useValidateForm } from 'src/composables/useValidateForm'
-import { useToast } from 'src/composables/useToast'
 
-const { triggerPositive, triggerWarning } = useToast()
+const { register, isLoadingRegister } = userAuth()
 
 const GENDER_OPTIONS = ['Hombre', 'Mujer']
-
-const { userAuth: auth } = userAuth()
-const loadingButton = ref(false)
-const router = useRouter()
 
 const INITIAL_VALUES = {
   name: '',
@@ -33,36 +23,7 @@ const { useForm, validatInput, validateMessage, validateForm } =
 const onSubmit = async (e) => {
   validateForm()
   const roleIdClient = 3
-
-  try {
-    loadingButton.value = true
-    const { data } = await registerUser({
-      ...useForm.value,
-      role_id: roleIdClient
-    })
-    triggerPositive('¡Ahora estás registrado!')
-    localStorage.setItem('user', JSON.stringify(data))
-    if (
-      auth?.value.user.membresia?.status === 'activa' ||
-      auth?.value.user.membresia?.days > 0
-    ) {
-      router.push('/home')
-    } else {
-      router.push('/memberships')
-    }
-  } catch (err) {
-    if (err.response?.status === 400) {
-      triggerWarning(
-        'Ese usuario ya exite, por favor ingrese otro correo o número de teléfono'
-      )
-    }
-    if (err.code === 'ERR_NETWORK') {
-      triggerWarning('Verifique su conexión a internet e intente nuevamente')
-    }
-    console.error(err)
-  } finally {
-    loadingButton.value = false
-  }
+  register({ ...useForm.value, role_id: roleIdClient })
 }
 </script>
 
@@ -196,7 +157,7 @@ const onSubmit = async (e) => {
             class="full-width q-mb-md"
             height="48px"
             color="secondary"
-            :loading="loadingButton"
+            :loading="isLoadingRegister"
             size="14px"
             fill
           />

@@ -83,6 +83,16 @@
     <q-page-container>
       <router-view />
     </q-page-container>
+     <div class="q-px-sm q-py-lg">
+      <div style='position:fixed;z-index:100;right:24px;bottom:24px'>
+        <q-fab color="primary" icon="keyboard_arrow_up" direction="up">
+          <q-fab-action color="white">
+            <img src='qr-code-svgrepo-com.svg'/>
+          </q-fab-action>
+          <q-fab-action color="secondary" icon="alarm" />
+        </q-fab>
+      </div>
+    </div>
   </q-layout>
 </template>
 
