@@ -83,6 +83,10 @@ export const userAuth = () => {
     return Boolean(userAuth.user)
   }
 
+  const isAuthenticated = () => {
+    return Boolean(token)
+  }
+
   return {
     isActiveUser,
     membershipsIsActive,
@@ -91,6 +95,7 @@ export const userAuth = () => {
     token,
     user,
     isLoadingLogin,
+    isAuthenticated,
     isLoadingRegister
   }
 }

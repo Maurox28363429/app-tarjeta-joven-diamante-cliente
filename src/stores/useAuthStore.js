@@ -1,25 +1,26 @@
 import { defineStore } from 'pinia'
 import loginUser from 'src/api/loginUser'
 import registerUser from 'src/api/registerUser'
+import localStorageAuth from 'src/utils/localStorageAuth'
 
 /* eslint-disable camelcase */
 
 export const useAuthStore = defineStore('userAuth', {
   state: () => ({
-    user: JSON.parse(localStorage.getItem('user'))?.user || null,
-    token: JSON.parse(localStorage.getItem('user'))?.token || null
+    user: localStorageAuth.getUser()?.user || null,
+    token: localStorageAuth.getUser()?.token || null
   }),
   actions: {
     logout () {
       this.user = null
       this.token = null
-      localStorage.removeItem('user')
+      localStorageAuth.removeUser()
     },
     async login ({ email, password }) {
       const { data } = await loginUser({ email, password })
       this.user = data.user
       this.token = data.token
-      localStorage.setItem('user', JSON.stringify(data))
+      localStorageAuth.setUser(data)
 
       if (
         this.user.membresia?.status === 'activa' ||
@@ -42,7 +43,7 @@ export const useAuthStore = defineStore('userAuth', {
       })
       this.user = data.user
       this.token = data.token
-      localStorage.setItem('user', JSON.stringify(data))
+      localStorageAuth.setUser(data)
       this.router.push('/memberships')
     }
   }
