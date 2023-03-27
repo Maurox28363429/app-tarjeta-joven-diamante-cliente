@@ -37,12 +37,12 @@
             <q-item-section>Dashboard </q-item-section>
           </q-item>
 
-          <q-item active clickable v-ripple to="/home">
+          <q-item active clickable v-ripple to="/home/news">
             <q-item-section avatar>
               <q-icon name="star" />
             </q-item-section>
 
-            <q-item-section> Perfil</q-item-section>
+            <q-item-section>Noticias</q-item-section>
           </q-item>
 
           <q-item clickable v-ripple>

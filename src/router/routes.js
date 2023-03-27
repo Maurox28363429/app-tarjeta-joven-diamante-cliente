@@ -7,19 +7,28 @@ const routes = [
       { path: 'register', component: () => import('pages/RegisterPage.vue') },
       {
         path: 'memberships',
-        component: () => import('pages/MembershipsPage.vue')
+        component: () => import('pages/MembershipsPage.vue'),
+        meta: { requiresAuth: true }
       },
       {
         path: 'payment',
-        component: () => import('pages/PaymentPage.vue')
+        component: () => import('pages/PaymentPage.vue'),
+        meta: { requiresAuth: true }
       },
       {
         path: 'home',
         component: () => import('src/pages/HomePage.vue'),
+        meta: { requiresAuth: true },
         children: [
           {
             path: '',
-            component: () => import('pages/DashboardPage.vue')
+            component: () => import('pages/DashboardPage.vue'),
+            meta: { requiresAuth: true }
+          },
+          {
+            path: 'news',
+            component: () => import('pages/NewsPage.vue'),
+            meta: { requiresAuth: true }
           }
         ]
       }
