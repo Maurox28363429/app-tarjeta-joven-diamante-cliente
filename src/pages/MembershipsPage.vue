@@ -1,8 +1,59 @@
+<script setup>
+import MembershipsCard from 'src/components/MembershipsCard.vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+const goBack = () => {
+  console.log('go back')
+  router.go(-1)
+}
+
+const memberships = [
+  {
+    name: 'pro',
+    price: 100,
+    image: 'src/assets/rocket.svg',
+    benefits: [
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+    ]
+  },
+  {
+    name: 'free',
+    price: 0,
+    image: 'src/assets/plane.svg',
+    benefits: [
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+    ]
+  }
+]
+</script>
+
 <template>
   <div class="memberships">
     <div class="background_blue"></div>
+
+    <div
+      @click="goBack"
+      style="position: absolute; top: 20px; left: 20px; z-index: 20"
+    >
+      <q-icon
+        name="arrow_back"
+        size="xl"
+        color="white"
+        class="cursor-pointer"
+      />
+    </div>
+
     <div class="width-full column justify-center membershipsContainer">
-      <div class="memberships_description column justify-center q-px-md">
+      <div
+        class="memberships_description column justify-center q-px-md q-mt-xl"
+      >
         <p class="text-weight-medium text-h4 text-center memberships_title">
           Planes flexibles & precios
         </p>
@@ -14,135 +65,24 @@
         </p>
       </div>
       <div class="memberships_plans width-full q-pb-xl">
-        <div class="plan">
-          <q-img
-            src="./../assets/plane.svg"
-            spinner-color="white"
-            style="height: 58px; max-width: 62px"
+        <template v-for="membership in memberships" :key="membership.price">
+          <MembershipsCard
+            :image="membership.image"
+            :name="membership.name"
+            :price="membership.price"
+            :benefits="membership.benefits"
           />
-          <p
-            class="text-h6 text-weight-bold text-secondary text-uppercase q-my-md"
-          >
-            Free
-          </p>
-          <p class="text-weight-medium text-h3">
-            <span class="text-h5">$</span>0
-          </p>
-          <ul class="benefitsList">
-            <li>
-              <q-img
-                src="./../assets/checkIcon.svg"
-                spinner-color="white"
-                style="height: 22px; max-width: 22px"
-              />
-              <p>Lorem ipsum dolor sit amet</p>
-            </li>
-            <li>
-              <q-img
-                src="./../assets/checkIcon.svg"
-                spinner-color="white"
-                style="height: 22px; max-width: 22px"
-              />
-              <p>Lorem ipsum dolor sit amet</p>
-            </li>
-            <li>
-              <q-img
-                src="./../assets/checkIcon.svg"
-                spinner-color="white"
-                style="height: 22px; max-width: 22px"
-              />
-              <p>Lorem ipsum dolor sit amet</p>
-            </li>
-          </ul>
-          <div class="full-width button">
-            <q-btn
-              outline
-              color="secondary"
-              label="Comprar"
-              class="full-width"
-              to="/payment"
-            />
-          </div>
-        </div>
-        <div class="plan">
-          <q-img
-            src="./../assets/rocket.svg"
-            spinner-color="white"
-            style="height: 68px; max-width: 68px"
-          />
-          <p
-            class="text-h6 text-weight-bold text-secondary text-uppercase q-my-md"
-          >
-            Pro
-          </p>
-          <p class="text-weight-medium text-h3">
-            <span class="text-h5">$</span>15
-          </p>
-          <ul class="benefitsList">
-            <li>
-              <q-img
-                src="./../assets/checkIcon.svg"
-                spinner-color="white"
-                style="height: 22px; max-width: 22px"
-              />
-              <p>Lorem ipsum dolor sit amet</p>
-            </li>
-            <li>
-              <q-img
-                src="./../assets/checkIcon.svg"
-                spinner-color="white"
-                style="height: 22px; max-width: 22px"
-              />
-              <p>Lorem ipsum dolor sit amet</p>
-            </li>
-            <li>
-              <q-img
-                src="./../assets/checkIcon.svg"
-                spinner-color="white"
-                style="height: 22px; max-width: 22px"
-              />
-              <p>Lorem ipsum dolor sit amet</p>
-            </li>
-          </ul>
-          <div class="full-width button">
-            <q-btn
-              outline
-              color="secondary"
-              label="Comprar"
-              class="full-width"
-              to="/payment"
-            />
-          </div>
-        </div>
+        </template>
       </div>
-      <p class="text-h5 text-weight-medium text-center"></p>
     </div>
   </div>
 </template>
 
 <style>
-.benefitsList {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
 .memberships .button {
   display: flex;
   align-items: flex-end;
   flex: 1;
-}
-
-.benefitsList p {
-  margin: 0;
-}
-
-.benefitsList li {
-  gap: 8px;
-  align-items: center;
-  width: 100%;
-  display: flex;
 }
 
 .membershipsContainer {
@@ -180,17 +120,5 @@
   height: 100%;
   min-height: 100vh;
   background: #e9e9e9;
-}
-
-.plan {
-  background: #ffffff;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  width: 294px;
-  height: 427px;
-  border-radius: 4px;
-  padding: 32px;
 }
 </style>

@@ -8,8 +8,11 @@ export const userAuth = () => {
   const authStore = useAuthStore()
   const isLoadingLogin = ref(false)
   const isLoadingRegister = ref(false)
+  const isLoadingMembership = ref(false)
 
   const { token, user } = authStore
+
+  console.log(user, 'user')
 
   const membershipsIsActive = () => {
     if (
@@ -40,6 +43,21 @@ export const userAuth = () => {
       console.error(err)
     } finally {
       isLoadingLogin.value = false
+    }
+  }
+
+  const addMembership = async ({ user_id }) => {
+    try {
+      isLoadingMembership.value = true
+      await authStore.addMembership({ user_id })
+      triggerPositive('Ha obtenido la membresía con éxito')
+    } catch (err) {
+      if (err.code === 'ERR_NETWORK') {
+        triggerWarning('Verifique su conexión a internet e intente nuevamente')
+      }
+      console.error(err)
+    } finally {
+      isLoadingMembership.value = false
     }
   }
 
@@ -96,6 +114,8 @@ export const userAuth = () => {
     user,
     isLoadingLogin,
     isAuthenticated,
-    isLoadingRegister
+    isLoadingRegister,
+    addMembership,
+    isLoadingMembership
   }
 }
