@@ -218,7 +218,7 @@
         <q-tab
           name="memberships"
           label="Membresías"
-          class="text-capitalize q-px-none"
+          class="text-capitalize"
           color="white"
           icon="rocket_launch"
         />
