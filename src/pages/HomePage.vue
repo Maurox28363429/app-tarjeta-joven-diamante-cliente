@@ -176,49 +176,49 @@
     >
       <router-link
         to="/home"
-        style="text-decoration: none; color: #ffff; width: 100%"
+        style="text-decoration: none; color: #ffff; width: 100%; margin: none"
       >
         <q-tab
           name="dashboard"
           label="Dashboard"
           color="white"
           to="/home"
-          class="text-capitalize"
+          class="text-capitalize q-px-none"
           icon="auto_graph"
         />
       </router-link>
       <router-link
         to="/news"
-        style="text-decoration: none; color: #ffff; width: 100%"
+        style="text-decoration: none; color: #ffff; width: 100%; margin: none"
       >
         <q-tab
           name="Novedades"
           label="Novedades"
           color="white"
-          class="text-capitalize"
+          class="text-capitalize q-px-none"
           icon="newspaper"
         />
       </router-link>
       <router-link
         to="/home"
-        style="text-decoration: none; color: #ffff; width: 100%"
+        style="text-decoration: none; color: #ffff; width: 100%; margin: none"
       >
         <q-tab
           name="perfile"
           label="Perfil"
-          class="text-capitalize"
+          class="text-capitalize q-px-none"
           color="white"
           icon="person"
         />
       </router-link>
       <router-link
         to="/memberships"
-        style="text-decoration: none; color: #ffff; width: 100%"
+        style="text-decoration: none; color: #ffff; width: 100%; margin: none"
       >
         <q-tab
           name="memberships"
           label="Membresías"
-          class="text-capitalize"
+          class="text-capitalize q-px-none"
           color="white"
           icon="rocket_launch"
         />
