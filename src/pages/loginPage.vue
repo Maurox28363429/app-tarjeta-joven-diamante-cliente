@@ -107,14 +107,14 @@ const showPassword = () => {
             Olvidé mi contraseña</router-link
           >
         </div>
-        <div class="full-width q-px-md column items-center">
+        <div class="full-width column items-center">
           <q-btn
             :disable="!validateMessage.isvalid"
             label="Login"
             size="14px"
             fill
             height="48px"
-            color="secondary"
+            color="primary"
             class="full-width q-mb-md"
             :loading="isLoadingLogin"
             type="submit"

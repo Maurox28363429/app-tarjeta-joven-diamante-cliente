@@ -1,1 +1,0 @@
-import{bc as e,a3 as a,a4 as s,a5 as t}from"./index.0ca31bcd.js";const o={},c={class:"row justify-center full-width"},r=t("h3",null,"Dashboard",-1),n=[r];function _(d,i){return a(),s("div",c,n)}var f=e(o,[["render",_]]);export{f as default};

@@ -26,12 +26,17 @@ const routes = [
         ]
       },
       {
-        path: '',
+        path: '/',
         component: () => import('src/pages/HomePage.vue'),
         meta: { requiresAuth: true },
         children: [
           {
             path: 'products',
+            component: () => import('pages/ProductsPage.vue'),
+            meta: { requiresAuth: true }
+          },
+          {
+            path: '',
             component: () => import('pages/ProductsPage.vue'),
             meta: { requiresAuth: true }
           },

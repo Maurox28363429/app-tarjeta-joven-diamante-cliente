@@ -12,8 +12,6 @@ export const userAuth = () => {
 
   const { token, user } = authStore
 
-  console.log(user, 'user')
-
   const membershipsIsActive = () => {
     if (
       userAuth?.user.membresia?.status === 'activa' ||

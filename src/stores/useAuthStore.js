@@ -27,9 +27,9 @@ export const useAuthStore = defineStore('userAuth', {
         this.user.membresia?.status === 'activa' ||
         this.user.membresia?.days > 0
       ) {
-        this.router.push('/home')
+        this.router.push('/products')
       } else {
-        this.router.push('/memberships')
+        this.router.push('/products')
       }
     },
     async register ({ name, email, last_name, phone, sex, password, role_id }) {
@@ -45,12 +45,11 @@ export const useAuthStore = defineStore('userAuth', {
       this.user = data.user
       this.token = data.token
       localStorageAuth.setUser(data)
-      this.router.push('/memberships')
+      this.router.push('/products')
     },
     async addMembership ({ user_id }) {
       const { data } = await membershipsTest({ user_id })
       this.user.membresia = data
-      console.log(data, 'data de membresia')
       localStorageAuth.setUser({ user: this.user, token: this.token })
     }
   }
