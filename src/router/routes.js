@@ -31,18 +31,28 @@ const routes = [
         meta: { requiresAuth: true },
         children: [
           {
-            path: 'home',
-            component: () => import('pages/DashboardPage.vue'),
-            meta: { requiresAuth: true }
-          },
-          {
-            path: 'news',
-            component: () => import('pages/NewsPage.vue'),
+            path: 'products',
+            component: () => import('pages/ProductsPage.vue'),
             meta: { requiresAuth: true }
           },
           {
             path: 'membershipsHome',
             component: () => import('pages/MembershipsPage.vue'),
+            meta: { requiresAuth: true }
+          },
+          {
+            path: 'account',
+            component: () => import('pages/AccountPage.vue'),
+            meta: { requiresAuth: true }
+          },
+          {
+            path: 'shopping',
+            component: () => import('pages/ShoppingPage.vue'),
+            meta: { requiresAuth: true }
+          },
+          {
+            path: 'store',
+            component: () => import('pages/StorePage.vue'),
             meta: { requiresAuth: true }
           }
         ]

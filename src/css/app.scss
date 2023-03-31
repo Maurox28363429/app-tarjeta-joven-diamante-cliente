@@ -1,16 +1,16 @@
 // app global css in SCSS form
 
 // Abstract files
-@import "abstracts/mixins.scss";
+@import 'abstracts/mixins.scss';
 
 // Core files
-@import "core/reset.scss", "core/typography.scss";
+@import 'core/reset.scss', 'core/typography.scss', 'core/colors';
 
 // Components
-@import "components/buttom.scss";
+@import 'components/buttom.scss';
 
 // Layout
-@import "layout/footer.scss";
+@import 'layout/footer.scss';
 
 // Pages
-@import "pages/home.scss", "pages/register.scss", "pages/login.scss";
+@import 'pages/home.scss', 'pages/register.scss', 'pages/login.scss';

@@ -44,7 +44,7 @@ const memberships = [
     >
       <q-icon
         name="arrow_back"
-        size="xl"
+        size="md"
         color="white"
         class="cursor-pointer"
       />
@@ -54,10 +54,8 @@ const memberships = [
       <div
         class="memberships_description column justify-center q-px-md q-mt-xl"
       >
-        <p class="text-weight-medium text-h4 text-center memberships_title">
-          Planes flexibles & precios
-        </p>
-        <p class="text-subtitle1 text-center">
+        <p class="title-large text-center">Planes flexibles & precios</p>
+        <p class="body-medium text-center">
           Bienvenido a nuestra plataforma de Tarjeta joven diamante, donde
           puedes encontrar todas tus tiendas favoritas en un solo lugar.Para
           hacerlo aún más fácil, ofrecemos diferentes planes que se adaptan a

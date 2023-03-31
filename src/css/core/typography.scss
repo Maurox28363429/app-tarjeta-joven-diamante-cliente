@@ -1,9 +1,5 @@
 @use './../quasar.variables.scss';
-
-.error {
-  color: $negative;
-  font-size: 12px;
-}
+@use './_colors.scss' as *;
 
 .text-link {
   color: #414bb2;
@@ -12,4 +8,115 @@
 .label-input {
   font-weight: 500;
   color: $gray;
+}
+
+// Fonts
+$font-family-nunito: 'Nunito', sans-serif;
+
+// Display
+$display-large: (57px, $font-family-nunito, 400, 64px, -0.25px);
+$display-medium: (45px, $font-family-nunito, 400, 52px, 0);
+$display-small: (36px, $font-family-nunito, 400, 44px, 0);
+
+// Headline
+$headline-large: (32px, $font-family-nunito, 400, 40px, 0);
+$headline-medium: (28px, $font-family-nunito, 400, 36px, 0);
+$headline-small: (24px, $font-family-nunito, 400, 32px, 0);
+
+// Body
+$body-large: (16px, $font-family-nunito, 400, 24px, 0.5px);
+$body-medium: (14px, $font-family-nunito, 400, 20px, 0.25px);
+$body-small: (12px, $font-family-nunito, 400, 16px, 0.4px);
+
+// Label
+$label-large: (14px, $font-family-nunito, 500, 20px, 0.1px);
+$label-medium: (12px, $font-family-nunito, 500, 16px, 0.5px);
+$label-small: (11px, $font-family-nunito, 500, 16px, 0.5px);
+
+// Title
+$title-large: (22px, $font-family-nunito, 400, 28px, 0);
+$title-medium: (16px, $font-family-nunito, 500, 24px, 0.15px);
+$title-small: (14px, $font-family-nunito, 500, 20px, 0.1px);
+
+// Mixins
+@mixin text-style($style) {
+  font-size: nth($style, 1);
+  font-family: nth($style, 2);
+  font-weight: nth($style, 3);
+  line-height: nth($style, 4);
+  letter-spacing: nth($style, 5);
+}
+
+.display-large {
+  @include text-style($display-large);
+}
+
+.display-medium {
+  @include text-style($display-medium);
+}
+
+.display-small {
+  @include text-style($display-small);
+}
+
+// Headline classes
+.headline-large {
+  @include text-style($headline-large);
+}
+
+.headline-medium {
+  @include text-style($headline-medium);
+}
+
+.headline-small {
+  @include text-style($headline-small);
+}
+
+// Body classes
+.body-large {
+  @include text-style($body-large);
+}
+
+.body-medium {
+  @include text-style($body-medium);
+}
+
+.body-small {
+  @include text-style($body-small);
+}
+
+// Label classes
+.label-large {
+  @include text-style($label-large);
+}
+
+.label-medium {
+  @include text-style($label-medium);
+}
+
+.label-small {
+  @include text-style($label-small);
+}
+
+// Title classes
+.title-large {
+  @include text-style($title-large);
+}
+
+.title-medium {
+  @include text-style($title-medium);
+}
+
+.title-small {
+  @include text-style($title-small);
+}
+
+.text-error {
+  color: $error-light;
+  @include text-style($body-small);
+}
+
+.error {
+  color: $error-light;
+  @include text-style($body-small);
 }

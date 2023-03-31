@@ -50,7 +50,7 @@ console.log(userIsmembershipFree.value)
       spinner-color="white"
       style="height: 58px; max-width: 62px"
     />
-    <p class="text-h6 text-weight-bold text-secondary text-uppercase q-my-md">
+    <p class="title-large text-secondary text-uppercase q-my-md">
       {{ name }}
     </p>
     <p class="text-weight-medium text-h3">
@@ -63,7 +63,7 @@ console.log(userIsmembershipFree.value)
           spinner-color="white"
           style="height: 22px; max-width: 22px"
         />
-        <p>{{ benefit }}</p>
+        <p class="body-medium">{{ benefit }}</p>
       </li>
     </ul>
     <div class="full-width button">
@@ -83,7 +83,8 @@ console.log(userIsmembershipFree.value)
   display: flex;
   flex-direction: column;
   align-items: center;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.3),
+    0px 2px 6px 2px rgba(0, 0, 0, 0.15);
   width: 320px;
   min-height: 427px;
   border-radius: 4px;

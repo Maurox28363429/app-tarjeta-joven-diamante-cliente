@@ -1,5 +1,9 @@
 <script setup>
 import { registerSchema } from 'src/schemas/registerSchema'
+import { ref, computed } from 'vue'
+import StepOne from '../components/RegisterInputs/StepOne.vue'
+import StepTwo from '../components/RegisterInputs/StepTwo.vue'
+import StepThree from '../components/RegisterInputs/StepThree.vue'
 
 import { userAuth } from 'src/composables/userAuth'
 import { useValidateForm } from 'src/composables/useValidateForm'
@@ -17,6 +21,32 @@ const INITIAL_VALUES = {
   password: ''
 }
 
+const lastStep = 3
+const currentForm = ref(1)
+
+const nextStep = () => {
+  return currentForm.value++
+}
+
+const prevStep = () => {
+  return currentForm.value--
+}
+
+const disableLastButton = computed(() => {
+  if (currentForm.value === 1) {
+    return true
+  }
+  return false
+})
+
+const isLastStep = computed(() => {
+  if (currentForm.value === lastStep) {
+    return true
+  }
+
+  return false
+})
+
 const { useForm, validatInput, validateMessage, validateForm } =
   useValidateForm({ initialValue: INITIAL_VALUES, schema: registerSchema })
 
@@ -25,11 +55,15 @@ const onSubmit = async (e) => {
   const roleIdClient = 3
   register({ ...useForm.value, role_id: roleIdClient })
 }
+
+const updateForm = ({ key, value }) => {
+  useForm.value[key] = value
+}
 </script>
 
 <template>
   <div class="full-width items-center row justify-center registerContainer">
-    <div class="column items-center q-my-xl q-mx-none register">
+    <div class="column items-center q-mx-none register">
       <div class="column items-center justify-center">
         <q-img
           src="./../assets/logo.svg"
@@ -39,131 +73,85 @@ const onSubmit = async (e) => {
           class="rounded-borders q-mb-md"
         >
         </q-img>
-        <p class="text-h5 q-mb-xl text-weight-bold">Crear cuenta</p>
+        <p class="q-mb-xl title-large text-center">
+          Bienvenido a Tarjeta Joven Diamante
+        </p>
       </div>
 
       <q-form
         @submit.prevent="onSubmit"
-        class="q-gutter-md full-width column items-center"
+        class="q-gutter-md full-width column items-center loginForm"
       >
-        <div
-          class="inputsContainer q-ma-none text-dark items-center column form"
-        >
-          <div class="q-ma-none full-width input">
-            <label class="label-input">
-              Nombre
-              <q-input
-                lazy-rules
-                outlined
-                v-model="useForm.name"
-                placeholder="Luis"
-                @blur="validatInput('name')"
-                @keypress="validatInput('name')"
-              />
-            </label>
-            <p class="error" v-if="!!validateMessage.errors.name">
-              {{ validateMessage.errors.name }}
-            </p>
+        <div class="full-width row justify-between">
+          <p class="title-medium">Crear cuenta</p>
+          <p class="text-weight-bold">{{ currentForm }}/{{ lastStep }}</p>
+        </div>
+        <div class="q-mb-md q-ma-none text-dark column items-center full-width">
+          <div v-show="currentForm === 1" class="full-width">
+            <StepOne
+              @update:modelValue="updateForm($event)"
+              :validateMessage="validateMessage"
+              :validatInput="validatInput"
+              :useForm="useForm"
+            />
           </div>
-          <div class="q-ma-none full-width input">
-            <label class="label-input">
-              Apellido
-              <q-input
-                lazy-rules
-                outlined
-                v-model="useForm.last_name"
-                placeholder="Perez"
-                @blur="validatInput('last_name')"
-                @keypress="validatInput('last_name')"
-              />
-            </label>
-            <p class="error" v-if="!!validateMessage.errors.last_name">
-              {{ validateMessage.errors.last_name }}
-            </p>
+          <div v-show="currentForm === 2" class="full-width">
+            <StepTwo
+              @update:modelValue="updateForm($event)"
+              :validateMessage="validateMessage"
+              :validatInput="validatInput"
+              :useForm="useForm"
+            />
           </div>
-          <div class="q-ma-none full-width input">
-            <label class="label-input">
-              Email
-              <q-input
-                lazy-rules
-                type="email"
-                outlined
-                v-model="useForm.email"
-                placeholder="example@gmail.com"
-                @blur="validatInput('email')"
-                @keypress="validatInput('email')"
-              />
-            </label>
-            <p class="error" v-if="!!validateMessage.errors.email">
-              {{ validateMessage.errors.email }}
-            </p>
-          </div>
-          <div class="q-ma-none full-width input">
-            <label class="label-input">
-              Telefono
-              <q-input
-                lazy-rules
-                type="tel"
-                outlined
-                v-model="useForm.phone"
-                placeholder="041459789"
-                @blur="validatInput('phone')"
-                @keypress="validatInput('phone')"
-              />
-            </label>
-            <p class="error" v-if="!!validateMessage.errors.phone">
-              {{ validateMessage.errors.phone }}
-            </p>
-          </div>
-          <div class="q-ma-none full-width input">
-            <label class="label-input">
-              Genero
-              <q-select
-                outlined
-                lazy-rules
-                class="full-width q-ma-none"
-                v-model="useForm.sex"
-                :options="GENDER_OPTIONS"
-              />
-            </label>
-            <p class="error" v-if="!!validateMessage.errors.role_id">
-              {{ validateMessage.errors.sex }}
-            </p>
-          </div>
-          <div class="q-ma-none full-width input">
-            <label class="label-input">
-              Password
-              <q-input
-                lazy-rules
-                type="password"
-                outlined
-                v-model="useForm.password"
-                placeholder="********"
-                @blur="validatInput('password')"
-                @keypress="validatInput('password')"
-              />
-            </label>
-            <p class="error" v-if="!!validateMessage.errors.password">
-              {{ validateMessage.errors.password }}
-            </p>
+          <div v-show="currentForm === 3" class="full-width">
+            <StepThree
+              @update:modelValue="updateForm($event)"
+              :validateMessage="validateMessage"
+              :validatInput="validatInput"
+              :useForm="useForm"
+            />
           </div>
         </div>
 
-        <div class="q-py-none q-px-md full-width row justify-center">
+        <div
+          class="q-py-none full-width row"
+          style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px"
+        >
           <q-btn
+            :disable="disableLastButton"
+            @click="prevStep"
+            label="Anterior"
+            class=""
+            height="48px"
+            color="secondary"
+            size="14px"
+            fill
+          />
+          <q-btn
+            v-if="!isLastStep"
+            @click="nextStep"
+            label="Siguiente"
+            class=""
+            height="48px"
+            color="secondary"
+            size="14px"
+            fill
+          />
+          <q-btn
+            v-if="isLastStep"
             :disable="!validateMessage.isvalid"
             type="submit"
             label="Registrar"
-            class="full-width q-mb-md"
+            class=""
             height="48px"
-            color="secondary"
+            color="primary"
             :loading="isLoadingRegister"
             size="14px"
             fill
           />
         </div>
         <router-link class="text-link" to="/login"
-          >Ya tienes una cuenta?
+          >¿Ya tienes cuenta?
           <span class="text-weight-bold">Login</span></router-link
         >
       </q-form>

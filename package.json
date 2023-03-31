@@ -20,6 +20,7 @@
   "dependencies": {
     "@quasar/extras": "^1.0.0",
     "axios": "^1.2.1",
+    "cordova": "^11.1.0",
     "pinia": "^2.0.11",
     "qrcode.vue": "^3.3.4",
     "quasar": "^2.6.0",
@@ -29,6 +30,7 @@
   },
   "devDependencies": {
     "@quasar/app-vite": "^1.0.0",
+    "@quasar/quasar-app-extension-qiconpicker": "^2.0.6",
     "autoprefixer": "^10.4.2",
     "eslint": "^8.36.0",
     "eslint-config-prettier": "^8.1.0",
