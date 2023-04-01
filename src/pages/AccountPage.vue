@@ -24,7 +24,7 @@
               </q-item-label>
             </q-item-section>
           </q-item>
-          <q-item clickable v-ripple>
+          <q-item clickable v-ripple to="/memberships">
             <q-item-section>
               <q-item-label>Subir membresías</q-item-label>
               <q-item-label caption>
@@ -42,7 +42,7 @@
               </q-item-label>
             </q-item-section>
           </q-item>
-          <q-item clickable v-ripple>
+          <q-item clickable v-ripple @click="handledLogout">
             <q-item-section>
               <q-item-label class="text-negative">Cerrar sección</q-item-label>
               <q-item-label caption>
@@ -76,5 +76,11 @@ const user = {
 const goBack = () => {
   console.log('go back')
   router.go(-1)
+}
+
+const handledLogout = (e) => {
+  e.preventDefault()
+  localStorage.removeItem('user')
+  router.push('/login')
 }
 </script>

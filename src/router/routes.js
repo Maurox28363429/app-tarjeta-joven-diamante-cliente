@@ -3,7 +3,16 @@ const routes = [
     path: '/',
     children: [
       { path: 'login', component: () => import('pages/loginPage.vue') },
+      {
+        path: 'forgotpassword',
+        component: () => import('pages/forgotpasswordPage.vue')
+      },
       { path: 'register', component: () => import('pages/RegisterPage.vue') },
+      {
+        path: 'recoveryPassword',
+        name: 'recoveryPassword',
+        component: () => import('pages/RecoverypasswordPage.vue')
+      },
       {
         path: 'memberships',
         meta: { requiresAuth: true },

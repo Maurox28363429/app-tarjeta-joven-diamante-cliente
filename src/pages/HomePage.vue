@@ -123,7 +123,7 @@
             :label="!miniState ? 'Cerrar sesión' : ''"
             text-color="white"
             class="body-small"
-            style="position: absolute; bottom: 20px; background-color: #410002"
+            style="position: absolute; bottom: 20px; background-color: #ba1a1a"
           />
         </div>
       </q-scroll-area>
@@ -238,7 +238,7 @@ aside {
 }
 
 .logoutButton {
-  background: #410002;
+  background: #ba1a1a;
 }
 
 .menu {

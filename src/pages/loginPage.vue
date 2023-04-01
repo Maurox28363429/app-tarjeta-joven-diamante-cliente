@@ -103,9 +103,12 @@ const showPassword = () => {
         </div>
 
         <div class="full-width q-ma-none">
-          <router-link class="text-link body-medium text-primary" to="/">
-            Olvidé mi contraseña</router-link
+          <router-link
+            class="text-link body-medium text-primary"
+            to="/forgotpassword"
           >
+            Olvidé mi contraseña
+          </router-link>
         </div>
         <div class="full-width column items-center">
           <q-btn
