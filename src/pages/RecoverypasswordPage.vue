@@ -14,11 +14,15 @@
             Introduce el código enviado a tu correo electrónico.
           </p>
           <div class="full-width">
-            <PinInput :submit="handledSencode" />
+            <PinInput
+              :submit="handledSencode"
+              :loading="loadingHandledSencode"
+            />
           </div>
           <p>¿No has recibido el correo electrónico?</p>
           <q-btn
             @click="sendCode"
+            :loading="loadingSendCode"
             label="Reenviar código"
             size="14px"
             fill
@@ -59,6 +63,7 @@
             </div>
             <q-btn
               @click="sendPassword"
+              :loading="loadingSendPassword"
               :disabled="!validateMessage.isvalid"
               label="Guardar"
               size="14px"
@@ -87,6 +92,9 @@ import getCodeForRecoveryPassword from 'src/api/getCodeForRecoveryPassword'
 import { useRecoveryPasswordStore } from 'src/stores/recoveryPasswordStore'
 
 const { triggerPositive, triggerWarning } = useToast()
+const loadingSendCode = ref(false)
+const loadingSendPassword = ref(false)
+const loadingHandledSencode = ref(false)
 
 const typePassword = ref('password')
 const iconPassword = ref('visibility_off')
@@ -125,42 +133,49 @@ const goBack = () => {
 
 const sendCode = async () => {
   try {
+    loadingSendCode.value = true
     await getCodeForRecoveryPassword({ email: recoveryEmail })
     triggerPositive('¡Código reenviado!, puede tardar unos minutos')
   } catch (err) {
     console.log()
     triggerWarning('¡Up! Ha ocurrido un error, intento nuevamente')
+  } finally {
+    loadingSendCode.value = false
   }
 }
-
-console.log(recoveryEmail, 'email')
 
 const handledSencode = async (code) => {
   codeValue.value = code
   try {
-    const { data } = await validatePasswordAndCode({
+    loadingHandledSencode.value = true
+    await validatePasswordAndCode({
       email: recoveryEmail,
       code
     })
     showFormCode.value = false
-    console.log(data)
     triggerPositive('¡Código verificado!, ahora puede cambiar su contraseña.')
   } catch (error) {
     console.log(error)
+  } finally {
+    loadingHandledSencode.value = false
   }
 }
 
 const sendPassword = async () => {
   try {
+    loadingSendPassword.value = true
     await changePassword({
       recovery_cod: codeValue.value,
       password: useForm.value.password,
       email: recoveryEmail
     })
     triggerPositive('La contraseña ha sido cambiada exitosamente.')
+    router.push({ name: 'login' })
   } catch (error) {
     console.log(error)
     triggerWarning('¡Up! Códido incorreto, intente de nuevo ')
+  } finally {
+    loadingSendPassword.value = false
   }
 }
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <p class="q-ml-lg q-mt-lg text-h4 text-weight-medium">Novedades</p>
+  <p class="q-ml-lg q-mt-lg title-large">Novedades</p>
   <div class="full-width full-height row justify-center q-mt-lg">
     <q-input
       v-model="search"

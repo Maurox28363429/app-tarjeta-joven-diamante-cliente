@@ -33,6 +33,7 @@
           </div>
           <q-btn
             :disable="!validateMessage.isvalid"
+            :loading="loading"
             label="Enviar"
             size="14px"
             fill
@@ -54,7 +55,9 @@ import { emailSchema } from 'src/schemas/emailShema'
 import getCodeForRecoveryPassword from 'src/api/getCodeForRecoveryPassword'
 import { useToast } from 'src/composables/useToast'
 import { useRecoveryPasswordStore } from 'src/stores/recoveryPasswordStore'
+import { ref } from 'vue'
 
+const loading = ref(false)
 const { triggerPositive, triggerWarning } = useToast()
 
 const router = useRouter()
@@ -77,6 +80,7 @@ const recoveryPasswordStore = useRecoveryPasswordStore()
 
 const sendEmail = async () => {
   try {
+    loading.value = true
     await getCodeForRecoveryPassword({ email: useForm.value.email })
     triggerPositive('Código enviado, podría tardar unos minutos en llegar.')
     recoveryPasswordStore.setEmail(useForm.value.email)
@@ -86,6 +90,8 @@ const sendEmail = async () => {
   } catch (err) {
     console.log(err)
     triggerWarning('¡Up! Ha ocurrido un error, intento nuevamente')
+  } finally {
+    loading.value = false
   }
 }
 </script>

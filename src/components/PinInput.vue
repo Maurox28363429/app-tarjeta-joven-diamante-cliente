@@ -18,6 +18,7 @@
     <q-btn
       @click="() => submit(values.join(''))"
       label="Enviar código"
+      :loading="loading"
       size="14px"
       fill
       height="48px"
@@ -37,6 +38,10 @@ const { triggerWarning } = useToast()
 defineProps({
   submit: {
     type: Function,
+    required: true
+  },
+  loading: {
+    type: Boolean,
     required: true
   }
 })

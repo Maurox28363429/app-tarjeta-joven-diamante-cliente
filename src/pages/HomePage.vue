@@ -3,6 +3,7 @@
     <q-header
       class="q-py-sm text-white"
       style="
+        height: 60px;
         background: #f8fdff;
         box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.3),
           0px 1px 3px 1px rgba(0, 0, 0, 0.15);
@@ -22,10 +23,16 @@
           <q-img
             src="../assets/acronimo.svg"
             spinner-color="dark"
-            style="height: 40px; max-width: 98px"
+            style="height: 32px; max-width: 74px"
           />
         </q-toolbar-title>
-        <q-btn fill round icon="shopping_cart" color="secondary" />
+        <q-btn
+          style="height: 35px; width: 35px"
+          fill
+          round
+          icon="shopping_cart"
+          color="secondary"
+        />
         <router-link to="/account" class="cursor-pointer">
           <q-avatar size="42px" class="q-ml-md">
             <img src="https://cdn.quasar.dev/img/boy-avatar.png" />
@@ -82,7 +89,13 @@
 
             <q-item-section>Mis compras</q-item-section>
           </q-item>
+          <q-item clickable v-ripple to="/news">
+            <q-item-section avatar>
+              <q-icon name="newspaper" />
+            </q-item-section>
 
+            <q-item-section>Novedades</q-item-section>
+          </q-item>
           <q-item clickable v-ripple to="/account">
             <q-item-section avatar>
               <q-icon name="person" />
@@ -91,27 +104,12 @@
             <q-item-section>Mi perfil</q-item-section>
           </q-item>
 
-          <q-item active clickable v-ripple to="/store">
-            <q-item-section avatar>
-              <q-icon name="store" />
-            </q-item-section>
-
-            <q-item-section>Comercios</q-item-section>
-          </q-item>
-
           <q-item clickable v-ripple to="/memberships">
             <q-item-section avatar>
               <q-icon name="rocket_launch" />
             </q-item-section>
 
             <q-item-section>Membresías</q-item-section>
-          </q-item>
-          <q-item clickable v-ripple to="/products">
-            <q-item-section avatar>
-              <q-icon name="local_offer" />
-            </q-item-section>
-
-            <q-item-section>Productos</q-item-section>
           </q-item>
         </q-list>
         <div
@@ -136,7 +134,11 @@
           <div class="text-weight-bold">
             ¡Hola, {{ user.name + ' ' + user.last_name }}!
           </div>
-          <div>{{ user.email }}</div>
+          <div>
+            <p style="text-overflow: ellipsis; overflow: hidden; width: 196px">
+              {{ user.email }}
+            </p>
+          </div>
         </div>
       </div>
     </q-drawer>
@@ -158,7 +160,7 @@
     </q-dialog>
 
     <div class="q-px-sm q-py-lg">
-      <div style="position: fixed; z-index: 100; right: 24px; bottom: 64px">
+      <div class="qrButton">
         <q-fab color="primary" icon="keyboard_arrow_up" direction="up">
           <q-fab-action color="primary" @click="handleModal">
             <img src="./../assets/qr.jpg" style="width: 24px; height: 24px" />
@@ -193,27 +195,15 @@
         />
       </router-link>
       <router-link
-        to="/store"
+        to="/news"
         style="text-decoration: none; color: #ffff; width: 100%; margin: none"
       >
         <q-tab
-          name="Comercios"
-          label="Comercios"
+          name="Novedades"
+          label="Novedades"
           color="white"
           class="text-capitalize q-px-none"
-          icon="store"
-        />
-      </router-link>
-      <router-link
-        to="/products"
-        style="text-decoration: none; color: #ffff; width: 100%; margin: none"
-      >
-        <q-tab
-          name="Productos"
-          label="Productos"
-          class="text-capitalize"
-          color="white"
-          icon="local_offer"
+          icon="newspaper"
         />
       </router-link>
       <router-link
@@ -250,12 +240,22 @@ aside {
   display: none;
 }
 
+.qrButton {
+  position: fixed;
+  z-index: 100;
+  right: 24px;
+  bottom: 6px;
+}
+
 @media (max-width: 700px) {
   .menu {
     display: none;
   }
   .menuMobile {
     display: block;
+  }
+  .qrButton {
+    bottom: 64px;
   }
 }
 </style>

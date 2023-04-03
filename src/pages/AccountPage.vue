@@ -9,8 +9,8 @@
           <img src="https://cdn.quasar.dev/img/boy-avatar.png" />
         </q-avatar>
         <div>
-          <p class="q-ma-none">{{ user.name }}</p>
-          <p class="q-ma-none">{{ user.profile.Email }}</p>
+          <p class="q-ma-none">{{ user.name + ' ' + user.last_name }}</p>
+          <p class="q-ma-none">{{ user.email }}</p>
         </div>
       </div>
       <q-card>
@@ -19,8 +19,8 @@
             <q-item-section>
               <q-item-label>Ver perfil</q-item-label>
               <q-item-label caption>
-                Set the content filtering level to restrict apps that can be
-                downloaded
+                Toda la informacion relacionada de su perfil puede ser editada y
+                la puede visualizar.
               </q-item-label>
             </q-item-section>
           </q-item>
@@ -28,17 +28,22 @@
             <q-item-section>
               <q-item-label>Subir membresías</q-item-label>
               <q-item-label caption>
-                Set the content filtering level to restrict apps that can be
-                downloaded
+                Subir de plan es muy facil, solo debe seleccionar el plan que
+                desea y subir la información requerida.
               </q-item-label>
             </q-item-section>
           </q-item>
-          <q-item clickable v-ripple>
+          <q-item>
             <q-item-section>
-              <q-item-label>Contactar a soporte</q-item-label>
+              <q-item-label
+                >Contactanos a
+                <span class="text-weight-bold"
+                  >info@tarjetajovendiamante.com</span
+                ></q-item-label
+              >
               <q-item-label caption>
-                Set the content filtering level to restrict apps that can be
-                downloaded
+                Estamos para ayudarte, si tienes alguna duda o problema con tu
+                cuenta puedes contactarnos.
               </q-item-label>
             </q-item-section>
           </q-item>
@@ -46,8 +51,7 @@
             <q-item-section>
               <q-item-label class="text-negative">Cerrar sección</q-item-label>
               <q-item-label caption>
-                Set the content filtering level to restrict apps that can be
-                downloaded
+                Cerrar sección y volver a la pagina de inicio.
               </q-item-label>
             </q-item-section>
           </q-item>
@@ -59,20 +63,12 @@
 
 <script setup>
 import { useRouter } from 'vue-router'
+import { userAuth } from 'src/composables/userAuth'
+
+const { user } = userAuth()
 
 const router = useRouter()
 
-const user = {
-  name: 'John Doe',
-  avatar: 'https://randomuser.me/api/portraits/men/15.jpg',
-  profile: {
-    Email: 'johndoe@example.com',
-    Phone: '+1 (555) 123-4567',
-    Location: 'New York, USA',
-    Occupation: 'Software Developer',
-    Bio: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus.'
-  }
-}
 const goBack = () => {
   console.log('go back')
   router.go(-1)

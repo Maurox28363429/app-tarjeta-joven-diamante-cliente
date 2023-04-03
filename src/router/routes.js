@@ -2,7 +2,11 @@ const routes = [
   {
     path: '/',
     children: [
-      { path: 'login', component: () => import('pages/loginPage.vue') },
+      {
+        name: 'login',
+        path: 'login',
+        component: () => import('pages/loginPage.vue')
+      },
       {
         path: 'forgotpassword',
         component: () => import('pages/forgotpasswordPage.vue')
@@ -67,6 +71,11 @@ const routes = [
           {
             path: 'store',
             component: () => import('pages/StorePage.vue'),
+            meta: { requiresAuth: true }
+          },
+          {
+            path: 'news',
+            component: () => import('pages/NewsPage.vue'),
             meta: { requiresAuth: true }
           }
         ]
