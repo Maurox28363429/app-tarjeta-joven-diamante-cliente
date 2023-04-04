@@ -15,9 +15,10 @@ const memberships = [
     price: 100,
     image: 'src/assets/rocket.svg',
     benefits: [
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+      'Obten descuentos en tus compras',
+      'Participa en sorteos y obten premios',
+      'Tendras acceso a la compra de productos y servicios premium'
+
     ]
   },
   {
@@ -25,10 +26,8 @@ const memberships = [
     price: 0,
     image: 'src/assets/plane.svg',
     benefits: [
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+      'Obten descuentos en tu periodo de prueba',
+      'Tendras acceso a productos y servicios premium'
     ]
   }
 ]
