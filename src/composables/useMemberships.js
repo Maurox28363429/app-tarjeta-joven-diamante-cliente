@@ -8,10 +8,15 @@ export const useMemberships = () => {
   const PRO_IMAGE = 'src/assets/rocket.svg'
   const FREE_IMAGE = 'src/assets/plane.svg'
 
-  const benefits = [
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+  const benefitsPro = [
+    'Obten descuentos en tus compras',
+    'Participa en sorteos y obten premios',
+    'Tendras acceso a la compra de productos y servicios premium'
+  ]
+
+  const benefitsFree = [
+    'Obten descuentos en tu periodo de prueba',
+    'Tendras acceso a productos y servicios premium'
   ]
 
   const fetchMemberships = async () => {
@@ -22,13 +27,13 @@ export const useMemberships = () => {
         const FREE = 'Membresia 5 Días'
         const PRO = 'Membresia anual'
 
-        membership.benefits = benefits
-
         if (membership.name === PRO) {
           membership.image = PRO_IMAGE
+          membership.benefits = benefitsPro
         }
         if (membership.name === FREE) {
           membership.image = FREE_IMAGE
+          membership.benefits = benefitsFree
         }
 
         return membership

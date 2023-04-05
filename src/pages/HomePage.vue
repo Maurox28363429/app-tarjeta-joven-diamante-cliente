@@ -86,7 +86,6 @@
             <q-item-section avatar>
               <q-icon name="shopping_basket" />
             </q-item-section>
-
             <q-item-section>Mis compras</q-item-section>
           </q-item>
           <q-item clickable v-ripple to="/news">
@@ -94,7 +93,7 @@
               <q-icon name="newspaper" />
             </q-item-section>
 
-            <q-item-section>Novedades</q-item-section>
+            <q-item-section>Promociones</q-item-section>
           </q-item>
           <q-item clickable v-ripple to="/account">
             <q-item-section avatar>
@@ -103,7 +102,13 @@
 
             <q-item-section>Mi perfil</q-item-section>
           </q-item>
+          <q-item clickable v-ripple to="/products">
+            <q-item-section avatar>
+              <q-icon name="sell" />
+            </q-item-section>
 
+            <q-item-section>Ofertas</q-item-section>
+          </q-item>
           <q-item clickable v-ripple to="/memberships">
             <q-item-section avatar>
               <q-icon name="rocket_launch" />
@@ -194,6 +199,18 @@
           icon="shopping_basket"
         />
       </router-link>
+      <router-link
+      to="/products"
+      style="text-decoration: none; color: #ffff; width: 100%; margin: none"
+    >
+      <q-tab
+        name="Ofertas"
+        label="Ofertas"
+        color="white"
+        class="text-capitalize q-px-none"
+        icon="sell"
+      />
+    </router-link>
       <router-link
         to="/news"
         style="text-decoration: none; color: #ffff; width: 100%; margin: none"
