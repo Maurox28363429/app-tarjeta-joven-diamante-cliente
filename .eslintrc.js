@@ -4,19 +4,14 @@ module.exports = {
     es2021: true,
     node: true
   },
-  extends: [
-    'plugin:vue/vue3-essential',
-    'standard'
-  ],
-  overrides: [
-  ],
+  extends: ['plugin:vue/vue3-essential', 'standard'],
+  overrides: [],
   parserOptions: {
     ecmaVersion: 'latest',
     sourceType: 'module'
   },
-  plugins: [
-    'vue'
-  ],
+  plugins: ['vue'],
   rules: {
+    camelcase: 'off'
   }
 }

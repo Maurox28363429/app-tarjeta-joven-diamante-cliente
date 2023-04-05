@@ -21,6 +21,10 @@ const props = defineProps({
     type: String,
     required: true,
     default: ''
+  },
+  id: {
+    type: Number,
+    required: true
   }
 })
 
@@ -39,8 +43,6 @@ const planValidate = computed(() => {
     return 'plan-white'
   }
 })
-
-console.log(userIsmembershipFree.value)
 </script>
 
 <template>
@@ -60,7 +62,7 @@ console.log(userIsmembershipFree.value)
       <li v-for="(benefit, index) of benefits" :key="index">
         <q-img
           src="./../assets/checkIcon.svg"
-          spinner-color="white"
+          spinner-color="dark"
           style="height: 22px; max-width: 22px"
         />
         <p class="body-medium">{{ benefit }}</p>
@@ -72,7 +74,7 @@ console.log(userIsmembershipFree.value)
         color="secondary"
         label="Comprar"
         class="full-width"
-        :to="baseurl + name"
+        :to="baseurl + id"
       />
     </div>
   </div>

@@ -1,8 +1,11 @@
 import { instance } from '.'
 
-/* eslint-disable camelcase */
-export default function changePassword ({ email, recovery_cod, password }) {
-  return instance.post('/putRecovery', {
+export default async function changePassword ({
+  email,
+  recovery_cod,
+  password
+}) {
+  return await instance.post('/putRecovery', {
     email,
     recovery_cod,
     password

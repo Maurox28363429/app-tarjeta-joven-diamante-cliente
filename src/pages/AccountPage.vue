@@ -15,7 +15,7 @@
       </div>
       <q-card>
         <q-list bordered padding>
-          <q-item clickable v-ripple>
+          <q-item clickable v-ripple to="/account/profile">
             <q-item-section>
               <q-item-label>Ver perfil</q-item-label>
               <q-item-label caption>

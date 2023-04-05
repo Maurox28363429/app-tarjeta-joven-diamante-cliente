@@ -1,37 +1,16 @@
 <script setup>
 import MembershipsCard from 'src/components/MembershipsCard.vue'
 import { useRouter } from 'vue-router'
+import { useMemberships } from 'src/composables/useMemberships'
 
 const router = useRouter()
+const arr = new Array(2).fill(0)
+
+const { loading, memberships } = useMemberships()
 
 const goBack = () => {
-  console.log('go back')
   router.go(-1)
 }
-
-const memberships = [
-  {
-    name: 'pro',
-    price: 100,
-    image: 'src/assets/rocket.svg',
-    benefits: [
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
-    ]
-  },
-  {
-    name: 'free',
-    price: 0,
-    image: 'src/assets/plane.svg',
-    benefits: [
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
-    ]
-  }
-]
 </script>
 
 <template>
@@ -62,15 +41,107 @@ const memberships = [
           tus necesidades y presupuesto.
         </p>
       </div>
-      <div class="memberships_plans width-full q-pb-xl">
-        <template v-for="membership in memberships" :key="membership.price">
+      <div class="memberships_plans width-full q-pb-xl" v-if="!loading">
+        <template v-for="membership in memberships" :key="membership.id">
           <MembershipsCard
             :image="membership.image"
             :name="membership.name"
             :price="membership.price"
             :benefits="membership.benefits"
+            :id="membership.id"
           />
         </template>
+      </div>
+      <div class="memberships_plans width-full q-pb-xl" v-if="loading">
+        <template v-for="(items, index) in arr" :key="index">
+          <q-card
+            style="
+              box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.3),
+                0px 2px 6px 2px rgba(0, 0, 0, 0.15);
+              width: 320px;
+              min-height: 427px;
+              padding: 32px;
+            "
+          >
+            <q-item class="row justify-center full-width">
+              <q-item-section avatar>
+                <q-skeleton type="QAvatar" />
+              </q-item-section>
+            </q-item>
+
+            <q-item-section class="q-mb-lg">
+              <q-item-label>
+                <q-skeleton type="text" />
+              </q-item-label>
+              <q-item-label caption>
+                <q-skeleton type="text" />
+              </q-item-label>
+            </q-item-section>
+
+            <q-item style="max-width: 300px">
+              <q-item-section avatar style="min-width: 0px">
+                <q-skeleton type="QAvatar" style="width: 22px; height: 22px" />
+              </q-item-section>
+
+              <q-item-section>
+                <q-item-label>
+                  <q-skeleton type="text" />
+                </q-item-label>
+                <q-item-label caption>
+                  <q-skeleton type="text" width="65%" />
+                </q-item-label>
+              </q-item-section>
+            </q-item>
+
+            <q-item style="max-width: 300px">
+              <q-item-section avatar style="min-width: 0px">
+                <q-skeleton type="QAvatar" style="width: 22px; height: 22px" />
+              </q-item-section>
+
+              <q-item-section>
+                <q-item-label>
+                  <q-skeleton type="text" />
+                </q-item-label>
+                <q-item-label caption>
+                  <q-skeleton type="text" width="65%" />
+                </q-item-label>
+              </q-item-section>
+            </q-item>
+
+            <q-item style="max-width: 300px">
+              <q-item-section avatar style="min-width: 0px">
+                <q-skeleton type="QAvatar" style="width: 22px; height: 22px" />
+              </q-item-section>
+
+              <q-item-section>
+                <q-item-label>
+                  <q-skeleton type="text" />
+                </q-item-label>
+                <q-item-label caption>
+                  <q-skeleton type="text" width="65%" />
+                </q-item-label>
+              </q-item-section>
+            </q-item>
+
+            <q-item style="max-width: 300px">
+              <q-item-section avatar style="min-width: 0px">
+                <q-skeleton type="QAvatar" style="width: 22px; height: 22px" />
+              </q-item-section>
+
+              <q-item-section>
+                <q-item-label>
+                  <q-skeleton type="text" />
+                </q-item-label>
+                <q-item-label caption>
+                  <q-skeleton type="text" width="65%" />
+                </q-item-label>
+              </q-item-section>
+            </q-item>
+
+            <q-card-actions class="full-width">
+              <q-skeleton type="QBtn" class="full-width" />
+            </q-card-actions> </q-card
+        ></template>
       </div>
     </div>
   </div>
@@ -101,7 +172,7 @@ const memberships = [
 }
 
 .background_blue {
-  background: #272e67;
+  background: #4d57a9;
   width: 100%;
   position: absolute;
   height: 416px;

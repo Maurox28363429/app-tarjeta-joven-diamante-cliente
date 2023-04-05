@@ -77,7 +77,7 @@
               <p
                 class="text-weight-medium text-subtitle2 text-grey-6 q-ma-none"
               >
-                Quendan: 5 días
+                Quendan: {{ user.membresia.days }} días
               </p>
             </q-item-section>
           </q-item>
@@ -219,6 +219,14 @@
         />
       </router-link>
     </q-tabs>
+    <UpdateMembershipModal
+      :showModal="showModalNew()"
+      description="Obten 5 días de pueba con el plan free, y recibe ofertas especiales"
+    />
+    <UpdateMembershipModal
+      :showModal="showModalRenovar()"
+      description="Renueva el plan, y recibe ofertas especiales"
+    />
   </q-layout>
 </template>
 
@@ -265,6 +273,8 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import QrUser from 'src/components/QrUser.vue'
 import { userAuth } from 'src/composables/userAuth'
+import UpdateMembershipModal from '../components/UpdateMembershipModal.vue'
+import format from 'src/utils/date'
 
 const { user } = userAuth()
 
@@ -272,6 +282,21 @@ const leftDrawerOpen = ref(false)
 const router = useRouter()
 
 const show = ref(false)
+
+const showModalRenovar = () => {
+  if (user.membresia.days === 1) {
+    return true
+  }
+  return false
+}
+
+const showModalNew = () => {
+  if (format(user.membresia.updated_at) === format(new Date())) {
+    return true
+  }
+  return false
+}
+
 const miniState = ref(true)
 
 const handleModal = () => {
@@ -290,14 +315,9 @@ const toggleLeftDrawer = () => {
 }
 
 const drawerClick = (e) => {
-  // if in "mini" state and user
-  // click on drawer, we switch it to "normal" mode
   if (miniState.value) {
     miniState.value = false
 
-    // notice we have registered an event with capture flag;
-    // we need to stop further propagation as this click is
-    // intended for switching drawer to "normal" mode only
     e.stopPropagation()
   }
 }

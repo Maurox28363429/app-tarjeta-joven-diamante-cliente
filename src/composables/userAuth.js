@@ -44,6 +44,10 @@ export const userAuth = () => {
     }
   }
 
+  const updatedUser = () => {
+    return authStore.updated()
+  }
+
   const addMembership = async ({ user_id }) => {
     try {
       isLoadingMembership.value = true
@@ -114,6 +118,7 @@ export const userAuth = () => {
     isAuthenticated,
     isLoadingRegister,
     addMembership,
-    isLoadingMembership
+    isLoadingMembership,
+    updatedUser
   }
 }

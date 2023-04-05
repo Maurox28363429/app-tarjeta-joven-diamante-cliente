@@ -1,8 +1,7 @@
 import { instance } from '.'
 
-/* eslint-disable camelcase */
-export default function validatePasswordAndCode ({ email, code }) {
-  return instance.post('/validateRecovery', {
+export default async function validatePasswordAndCode ({ email, code }) {
+  return await instance.post('/validateRecovery', {
     email,
     code
   })

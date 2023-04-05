@@ -8,10 +8,6 @@ const textError = ref(false)
 const { user, addMembership, isLoadingMembership } = userAuth()
 
 const props = defineProps({
-  benefits: {
-    type: Array,
-    required: true
-  },
   price: {
     type: Number,
     required: true
@@ -165,8 +161,6 @@ const isFree = Boolean(props.name === 'free')
               <ul class="q-gutter-y-md">
                 <li
                   class="row items-center"
-                  v-for="(benefit, index) of benefits"
-                  :key="index"
                 >
                   <q-icon
                     name="check_circle"
@@ -176,7 +170,52 @@ const isFree = Boolean(props.name === 'free')
                   />
                   <div class="col-10 col-xl-11">
                     <p class="q-ma-none q-ml-xs">
-                      {{ benefit }}
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit
+                    </p>
+                  </div>
+                </li>
+                <li
+                  class="row items-center"
+                >
+                  <q-icon
+                    name="check_circle"
+                    size="md"
+                    color="primary"
+                    class="col-2 col-xl-1"
+                  />
+                  <div class="col-10 col-xl-11">
+                    <p class="q-ma-none q-ml-xs">
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit
+                    </p>
+                  </div>
+                </li>
+                <li
+                  class="row items-center"
+                >
+                  <q-icon
+                    name="check_circle"
+                    size="md"
+                    color="primary"
+                    class="col-2 col-xl-1"
+                  />
+                  <div class="col-10 col-xl-11">
+                    <p class="q-ma-none q-ml-xs">
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit
+                    </p>
+                  </div>
+                </li>
+                <li
+                  class="row items-center"
+                >
+                  <q-icon
+                    name="check_circle"
+                    size="md"
+                    color="primary"
+                    class="col-2 col-xl-1"
+                  />
+                  <div class="col-10 col-xl-11">
+                    <p class="q-ma-none q-ml-xs">
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit
                     </p>
                   </div>
                 </li>

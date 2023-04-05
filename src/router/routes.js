@@ -1,3 +1,5 @@
+const clientAuthMeta = { requiresAuth: true, role: 'client' }
+
 const routes = [
   {
     path: '/',
@@ -8,75 +10,98 @@ const routes = [
         component: () => import('pages/loginPage.vue')
       },
       {
+        name: 'forgotpassword',
         path: 'forgotpassword',
         component: () => import('pages/forgotpasswordPage.vue')
       },
-      { path: 'register', component: () => import('pages/RegisterPage.vue') },
       {
-        path: 'recoveryPassword',
+        name: 'register',
+        path: 'register',
+        component: () => import('pages/RegisterPage.vue')
+      },
+      {
         name: 'recoveryPassword',
+        path: 'recoveryPassword',
         component: () => import('pages/RecoverypasswordPage.vue')
       },
       {
         path: 'memberships',
-        meta: { requiresAuth: true },
+        meta: clientAuthMeta,
         children: [
           {
             path: '',
             component: () => import('pages/MembershipsPage.vue'),
-            meta: { requiresAuth: true }
-          },
-          {
-            path: 'free',
-            component: () => import('pages/PaymentPage.vue'),
-            meta: { requiresAuth: true }
-          },
-          {
-            path: 'pro',
-            component: () => import('pages/PaymentPage.vue'),
-            meta: { requiresAuth: true }
+            meta: clientAuthMeta
           }
         ]
       },
       {
+        path: 'memberships/:id',
+        component: () => import('pages/PaymentPage.vue'),
+        meta: clientAuthMeta,
+        beforeEnter: (to, from, next) => {
+          if (isNaN(parseInt(to.params.id))) {
+            next({ name: 'error', params: { errorCode: 400 } })
+          } else {
+            next()
+          }
+        }
+      },
+      {
         path: '/',
         component: () => import('src/pages/HomePage.vue'),
-        meta: { requiresAuth: true },
+        meta: clientAuthMeta,
         children: [
           {
+            name: 'products',
             path: 'products',
             component: () => import('pages/ProductsPage.vue'),
-            meta: { requiresAuth: true }
+            meta: clientAuthMeta
           },
           {
             path: '',
             component: () => import('pages/ProductsPage.vue'),
-            meta: { requiresAuth: true }
+            meta: clientAuthMeta
           },
           {
+            name: 'membershipsHome',
             path: 'membershipsHome',
             component: () => import('pages/MembershipsPage.vue'),
-            meta: { requiresAuth: true }
+            meta: clientAuthMeta
           },
           {
             path: 'account',
-            component: () => import('pages/AccountPage.vue'),
-            meta: { requiresAuth: true }
+            meta: clientAuthMeta,
+            children: [
+              {
+                name: 'account',
+                path: '',
+                component: () => import('src/pages/AccountPage.vue')
+              },
+              {
+                name: 'profile',
+                path: 'profile',
+                component: () => import('src/pages/ProfilePage.vue')
+              }
+            ]
           },
           {
+            name: 'shopping',
             path: 'shopping',
             component: () => import('pages/ShoppingPage.vue'),
-            meta: { requiresAuth: true }
+            meta: clientAuthMeta
           },
           {
+            name: 'store',
             path: 'store',
             component: () => import('pages/StorePage.vue'),
-            meta: { requiresAuth: true }
+            meta: clientAuthMeta
           },
           {
+            name: 'news',
             path: 'news',
             component: () => import('pages/NewsPage.vue'),
-            meta: { requiresAuth: true }
+            meta: clientAuthMeta
           }
         ]
       }
@@ -86,6 +111,7 @@ const routes = [
   // Always leave this as last one,
   // but you can also remove it
   {
+    name: 'error',
     path: '/:catchAll(.*)*',
     component: () => import('pages/ErrorNotFound.vue')
   }

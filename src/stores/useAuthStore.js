@@ -4,14 +4,16 @@ import registerUser from 'src/api/registerUser'
 import localStorageAuth from 'src/utils/localStorageAuth'
 import membershipsTest from 'src/api/membershipsTest'
 
-/* eslint-disable camelcase */
-
 export const useAuthStore = defineStore('userAuth', {
   state: () => ({
     user: localStorageAuth.getUser()?.user || null,
     token: localStorageAuth.getUser()?.token || null
   }),
   actions: {
+    updated () {
+      this.user = localStorageAuth.getUser()?.user || null
+      this.token = localStorageAuth.getUser()?.token || null
+    },
     logout () {
       this.user = null
       this.token = null

@@ -1,8 +1,7 @@
 import { instance } from '.'
 
-/* eslint-disable camelcase */
-export default function getCodeForRecoveryPassword ({ email }) {
-  return instance.post('/getRecovery', {
+export default async function getCodeForRecoveryPassword ({ email }) {
+  return await instance.post('/getRecovery', {
     email
   })
 }

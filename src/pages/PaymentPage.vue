@@ -1,43 +1,41 @@
 <script setup>
 import { useRouter } from 'vue-router'
+import { ref, onMounted } from 'vue'
 import MembershipsPayment from '../../src/components/MembershipsPayment.vue'
+import getSingleMemberships from 'src/api/getSingleMemberships'
 /* eslint-disable camelcase */
 const router = useRouter()
 
-const membresia_name = router.currentRoute.value.fullPath.split('/')[2]
+const { id } = router.currentRoute.value.params
+const plan = ref({})
+const loading = ref(false)
 
-console.log(membresia_name, 'params')
-
-const memberships = {
-  pro: {
-    name: 'pro',
-    price: 100,
-    benefits: [
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
-    ]
-  },
-  free: {
-    name: 'free',
-    price: 0,
-    benefits: [
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
-    ]
+onMounted(() => {
+  const filtrado = async () => {
+    try {
+      loading.value = true
+      const data = await getSingleMemberships(Number(id))
+      console.log(data, 'data')
+      plan.value = data
+    } catch (err) {
+      console.log(err)
+    } finally {
+      loading.value = false
+    }
   }
-}
-
-const { name, price, benefits } = memberships[membresia_name]
-
-console.log(memberships[membresia_name], 'memberships')
+  filtrado()
+})
 </script>
 
 <template>
-  <MembershipsPayment :name="name" :price="price" :benefits="benefits" />
+  <div v-if="!loading">
+    <MembershipsPayment :name="plan.name" :price="plan.price" />
+  </div>
+  <div
+    v-if="loading"
+    style="height:100vh"
+    class="full-width screen-heigth row justify-center items-center"
+  >
+    <q-spinner color="primary" size="3em" :thickness="2" />
+  </div>
 </template>

@@ -34,15 +34,42 @@ export default route(function (/* { store, ssrContext } */) {
     history: createHistory(process.env.VUE_ROUTER_BASE)
   })
 
+  const roles = [
+    {
+      id: 1,
+      name: 'admin'
+    },
+    {
+      id: 3,
+      name: 'cliente'
+    },
+    {
+      id: 2,
+      name: 'empresa'
+    }
+  ]
+
   Router.beforeEach((to, from, next) => {
     if (to.matched.some((record) => record.meta.requiresAuth)) {
       // Verificar si el usuario está autenticado
-      if (localStorageAuth.getUser() === null) {
+      const user = localStorageAuth.getUser()
+
+      if (user === null) {
         // Si el usuario no está autenticado, redirigir a la página de inicio de sesión
         next({ path: '/login' })
       } else {
-        // Si el usuario está autenticado, permitir el acceso a la ruta
-        next()
+        // Verificar si la ruta tiene un rol asignado
+        const routeRoleName = to.matched.find((record) => record.meta.role)
+          ?.meta.role
+        const routeRole = roles.find((role) => role.name === routeRoleName)
+
+        if (routeRole && user.role_id !== routeRole.id) {
+          // Si el rol del usuario no coincide con el rol de la ruta, redirigir a una página de error o de acceso denegado
+          next({ name: 'error', params: { errorCode: 403 } })
+        } else {
+          // Si el usuario está autenticado y su rol coincide con el rol de la ruta, permitir el acceso a la ruta
+          next()
+        }
       }
     } else {
       // Si la ruta no requiere autenticación, permitir el acceso

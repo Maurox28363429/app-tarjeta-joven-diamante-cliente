@@ -1,6 +1,6 @@
 import { instance } from '.'
 
-export default async function registerUser ({
+export default async function updateUser ({
   name,
   email,
   password,
@@ -9,9 +9,10 @@ export default async function registerUser ({
   phone,
   last_name,
   sex,
-  address
+  address,
+  id
 }) {
-  return await instance.post('/register', {
+  return await instance.put(`user/${id}`, {
     name,
     email,
     password,
