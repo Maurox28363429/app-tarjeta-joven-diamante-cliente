@@ -158,6 +158,8 @@ createQuasarApp(createApp, quasarUserOptions)
       
       import('boot/axios'),
       
+      import('boot/qrcode-reader'),
+      
       import('@quasar/quasar-app-extension-qiconpicker/src/boot/register.js')
       
     ]).then(bootFiles => {

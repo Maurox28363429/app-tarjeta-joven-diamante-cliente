@@ -15,21 +15,12 @@
       </div>
       <q-card>
         <q-list bordered padding>
-          <q-item clickable v-ripple to="/account/profile">
+          <q-item clickable v-ripple to="/empresa/account/profile">
             <q-item-section>
               <q-item-label>Ver perfil</q-item-label>
               <q-item-label caption>
                 Toda la informacion relacionada de su perfil puede ser editada y
                 la puede visualizar.
-              </q-item-label>
-            </q-item-section>
-          </q-item>
-          <q-item clickable v-ripple to="/memberships">
-            <q-item-section>
-              <q-item-label>Subir membresías</q-item-label>
-              <q-item-label caption>
-                Subir de plan es muy facil, solo debe seleccionar el plan que
-                desea y subir la información requerida.
               </q-item-label>
             </q-item-section>
           </q-item>

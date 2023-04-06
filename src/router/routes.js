@@ -1,4 +1,5 @@
-const clientAuthMeta = { requiresAuth: true, role: 'client' }
+const clientAuthMeta = { requiresAuth: true, role: 'cliente' }
+const bussinesAuthMeta = { requiresAuth: true, role: 'empresa' }
 
 const routes = [
   {
@@ -7,12 +8,17 @@ const routes = [
       {
         name: 'login',
         path: 'login',
-        component: () => import('pages/loginPage.vue')
+        component: () => import('pages/LoginPage.vue')
+      },
+      {
+        name: 'login',
+        path: '',
+        component: () => import('pages/LoginPage.vue')
       },
       {
         name: 'forgotpassword',
         path: 'forgotpassword',
-        component: () => import('pages/forgotpasswordPage.vue')
+        component: () => import('pages/ForgotpasswordPage.vue')
       },
       {
         name: 'register',
@@ -25,19 +31,92 @@ const routes = [
         component: () => import('pages/RecoverypasswordPage.vue')
       },
       {
+        path: 'cliente',
+        meta: clientAuthMeta,
+        component: () => import('layouts/MainClientLayout.vue'),
+        children: [
+          {
+            name: 'products',
+            path: 'products',
+            component: () => import('pages/client/ProductsPage.vue')
+          },
+          {
+            path: '',
+            component: () => import('pages/client/ProductsPage.vue')
+          },
+          {
+            path: 'account',
+            children: [
+              {
+                name: 'account',
+                path: '',
+                component: () => import('pages/client/AccountPage.vue')
+              },
+              {
+                name: 'profile',
+                path: 'profile',
+                component: () => import('pages/client/ProfilePage.vue')
+              }
+            ]
+          },
+          {
+            name: 'shopping',
+            path: 'shopping',
+            component: () => import('pages/client/ShoppingPage.vue')
+          },
+          {
+            name: 'store',
+            path: 'store',
+            component: () => import('pages/client/StorePage.vue')
+          },
+          {
+            name: 'news',
+            path: 'news',
+            component: () => import('pages/client/PromotionsPage.vue')
+          }
+        ]
+      },
+      {
+        path: 'empresa',
+        meta: bussinesAuthMeta,
+        component: () => import('layouts/MainBussinesLaout.vue'),
+        children: [
+          {
+            path: 'account',
+            children: [
+              {
+                name: 'account',
+                path: '',
+                component: () => import('pages/business/AccountPage.vue')
+              },
+              {
+                name: 'profile',
+                path: 'profile',
+                component: () => import('pages/business/ProfilePage.vue')
+              }
+            ]
+          },
+          {
+            name: 'orders',
+            path: 'orders',
+            component: () => import('pages/business/OrdersPage.vue')
+          }
+        ]
+      },
+      {
         path: 'memberships',
         meta: clientAuthMeta,
         children: [
           {
             path: '',
-            component: () => import('pages/MembershipsPage.vue'),
+            component: () => import('pages/client/MembershipsPage.vue'),
             meta: clientAuthMeta
           }
         ]
       },
       {
         path: 'memberships/:id',
-        component: () => import('pages/PaymentPage.vue'),
+        component: () => import('pages/client/PaymentPage.vue'),
         meta: clientAuthMeta,
         beforeEnter: (to, from, next) => {
           if (isNaN(parseInt(to.params.id))) {
@@ -46,70 +125,9 @@ const routes = [
             next()
           }
         }
-      },
-      {
-        path: '/',
-        component: () => import('src/pages/HomePage.vue'),
-        meta: clientAuthMeta,
-        children: [
-          {
-            name: 'products',
-            path: 'products',
-            component: () => import('pages/ProductsPage.vue'),
-            meta: clientAuthMeta
-          },
-          {
-            path: '',
-            component: () => import('pages/ProductsPage.vue'),
-            meta: clientAuthMeta
-          },
-          {
-            name: 'membershipsHome',
-            path: 'membershipsHome',
-            component: () => import('pages/MembershipsPage.vue'),
-            meta: clientAuthMeta
-          },
-          {
-            path: 'account',
-            meta: clientAuthMeta,
-            children: [
-              {
-                name: 'account',
-                path: '',
-                component: () => import('src/pages/AccountPage.vue')
-              },
-              {
-                name: 'profile',
-                path: 'profile',
-                component: () => import('src/pages/ProfilePage.vue')
-              }
-            ]
-          },
-          {
-            name: 'shopping',
-            path: 'shopping',
-            component: () => import('pages/ShoppingPage.vue'),
-            meta: clientAuthMeta
-          },
-          {
-            name: 'store',
-            path: 'store',
-            component: () => import('pages/StorePage.vue'),
-            meta: clientAuthMeta
-          },
-          {
-            name: 'news',
-            path: 'news',
-            component: () => import('pages/NewsPage.vue'),
-            meta: clientAuthMeta
-          }
-        ]
       }
     ]
   },
-
-  // Always leave this as last one,
-  // but you can also remove it
   {
     name: 'error',
     path: '/:catchAll(.*)*',

@@ -19,21 +19,22 @@
           color="dark"
           @click="toggleLeftDrawer"
         />
-        <q-toolbar-title class="row justify-center items-center">
+        <q-toolbar-title class="row items-center">
           <q-img
             src="../assets/acronimo.svg"
             spinner-color="dark"
-            style="height: 32px; max-width: 74px"
+            @click="goHome"
+            style="height: 32px; max-width: 74px; cursor: pointer"
           />
         </q-toolbar-title>
         <q-btn
-          style="height: 35px; width: 35px"
+          style="height: 35px; width: 35px; display: none"
           fill
           round
           icon="shopping_cart"
           color="secondary"
         />
-        <router-link to="/account" class="cursor-pointer">
+        <router-link to="/cliente/account" class="cursor-pointer">
           <q-avatar size="42px" class="q-ml-md">
             <img src="https://cdn.quasar.dev/img/boy-avatar.png" />
           </q-avatar>
@@ -73,36 +74,38 @@
         <q-list padding>
           <q-item>
             <q-item-section>
-              <p class="text-weight-bold text-h6 q-ma-none">Plan free</p>
+              <p class="text-weight-bold text-h6 q-ma-none">
+                Plan {{ user?.membresia?.type }}
+              </p>
               <p
                 class="text-weight-medium text-subtitle2 text-grey-6 q-ma-none"
               >
-                Quendan: {{ user.membresia.days }} días
+                Quendan: {{ user?.membresia?.days }} días
               </p>
             </q-item-section>
           </q-item>
           <q-separator inset v-show="!miniState" />
-          <q-item clickable v-ripple to="/shopping">
+          <q-item clickable v-ripple to="/cliente/shopping">
             <q-item-section avatar>
               <q-icon name="shopping_basket" />
             </q-item-section>
             <q-item-section>Mis compras</q-item-section>
           </q-item>
-          <q-item clickable v-ripple to="/news">
+          <q-item clickable v-ripple to="/cliente/news">
             <q-item-section avatar>
               <q-icon name="newspaper" />
             </q-item-section>
 
             <q-item-section>Promociones</q-item-section>
           </q-item>
-          <q-item clickable v-ripple to="/account">
+          <q-item clickable v-ripple to="/cliente/account">
             <q-item-section avatar>
               <q-icon name="person" />
             </q-item-section>
 
             <q-item-section>Mi perfil</q-item-section>
           </q-item>
-          <q-item clickable v-ripple to="/products">
+          <q-item clickable v-ripple to="/cliente/products">
             <q-item-section avatar>
               <q-icon name="sell" />
             </q-item-section>
@@ -188,7 +191,7 @@
       narrow-indicator
     >
       <router-link
-        to="/shopping"
+        to="/cliente/shopping"
         style="text-decoration: none; color: #ffff; width: 100%; margin: none"
       >
         <q-tab
@@ -200,39 +203,27 @@
         />
       </router-link>
       <router-link
-      to="/products"
-      style="text-decoration: none; color: #ffff; width: 100%; margin: none"
-    >
-      <q-tab
-        name="Ofertas"
-        label="Ofertas"
-        color="white"
-        class="text-capitalize q-px-none"
-        icon="sell"
-      />
-    </router-link>
-      <router-link
-        to="/news"
+        to="/cliente/products"
         style="text-decoration: none; color: #ffff; width: 100%; margin: none"
       >
         <q-tab
-          name="Novedades"
-          label="Novedades"
+          name="Ofertas"
+          label="Ofertas"
           color="white"
           class="text-capitalize q-px-none"
-          icon="newspaper"
+          icon="sell"
         />
       </router-link>
       <router-link
-        to="/account"
+        to="/cliente/news"
         style="text-decoration: none; color: #ffff; width: 100%; margin: none"
       >
         <q-tab
-          name="cuenta"
-          label="cuenta"
-          class="text-capitalize q-px-none"
+          name="Promociones"
+          label="Promociones"
           color="white"
-          icon="person"
+          class="text-capitalize q-px-none"
+          icon="newspaper"
         />
       </router-link>
     </q-tabs>
@@ -295,20 +286,25 @@ import format from 'src/utils/date'
 
 const { user } = userAuth()
 
+const goHome = () => {
+  console.log('goHome')
+  router.push('/')
+}
+
 const leftDrawerOpen = ref(false)
 const router = useRouter()
 
 const show = ref(false)
 
 const showModalRenovar = () => {
-  if (user.membresia.days === 1) {
+  if (user?.membresia?.days === 1) {
     return true
   }
   return false
 }
 
 const showModalNew = () => {
-  if (format(user.membresia.updated_at) === format(new Date())) {
+  if (format(user?.membresia?.updated_at) === format(new Date())) {
     return true
   }
   return false

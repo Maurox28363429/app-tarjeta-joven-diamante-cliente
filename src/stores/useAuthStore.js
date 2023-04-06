@@ -3,6 +3,7 @@ import loginUser from 'src/api/loginUser'
 import registerUser from 'src/api/registerUser'
 import localStorageAuth from 'src/utils/localStorageAuth'
 import membershipsTest from 'src/api/membershipsTest'
+import ROLE_ID from 'src/utils/roleId'
 
 export const useAuthStore = defineStore('userAuth', {
   state: () => ({
@@ -25,14 +26,8 @@ export const useAuthStore = defineStore('userAuth', {
       this.token = data.token
       localStorageAuth.setUser(data)
 
-      if (
-        this.user.membresia?.status === 'activa' ||
-        this.user.membresia?.days > 0
-      ) {
-        this.router.push('/products')
-      } else {
-        this.router.push('/products')
-      }
+      console.log('user', ROLE_ID[this.user.role_id])
+      this.router.push({ path: `/${ROLE_ID[this.user.role_id]}` })
     },
     async register ({ name, email, last_name, phone, sex, password, role_id }) {
       const { data } = await registerUser({
@@ -47,7 +42,7 @@ export const useAuthStore = defineStore('userAuth', {
       this.user = data.user
       this.token = data.token
       localStorageAuth.setUser(data)
-      this.router.push('/products')
+      this.router.push({ path: `/${ROLE_ID[this.user.role_id]}` })
     },
     async addMembership ({ user_id }) {
       const { data } = await membershipsTest({ user_id })

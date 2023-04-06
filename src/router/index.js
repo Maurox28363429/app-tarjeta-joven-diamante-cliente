@@ -63,7 +63,8 @@ export default route(function (/* { store, ssrContext } */) {
           ?.meta.role
         const routeRole = roles.find((role) => role.name === routeRoleName)
 
-        if (routeRole && user.role_id !== routeRole.id) {
+        if (routeRole && user.user.role_id !== routeRole.id) {
+          console.log('user', user.role_id, 'route', routeRole.id, user)
           // Si el rol del usuario no coincide con el rol de la ruta, redirigir a una página de error o de acceso denegado
           next({ name: 'error', params: { errorCode: 403 } })
         } else {

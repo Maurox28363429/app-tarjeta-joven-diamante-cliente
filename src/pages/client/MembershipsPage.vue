@@ -17,10 +17,7 @@ const goBack = () => {
   <div class="memberships">
     <div class="background_blue"></div>
 
-    <div
-      @click="goBack"
-      style="position: absolute; top: 20px; left: 20px; z-index: 20"
-    >
+    <div @click="goBack" class="back-button">
       <q-icon
         name="arrow_back"
         size="md"
@@ -54,15 +51,7 @@ const goBack = () => {
       </div>
       <div class="memberships_plans width-full q-pb-xl" v-if="loading">
         <template v-for="(items, index) in arr" :key="index">
-          <q-card
-            style="
-              box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.3),
-                0px 2px 6px 2px rgba(0, 0, 0, 0.15);
-              width: 320px;
-              min-height: 427px;
-              padding: 32px;
-            "
-          >
+          <q-card class="membership-card-skeleton">
             <q-item class="row justify-center full-width">
               <q-item-section avatar>
                 <q-skeleton type="QAvatar" />
@@ -78,9 +67,9 @@ const goBack = () => {
               </q-item-label>
             </q-item-section>
 
-            <q-item style="max-width: 300px">
-              <q-item-section avatar style="min-width: 0px">
-                <q-skeleton type="QAvatar" style="width: 22px; height: 22px" />
+            <q-item class="benefit">
+              <q-item-section avatar class="benefitPoint">
+                <q-skeleton type="QAvatar" class="sizePoint" />
               </q-item-section>
 
               <q-item-section>
@@ -93,9 +82,9 @@ const goBack = () => {
               </q-item-section>
             </q-item>
 
-            <q-item style="max-width: 300px">
-              <q-item-section avatar style="min-width: 0px">
-                <q-skeleton type="QAvatar" style="width: 22px; height: 22px" />
+            <q-item class="benefit">
+              <q-item-section avatar class="benefitPoint">
+                <q-skeleton type="QAvatar" class="sizePoint" />
               </q-item-section>
 
               <q-item-section>
@@ -108,24 +97,9 @@ const goBack = () => {
               </q-item-section>
             </q-item>
 
-            <q-item style="max-width: 300px">
-              <q-item-section avatar style="min-width: 0px">
-                <q-skeleton type="QAvatar" style="width: 22px; height: 22px" />
-              </q-item-section>
-
-              <q-item-section>
-                <q-item-label>
-                  <q-skeleton type="text" />
-                </q-item-label>
-                <q-item-label caption>
-                  <q-skeleton type="text" width="65%" />
-                </q-item-label>
-              </q-item-section>
-            </q-item>
-
-            <q-item style="max-width: 300px">
-              <q-item-section avatar style="min-width: 0px">
-                <q-skeleton type="QAvatar" style="width: 22px; height: 22px" />
+            <q-item class="benefit">
+              <q-item-section avatar class="benefitPoint">
+                <q-skeleton type="QAvatar" class="sizePoint" />
               </q-item-section>
 
               <q-item-section>
@@ -140,8 +114,9 @@ const goBack = () => {
 
             <q-card-actions class="full-width">
               <q-skeleton type="QBtn" class="full-width" />
-            </q-card-actions> </q-card
-        ></template>
+            </q-card-actions>
+          </q-card>
+        </template>
       </div>
     </div>
   </div>
@@ -189,5 +164,33 @@ const goBack = () => {
   height: 100%;
   min-height: 100vh;
   background: #e9e9e9;
+}
+
+.back-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 20;
+}
+
+.membership-card-skeleton {
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.3),
+    0px 2px 6px 2px rgba(0, 0, 0, 0.15);
+  width: 320px;
+  min-height: 427px;
+  padding: 32px;
+}
+
+.benefit {
+  max-width: 300px;
+}
+
+.benefitPoint {
+  min-width: 0;
+}
+
+.sizePoint {
+  width: 22px;
+  height: 22px;
 }
 </style>

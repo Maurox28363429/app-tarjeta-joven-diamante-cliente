@@ -1,9 +1,9 @@
 <script setup>
 import { useRouter } from 'vue-router'
 import { ref, onMounted } from 'vue'
-import MembershipsPayment from '../../src/components/MembershipsPayment.vue'
+import MembershipsPayment from 'src/components/MembershipsPayment.vue'
 import getSingleMemberships from 'src/api/getSingleMemberships'
-/* eslint-disable camelcase */
+
 const router = useRouter()
 
 const { id } = router.currentRoute.value.params
@@ -33,7 +33,7 @@ onMounted(() => {
   </div>
   <div
     v-if="loading"
-    style="height:100vh"
+    style="height: 100vh"
     class="full-width screen-heigth row justify-center items-center"
   >
     <q-spinner color="primary" size="3em" :thickness="2" />

@@ -3,7 +3,7 @@
     <div class="full-width title-large q-pt-lg q-pl-lg">
       <p>Perfil</p>
     </div>
-    <div class="q-pa-md full-width row wrap justify-center q-gutter-lg">
+    <div class="q-pa-md full-width row wrap justify-center container">
       <q-list bordered padding separator class="profile rounded-borders">
         <q-item>
           <q-item-section class="row justify-center full-width items-center">
@@ -48,18 +48,6 @@
           <q-item-section>
             <q-item-label>Direccion</q-item-label>
             <q-item-label caption>{{ user.address }}</q-item-label>
-          </q-item-section>
-        </q-item>
-        <q-item>
-          <q-item-section>
-            <q-item-label>Membresía</q-item-label>
-            <q-item-label caption></q-item-label>
-          </q-item-section>
-        </q-item>
-        <q-item>
-          <q-item-section>
-            <q-item-label>Estado de Membresía</q-item-label>
-            <q-item-label caption>{{ user.membresia.status }}</q-item-label>
           </q-item-section>
         </q-item>
       </q-list>
@@ -168,7 +156,12 @@
                 </p>
               </div>
               <q-item-section class="button">
-                <q-btn :loading="loading" type="submit" color="primary" label="Guardar" />
+                <q-btn
+                  :loading="loading"
+                  type="submit"
+                  color="primary"
+                  label="Guardar"
+                />
               </q-item-section>
             </q-item-section>
           </q-item>
@@ -222,12 +215,19 @@ const handledUpdateUser = async () => {
   validateForm()
   try {
     loading.value = true
-    const values = { ...useForm.value, role_id: user.value.role_id, active: user.value.active, id: user.value.id, sex: useForm.value.sex.value }
+    const values = {
+      ...useForm.value,
+      role_id: user.value.role_id,
+      active: user.value.active,
+      id: user.value.id,
+      sex: useForm.value.sex.value
+    }
     await updateUser(values)
     const userCurrent = localStorageAuth.getUser()
-    localStorageAuth.setUser({ user: { ...userCurrent.user, ...values }, token: userCurrent.token })
-    console.log('submit!!!')
-    console.log(values)
+    localStorageAuth.setUser({
+      user: { ...userCurrent.user, ...values },
+      token: userCurrent.token
+    })
     updatedUser()
     triggerPositive('Usuario actualizado con éxito')
   } catch (err) {
@@ -243,6 +243,11 @@ const handledUpdateUser = async () => {
 .editContainer {
   flex: 1;
   min-width: 300px;
+  margin: 0px;
+}
+
+.container {
+  gap: 16px;
 }
 
 .formContainer {
@@ -253,6 +258,7 @@ const handledUpdateUser = async () => {
 
 .profile {
   width: 100%;
+  margin: 0px;
 }
 
 @media (min-width: 700px) {
