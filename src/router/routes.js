@@ -11,7 +11,6 @@ const routes = [
         component: () => import('pages/LoginPage.vue')
       },
       {
-        name: 'login',
         path: '',
         component: () => import('pages/LoginPage.vue')
       },
@@ -48,12 +47,10 @@ const routes = [
             path: 'account',
             children: [
               {
-                name: 'account',
                 path: '',
                 component: () => import('pages/client/AccountPage.vue')
               },
               {
-                name: 'profile',
                 path: 'profile',
                 component: () => import('pages/client/ProfilePage.vue')
               }
@@ -85,7 +82,6 @@ const routes = [
             path: 'account',
             children: [
               {
-                name: 'account',
                 path: '',
                 component: () => import('pages/business/AccountPage.vue')
               },
