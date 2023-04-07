@@ -129,7 +129,8 @@
       transition-hide="scale"
     >
       <q-card>
-        <QRScanner />
+        <QRSCanerMobile v-if="!isWeb" />
+        <QRScanner v-else />
         <q-card-actions align="right" class="text-primary">
           <q-btn flat label="Close" v-close-popup />
         </q-card-actions>
@@ -240,12 +241,21 @@ import QRScanner from 'src/components/QRScanner.vue'
 import { userAuth } from 'src/composables/userAuth'
 import UpdateMembershipModal from '../components/UpdateMembershipModal.vue'
 import format from 'src/utils/date'
+import QRSCanerMobile from 'src/components/QRSCanerMobile.vue'
 
 const { user } = userAuth()
 
 const goHome = () => {
   console.log('goHome')
   router.push('/empresa')
+}
+
+// detecta si esta en un navegador web
+const isWeb = () => {
+  if (typeof window !== 'undefined') {
+    return true
+  }
+  return false
 }
 
 const leftDrawerOpen = ref(false)
