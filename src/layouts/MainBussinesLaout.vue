@@ -129,7 +129,8 @@
       transition-hide="scale"
     >
       <q-card>
-        <QRSCanerMobile />
+        <QRSCanerMobile class="cordova-only" />
+        <QRScanner class="cordova-hide" />
         <q-card-actions align="right" class="text-primary">
           <q-btn flat label="Close" v-close-popup />
         </q-card-actions>
@@ -236,7 +237,7 @@ aside {
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-// import QRScanner from 'src/components/QRScanner.vue'
+import QRScanner from 'src/components/QRScanner.vue'
 import { userAuth } from 'src/composables/userAuth'
 import UpdateMembershipModal from '../components/UpdateMembershipModal.vue'
 import format from 'src/utils/date'
