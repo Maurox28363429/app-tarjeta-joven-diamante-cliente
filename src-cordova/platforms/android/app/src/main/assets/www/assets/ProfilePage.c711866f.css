@@ -1,0 +1,1 @@
+.editContainer[data-v-511af2b0]{flex:1;min-width:300px}.formContainer[data-v-511af2b0]{display:grid;grid-template-columns:1fr;gap:10px}.profile[data-v-511af2b0]{width:100%}@media (min-width: 700px){.formContainer[data-v-511af2b0]{grid-template-columns:1fr 1fr}.button[data-v-511af2b0]{grid-column:1 / 3}.profile[data-v-511af2b0]{width:100%;max-width:300px}}
