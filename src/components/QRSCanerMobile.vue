@@ -1,47 +1,44 @@
-<template>lector qr</template>
+<template>
+  <q-page class="flex flex-center">
+    <q-btn color="primary" @click="startScan">Iniciar escaneo</q-btn>
+  </q-page>
+</template>
 
-<script setup>
-import QRScanner from 'cordova-plugin-qrscanner-11'
-import { onMounted } from 'vue'
+<script>
+export default {
+  methods: {
+    startScan () {
+      if (
+        typeof window.cordova !== 'undefined' &&
+        typeof window.QRScanner !== 'undefined'
+      ) {
+        window.QRScanner.prepare((err, status) => {
+          if (err) {
+            console.error(err)
+            return
+          }
 
-onMounted(() => {
-  QRScanner.prepare(onDone) // show the prompt
-})
+          if (status.authorized) {
+            window.QRScanner.show()
+            window.QRScanner.scan((err, result) => {
+              if (err) {
+                console.error(err)
+                return
+              }
 
-function onDone (err, status) {
-  if (err) {
-    // here we can handle errors and clean up any loose ends.
-    console.error(err)
-  }
-  if (status.authorized) {
-    // W00t, you have camera access and the scanner is initialized.
-    QRScanner.show(function (status) {
-      console.log(status)
-    })
-
-    // start scanning
-    QRScanner.scan(displayContents)
-  } else if (status.denied) {
-    QRScanner.openSettings()
-  } else {
-    console.log('no se pudo obtener permiso')
-    // we didn't get permission, but we didn't get permanently denied. (On
-    // Android, a denial isn't permanent unless the user checks the "Don't
-    // ask again" box.) We can ask again at the next relevant opportunity.
+              alert('Contenido del código QR: ' + result)
+              window.QRScanner.hide()
+            })
+          } else if (status.denied) {
+            window.QRScanner.openSettings()
+          } else {
+            console.log('No se pudo obtener el permiso')
+          }
+        })
+      } else {
+        console.log('Cordova o QRScanner no están definidos')
+      }
+    }
   }
 }
-
-function displayContents (err, texto) {
-  if (err) {
-    // se produjo un error o se canceló el escaneo ( código de error `6` )
-  } else {
-    // El escaneo completado, muestra el contenido del código QR:
-    alert(texto)
-  }
-}
-
-// Haga que la vista web sea transparente para que la vista previa de video sea visible detrás de ella.
-
-// Asegúrese de hacer que cualquier elemento HTML opaco sea transparente aquí para evitar
-// cubriendo el video.
 </script>
