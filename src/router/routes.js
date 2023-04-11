@@ -59,7 +59,7 @@ const routes = [
           {
             name: 'shopping',
             path: 'shopping',
-            component: () => import('pages/client/ShoppingPage.vue')
+            component: () => import('pages/ShoppingPage.vue')
           },
           {
             name: 'store',
@@ -95,7 +95,7 @@ const routes = [
           {
             name: 'orders',
             path: 'orders',
-            component: () => import('pages/business/OrdersPage.vue')
+            component: () => import('pages/ShoppingPage.vue')
           }
         ]
       },

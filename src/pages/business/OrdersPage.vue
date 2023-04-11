@@ -1,1 +1,0 @@
-<template>orders</template>
