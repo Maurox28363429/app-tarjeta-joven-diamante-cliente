@@ -1,0 +1,1 @@
+import{u as i}from"./use-quasar.f2aa822b.js";const s=()=>{const r=i();return{triggerPositive:t=>{r.notify({type:"positive",message:t})},triggerWarning:t=>{r.notify({type:"warning",message:t})}}};export{s as u};
