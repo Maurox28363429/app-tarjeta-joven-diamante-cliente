@@ -6,6 +6,12 @@
       @detect="onDetect"
       @error="onError"
     ></qrcode-stream>
+    <q-inner-loading
+      :showing="visible"
+      label="Por favor espera..."
+      label-class="text-teal"
+      label-style="font-size: 1.1em"
+    />
     <div
       v-if="!permision"
       class="full-width full-height column justify-center items-center"
@@ -23,8 +29,12 @@
 
 <script setup>
 import { onMounted, ref } from 'vue'
+import { useToast } from 'src/composables/useToast'
+const visible = ref(false)
 
 const permision = ref(true)
+
+const { triggerWarning } = useToast()
 
 function addPermision () {
   if (
@@ -44,17 +54,22 @@ function addPermision () {
         } else {
           // El permiso ha sido denegado
           console.warn('Permiso de cámara denegado')
+          triggerWarning('Los permisos para la camara estan desactivados')
           permision.value = false
         }
       },
       function () {
         // Error al solicitar el permiso
         console.error('Error al solicitar el permiso de cámara')
+        triggerWarning('Los permisos para la camara estan desactivados')
         permision.value = false
       }
     )
   }
 }
+
+// how get permission denied in web
+// https://stackoverflow.com/questions/49383406/how-to-detect-if-the-user-denied-the-camera-permission-in-chrome
 
 onMounted(() => {
   addPermision()
@@ -65,6 +80,7 @@ const onDecode = (decodedString) => {
 }
 
 const onInit = (promise) => {
+  visible.value = true
   promise
     .then(() => {
       console.log('¡Listo para escanear!')
@@ -72,7 +88,11 @@ const onInit = (promise) => {
     })
     .catch((error) => {
       console.error('Error al inicializar el lector de QR:', error)
+      triggerWarning('Los permisos para la camara estan desactivados')
       permision.value = false
+    })
+    .finally(() => {
+      visible.value = false
     })
 }
 
