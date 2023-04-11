@@ -7,6 +7,7 @@ import {
   createWebHashHistory
 } from 'vue-router'
 import routes from './routes'
+import ROLE_ID from 'src/utils/roleId'
 
 /*
  * If not building with SSR mode, you can
@@ -48,6 +49,24 @@ export default route(function (/* { store, ssrContext } */) {
       name: 'empresa'
     }
   ]
+
+  Router.beforeEach((to, from, next) => {
+    const user = localStorageAuth.getUser()
+    if (user) {
+      if (
+        to.path === '/' ||
+        to.path === '/login' ||
+        to.path === '/register' ||
+        to.path === '/forgotpassword' ||
+        to.path === '/recoveryPassword'
+      ) {
+        next({ path: `/${ROLE_ID[user?.user?.role_id]}` })
+      }
+      // Si el usuario está autenticado y trata de acceder a la página de inicio de sesión,
+      // redirigirlo a la página correspondiente a su rol
+    }
+    next()
+  })
 
   Router.beforeEach((to, from, next) => {
     if (to.matched.some((record) => record.meta.requiresAuth)) {

@@ -9,7 +9,7 @@
       color="primary"
     >
       <template v-slot:append>
-        <q-icon name="search" v-model="search"/>
+        <q-icon name="search" v-model="search" />
       </template>
     </q-input>
   </div>
@@ -22,7 +22,13 @@
       :key="items.id"
     >
       <q-card class="my-card">
-        <img :src="(items.img_array_url[0])? items.img_array_url[0]:'https://cdn.quasar.dev/img/mountains.jpg' " />
+        <img
+          :src="
+            items.img_array_url[0]
+              ? items.img_array_url[0]
+              : 'https://cdn.quasar.dev/img/mountains.jpg'
+          "
+        />
 
         <q-card-section>
           <q-list>
@@ -46,7 +52,9 @@
 
               <q-item-section>
                 <q-item-label>{{ items.price_total }} $</q-item-label>
-                <q-item-label caption>Descuento{{ items.descuento }} %</q-item-label>
+                <q-item-label caption
+                  >Descuento{{ items.descuento }} %</q-item-label
+                >
               </q-item-section>
             </q-item>
           </q-list>
@@ -58,13 +66,15 @@
       </q-card>
     </div>
   </div>
-  <div  class="full-width full-height row wrap q-gutter-lg justify-center q-my-lg">
+  <div
+    class="full-width full-height row wrap q-gutter-lg justify-center q-my-lg"
+  >
     <q-pagination
-    style="margin-top: 1em;"
-    v-model="currentPaginate"
-    :max="paginas"
-    boundary-numbers
-  />
+      style="margin-top: 1em"
+      v-model="currentPaginate"
+      :max="paginas"
+      boundary-numbers
+    />
   </div>
 </template>
 
@@ -90,7 +100,12 @@ watch(search, async (val) => {
 })
 function getProducts () {
   instance
-    .get('/comercio-ofertas?with[]=comercio&nombre=' + search.value + '&page=' + currentPaginate.value)
+    .get(
+      '/comercio-ofertas?with[]=comercio&nombre=' +
+        search.value +
+        '&page=' +
+        currentPaginate.value
+    )
     .then((res) => {
       console.log(res.data)
       products.value = res.data.data
@@ -100,7 +115,7 @@ function getProducts () {
     .catch((err) => {
       console.log(err)
     })
-};
+}
 // eventos hooks
 onMounted(async () => {
   await getProducts()

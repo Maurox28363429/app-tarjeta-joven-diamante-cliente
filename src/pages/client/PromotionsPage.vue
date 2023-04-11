@@ -39,12 +39,12 @@
 
       <!-- Si las noticias están cargadas, muestra la cuadrícula -->
       <template v-else>
-        <template v-if="filteredNews.length === 0">
+        <template v-if="news?.length === 0">
           <div class="no-results">No se encontraron resultados</div>
         </template>
 
         <template v-else>
-          <template v-for="item in filteredNews" :key="item.id">
+          <template v-for="item in news" :key="item.id">
             <q-card class="news-card">
               <q-img
                 :src="item.img_url"
@@ -71,6 +71,10 @@
           </template>
         </template>
       </template>
+    </div>
+
+    <div class="q-pa-lg flex flex-center">
+      <q-pagination v-model="currentPaginate" :max="paginas" />
     </div>
 
     <!-- Diálogo modal de noticias -->
@@ -100,7 +104,7 @@
   </div>
 </template>
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import getNews from 'src/api/getNews'
 
 const openModal = ref(false)
@@ -108,29 +112,38 @@ const news = ref([])
 const search = ref('')
 const modalCurrent = ref({})
 const loading = ref(false)
-
-// Filtra las noticias basado en el término de búsqueda
-const filteredNews = computed(() => {
-  return news.value.filter((item) =>
-    item.titulo.toLowerCase().includes(search.value.toLowerCase())
-  )
-})
+const currentPaginate = ref(1)
+const paginas = ref(1)
 
 const showModal = (modalInfo) => {
   modalCurrent.value = { ...modalInfo }
   openModal.value = true
 }
 
-onMounted(async () => {
+async function fetchNews () {
   try {
     loading.value = true
-    const { data } = await getNews()
+    const { data } = await getNews({
+      page: currentPaginate.value,
+      search: search.value
+    })
     news.value = data.data
   } catch (err) {
     console.log(err)
   } finally {
     loading.value = false
   }
+}
+
+watch(currentPaginate, async (val) => {
+  await fetchNews()
+})
+watch(search, async (val) => {
+  await fetchNews()
+})
+
+onMounted(async () => {
+  await fetchNews()
 })
 </script>
 <style>
