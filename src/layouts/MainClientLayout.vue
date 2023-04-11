@@ -143,7 +143,10 @@
             ¡Hola, {{ user.name + ' ' + user.last_name }}!
           </div>
           <div>
-            <p style="text-overflow: ellipsis; overflow: hidden; width: 196px">
+            <p
+              class="text-center"
+              style="text-overflow: ellipsis; overflow: hidden; width: 196px"
+            >
               {{ user.email }}
             </p>
           </div>
