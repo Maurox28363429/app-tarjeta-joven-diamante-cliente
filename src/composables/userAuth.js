@@ -1,8 +1,6 @@
 import { useAuthStore } from 'src/stores/useAuthStore'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useToast } from './useToast'
-
-/* eslint-disable camelcase */
 
 export const userAuth = () => {
   const authStore = useAuthStore()
@@ -10,7 +8,7 @@ export const userAuth = () => {
   const isLoadingRegister = ref(false)
   const isLoadingMembership = ref(false)
 
-  const { token, user } = authStore
+  const { token } = authStore
 
   const membershipsIsActive = () => {
     if (
@@ -21,6 +19,8 @@ export const userAuth = () => {
     }
     return false
   }
+
+  const user = computed(() => authStore?.user)
 
   const { triggerPositive, triggerWarning } = useToast()
 

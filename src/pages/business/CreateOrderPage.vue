@@ -2,6 +2,9 @@
   <p class="q-ma-md">
     Cliente: {{ client ? client.name : 'cliente no ingresado' }}
   </p>
+  <p class="q-ma-md body-small" style="color: #363636">
+    {{ !client ? 'Por favor ingrese el cliente a través del QR' : '' }}
+  </p>
   <div class="orderContainer">
     <div class="full-height q-mx-md">
       <div class="full-width q-mb-lg row justify-center q-mt-lg">
@@ -21,7 +24,7 @@
       <div class="containerCard">
         <q-inner-loading
           :showing="loading"
-          label="Please wait..."
+          label="Por favor espera..."
           label-class="text-teal"
           label-style="font-size: 1.1em"
         />
@@ -35,16 +38,16 @@
           </div>
           <div>
             <div class="text-center column">
-              <p class="q-ma-none">nombre</p>
-              <p class="q-ma-none">{{ items.nombre }}</p>
+              <p class="q-ma-none text-weight-medium">{{ items.nombre }}</p>
+              <p class="q-ma-none text-weight-medium">
+                ${{ items.price_total }}
+              </p>
+              <p class="q-ma-none">Desct: {{ items.descuento }}%</p>
             </div>
           </div>
           <div>
-            <p class="q-ma-none">Precio: ${{ items.price_total }}</p>
-            <p class="q-ma-none">Descuento: {{ items.descuento }}%</p>
-          </div>
-          <div>
-            <p class="q-ma-none">Fecha limite:</p>
+            <p class="q-ma-none">stock:{{ items.stock }}</p>
+            <p class="q-ma-none">F/l:</p>
             <p class="q-ma-none">
               {{ items.fecha_tope_descuento }}
             </p>
@@ -53,15 +56,15 @@
             <q-btn
               color="primary"
               icon="add"
-              size="sm"
+              size="xs"
               round
               @click="addMount(items.id)"
             />
-            {{ items.cantidad }}
+            <p class="q-ma-none text-weight-medium">{{ items.cantidad }}</p>
             <q-btn
               color="primary"
               icon="remove"
-              size="sm"
+              size="xs"
               round
               @click="subtractMount(items.id)"
             />
@@ -81,7 +84,10 @@
       </div>
     </div>
     <div class="full-width">
+
       <div class="q-pa-md">
+        <p class="q-ma-none">Total</p>
+        <p class="q-ma-none">Descuento</p>
         <q-table
           class="my-sticky-virtscroll-table"
           flat
@@ -97,7 +103,7 @@
           v-model:selected="selected"
         />
         <div class="buttonActions">
-          <q-btn color="positive" label="finalizar compra" @click="invoice" />
+          <q-btn color="positive" label="finalizar compra" @click="invoice" :disable="!client" />
           <q-btn color="negative" label="eliminar" @click="deleteProduct" />
         </div>
       </div>
@@ -106,13 +112,18 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch, computed } from 'vue'
 import getOffersFromStore from 'src/api/getOffersFromStore'
 import { userAuth } from 'src/composables/userAuth'
 import { userCart } from 'src/stores/userCart'
 import invoiceOffer from 'src/api/invoiceOffer'
+import { useToast } from 'src/composables/useToast'
 
-const { client } = userCart()
+const { triggerPositive, triggerWarning } = useToast()
+
+const storeClient = userCart()
+
+const client = computed(() => storeClient.client)
 
 const { user } = userAuth()
 
@@ -123,8 +134,6 @@ const pages = ref(1)
 const currentPaginate = ref(1)
 const selected = ref([])
 const rows = ref([])
-
-console.log(selected.value)
 
 async function invoice () {
   const products = rows.value.map((item) => {
@@ -139,34 +148,29 @@ async function invoice () {
       total_descuento: 10,
       ofertas: products,
       total: 1,
-      client_id: client.id
+      client_id: storeClient.client.id
     })
+    triggerPositive('Factura creada')
   } catch (err) {
-    console.log(err)
+    console.error(err)
+    triggerWarning('Error al crear la factura')
   }
 }
 
 function deleteProduct () {
-  console.log(selected.value)
-  console.log('delete')
-
-  // Corrección en la función de filtrado
   const filtro = rows.value.filter(
     (item) =>
       !selected.value.some((selectedItem) => selectedItem.id === item.id)
   )
-
-  console.log(filtro, 'filtro')
-  console.log(rows.value, 'rows')
-
   // Actualizar el valor de rows con el resultado del filtro
   rows.value = filtro
+  if (selected.value.length > 0) {
+    triggerPositive('Producto eliminado')
+  }
 }
 
 function addMount (id) {
-  console.log('agregar', id)
   const item = offers.value.find((item) => item.id === id)
-  console.log(item, 'item')
   if (item) {
     item.cantidad++
   }
@@ -188,6 +192,7 @@ function addProduct (product) {
   const productExist = rows.value.find((item) => item.id === product.id)
   if (productExist) {
     productExist.cantidad = product.cantidad + productExist.cantidad
+    triggerPositive('Producto agregado')
   } else {
     rows.value.push({
       id: product.id,
@@ -196,6 +201,7 @@ function addProduct (product) {
       price_total: product.price_total,
       descuento: product.descuento
     })
+    triggerPositive('Producto agregado')
   }
 }
 
@@ -272,10 +278,10 @@ function getSelectedString () {
 
 <style>
 .orderContainer {
-  display: grid;
+  display: flex;
+  flex-direction: column;
   height: 100%;
   width: 100%;
-  grid-template-columns: 1fr;
 }
 
 .card {
@@ -283,31 +289,36 @@ function getSelectedString () {
   width: 100%;
   min-height: 80px;
   display: grid;
-  grid-template-columns: 2fr 2fr 2fr 2fr 2fr 1fr;
+  grid-template-columns: 1fr 2fr 1fr 1fr;
   align-items: center;
-  padding: 0 16px;
+  padding: 0 2px 0 0;
+  font-size: 12px;
+  position: relative;
   background: #2222;
 }
 
 .containerCard {
   display: flex;
-  height: 100%;
+  min-height: 300px;
   flex-direction: column;
   align-items: center;
   position: relative;
-  gap: 10px;
+  gap: 24px;
 }
 
 .buttonAdd {
   justify-self: flex-end;
+  position: absolute;
+  bottom: -18px;
 }
 
 .buttonActions {
   width: 100%;
   display: flex;
   gap: 16px;
-  justify-content: flex-end;
+  justify-content: center;
   margin-top: 10px;
+  padding-bottom: 66px;
 }
 
 .my-sticky-virtscroll-table {
@@ -347,8 +358,16 @@ tbody {
   scrollbar-width: none;
 }
 
+@media (min-width: 600px) {
+  .card {
+    padding: 0 16px 0 0;
+    font-size: 14px;
+  }
+}
+
 @media (min-width: 1115px) {
   .orderContainer {
+    display: grid;
     grid-template-columns: 1fr 1fr;
   }
 }

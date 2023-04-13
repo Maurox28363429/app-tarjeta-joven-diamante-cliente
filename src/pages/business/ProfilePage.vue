@@ -172,7 +172,7 @@
 </template>
 <script setup>
 import { userAuth } from 'src/composables/userAuth'
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 import { useValidateForm } from 'src/composables/useValidateForm'
 import { updateProfileShema } from 'src/schemas/updateProfileShema'
 import updateUser from 'src/api/updateUser'
@@ -183,12 +183,7 @@ const { triggerPositive, triggerWarning } = useToast()
 
 const loading = ref(false)
 
-const { user: userStore, updatedUser } = userAuth()
-const user = ref(localStorageAuth.getUser().user)
-
-watch(userStore, () => {
-  user.value = userStore
-})
+const { user, updatedUser } = userAuth()
 
 const GENDER_OPTIONS = [
   { label: 'Mujer', value: 0 },
