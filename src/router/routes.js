@@ -96,6 +96,11 @@ const routes = [
             name: 'orders',
             path: 'orders',
             component: () => import('pages/ShoppingPage.vue')
+          },
+          {
+            name: 'create-order',
+            path: 'create-order',
+            component: () => import('pages/business/CreateOrderPage.vue')
           }
         ]
       },

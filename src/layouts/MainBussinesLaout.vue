@@ -87,6 +87,13 @@
 
             <q-item-section>Ordenes</q-item-section>
           </q-item>
+          <q-item clickable v-ripple to="/empresa/create-order">
+            <q-item-section avatar>
+              <q-icon name="border_color" />
+            </q-item-section>
+
+            <q-item-section>Crear orden</q-item-section>
+          </q-item>
         </q-list>
         <div
           @click="handledLogout"
@@ -111,7 +118,10 @@
             ¡Hola, {{ user.name + ' ' + user.last_name }}!
           </div>
           <div>
-            <p class="text-center" style="text-overflow: ellipsis; overflow: hidden; width: 196px">
+            <p
+              class="text-center"
+              style="text-overflow: ellipsis; overflow: hidden; width: 196px"
+            >
               {{ user.email }}
             </p>
           </div>
@@ -129,7 +139,7 @@
       transition-hide="scale"
     >
       <q-card>
-        <QRScanner/>
+        <QRScanner :close-modal="show" @close-modal="show = false" />
         <q-card-actions align="right" class="text-primary">
           <q-btn flat label="Close" v-close-popup />
         </q-card-actions>
@@ -181,6 +191,18 @@
           color="white"
           class="text-capitalize q-px-none"
           icon="receipt_long"
+        />
+      </router-link>
+      <router-link
+        to="/empresa/create-order"
+        style="text-decoration: none; color: #ffff; width: 100%; margin: none"
+      >
+        <q-tab
+          name="crear order"
+          label="Crear orden"
+          color="white"
+          class="text-capitalize q-px-none"
+          icon="border_color"
         />
       </router-link>
     </q-tabs>

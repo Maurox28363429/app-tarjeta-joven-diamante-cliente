@@ -7,7 +7,7 @@
       @error="onError"
     ></qrcode-stream>
     <q-inner-loading
-      :showing="visible"
+      :showing="visible || loading"
       label="Por favor espera..."
       label-class="text-teal"
       label-style="font-size: 1.1em"
@@ -28,11 +28,26 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, defineEmits } from 'vue'
 import { useToast } from 'src/composables/useToast'
+import { userCart } from 'src/stores/userCart'
+import { useRouter } from 'vue-router'
+
+const emits = defineEmits(['close-modal'])
+
+const router = useRouter()
+
+const client = userCart()
 const visible = ref(false)
+const loading = ref(false)
 
 const permision = ref(true)
+
+defineProps({
+  closeModal: {
+    type: Object
+  }
+})
 
 const { triggerWarning } = useToast()
 
@@ -68,15 +83,25 @@ function addPermision () {
   }
 }
 
-// how get permission denied in web
-// https://stackoverflow.com/questions/49383406/how-to-detect-if-the-user-denied-the-camera-permission-in-chrome
-
 onMounted(() => {
   addPermision()
 })
 
-const onDecode = (decodedString) => {
+const onDecode = async (decodedString) => {
   console.log('Código QR escaneado:', decodedString)
+  loading.value = true
+  try {
+    console.log(decodedString, 'code')
+    const data = await client.setClient(decodedString)
+    console.log('Cliente asignado:', data)
+
+    router.push('/empresa/create-order')
+    emits('close-modal')
+  } catch (error) {
+    console.error('Error al asignar el cliente:', error)
+  } finally {
+    loading.value = false
+  }
 }
 
 const onInit = (promise) => {
