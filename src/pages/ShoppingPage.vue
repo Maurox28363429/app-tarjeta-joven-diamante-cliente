@@ -1,7 +1,13 @@
 <template>
   <div class="q-pa-lg flex flex-center">
     <!--Container-->
-    <div class="q-pa-md full-width">
+    <div class="q-pa-md full-width " style="position: relative; min-height: 400px;">
+      <q-inner-loading
+          :showing="loading"
+          label="Por favor espera..."
+          label-class="text-teal"
+          label-style="font-size: 1.1em"
+        />
       <q-table
         class="my-sticky-header-table"
         flat
@@ -139,15 +145,17 @@ import { instance } from 'src/api/index.js'
 import { userAuth } from 'src/composables/userAuth'
 // user auth
 const { user } = userAuth()
-console.log(user)
 // variables
 const currentPaginate = ref(1)
-const paginas = ref(0)
+const paginas = ref(1)
 const prouctos = ref([])
 // dialog
 const dialog = ref(false)
 const maximizedToggle = ref(true)
 // table
+
+const loading = ref(false)
+
 const columns = [
   {
     name: 'id',
@@ -175,7 +183,7 @@ const columns = [
   }
 ]
 
-if (user.role_id === 2) {
+if (user.value.role_id === 3) {
   columns[1] = {
     name: 'client',
     label: 'Cliente',
@@ -195,27 +203,25 @@ onMounted(async () => {
 })
 // funciones
 const onButtonClick = (evt, row, index) => {
-  console.log(row)
-  console.log(index)
-  console.log(evt)
   dialog.value = true
   prouctos.value = row.ofertas
 }
-const cargarDatos = async (page = 0) => {
-  const queryString =
-    user.role_id === 2
-      ? `/cliente-comercio-ofertas?with[]=comercio&with[]=client&page=${page}&client_id=${user.id}`
-      : `/cliente-comercio-ofertas?with[]=comercio&with[]=client&page=${page}&comercio_id=${user.id}`
-  await instance
-    .get(queryString)
-    .then((res) => {
-      rows.value = res.data.data
-      paginas.value = res.data.pagination.lastPage
-      currentPaginate.value = res.data.pagination.currentPage
-    })
-    .catch((err) => {
-      console.log(err)
-    })
+const cargarDatos = async (page = 1) => {
+  try {
+    loading.value = true
+    const queryString =
+    user.value.role_id === 3
+      ? `/cliente-comercio-ofertas?with[]=comercio&with[]=client&page=${page}&client_id=${user.value.id}`
+      : `/cliente-comercio-ofertas?with[]=comercio&with[]=client&page=${page}&comercio_id=${user.value.id}`
+    const { data } = await instance.get(queryString)
+    rows.value = data.data
+    paginas.value = data.pagination.lastPage
+    currentPaginate.value = data.pagination.currentPage
+  } catch (error) {
+    console.log(error)
+  } finally {
+    loading.value = false
+  }
 }
 </script>
 <style scoped>

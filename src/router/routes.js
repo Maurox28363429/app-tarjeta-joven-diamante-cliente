@@ -79,6 +79,11 @@ const routes = [
         component: () => import('layouts/MainBussinesLaout.vue'),
         children: [
           {
+            path: '',
+            component: () => import('pages/business/CreateOrderPage.vue')
+
+          },
+          {
             path: 'account',
             children: [
               {

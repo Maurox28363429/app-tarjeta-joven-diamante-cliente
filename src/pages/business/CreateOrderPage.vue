@@ -1,5 +1,5 @@
 <template>
-  <p class="q-ma-md">
+  <p class="q-ma-md body-large">
     Cliente: {{ client ? client.name : 'cliente no ingresado' }}
   </p>
   <p class="q-ma-md body-small" style="color: #363636">
@@ -89,8 +89,8 @@
     <div class="full-width">
 
       <div class="q-pa-md">
-        <p class="q-ma-none">Total</p>
-        <p class="q-ma-none">Descuento</p>
+        <p class="q-ma-none body-large">Total: ${{ total }}</p>
+        <p class="q-ma-none body-large">Ahorro: ${{ totalSaving }}</p>
         <q-table
           class="my-sticky-virtscroll-table"
           flat
@@ -139,6 +139,20 @@ const currentPaginate = ref(1)
 const selected = ref([])
 const rows = ref([])
 
+const total = computed(() => {
+  return rows.value.reduce((acc, item) => {
+    return acc + item.priceTotal
+  }, 0)
+})
+
+const totalSaving = computed(() => {
+  return rows.value.reduce((acc, item) => {
+    return acc + item.savings
+  }, 0)
+})
+
+console.log(total, totalSaving)
+
 async function invoice () {
   const products = rows.value.map((item) => {
     return {
@@ -146,14 +160,6 @@ async function invoice () {
       cantidad: item.cantidad
     }
   })
-
-  const total = rows.value.reduce((acc, item) => {
-    return acc + item.price_total
-  }, 0)
-
-  const totalSaving = rows.value.reduce((acc, item) => {
-    return acc + item.price_total * (item.descuento / 100)
-  }, 0)
 
   try {
     loadingInvoice.value = true
@@ -207,6 +213,8 @@ function subtractMount (id) {
   console.log(item, 'item')
   if (item && item.cantidad > 1) {
     item.cantidad--
+    item.priceTotal = item.priceWidthDiscount * item.cantidad
+    item.savings = item.savings * item.cantidad
   }
 }
 
@@ -215,6 +223,7 @@ function addProduct (product) {
   if (productExist) {
     productExist.cantidad = product.cantidad + productExist.cantidad
     productExist.priceTotal = product.priceWidthDiscount * productExist.cantidad
+    productExist.savings = product.savings * productExist.cantidad
     triggerPositive('Producto agregado')
   } else {
     rows.value.push({
@@ -332,6 +341,10 @@ function getSelectedString () {
   width: 100%;
 }
 
+.orderContainer div:nth-child(2){
+  max-width: 100%;
+}
+
 .card {
   border-radius: 4px;
   width: 100%;
@@ -373,12 +386,33 @@ function getSelectedString () {
 .my-sticky-virtscroll-table {
   /* height or max-height is important */
   height: 410px;
-  scrollbar-width: none;
   overflow: auto;
 }
 
-::-webkit-scrollbar {
-  display: none;
+.q-virtual-scroll::-webkit-scrollbar {
+    -webkit-appearance: none;
+}
+
+.q-virtual-scroll::-webkit-scrollbar:vertical {
+    width:10px;
+}
+
+.q-virtual-scroll::-webkit-scrollbar-button:increment,.q-virtual-scroll::-webkit-scrollbar-button {
+    display: none;
+}
+
+.q-virtual-scroll::-webkit-scrollbar:horizontal {
+    height: 10px;
+}
+
+.q-virtual-scroll::-webkit-scrollbar-thumb {
+    background-color: #797979;
+    border-radius: 20px;
+    border: 2px solid #f1f2f3;
+}
+
+.my-sticky-virtscroll-table::-webkit-scrollbar-track {
+    border-radius: 10px;
 }
 
 .q-table__top,
@@ -419,5 +453,9 @@ tbody {
     display: grid;
     grid-template-columns: 1fr 1fr;
   }
+
+  .orderContainer div:nth-child(2){
+    max-width: 600px;
+}
 }
 </style>
