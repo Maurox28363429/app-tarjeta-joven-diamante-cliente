@@ -29,8 +29,9 @@
           label-style="font-size: 1.1em"
         />
         <div class="card" v-for="items in offers" :key="items.id">
-          <div>
+          <div class="">
             <q-img
+              class="rounded-borders"
               :src="items.img_array_url[0]"
               spinner-color="dark"
               style="height: 80px; max-width: 150px"
@@ -58,6 +59,7 @@
               icon="add"
               size="xs"
               round
+
               @click="addMount(items.id)"
             />
             <p class="q-ma-none text-weight-medium">{{ items.cantidad }}</p>
@@ -73,6 +75,7 @@
             <q-btn
               @click="addProduct(items)"
               color="positive"
+              :disable="items.stock===0"
               icon="add"
               round
             />
@@ -103,7 +106,7 @@
           v-model:selected="selected"
         />
         <div class="buttonActions">
-          <q-btn color="positive" label="finalizar compra" @click="invoice" :disable="!client" />
+          <q-btn :loading="loadingInvoice" color="positive" label="finalizar compra" @click="invoice" :disable="!client || rows.length === 0" />
           <q-btn color="negative" label="eliminar" @click="deleteProduct" />
         </div>
       </div>
@@ -130,6 +133,7 @@ const { user } = userAuth()
 const search = ref('')
 const offers = ref([])
 const loading = ref(false)
+const loadingInvoice = ref(false)
 const pages = ref(1)
 const currentPaginate = ref(1)
 const selected = ref([])
@@ -142,18 +146,35 @@ async function invoice () {
       cantidad: item.cantidad
     }
   })
+
+  const total = rows.value.reduce((acc, item) => {
+    return acc + item.price_total
+  }, 0)
+
+  const totalSaving = rows.value.reduce((acc, item) => {
+    return acc + item.price_total * (item.descuento / 100)
+  }, 0)
+
   try {
-    await invoiceOffer({
-      comercio_id: user.id,
-      total_descuento: 10,
+    loadingInvoice.value = true
+    const { error } = await invoiceOffer({
+      comercio_id: user.value.id,
+      total_descuento: totalSaving,
       ofertas: products,
-      total: 1,
+      total,
       client_id: storeClient.client.id
     })
-    triggerPositive('Factura creada')
+
+    if (error) {
+      triggerWarning(error)
+    } else {
+      triggerPositive('Factura creada')
+    }
   } catch (err) {
     console.error(err)
     triggerWarning('Error al crear la factura')
+  } finally {
+    loadingInvoice.value = false
   }
 }
 
@@ -173,6 +194,7 @@ function addMount (id) {
   const item = offers.value.find((item) => item.id === id)
   if (item) {
     item.cantidad++
+    item.priceTotal = item.priceWidthDiscount * item.cantidad
   }
 }
 
@@ -192,6 +214,7 @@ function addProduct (product) {
   const productExist = rows.value.find((item) => item.id === product.id)
   if (productExist) {
     productExist.cantidad = product.cantidad + productExist.cantidad
+    productExist.priceTotal = product.priceWidthDiscount * productExist.cantidad
     triggerPositive('Producto agregado')
   } else {
     rows.value.push({
@@ -199,7 +222,10 @@ function addProduct (product) {
       cantidad: product.cantidad,
       nombre: product.nombre,
       price_total: product.price_total,
-      descuento: product.descuento
+      descuento: product.descuento,
+      priceWidthDiscount: product.priceWidthDiscount,
+      savings: product.savings,
+      priceTotal: product.priceTotal
     })
     triggerPositive('Producto agregado')
   }
@@ -211,12 +237,13 @@ async function fetchOffers () {
     const products = await getOffersFromStore({
       name: search.value,
       page: currentPaginate.value,
-      id: user.id
+      id: user.value.id
     })
 
     offers.value = await products.data.map((items) => {
-      return { ...items, cantidad: 1 }
+      return { ...items, cantidad: 1, priceWidthDiscount: items.price_total - ((items.descuento / 100) * items.price_total), savings: items.price_total - (items.price_total - ((items.descuento / 100) * items.price_total)), priceTotal: items.price_total - ((items.descuento / 100) * items.price_total) * 1 }
     })
+    console.log(offers.value, 'offers')
   } catch (error) {
     console.error(error)
   } finally {
@@ -252,6 +279,20 @@ const columns = [
     sortable: true
   },
   {
+    name: 'priceWidthDiscount',
+    align: 'center',
+    label: 'precio con descuento',
+    field: 'priceWidthDiscount',
+    sortable: true
+  },
+  {
+    name: 'savings',
+    align: 'center',
+    label: 'Ahorrado',
+    field: 'savings',
+    sortable: true
+  },
+  {
     name: 'price_total',
     label: 'Precio',
     field: 'price_total',
@@ -264,6 +305,13 @@ const columns = [
     field: 'descuento',
     sortable: true,
     format: (val) => `${val}%`
+  },
+  {
+    name: 'priceTotal',
+    label: 'Precio total',
+    field: 'priceTotal',
+    sortable: true,
+    format: (val) => `$${val}`
   }
 ]
 
@@ -294,7 +342,8 @@ function getSelectedString () {
   padding: 0 2px 0 0;
   font-size: 12px;
   position: relative;
-  background: #2222;
+  background: #ffff;
+  border: 1px solid #e0e0e0;
 }
 
 .containerCard {

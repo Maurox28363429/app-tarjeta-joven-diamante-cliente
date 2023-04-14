@@ -186,7 +186,6 @@
         z-index: 100;
         bottom: 0;
         width: 100%;
-        border-radius: 16px 16px 0 0;
       "
       dense
       class="menuMobile bg-primary text-white justify-center"
