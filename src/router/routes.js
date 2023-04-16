@@ -100,7 +100,7 @@ const routes = [
           {
             name: 'orders',
             path: 'orders',
-            component: () => import('pages/ShoppingPage.vue')
+            component: () => import('pages/client/MembershipsPage.vue')
           },
           {
             name: 'create-order',

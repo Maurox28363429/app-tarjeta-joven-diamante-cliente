@@ -43,13 +43,16 @@
               <p class="q-ma-none text-weight-medium">
                 ${{ items.price_total }}
               </p>
-              <p class="q-ma-none">Desct: {{ items.descuento }}%</p>
             </div>
           </div>
           <div>
-            <p class="q-ma-none">stock:{{ items.stock }}</p>
-            <p class="q-ma-none">F/l:</p>
-            <p class="q-ma-none">
+            <p class="q-ma-none">Inventario: {{ items.stock }}</p>
+            <p class="q-ma-none text-weight-medium">
+             Precio ${{ items.price_total }}
+            </p>
+            <p class="q-ma-none">Desct: {{ items.descuento }}%</p>
+            <p class="q-ma-none" style="display:none">F/l:</p>
+            <p class="q-ma-none" style="display:none">
               {{ items.fecha_tope_descuento }}
             </p>
           </div>
@@ -59,10 +62,10 @@
               icon="add"
               size="xs"
               round
-
+              :disable="items.stock===0"
               @click="addMount(items.id)"
             />
-            <p class="q-ma-none text-weight-medium">{{ items.cantidad }}</p>
+            <p class="q-ma-none text-weight-medium" style="padding: 0 7px;">{{ items.cantidad }}</p>
             <q-btn
               color="primary"
               icon="remove"
@@ -140,15 +143,15 @@ const selected = ref([])
 const rows = ref([])
 
 const total = computed(() => {
-  return rows.value.reduce((acc, item) => {
+  return Math.round(100 * rows.value.reduce((acc, item) => {
     return acc + item.priceTotal
-  }, 0)
+  }, 0)) / 100
 })
 
 const totalSaving = computed(() => {
-  return rows.value.reduce((acc, item) => {
+  return Math.round(100 * rows.value.reduce((acc, item) => {
     return acc + item.savings
-  }, 0)
+  }, 0)) / 100
 })
 
 console.log(total, totalSaving)
