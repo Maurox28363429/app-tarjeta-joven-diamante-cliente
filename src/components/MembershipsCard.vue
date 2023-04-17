@@ -55,8 +55,11 @@ const planValidate = computed(() => {
     <p class="title-large text-secondary text-uppercase q-my-md">
       {{ name }}
     </p>
-    <p class="text-weight-medium text-h3">
+    <p class="text-weight-medium text-h3" v-if="price>0">
       <span class="text-h5">$</span>{{ price }}
+    </p>
+    <p class="text-weight-medium text-h3" v-if="price==0">
+      <span class="text-h5"></span>Gratis
     </p>
     <ul class="benefitsList">
       <li v-for="(benefit, index) of benefits" :key="index">
@@ -72,7 +75,7 @@ const planValidate = computed(() => {
       <q-btn
         outline
         color="secondary"
-        label="Comprar"
+        :label="(price>0)?'Comprar':'Obtener'"
         class="full-width"
         :to="baseurl + id"
       />

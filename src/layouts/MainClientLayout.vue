@@ -173,7 +173,7 @@
     <div class="q-px-sm q-py-lg">
       <div class="qrButton">
         <q-fab color="primary" icon="keyboard_arrow_up" direction="up">
-          <q-fab-action color="primary" @click="handleModal">
+          <q-fab-action color="primary" @click="handleModal" :disable="(user.membresia.status=='vencida')? true:false">
             <img src="./../assets/qr.jpg" style="width: 24px; height: 24px" />
           </q-fab-action>
         </q-fab>
@@ -185,8 +185,7 @@
         position: fixed;
         z-index: 100;
         bottom: 0;
-        width: 100%;
-      "
+        width: 100%;"
       dense
       class="menuMobile bg-primary text-white justify-center"
       align="justify-center"
@@ -279,7 +278,7 @@ aside {
 </style>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import QrUser from 'src/components/QrUser.vue'
 import { userAuth } from 'src/composables/userAuth'
@@ -287,7 +286,6 @@ import UpdateMembershipModal from '../components/UpdateMembershipModal.vue'
 import format from 'src/utils/date'
 
 const { user } = userAuth()
-
 const goHome = () => {
   console.log('goHome')
   router.push('/')
@@ -295,7 +293,6 @@ const goHome = () => {
 
 const leftDrawerOpen = ref(false)
 const router = useRouter()
-
 const show = ref(false)
 
 const showModalRenovar = () => {
@@ -336,4 +333,9 @@ const drawerClick = (e) => {
     e.stopPropagation()
   }
 }
+onMounted(() => {
+  if (user?.membresia?.type === 'permitir_gratuita') {
+    router.push('/memberships')
+  }
+})
 </script>
