@@ -17,5 +17,5 @@ import { ref } from 'vue'
 
 const { user } = userAuth()
 const sizeQr = ref(284)
-const idUser = user.id.toString()
+const idUser = user.value.id.toString()
 </script>

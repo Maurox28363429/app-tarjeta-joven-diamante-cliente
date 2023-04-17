@@ -293,20 +293,22 @@ const goHome = () => {
   router.push('/')
 }
 
+console.log(user.value)
+
 const leftDrawerOpen = ref(false)
 const router = useRouter()
 
 const show = ref(false)
 
 const showModalRenovar = () => {
-  if (user?.membresia?.days === 1) {
+  if (user.value?.membresia?.days === 1) {
     return true
   }
   return false
 }
 
 const showModalNew = () => {
-  if (format(user?.membresia?.updated_at) === format(new Date())) {
+  if (format(user.value?.membresia?.updated_at) === format(new Date())) {
     return true
   }
   return false
