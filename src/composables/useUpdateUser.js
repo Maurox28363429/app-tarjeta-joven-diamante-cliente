@@ -1,20 +1,20 @@
-import { ref } from 'vue'
-import updateUser from 'src/api/updateUser'
+import { ref } from "vue";
+import updateUser from "src/api/updateUser";
 
 export const useUpdateUser = () => {
-  const loading = ref(false)
+  const loading = ref(false);
 
   const fetchUpdateUser = async () => {
     try {
-      loading.value = true
-      const { data } = await updateUser()
-      console.lo(data)
+      loading.value = true;
+      const { data } = await updateUser();
+      console.lo(data);
     } catch (error) {
-      console.log(error)
+      console.error(error);
     } finally {
-      loading.value = false
+      loading.value = false;
     }
-  }
+  };
 
-  return { loading, fetchUpdateUser }
-}
+  return { loading, fetchUpdateUser };
+};

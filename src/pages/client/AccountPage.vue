@@ -9,7 +9,7 @@
           <img src="https://cdn.quasar.dev/img/boy-avatar.png" />
         </q-avatar>
         <div>
-          <p class="q-ma-none">{{ user.name + ' ' + user.last_name }}</p>
+          <p class="q-ma-none">{{ user.name + " " + user.last_name }}</p>
           <p class="q-ma-none">{{ user.email }}</p>
         </div>
       </div>
@@ -62,21 +62,20 @@
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router'
-import { userAuth } from 'src/composables/userAuth'
+import { useRouter } from "vue-router";
+import { userAuth } from "src/composables/userAuth";
 
-const { user } = userAuth()
+const { user } = userAuth();
 
-const router = useRouter()
+const router = useRouter();
 
 const goBack = () => {
-  console.log('go back')
-  router.go(-1)
-}
+  router.go(-1);
+};
 
 const handledLogout = (e) => {
-  e.preventDefault()
-  localStorage.removeItem('user')
-  router.push('/login')
-}
+  e.preventDefault();
+  localStorage.removeItem("user");
+  router.push("/login");
+};
 </script>

@@ -1,9 +1,9 @@
 <template>
   <p class="q-ma-md body-large">
-    Cliente: {{ client ? client.name : 'cliente no ingresado' }}
+    Cliente: {{ client ? client.name : "cliente no ingresado" }}
   </p>
   <p class="q-ma-md body-small" style="color: #363636">
-    {{ !client ? 'Por favor ingrese el cliente a través del QR' : '' }}
+    {{ !client ? "Por favor ingrese el cliente a través del QR" : "" }}
   </p>
   <div class="orderContainer">
     <div class="full-height q-mx-md">
@@ -48,11 +48,11 @@
           <div>
             <p class="q-ma-none">Inventario: {{ items.stock }}</p>
             <p class="q-ma-none text-weight-medium">
-             Precio ${{ items.price_total }}
+              Precio ${{ items.price_total }}
             </p>
             <p class="q-ma-none">Desct: {{ items.descuento }}%</p>
-            <p class="q-ma-none" style="display:none">F/l:</p>
-            <p class="q-ma-none" style="display:none">
+            <p class="q-ma-none" style="display: none">F/l:</p>
+            <p class="q-ma-none" style="display: none">
               {{ items.fecha_tope_descuento }}
             </p>
           </div>
@@ -62,10 +62,12 @@
               icon="add"
               size="xs"
               round
-              :disable="items.stock===0"
+              :disable="items.stock === 0"
               @click="addMount(items.id)"
             />
-            <p class="q-ma-none text-weight-medium" style="padding: 0 7px;">{{ items.cantidad }}</p>
+            <p class="q-ma-none text-weight-medium" style="padding: 0 7px">
+              {{ items.cantidad }}
+            </p>
             <q-btn
               color="primary"
               icon="remove"
@@ -78,7 +80,7 @@
             <q-btn
               @click="addProduct(items)"
               color="positive"
-              :disable="items.stock===0"
+              :disable="items.stock === 0"
               icon="add"
               round
             />
@@ -90,7 +92,6 @@
       </div>
     </div>
     <div class="full-width">
-
       <div class="q-pa-md">
         <p class="q-ma-none body-large">Total: ${{ total }}</p>
         <p class="q-ma-none body-large">Ahorro: ${{ totalSaving }}</p>
@@ -109,7 +110,13 @@
           v-model:selected="selected"
         />
         <div class="buttonActions">
-          <q-btn :loading="loadingInvoice" color="positive" label="finalizar compra" @click="invoice" :disable="!client || rows.length === 0" />
+          <q-btn
+            :loading="loadingInvoice"
+            color="positive"
+            label="finalizar compra"
+            @click="invoice"
+            :disable="!client || rows.length === 0"
+          />
           <q-btn color="negative" label="eliminar" @click="deleteProduct" />
         </div>
       </div>
@@ -118,116 +125,123 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch, computed } from 'vue'
-import getOffersFromStore from 'src/api/getOffersFromStore'
-import { userAuth } from 'src/composables/userAuth'
-import { userCart } from 'src/stores/userCart'
-import invoiceOffer from 'src/api/invoiceOffer'
-import { useToast } from 'src/composables/useToast'
+import { ref, onMounted, watch, computed } from "vue";
+import getOffersFromStore from "src/api/getOffersFromStore";
+import { userAuth } from "src/composables/userAuth";
+import { userCart } from "src/stores/userCart";
+import invoiceOffer from "src/api/invoiceOffer";
+import { useToast } from "src/composables/useToast";
 
-const { triggerPositive, triggerWarning } = useToast()
+const { triggerPositive, triggerWarning } = useToast();
 
-const storeClient = userCart()
+const storeClient = userCart();
 
-const client = computed(() => storeClient.client)
+const client = computed(() => storeClient.client);
 
-const { user } = userAuth()
+const { user } = userAuth();
 
-const search = ref('')
-const offers = ref([])
-const loading = ref(false)
-const loadingInvoice = ref(false)
-const pages = ref(1)
-const currentPaginate = ref(1)
-const selected = ref([])
-const rows = ref([])
+const search = ref("");
+const offers = ref([]);
+const loading = ref(false);
+const loadingInvoice = ref(false);
+const pages = ref(1);
+const currentPaginate = ref(1);
+const selected = ref([]);
+const rows = ref([]);
 
 const total = computed(() => {
-  return Math.round(100 * rows.value.reduce((acc, item) => {
-    return acc + item.priceTotal
-  }, 0)) / 100
-})
+  return (
+    Math.round(
+      100 *
+        rows.value.reduce((acc, item) => {
+          return acc + item.priceTotal;
+        }, 0)
+    ) / 100
+  );
+});
 
 const totalSaving = computed(() => {
-  return Math.round(100 * rows.value.reduce((acc, item) => {
-    return acc + item.savings
-  }, 0)) / 100
-})
+  return (
+    Math.round(
+      100 *
+        rows.value.reduce((acc, item) => {
+          return acc + item.savings;
+        }, 0)
+    ) / 100
+  );
+});
 
-console.log(total, totalSaving)
-
-async function invoice () {
+async function invoice() {
   const products = rows.value.map((item) => {
     return {
       id: item.id,
-      cantidad: item.cantidad
-    }
-  })
+      cantidad: item.cantidad,
+    };
+  });
 
   try {
-    loadingInvoice.value = true
+    loadingInvoice.value = true;
     const { error } = await invoiceOffer({
       comercio_id: user.value.id,
       total_descuento: totalSaving,
       ofertas: products,
       total,
-      client_id: storeClient.client.id
-    })
+      client_id: storeClient.client.id,
+    });
 
     if (error) {
-      triggerWarning(error)
+      triggerWarning(error);
     } else {
-      triggerPositive('Factura creada')
+      triggerPositive("Factura creada");
     }
   } catch (err) {
-    console.error(err)
-    triggerWarning('Error al crear la factura')
+    console.error(err);
+    triggerWarning("Error al crear la factura");
   } finally {
-    loadingInvoice.value = false
+    loadingInvoice.value = false;
   }
 }
 
-function deleteProduct () {
+function deleteProduct() {
   const filtro = rows.value.filter(
     (item) =>
       !selected.value.some((selectedItem) => selectedItem.id === item.id)
-  )
+  );
   // Actualizar el valor de rows con el resultado del filtro
-  rows.value = filtro
+  rows.value = filtro;
   if (selected.value.length > 0) {
-    triggerPositive('Producto eliminado')
+    triggerPositive("Producto eliminado");
   }
 }
 
-function addMount (id) {
-  const item = offers.value.find((item) => item.id === id)
+function addMount(id) {
+  const item = offers.value.find((item) => item.id === id);
   if (item) {
-    item.cantidad++
-    item.priceTotal = item.priceWidthDiscount * item.cantidad
+    item.cantidad++;
+    item.priceTotal = item.priceWidthDiscount * item.cantidad;
   }
 }
 
-function subtractMount (id) {
-  console.log('restar', id)
+function subtractMount(id) {
   const item = offers.value.find((item) => {
-    console.log(item.id, id)
-    return item.id === id
-  })
-  console.log(item, 'item')
+    return item.id === id;
+  });
+
   if (item && item.cantidad > 1) {
-    item.cantidad--
-    item.priceTotal = item.priceWidthDiscount * item.cantidad
-    item.savings = item.savings * item.cantidad
+    item.cantidad--;
+    item.priceTotal = item.priceWidthDiscount * item.cantidad;
+    item.savings = item.savings * item.cantidad;
   }
 }
 
-function addProduct (product) {
-  const productExist = rows.value.find((item) => item.id === product.id)
+function addProduct(product) {
+  const productExist = rows.value.find((item) => item.id === product.id);
   if (productExist) {
-    productExist.cantidad = product.cantidad + productExist.cantidad
-    productExist.priceTotal = product.priceWidthDiscount * productExist.cantidad
-    productExist.savings = product.savings * productExist.cantidad
-    triggerPositive('Producto agregado')
+    productExist.cantidad = product.cantidad + productExist.cantidad;
+    productExist.priceTotal =
+      product.priceWidthDiscount * productExist.cantidad;
+    productExist.savings = product.savings * productExist.cantidad;
+    triggerPositive("Producto agregado");
   } else {
     rows.value.push({
       id: product.id,
@@ -237,102 +251,111 @@ function addProduct (product) {
       descuento: product.descuento,
       priceWidthDiscount: product.priceWidthDiscount,
       savings: product.savings,
-      priceTotal: product.priceTotal
-    })
-    triggerPositive('Producto agregado')
+      priceTotal: product.priceTotal,
+    });
+    triggerPositive("Producto agregado");
   }
 }
 
-async function fetchOffers () {
+async function fetchOffers() {
   try {
-    loading.value = true
+    loading.value = true;
     const products = await getOffersFromStore({
       name: search.value,
       page: currentPaginate.value,
-      id: user.value.id
-    })
+      id: user.value.id,
+    });
 
     offers.value = await products.data.map((items) => {
-      return { ...items, cantidad: 1, priceWidthDiscount: items.price_total - ((items.descuento / 100) * items.price_total), savings: items.price_total - (items.price_total - ((items.descuento / 100) * items.price_total)), priceTotal: items.price_total - ((items.descuento / 100) * items.price_total) * 1 }
-    })
-    console.log(offers.value, 'offers')
+      return {
+        ...items,
+        cantidad: 1,
+        priceWidthDiscount:
+          items.price_total - (items.descuento / 100) * items.price_total,
+        savings:
+          items.price_total -
+          (items.price_total - (items.descuento / 100) * items.price_total),
+        priceTotal:
+          items.price_total - (items.descuento / 100) * items.price_total * 1,
+      };
+    });
   } catch (error) {
-    console.error(error)
+    console.error(error);
   } finally {
-    loading.value = false
+    loading.value = false;
   }
 }
 
 watch(search, async (val) => {
-  await fetchOffers()
-})
+  await fetchOffers();
+});
 
 watch(currentPaginate, async (val) => {
-  await fetchOffers()
-})
+  await fetchOffers();
+});
 
 onMounted(async () => {
-  fetchOffers()
-})
+  fetchOffers();
+});
 
 const columns = [
   {
-    name: 'cantidad',
-    align: 'center',
-    label: 'Cantidad',
-    field: 'cantidad',
-    sortable: true
-  },
-  {
-    name: 'nombre',
-    align: 'center',
-    label: 'Producto',
-    field: 'nombre',
-    sortable: true
-  },
-  {
-    name: 'priceWidthDiscount',
-    align: 'center',
-    label: 'precio con descuento',
-    field: 'priceWidthDiscount',
-    sortable: true
-  },
-  {
-    name: 'savings',
-    align: 'center',
-    label: 'Ahorrado',
-    field: 'savings',
-    sortable: true
-  },
-  {
-    name: 'price_total',
-    label: 'Precio',
-    field: 'price_total',
+    name: "cantidad",
+    align: "center",
+    label: "Cantidad",
+    field: "cantidad",
     sortable: true,
-    format: (val) => `$${val}`
   },
   {
-    name: 'descuento',
-    label: 'Descuento',
-    field: 'descuento',
+    name: "nombre",
+    align: "center",
+    label: "Producto",
+    field: "nombre",
     sortable: true,
-    format: (val) => `${val}%`
   },
   {
-    name: 'priceTotal',
-    label: 'Precio total',
-    field: 'priceTotal',
+    name: "priceWidthDiscount",
+    align: "center",
+    label: "precio con descuento",
+    field: "priceWidthDiscount",
     sortable: true,
-    format: (val) => `$${val}`
-  }
-]
+  },
+  {
+    name: "savings",
+    align: "center",
+    label: "Ahorrado",
+    field: "savings",
+    sortable: true,
+  },
+  {
+    name: "price_total",
+    label: "Precio",
+    field: "price_total",
+    sortable: true,
+    format: (val) => `$${val}`,
+  },
+  {
+    name: "descuento",
+    label: "Descuento",
+    field: "descuento",
+    sortable: true,
+    format: (val) => `${val}%`,
+  },
+  {
+    name: "priceTotal",
+    label: "Precio total",
+    field: "priceTotal",
+    sortable: true,
+    format: (val) => `$${val}`,
+  },
+];
 
-function getSelectedString () {
+function getSelectedString() {
   return selected.value.length === 0
-    ? ''
+    ? ""
     : `${selected.value.length} record${
-        selected.value.length > 1 ? 's' : ''
-      } selected of ${rows.value.length}`
+        selected.value.length > 1 ? "s" : ""
+      } selected of ${rows.value.length}`;
 }
 </script>
 
@@ -344,7 +367,7 @@ function getSelectedString () {
   width: 100%;
 }
 
-.orderContainer div:nth-child(2){
+.orderContainer div:nth-child(2) {
   max-width: 100%;
 }
 
@@ -393,29 +416,30 @@ function getSelectedString () {
 }
 
 .q-virtual-scroll::-webkit-scrollbar {
-    -webkit-appearance: none;
+  -webkit-appearance: none;
 }
 
 .q-virtual-scroll::-webkit-scrollbar:vertical {
-    width:10px;
+  width: 10px;
 }
 
-.q-virtual-scroll::-webkit-scrollbar-button:increment,.q-virtual-scroll::-webkit-scrollbar-button {
-    display: none;
+.q-virtual-scroll::-webkit-scrollbar-button:increment,
+.q-virtual-scroll::-webkit-scrollbar-button {
+  display: none;
 }
 
 .q-virtual-scroll::-webkit-scrollbar:horizontal {
-    height: 10px;
+  height: 10px;
 }
 
 .q-virtual-scroll::-webkit-scrollbar-thumb {
-    background-color: #797979;
-    border-radius: 20px;
-    border: 2px solid #f1f2f3;
+  background-color: #797979;
+  border-radius: 20px;
+  border: 2px solid #f1f2f3;
 }
 
 .my-sticky-virtscroll-table::-webkit-scrollbar-track {
-    border-radius: 10px;
+  border-radius: 10px;
 }
 
 .q-table__top,
@@ -457,8 +481,8 @@ tbody {
     grid-template-columns: 1fr 1fr;
   }
 
-  .orderContainer div:nth-child(2){
+  .orderContainer div:nth-child(2) {
     max-width: 600px;
-}
+  }
 }
 </style>

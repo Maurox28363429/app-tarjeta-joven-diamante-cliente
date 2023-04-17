@@ -1,64 +1,47 @@
 <script setup>
-import { registerSchema } from 'src/schemas/registerSchema'
-import { ref, computed } from 'vue'
-import StepOne from '../components/RegisterInputs/StepOne.vue'
-import StepTwo from '../components/RegisterInputs/StepTwo.vue'
-import StepThree from '../components/RegisterInputs/StepThree.vue'
+import { registerSchema } from "src/schemas/registerSchema";
+import { ref, computed } from "vue";
+import StepOne from "../components/RegisterInputs/StepOne.vue";
+import StepTwo from "../components/RegisterInputs/StepTwo.vue";
+import StepThree from "../components/RegisterInputs/StepThree.vue";
 
-import { userAuth } from 'src/composables/userAuth'
-import { useValidateForm } from 'src/composables/useValidateForm'
+import { userAuth } from "src/composables/userAuth";
+import { useValidateForm } from "src/composables/useValidateForm";
 
-const { register, isLoadingRegister } = userAuth()
+const { register, isLoadingRegister } = userAuth();
 
-const GENDER_OPTIONS = ['Hombre', 'Mujer']
+const GENDER_OPTIONS = ["Hombre", "Mujer"];
 
 const INITIAL_VALUES = {
-  name: '',
-  email: '',
-  last_name: '',
-  phone: '',
+  name: "",
+  email: "",
+  last_name: "",
+  phone: "",
   sex: GENDER_OPTIONS[0],
-  password: ''
-}
+  password: "",
+};
 
-const lastStep = 3
-const currentForm = ref(1)
+const lastStep = 3;
+const currentForm = ref(1);
 
-const nextStep = () => {
-  return currentForm.value++
-}
+const nextStep = () => currentForm.value++;
+const prevStep = () => currentForm.value--;
 
-const prevStep = () => {
-  return currentForm.value--
-}
-
-const disableLastButton = computed(() => {
-  if (currentForm.value === 1) {
-    return true
-  }
-  return false
-})
-
-const isLastStep = computed(() => {
-  if (currentForm.value === lastStep) {
-    return true
-  }
-
-  return false
-})
+const disableLastButton = computed(() => currentForm.value === 1);
+const isLastStep = computed(() => currentForm.value === lastStep);
 
 const { useForm, validatInput, validateMessage, validateForm } =
-  useValidateForm({ initialValue: INITIAL_VALUES, schema: registerSchema })
+  useValidateForm({ initialValue: INITIAL_VALUES, schema: registerSchema });
 
 const onSubmit = async (e) => {
-  validateForm()
-  const roleIdClient = 3
-  register({ ...useForm.value, role_id: roleIdClient })
-}
+  validateForm();
+  const roleIdClient = 3;
+  register({ ...useForm.value, role_id: roleIdClient });
+};
 
 const updateForm = ({ key, value }) => {
-  useForm.value[key] = value
-}
+  useForm.value[key] = value;
+};
 </script>
 
 <template>
@@ -138,7 +121,7 @@ const updateForm = ({ key, value }) => {
             fill
           />
           <q-btn
-            v-if="isLastStep"
+            v-else
             :disable="!validateMessage.isvalid"
             type="submit"
             label="Registrar"
