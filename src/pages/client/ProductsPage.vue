@@ -93,45 +93,45 @@
 
 <script setup>
 // importaciones
-import { ref, onMounted, watch } from "vue";
-import { instance } from "src/api/index.js";
+import { ref, onMounted, watch } from 'vue'
+import { instance } from 'src/api/index.js'
 
-const currentPaginate = ref(1);
-const paginas = ref(0);
-const products = ref([]);
-const search = ref("");
-const loading = ref(false);
+const currentPaginate = ref(1)
+const paginas = ref(0)
+const products = ref([])
+const search = ref('')
+const loading = ref(false)
 
 // los observadores
 watch(currentPaginate, async (val) => {
-  await getProducts();
-});
+  await getProducts()
+})
 watch(search, async (val) => {
-  await getProducts();
-});
+  await getProducts()
+})
 
-async function getProducts() {
+async function getProducts () {
   try {
-    loading.value = true;
+    loading.value = true
     const { data } = await instance.get(
-      "/comercio-ofertas?with[]=comercio&nombre=" +
+      '/comercio-ofertas?with[]=comercio&nombre=' +
         search.value +
-        "&page=" +
+        '&page=' +
         currentPaginate.value
-    );
-    products.value = data.data;
-    paginas.value = data.pagination.lastPage;
-    currentPaginate.value = data.pagination.currentPage;
+    )
+    products.value = data.data
+    paginas.value = data.pagination.lastPage
+    currentPaginate.value = data.pagination.currentPage
   } catch (error) {
   } finally {
-    loading.value = false;
+    loading.value = false
   }
 }
 
 // eventos hooks
 onMounted(async () => {
-  await getProducts();
-});
+  await getProducts()
+})
 </script>
 
 <style>

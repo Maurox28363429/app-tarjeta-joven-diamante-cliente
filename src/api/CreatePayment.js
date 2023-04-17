@@ -1,4 +1,4 @@
-import { instance } from ".";
+import { instance } from '.'
 /* {
   "payment":100,
   "user_id":15,
@@ -6,10 +6,10 @@ import { instance } from ".";
   "membresia_id":6,
   "img":file
 } */
-export default async function createPayment(formdata) {
-  return await instance.post("/payment", formdata, {
+export default async function createPayment (formdata) {
+  return await instance.post('/payment', formdata, {
     headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
+      'Content-Type': 'multipart/form-data'
+    }
+  })
 }
