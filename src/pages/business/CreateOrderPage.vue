@@ -154,9 +154,9 @@ const getTotal = (property) => {
   )
 }
 
-const total = computed(() => getTotal('priceTotal'))
+const total = computed(() => Math.round(100 * getTotal('priceTotal')) / 100)
 
-const totalSaving = computed(() => getTotal('savings'))
+const totalSaving = computed(() => Math.round(100 * getTotal('savings')) / 100)
 
 async function invoice () {
   const products = rows.value.map((item) => {
@@ -228,6 +228,7 @@ function addProduct (product) {
       product.priceWidthDiscount * productExist.cantidad
     productExist.savings = product.savings * productExist.cantidad
   } else {
+    product.savings = Math.round(100 * product.savings) / 100
     rows.value.push({
       ...product,
       priceTotal: product.priceWidthDiscount * product.cantidad

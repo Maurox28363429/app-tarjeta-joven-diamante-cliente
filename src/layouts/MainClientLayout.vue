@@ -7,8 +7,7 @@
         background: #f8fdff;
         box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.3),
           0px 1px 3px 1px rgba(0, 0, 0, 0.15);
-      "
-    >
+      ">
       <q-toolbar class="row items-center">
         <q-btn
           class="menu"
@@ -332,7 +331,7 @@ const drawerClick = (e) => {
 }
 
 onMounted(() => {
-  if (user?.membresia?.status !== 'permitir_gratuita') {
+  if (user?.membresia?.status === 'permitir_gratuita') {
     router.push('/memberships')
   }
 })
