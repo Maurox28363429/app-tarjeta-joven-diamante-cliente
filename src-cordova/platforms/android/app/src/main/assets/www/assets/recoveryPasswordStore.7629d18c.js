@@ -1,0 +1,1 @@
+import{i as o}from"./index.360ce4ab.js";import{ca as s}from"./index.30f6a082.js";async function a({email:e}){return await o.post("/getRecovery",{email:e})}const i=s("recoveryPassword",{state:()=>({email:""}),actions:{setEmail(e){this.email=e}}});export{a as g,i as u};
