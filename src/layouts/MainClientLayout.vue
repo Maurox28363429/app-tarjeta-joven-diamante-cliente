@@ -173,7 +173,11 @@
     <div class="q-px-sm q-py-lg">
       <div class="qrButton">
         <q-fab color="primary" icon="keyboard_arrow_up" direction="up">
-          <q-fab-action color="primary" @click="handleModal" :disable="(user.membresia.status=='vencida')? true:false">
+          <q-fab-action
+            color="primary"
+            @click="handleModal"
+            :disable="user.membresia.status == 'vencida' ? true : false"
+          >
             <img src="./../assets/qr.jpg" style="width: 24px; height: 24px" />
           </q-fab-action>
         </q-fab>
@@ -181,12 +185,7 @@
     </div>
     <q-tabs
       v-model="tab"
-      style="
-        position: fixed;
-        z-index: 100;
-        bottom: 0;
-        width: 100%;
-      "
+      style="position: fixed; z-index: 100; bottom: 0; width: 100%"
       dense
       class="menuMobile bg-primary text-white justify-center"
       align="justify-center"
@@ -279,29 +278,39 @@ aside {
 </style>
 
 <script setup>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import QrUser from 'src/components/QrUser.vue'
-import { userAuth } from 'src/composables/userAuth'
-import UpdateMembershipModal from '../components/UpdateMembershipModal.vue'
-import format from 'src/utils/date'
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import { userAuth } from "src/composables/userAuth";
+import UpdateMembershipModal from "../components/UpdateMembershipModal.vue";
+import format from "src/utils/date";
 
-const { user } = userAuth()
+const { user } = userAuth();
 
 const goHome = () => {
-  router.push("/");
+  console.log("goHome");
+  router.push("/empresa");
 };
 
-const leftDrawerOpen = ref(false)
-const router = useRouter()
+const leftDrawerOpen = ref(false);
+const router = useRouter();
 
-const show = ref(false)
+const show = ref(false);
+
+const showModalRenovar = () => {
+  if (user?.membresia?.days === 1) {
+    return true;
+  }
+  return false;
+};
+
+const showModalNew = () => {
+  if (format(user?.membresia?.updated_at) === format(new Date())) {
+    return true;
+  }
+  return false;
+};
 
 const miniState = ref(true);
-
-const handleModal = () => {
-  show.value = !show.value;
-};
 
 const handledLogout = (e) => {
   e.preventDefault();
@@ -317,7 +326,8 @@ const toggleLeftDrawer = () => {
 const drawerClick = (e) => {
   if (miniState.value) {
     miniState.value = false;
+
     e.stopPropagation();
   }
-}
+};
 </script>

@@ -105,7 +105,6 @@
           :rows="rows"
           :columns="columns"
           row-key="id"
-          :selected-rows-label="getSelectedString"
           selection="multiple"
           v-model:selected="selected"
         />
@@ -149,27 +148,15 @@ const currentPaginate = ref(1);
 const selected = ref([]);
 const rows = ref([]);
 
-const total = computed(() => {
+const getTotal = (property) => {
   return (
-    Math.round(
-      100 *
-        rows.value.reduce((acc, item) => {
-          return acc + item.priceTotal;
-        }, 0)
-    ) / 100
+    (100 * rows.value.reduce((acc, item) => acc + item[property], 0)) / 100
   );
-});
+};
 
-const totalSaving = computed(() => {
-  return (
-    Math.round(
-      100 *
-        rows.value.reduce((acc, item) => {
-          return acc + item.savings;
-        }, 0)
-    ) / 100
-  );
-});
+const total = computed(() => getTotal("priceTotal"));
+
+const totalSaving = computed(() => getTotal("savings"));
 
 async function invoice() {
   const products = rows.value.map((item) => {
@@ -203,12 +190,10 @@ async function invoice() {
 }
 
 function deleteProduct() {
-  const filtro = rows.value.filter(
+  rows.value = rows.value.filter(
     (item) =>
       !selected.value.some((selectedItem) => selectedItem.id === item.id)
   );
-  // Actualizar el valor de rows con el resultado del filtro
-  rows.value = filtro;
   if (selected.value.length > 0) {
     triggerPositive("Producto eliminado");
   }
@@ -235,26 +220,20 @@ function subtractMount(id) {
 }
 
 function addProduct(product) {
-  const productExist = rows.value.find((item) => item.id === product.id);
-  if (productExist) {
-    productExist.cantidad = product.cantidad + productExist.cantidad;
+  const index = rows.value.findIndex((item) => item.id === product.id);
+  if (index !== -1) {
+    const productExist = rows.value[index];
+    productExist.cantidad += product.cantidad;
     productExist.priceTotal =
       product.priceWidthDiscount * productExist.cantidad;
     productExist.savings = product.savings * productExist.cantidad;
-    triggerPositive("Producto agregado");
   } else {
     rows.value.push({
-      id: product.id,
-      cantidad: product.cantidad,
-      nombre: product.nombre,
-      price_total: product.price_total,
-      descuento: product.descuento,
-      priceWidthDiscount: product.priceWidthDiscount,
-      savings: product.savings,
-      priceTotal: product.priceTotal,
+      ...product,
+      priceTotal: product.priceWidthDiscount * product.cantidad,
     });
-    triggerPositive("Producto agregado");
   }
+  triggerPositive("Producto agregado");
 }
 
 async function fetchOffers() {
@@ -349,14 +328,6 @@ const columns = [
     format: (val) => `$${val}`,
   },
 ];
-
-function getSelectedString() {
-  return selected.value.length === 0
-    ? ""
-    : `${selected.value.length} record${
-        selected.value.length > 1 ? "s" : ""
-      } selected of ${rows.value.length}`;
-}
 </script>
 
 <style>

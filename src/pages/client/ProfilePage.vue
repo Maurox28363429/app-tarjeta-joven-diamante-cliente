@@ -53,7 +53,7 @@
         <q-item>
           <q-item-section>
             <q-item-label>Membresía</q-item-label>
-            <q-item-label caption></q-item-label>
+            <q-item-label caption>{{ user.membresia.type }}</q-item-label>
           </q-item-section>
         </q-item>
         <q-item>

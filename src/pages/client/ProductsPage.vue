@@ -101,6 +101,7 @@ const paginas = ref(0);
 const products = ref([]);
 const search = ref("");
 const loading = ref(false);
+
 // los observadores
 watch(currentPaginate, async (val) => {
   await getProducts();
@@ -108,6 +109,7 @@ watch(currentPaginate, async (val) => {
 watch(search, async (val) => {
   await getProducts();
 });
+
 async function getProducts() {
   try {
     loading.value = true;

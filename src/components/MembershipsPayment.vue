@@ -34,7 +34,7 @@ const handledPayment = () => {
   }
 };
 
-const isFree = Boolean(props.name === 'free')
+const isFree = Boolean(props.name === "free");
 </script>
 
 <template>
