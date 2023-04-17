@@ -1,43 +1,40 @@
 <script setup>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { userAuth } from '../composables/userAuth.js'
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import { userAuth } from "../composables/userAuth.js";
 
-const val = ref(false)
-const textError = ref(false)
-const { user, addMembership, isLoadingMembership } = userAuth()
+const val = ref(false);
+const textError = ref(false);
+const { user, addMembership, isLoadingMembership } = userAuth();
 
 const props = defineProps({
   price: {
     type: Number,
-    required: true
+    required: true,
   },
   name: {
     type: String,
     required: true,
-    default: ''
-  }
-})
+    default: "",
+  },
+});
 
-const router = useRouter()
+const router = useRouter();
 
 const goBack = () => {
-  console.log('go back')
-  router.go(-1)
-}
+  router.go(-1);
+};
 
 const handledPayment = () => {
-  console.log(user?.id, 'user.id')
-  console.log('handledPayment')
   if (val.value) {
-    addMembership({ user_id: user?.id })
-    textError.value = false
+    addMembership({ user_id: user?.id });
+    textError.value = false;
   } else {
-    textError.value = true
+    textError.value = true;
   }
-}
+};
 
-const isFree = props.price === 0
+const isFree = Boolean(props.name === 'free')
 </script>
 
 <template>
@@ -159,9 +156,7 @@ const isFree = props.price === 0
                 ¿Qué estás adquiriendo con el plan {{ name }}?
               </p>
               <ul class="q-gutter-y-md">
-                <li
-                  class="row items-center"
-                >
+                <li class="row items-center">
                   <q-icon
                     name="check_circle"
                     size="md"
@@ -174,9 +169,7 @@ const isFree = props.price === 0
                     </p>
                   </div>
                 </li>
-                <li
-                  class="row items-center"
-                >
+                <li class="row items-center">
                   <q-icon
                     name="check_circle"
                     size="md"
@@ -189,9 +182,7 @@ const isFree = props.price === 0
                     </p>
                   </div>
                 </li>
-                <li
-                  class="row items-center"
-                >
+                <li class="row items-center">
                   <q-icon
                     name="check_circle"
                     size="md"
@@ -204,9 +195,7 @@ const isFree = props.price === 0
                     </p>
                   </div>
                 </li>
-                <li
-                  class="row items-center"
-                >
+                <li class="row items-center">
                   <q-icon
                     name="check_circle"
                     size="md"

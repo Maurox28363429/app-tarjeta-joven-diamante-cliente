@@ -16,30 +16,26 @@
   <div
     class="full-width full-height row wrap q-gutter-lg justify-center q-my-lg"
   >
+    <template v-if="loading">
+      <div v-for="index in 20" :key="index" class="skeleton-card">
+        <q-card class="my-card" style="height: 460px; width: 250px">
+          <q-skeleton height="200px" width="250px" square />
+          <q-card-section>
+            <q-skeleton style="margin-bottom: 10px" type="QSlider" />
+            <q-skeleton style="margin-bottom: 10px" type="QSlider" />
+            <q-skeleton type="text" class="text-caption" />
+            <q-skeleton type="text" class="text-caption" />
+            <q-skeleton type="text" class="text-caption" />
+            <q-skeleton type="text" class="text-caption" />
+          </q-card-section>
+        </q-card>
+      </div>
+    </template>
 
-  <template v-if="loading">
-        <div v-for="index in 20" :key="index" class="skeleton-card">
-          <q-card class="my-card" style="height: 460px; width: 250px;">
-            <q-skeleton height="200px" width="250px" square />
-            <q-card-section>
-              <q-skeleton style="margin-bottom: 10px;" type="QSlider" />
-              <q-skeleton style="margin-bottom: 10px;" type="QSlider" />
-              <q-skeleton type="text" class="text-caption" />
-              <q-skeleton type="text" class="text-caption" />
-              <q-skeleton type="text" class="text-caption" />
-              <q-skeleton type="text" class="text-caption" />
-            </q-card-section>
-          </q-card>
-        </div>
-      </template>
-
-    <div
-      v-for="items in products"
-      :key="items.id"
-    >
-      <q-card class="my-card" style="height: 460px; width: 250px;">
+    <div v-for="items in products" :key="items.id">
+      <q-card class="my-card" style="height: 460px; width: 250px">
         <img
-          style="height: 200px; width: 250px; max-height: 200px;"
+          style="height: 200px; width: 250px; max-height: 200px"
           :src="
             items.img_array_url[0]
               ? items.img_array_url[0]
@@ -97,49 +93,43 @@
 
 <script setup>
 // importaciones
-import { ref, onMounted, watch } from 'vue'
-import { instance } from 'src/api/index.js'
-import { userAuth } from 'src/composables/userAuth'
-// user auth
-const { user } = userAuth()
-console.log(user)
-// variables
-const currentPaginate = ref(1)
-const paginas = ref(0)
-const products = ref([])
-const search = ref('')
-const loading = ref(false)
+import { ref, onMounted, watch } from "vue";
+import { instance } from "src/api/index.js";
+
+const currentPaginate = ref(1);
+const paginas = ref(0);
+const products = ref([]);
+const search = ref("");
+const loading = ref(false);
 // los observadores
 watch(currentPaginate, async (val) => {
-  await getProducts()
-})
+  await getProducts();
+});
 watch(search, async (val) => {
-  await getProducts()
-})
-async function getProducts () {
+  await getProducts();
+});
+async function getProducts() {
   try {
-    loading.value = true
-    const { data } = await instance
-      .get(
-        '/comercio-ofertas?with[]=comercio&nombre=' +
+    loading.value = true;
+    const { data } = await instance.get(
+      "/comercio-ofertas?with[]=comercio&nombre=" +
         search.value +
-        '&page=' +
+        "&page=" +
         currentPaginate.value
-      )
-    products.value = data.data
-    paginas.value = data.pagination.lastPage
-    currentPaginate.value = data.pagination.currentPage
+    );
+    products.value = data.data;
+    paginas.value = data.pagination.lastPage;
+    currentPaginate.value = data.pagination.currentPage;
   } catch (error) {
-
   } finally {
-    loading.value = false
+    loading.value = false;
   }
 }
 
 // eventos hooks
 onMounted(async () => {
-  await getProducts()
-})
+  await getProducts();
+});
 </script>
 
 <style>

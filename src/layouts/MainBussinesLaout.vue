@@ -115,7 +115,7 @@
             <img src="https://cdn.quasar.dev/img/boy-avatar.png" />
           </q-avatar>
           <div class="text-weight-bold">
-            ¡Hola, {{ user.name + ' ' + user.last_name }}!
+            ¡Hola, {{ user.name + " " + user.last_name }}!
           </div>
           <div>
             <p
@@ -157,12 +157,7 @@
     </div>
     <q-tabs
       v-model="tab"
-      style="
-        position: fixed;
-        z-index: 100;
-        bottom: 0;
-        width: 100%;
-      "
+      style="position: fixed; z-index: 100; bottom: 0; width: 100%"
       dense
       class="menuMobile bg-primary text-white justify-center"
       align="justify-center"
@@ -255,61 +250,48 @@ aside {
 </style>
 
 <script setup>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import QRScanner from 'src/components/QRScanner.vue'
-import { userAuth } from 'src/composables/userAuth'
-import UpdateMembershipModal from '../components/UpdateMembershipModal.vue'
-import format from 'src/utils/date'
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import QRScanner from "src/components/QRScanner.vue";
+import { userAuth } from "src/composables/userAuth";
+import UpdateMembershipModal from "../components/UpdateMembershipModal.vue";
+import format from "src/utils/date";
 
-const { user } = userAuth()
+const { user } = userAuth();
+const router = useRouter();
+
+const leftDrawerOpen = ref(false);
+const show = ref(false);
+const miniState = ref(true);
 
 const goHome = () => {
-  console.log('goHome')
-  router.push('/empresa')
-}
+  router.push("/empresa");
+};
 
-const leftDrawerOpen = ref(false)
-const router = useRouter()
+const showModalRenovar = () => user?.membresia?.days === 1;
 
-const show = ref(false)
-
-const showModalRenovar = () => {
-  if (user?.membresia?.days === 1) {
-    return true
-  }
-  return false
-}
-
-const showModalNew = () => {
-  if (format(user?.membresia?.updated_at) === format(new Date())) {
-    return true
-  }
-  return false
-}
-
-const miniState = ref(true)
+const showModalNew = () =>
+  format(user?.membresia?.updated_at) === format(new Date());
 
 const handledReadQr = () => {
-  show.value = !show.value
-}
+  show.value = !show.value;
+};
 
 const handledLogout = (e) => {
-  e.preventDefault()
-  localStorage.removeItem('user')
-  router.push('/login')
-}
+  e.preventDefault();
+  localStorage.removeItem("user");
+  router.push("/login");
+};
 
 const toggleLeftDrawer = () => {
-  leftDrawerOpen.value = true
-  miniState.value = !miniState.value
-}
+  leftDrawerOpen.value = true;
+  miniState.value = !miniState.value;
+};
 
 const drawerClick = (e) => {
   if (miniState.value) {
-    miniState.value = false
-
-    e.stopPropagation()
+    miniState.value = false;
+    e.stopPropagation();
   }
-}
+};
 </script>

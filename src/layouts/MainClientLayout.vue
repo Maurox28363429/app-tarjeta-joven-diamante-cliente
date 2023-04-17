@@ -140,7 +140,7 @@
             <img src="https://cdn.quasar.dev/img/boy-avatar.png" />
           </q-avatar>
           <div class="text-weight-bold">
-            ¡Hola, {{ user.name + ' ' + user.last_name }}!
+            ¡Hola, {{ user.name + " " + user.last_name }}!
           </div>
           <div>
             <p
@@ -185,7 +185,8 @@
         position: fixed;
         z-index: 100;
         bottom: 0;
-        width: 100%;"
+        width: 100%;
+      "
       dense
       class="menuMobile bg-primary text-white justify-center"
       align="justify-center"
@@ -278,7 +279,7 @@ aside {
 </style>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import QrUser from 'src/components/QrUser.vue'
 import { userAuth } from 'src/composables/userAuth'
@@ -286,56 +287,37 @@ import UpdateMembershipModal from '../components/UpdateMembershipModal.vue'
 import format from 'src/utils/date'
 
 const { user } = userAuth()
+
 const goHome = () => {
-  console.log('goHome')
-  router.push('/')
-}
+  router.push("/");
+};
 
 const leftDrawerOpen = ref(false)
 const router = useRouter()
+
 const show = ref(false)
 
-const showModalRenovar = () => {
-  if (user?.membresia?.days === 1) {
-    return true
-  }
-  return false
-}
-
-const showModalNew = () => {
-  if (format(user?.membresia?.updated_at) === format(new Date())) {
-    return true
-  }
-  return false
-}
-
-const miniState = ref(true)
+const miniState = ref(true);
 
 const handleModal = () => {
-  show.value = !show.value
-}
+  show.value = !show.value;
+};
 
 const handledLogout = (e) => {
-  e.preventDefault()
-  localStorage.removeItem('user')
-  router.push('/login')
-}
+  e.preventDefault();
+  localStorage.removeItem("user");
+  router.push("/login");
+};
 
 const toggleLeftDrawer = () => {
-  leftDrawerOpen.value = true
-  miniState.value = !miniState.value
-}
+  leftDrawerOpen.value = true;
+  miniState.value = !miniState.value;
+};
 
 const drawerClick = (e) => {
   if (miniState.value) {
-    miniState.value = false
-
-    e.stopPropagation()
+    miniState.value = false;
+    e.stopPropagation();
   }
 }
-onMounted(() => {
-  if (user?.membresia?.type === 'permitir_gratuita') {
-    router.push('/memberships')
-  }
-})
 </script>
