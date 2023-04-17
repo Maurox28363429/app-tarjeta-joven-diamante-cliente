@@ -2,7 +2,7 @@
   "name": "app-cliente",
   "version": "0.0.1",
   "description": "A Quasar Project",
-  "productName": "Quasar App",
+  "productName": "Tarjeta joven diamante",
   "author": "Maurox28363429 <maur28363429rd@gmail.com>",
   "private": true,
   "scripts": {
@@ -23,12 +23,14 @@
     "cordova": "^11.1.0",
     "cordova-plugin-android-permissions": "^1.1.5",
     "cordova-plugin-qrscanner-11": "^3.0.5",
+    "eprezto-yappy": "^1.1.0",
     "pinia": "^2.0.11",
     "qrcode.vue": "^3.3.4",
     "quasar": "^2.6.0",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0",
     "vue3-qrcode-reader": "^0.0.1",
+    "yappy-js-front-sdk": "file:yappy-js-sdk.tgz",
     "yup": "^1.0.2"
   },
   "devDependencies": {
