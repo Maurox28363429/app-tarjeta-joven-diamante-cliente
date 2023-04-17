@@ -278,7 +278,7 @@ aside {
 </style>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { userAuth } from "src/composables/userAuth";
 import UpdateMembershipModal from "../components/UpdateMembershipModal.vue";
@@ -330,4 +330,10 @@ const drawerClick = (e) => {
     e.stopPropagation();
   }
 };
+
+onMounted(() => {
+  if (user?.membresia?.status === "permitir_gratuita") {
+    router.push("/memberships");
+  }
+});
 </script>
