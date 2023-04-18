@@ -18,13 +18,14 @@ const props = defineProps({
     default: ''
   }
 })
+
 const router = useRouter()
 
 const goBack = () => {
   router.go(-1)
 }
 
-const handledPayment = () => {
+const handledFreePayment = () => {
   if (val.value) {
     addMembership({ user_id: user?.id })
     textError.value = false
@@ -32,7 +33,12 @@ const handledPayment = () => {
     textError.value = true
   }
 }
-
+const HandlePayment = () => {
+  console.log(router.currentRoute.value.params)
+  router.push(
+    '/memberships/' + router.currentRoute.value.params.id + '/payment'
+  )
+}
 const isFree = Boolean(props.name === 'free') || props.price === 0
 </script>
 
@@ -95,7 +101,7 @@ const isFree = Boolean(props.name === 'free') || props.price === 0
                   <p class="q-ma-none">${{ price }}</p>
                 </div>
 
-                <button v-if="!isFree" class="row items-center buttonPay">
+                <button @click="HandlePayment" v-if="!isFree" class="row items-center buttonPay">
                   <p class="q-ma-none q-mr-md text-weight-medium">Pagar con</p>
                   <q-img
                     src="./../assets/yappyIcon.svg"
@@ -105,7 +111,7 @@ const isFree = Boolean(props.name === 'free') || props.price === 0
                 </button>
                 <button
                   v-if="isFree"
-                  @click="handledPayment"
+                  @click="handledFreePayment"
                   class="row items-center buttonPay justify-center"
                 >
                   <p class="q-ma-none q-mr-md text-weight-medium">
@@ -164,7 +170,7 @@ const isFree = Boolean(props.name === 'free') || props.price === 0
                   />
                   <div class="col-10 col-xl-11">
                     <p class="q-ma-none q-ml-xs">
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit
+                      Obten descuentos en tus compras
                     </p>
                   </div>
                 </li>
@@ -177,7 +183,7 @@ const isFree = Boolean(props.name === 'free') || props.price === 0
                   />
                   <div class="col-10 col-xl-11">
                     <p class="q-ma-none q-ml-xs">
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit
+                      Participa en sorteos y obten premios
                     </p>
                   </div>
                 </li>
@@ -190,20 +196,7 @@ const isFree = Boolean(props.name === 'free') || props.price === 0
                   />
                   <div class="col-10 col-xl-11">
                     <p class="q-ma-none q-ml-xs">
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit
-                    </p>
-                  </div>
-                </li>
-                <li class="row items-center">
-                  <q-icon
-                    name="check_circle"
-                    size="md"
-                    color="primary"
-                    class="col-2 col-xl-1"
-                  />
-                  <div class="col-10 col-xl-11">
-                    <p class="q-ma-none q-ml-xs">
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit
+                      Obten acceso a la compra de productos premium
                     </p>
                   </div>
                 </li>
@@ -212,9 +205,7 @@ const isFree = Boolean(props.name === 'free') || props.price === 0
                 <q-icon name="help" size="md" color="orange-9" />
                 <p class="q-ma-none q-ml-xs">
                   Tienes alguna duda?
-                  <span class="text-weight-bold cursor-pointer"
-                    >contáctanos</span
-                  >.
+                  <span class="text-weight-bold cursor-pointer">contáctanos</span>.
                 </p>
               </div>
             </div>
