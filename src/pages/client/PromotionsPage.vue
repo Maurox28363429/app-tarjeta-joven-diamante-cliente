@@ -179,6 +179,7 @@ onMounted(async () => {
 
 .news-card {
   border-radius: 8px;
+
   display: flex;
   flex-direction: column;
   box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px 0px,

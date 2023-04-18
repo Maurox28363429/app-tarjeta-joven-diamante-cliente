@@ -21,6 +21,7 @@
         <div>
           <div class="row items-center q-py-md">
             <q-icon
+              @click="goBack"
               name="arrow_back"
               size="xl"
               color="primary"
@@ -55,7 +56,8 @@
                   class="text-error"
                   v-if="!!validateMessage.errors.referencia"
                 >
-                  {{ validateMessage.errors.referencia }}
+                  <!-- {{ validateMessage.errors.referencia }} -->
+                  Campo Requerido
                 </p>
               </div>
               <div>
@@ -107,6 +109,10 @@ const loading = ref(false);
 const membership = ref({});
 const file = ref(null);
 const router = useRouter();
+
+const goBack = () => {
+  router.go(-1);
+};
 
 const INITIAL_VALUES = () => ({
   referencia: "",

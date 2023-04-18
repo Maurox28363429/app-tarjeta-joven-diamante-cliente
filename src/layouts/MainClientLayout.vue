@@ -332,7 +332,7 @@ const drawerClick = (e) => {
 };
 
 onMounted(() => {
-  if (user?.membresia?.status === "permitir_gratuita") {
+  if (user.value.membresia.type === "permitir_gratuita") {
     router.push("/memberships");
   }
 });

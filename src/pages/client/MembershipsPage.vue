@@ -10,6 +10,7 @@ const { loading, memberships } = useMemberships();
 const goBack = () => {
   router.go(-1);
 };
+console.log(memberships);
 </script>
 
 <template>
