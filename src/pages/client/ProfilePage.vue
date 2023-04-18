@@ -183,33 +183,33 @@
   </div>
 </template>
 <script setup>
-import { userAuth } from 'src/composables/userAuth'
-import { ref, watch } from 'vue'
-import { useValidateForm } from 'src/composables/useValidateForm'
-import { updateProfileShema } from 'src/schemas/updateProfileShema'
-import updateUser from 'src/api/updateUser'
-import localStorageAuth from 'src/utils/localStorageAuth'
-import { useToast } from 'src/composables/useToast'
+import { userAuth } from "src/composables/userAuth";
+import { ref, watch } from "vue";
+import { useValidateForm } from "src/composables/useValidateForm";
+import { updateProfileShema } from "src/schemas/updateProfileShema";
+import updateUser from "src/api/updateUser";
+import localStorageAuth from "src/utils/localStorageAuth";
+import { useToast } from "src/composables/useToast";
 
-const { triggerPositive, triggerWarning } = useToast()
+const { triggerPositive, triggerWarning } = useToast();
 
-const loading = ref(false)
+const loading = ref(false);
 
-const { user: userStore, updatedUser } = userAuth()
-const user = ref(localStorageAuth.getUser().user)
+const { user: userStore, updatedUser } = userAuth();
+const user = ref(localStorageAuth.getUser().user);
 
 watch(userStore, () => {
-  user.value = userStore
-})
+  user.value = userStore;
+});
 
 const GENDER_OPTIONS = [
-  { label: 'Mujer', value: 0 },
-  { label: 'Hombre', value: 1 }
-]
+  { label: "Mujer", value: 0 },
+  { label: "Hombre", value: 1 },
+];
 
 const genderCurrent = GENDER_OPTIONS.find((item) => {
-  return item.value === user.value.sex
-})
+  return item.value === user.value.sex;
+});
 
 const INITIAL_VALUES = {
   name: user.value.name,
@@ -217,44 +217,46 @@ const INITIAL_VALUES = {
   last_name: user.value.last_name,
   phone: user.value.phone,
   sex: genderCurrent,
-  address: user.value.address
-}
+  address: user.value.address,
+};
 
 const { useForm, validatInput, validateMessage, validateForm } =
-  useValidateForm({ initialValue: INITIAL_VALUES, schema: updateProfileShema })
+  useValidateForm({ initialValue: INITIAL_VALUES, schema: updateProfileShema });
 
 const handledUpdateUser = async () => {
-  validateForm()
+  validateForm();
   try {
-    loading.value = true
+    loading.value = true;
     const values = {
       ...useForm.value,
       role_id: user.value.role_id,
       active: user.value.active,
       id: user.value.id,
-      sex: useForm.value.sex.value
-    }
-    await updateUser(values)
-    const userCurrent = localStorageAuth.getUser()
+      sex: useForm.value.sex.value,
+    };
+    await updateUser(values);
+    const userCurrent = localStorageAuth.getUser();
     localStorageAuth.setUser({
       user: { ...userCurrent.user, ...values },
-      token: userCurrent.token
-    })
-    updatedUser()
-    triggerPositive('Usuario actualizado con éxito')
+      token: userCurrent.token,
+    });
+    updatedUser();
+    triggerPositive("Usuario actualizado con éxito");
   } catch (err) {
-    console.error(err)
-    triggerWarning('Ah ocurrido un error, intente nuevamente')
+    console.error(err);
+    triggerWarning("Ah ocurrido un error, intente nuevamente");
   } finally {
-    loading.value = false
+    loading.value = false;
   }
-}
+};
 </script>
 
 <style scoped>
 .editContainer {
   flex: 1;
   min-width: 300px;
+  margin-right: 0;
+  margin-left: 0;
 }
 
 .formContainer {
@@ -265,6 +267,7 @@ const handledUpdateUser = async () => {
 
 .profile {
   width: 100%;
+  margin: 0;
 }
 
 @media (min-width: 700px) {
