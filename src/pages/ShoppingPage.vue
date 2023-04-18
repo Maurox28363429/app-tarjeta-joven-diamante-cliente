@@ -91,9 +91,9 @@
                 />
                 <q-list>
                   <q-item>
-                    <q-section>
+                    <q-item-section>
                       <h5>{{ item.nombre }}</h5>
-                    </q-section>
+                    </q-item-section>
                   </q-item>
                   <q-item>
                     <q-item-section avatar>

@@ -174,8 +174,8 @@
       <div class="qrButton">
         <q-fab color="primary" icon="keyboard_arrow_up" direction="up">
           <q-fab-action
-            color="primary"
             @click="handleModal"
+            color="primary"
             :disable="user.membresia.status == 'vencida' ? true : false"
           >
             <img src="./../assets/qr.jpg" style="width: 24px; height: 24px" />
@@ -184,11 +184,10 @@
       </div>
     </div>
     <q-tabs
-      v-model="tab"
       style="position: fixed; z-index: 100; bottom: 0; width: 100%"
       dense
       class="menuMobile bg-primary text-white justify-center"
-      align="justify-center"
+      align="center"
       narrow-indicator
     >
       <router-link
@@ -283,6 +282,7 @@ import { useRouter } from 'vue-router'
 import { userAuth } from 'src/composables/userAuth'
 import UpdateMembershipModal from '../components/UpdateMembershipModal.vue'
 import format from 'src/utils/date'
+import QrUser from '../components/QrUser.vue'
 
 const { user } = userAuth()
 
@@ -301,6 +301,10 @@ const showModalRenovar = () => {
     return true
   }
   return false
+}
+
+const handleModal = () => {
+  show.value = true
 }
 
 const showModalNew = () => {

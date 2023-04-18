@@ -10,7 +10,8 @@ const { user, addMembership, isLoadingMembership } = userAuth()
 const props = defineProps({
   price: {
     type: Number,
-    required: true
+    required: true,
+    default: 0
   },
   name: {
     type: String,

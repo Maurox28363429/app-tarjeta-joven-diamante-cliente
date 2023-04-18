@@ -156,11 +156,10 @@
       </div>
     </div>
     <q-tabs
-      v-model="tab"
       style="position: fixed; z-index: 100; bottom: 0; width: 100%"
       dense
       class="menuMobile bg-primary text-white justify-center"
-      align="justify-center"
+      align="center"
       narrow-indicator
     >
       <router-link
