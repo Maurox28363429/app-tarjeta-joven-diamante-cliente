@@ -1,4 +1,6 @@
 node_modules
 .quasar
 .dist
-
+src-cordova
+src-electron
+package-lock.json

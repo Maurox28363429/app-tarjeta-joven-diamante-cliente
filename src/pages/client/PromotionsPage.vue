@@ -6,6 +6,8 @@
       <q-input
         v-model="search"
         outlined
+        class="full-width"
+        style="max-width: 400px"
         type="search"
         label="Buscar promociones"
         color="primary"
@@ -62,7 +64,11 @@
                 </p></q-card-section
               >
 
-              <q-card-actions align="right" class="q-pt-none">
+              <q-card-actions
+                align="right"
+                class="q-pt-none"
+                style="flex: 1; align-items: end"
+              >
                 <q-btn color="primary" @click="showModal({ ...item })" flat
                   >Ver más</q-btn
                 >
@@ -147,6 +153,10 @@ onMounted(async () => {
 });
 </script>
 <style>
+.promotions {
+  padding: 0 24px;
+}
+
 .title-large {
   margin-left: 24px;
   margin-top: 24px;
@@ -161,14 +171,16 @@ onMounted(async () => {
 
 .news-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  grid-gap: 24px;
-  margin: 0 24px;
-  margin-bottom: 24px;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 20px 7px;
+  justify-content: center;
+  padding: 20px 0;
 }
 
 .news-card {
   border-radius: 8px;
+  display: flex;
+  flex-direction: column;
   box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px 0px,
     rgba(0, 0, 0, 0.24) 0px 1px 1px 0px;
   overflow: hidden;
