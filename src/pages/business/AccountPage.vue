@@ -28,7 +28,7 @@
             <q-item-section>
               <q-item-label
                 >Contactanos a
-                <span class="text-weight-bold">informacion@tarjetajovendiamante.com</span></q-item-label>
+                <span class="text-weight-bold">informacionrmacion@tarjetajovendiamante.com</span></q-item-label>
               <q-item-label caption>
                 Estamos para ayudarte, si tienes alguna duda o problema con tu
                 cuenta puedes contactarnos.
