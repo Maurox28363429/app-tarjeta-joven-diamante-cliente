@@ -1,7 +1,7 @@
 <template>
   <div class="promotions">
     <!-- Título y campo de búsqueda -->
-    <p class="title-large">Promociones</p>
+    <p style="margin: 20px 0" class="title-large">Promociones</p>
     <div class="search-box">
       <q-input
         v-model="search"
@@ -112,6 +112,9 @@
 <script setup>
 import { ref, onMounted, watch } from "vue";
 import getNews from "src/api/getNews";
+import { useToast } from "src/composables/useToast";
+
+const { triggerWarning } = useToast();
 
 const openModal = ref(false);
 const news = ref([]);
@@ -136,6 +139,11 @@ async function fetchNews() {
     news.value = data.data;
   } catch (err) {
     console.error(err);
+    const errorMessage =
+      err.code === "ERR_NETWORK"
+        ? "Verifique su conexión a internet e intente nuevamente"
+        : "Error desconocido";
+    triggerWarning(errorMessage);
   } finally {
     loading.value = false;
   }

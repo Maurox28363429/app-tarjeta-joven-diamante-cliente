@@ -80,7 +80,7 @@ const routes = [
         children: [
           {
             path: "",
-            component: () => import("pages/business/CreateOrderPage.vue"),
+            component: () => import("pages/ShoppingPage.vue"),
           },
           {
             path: "account",
@@ -99,7 +99,7 @@ const routes = [
           {
             name: "orders",
             path: "orders",
-            component: () => import("pages/client/MembershipsPage.vue"),
+            component: () => import("pages/ShoppingPage.vue"),
           },
           {
             name: "create-order",

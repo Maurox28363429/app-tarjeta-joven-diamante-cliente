@@ -1,10 +1,7 @@
 <template>
-  <div class="q-pa-lg flex flex-center">
+  <div class="q-pa-md flex flex-center">
     <!--Container-->
-    <div
-      class="q-pa-md full-width"
-      style="position: relative; min-height: 400px"
-    >
+    <div class="full-width" style="position: relative; min-height: 400px">
       <q-inner-loading
         :showing="loading"
         label="Por favor espera..."
@@ -146,6 +143,9 @@
 import { ref, onMounted, watch } from "vue";
 import { instance } from "src/api/index.js";
 import { userAuth } from "src/composables/userAuth";
+import { useToast } from "src/composables/useToast";
+
+const { triggerWarning } = useToast();
 
 const { user } = userAuth();
 
@@ -211,6 +211,11 @@ const cargarDatos = async (page = 1) => {
     currentPaginate.value = data.pagination.currentPage;
   } catch (error) {
     console.error(error);
+    const errorMessage =
+      error.code === "ERR_NETWORK"
+        ? "Verifique su conexión a internet e intente nuevamente"
+        : "Error desconocido";
+    triggerWarning(errorMessage);
   } finally {
     loading.value = false;
   }

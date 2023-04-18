@@ -1,6 +1,6 @@
 <template>
   <div class="q-px-md">
-    <p class="q-ml-lg q-mt-lg title-large">Ofertas</p>
+    <p style="margin: 20px 0" class="title-large">Ofertas</p>
     <div class="full-width full-height row justify-center q-mt-lg">
       <q-input
         class="full-width"
@@ -19,7 +19,7 @@
     <div class="full-width full-height product-grid">
       <template v-if="loading">
         <div v-for="index in 20" :key="index" class="skeleton-card">
-          <q-card class="my-card" style="height: 360px; width: 250px">
+          <q-card class="my-card" style="height: 340px; width: 100%">
             <q-skeleton height="120px" width="100%" square />
             <q-card-section class="q-px-xs">
               <q-skeleton style="margin-bottom: 10px" type="QSlider" />
@@ -101,12 +101,15 @@
 // importaciones
 import { ref, onMounted, watch } from "vue";
 import { instance } from "src/api/index.js";
+import { useToast } from "src/composables/useToast";
 
 const currentPaginate = ref(1);
 const paginas = ref(0);
 const products = ref([]);
 const search = ref("");
 const loading = ref(false);
+
+const { triggerWarning } = useToast();
 
 // los observadores
 watch(currentPaginate, async (val) => {
@@ -129,6 +132,12 @@ async function getProducts() {
     paginas.value = data.pagination.lastPage;
     currentPaginate.value = data.pagination.currentPage;
   } catch (error) {
+    console.error(error);
+    const errorMessage =
+      error.code === "ERR_NETWORK"
+        ? "Verifique su conexión a internet e intente nuevamente"
+        : "Error desconocido";
+    triggerWarning(errorMessage);
   } finally {
     loading.value = false;
   }

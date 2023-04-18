@@ -1,6 +1,7 @@
 import { useAuthStore } from "src/stores/useAuthStore";
 import { ref, computed } from "vue";
 import { useToast } from "./useToast";
+import { useRouter } from "vue-router";
 
 export const userAuth = () => {
   const authStore = useAuthStore();
@@ -10,6 +11,8 @@ export const userAuth = () => {
   const { token } = authStore;
   const user = computed(() => authStore?.user);
   const { triggerPositive, triggerWarning } = useToast();
+
+  const router = useRouter();
 
   const membershipsIsActive = () =>
     userAuth?.user.membresia?.status === "activa" ||
@@ -74,6 +77,7 @@ export const userAuth = () => {
       isLoadingMembership.value = true;
       await authStore.addMembership({ user_id });
       triggerPositive("Ha obtenido la membresía con éxito");
+      router.push("/products");
     } catch (err) {
       const errorMessage =
         err.code === "ERR_NETWORK"

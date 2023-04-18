@@ -255,6 +255,8 @@ const handledUpdateUser = async () => {
 .editContainer {
   flex: 1;
   min-width: 300px;
+  margin-right: 0;
+  margin-left: 0;
 }
 
 .formContainer {
@@ -265,6 +267,7 @@ const handledUpdateUser = async () => {
 
 .profile {
   width: 100%;
+  margin: 0;
 }
 
 @media (min-width: 700px) {

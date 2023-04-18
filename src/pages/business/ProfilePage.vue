@@ -238,7 +238,8 @@ const handledUpdateUser = async () => {
 .editContainer {
   flex: 1;
   min-width: 300px;
-  margin: 0px;
+  margin-right: 0;
+  margin-left: 0;
 }
 
 .container {
