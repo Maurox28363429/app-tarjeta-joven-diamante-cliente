@@ -117,11 +117,6 @@ const routes = [
             component: () => import("pages/client/MembershipsPage.vue"),
             meta: clientAuthMeta,
           },
-          {
-            path: "payment",
-            component: () => import("pages/client/PaymentPage.vue"),
-            meta: clientAuthMeta,
-          },
         ],
       },
       {
@@ -135,6 +130,11 @@ const routes = [
             next();
           }
         },
+      },
+      {
+        path: "memberships/:id/payment",
+        component: () => import("pages/client/PaymentFormPage.vue"),
+        meta: clientAuthMeta,
       },
     ],
   },

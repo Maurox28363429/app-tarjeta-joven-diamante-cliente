@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import { userAuth } from "../composables/userAuth.js";
+import { userAuth } from "src/composables/userAuth.js";
 
 const val = ref(false);
 const textError = ref(false);
@@ -35,6 +35,13 @@ const handledPayment = () => {
 };
 
 const isFree = Boolean(props.name === "free");
+
+const HandlePayment = () => {
+  console.log(router.currentRoute.value.params);
+  router.push(
+    "/memberships/" + router.currentRoute.value.params.id + "/payment"
+  );
+};
 </script>
 
 <template>
@@ -48,7 +55,7 @@ const isFree = Boolean(props.name === "free");
       <q-toolbar>
         <q-toolbar-title>
           <q-img
-            src="../assets/acronimo.svg"
+            src="src/assets/acronimo.svg"
             spinner-color="white"
             style="height: 40px; max-width: 98px"
           />
@@ -96,10 +103,14 @@ const isFree = Boolean(props.name === "free");
                   <p class="q-ma-none">${{ price }}</p>
                 </div>
 
-                <button v-if="!isFree" class="row items-center buttonPay">
+                <button
+                  @click="HandlePayment"
+                  v-if="!isFree"
+                  class="row items-center buttonPay"
+                >
                   <p class="q-ma-none q-mr-md text-weight-medium">Pagar con</p>
                   <q-img
-                    src="./../assets/yappyIcon.svg"
+                    src="src/assets/yappyIcon.svg"
                     spinner-color="white"
                     style="width: 74.75px; height: 17.92px"
                   />
@@ -142,7 +153,7 @@ const isFree = Boolean(props.name === "free");
                 <div class="row items-center">
                   <p class="q-ma-none text-primary q-mr-md">Plan {{ name }}</p>
                   <q-img
-                    src="../assets/rokectPrimarysvg.svg"
+                    src="src/assets/rokectPrimarysvg.svg"
                     spinner-color="white"
                     style="width: 32px; height: 32px"
                   />
