@@ -124,127 +124,127 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch, computed } from "vue";
-import getOffersFromStore from "src/api/getOffersFromStore";
-import { userAuth } from "src/composables/userAuth";
-import { userCart } from "src/stores/userCart";
-import invoiceOffer from "src/api/invoiceOffer";
-import { useToast } from "src/composables/useToast";
+import { ref, onMounted, watch, computed } from 'vue'
+import getOffersFromStore from 'src/api/getOffersFromStore'
+import { userAuth } from 'src/composables/userAuth'
+import { userCart } from 'src/stores/userCart'
+import invoiceOffer from 'src/api/invoiceOffer'
+import { useToast } from 'src/composables/useToast'
 
-const { triggerPositive, triggerWarning } = useToast();
+const { triggerPositive, triggerWarning } = useToast()
 
-const storeClient = userCart();
+const storeClient = userCart()
 
-const client = computed(() => storeClient.client);
+const client = computed(() => storeClient.client)
 
-const { user } = userAuth();
+const { user } = userAuth()
 
-const search = ref("");
-const offers = ref([]);
-const loading = ref(false);
-const loadingInvoice = ref(false);
-const pages = ref(1);
-const currentPaginate = ref(1);
-const selected = ref([]);
-const rows = ref([]);
+const search = ref('')
+const offers = ref([])
+const loading = ref(false)
+const loadingInvoice = ref(false)
+const pages = ref(1)
+const currentPaginate = ref(1)
+const selected = ref([])
+const rows = ref([])
 
 const getTotal = (property) => {
   return (
     (100 * rows.value.reduce((acc, item) => acc + item[property], 0)) / 100
-  );
-};
+  )
+}
 
-const total = computed(() => Math.round(100 * getTotal("priceTotal")) / 100);
+const total = computed(() => Math.round(100 * getTotal('priceTotal')) / 100)
 
-const totalSaving = computed(() => Math.round(100 * getTotal("savings")) / 100);
+const totalSaving = computed(() => Math.round(100 * getTotal('savings')) / 100)
 
-async function invoice() {
+async function invoice () {
   const products = rows.value.map((item) => {
     return {
       id: item.id,
-      cantidad: item.cantidad,
-    };
-  });
+      cantidad: item.cantidad
+    }
+  })
 
   try {
-    loadingInvoice.value = true;
+    loadingInvoice.value = true
     const { error } = await invoiceOffer({
       comercio_id: user.value.id,
       total_descuento: totalSaving,
       ofertas: products,
       total,
-      client_id: storeClient.client.id,
-    });
+      client_id: storeClient.client.id
+    })
 
     if (error) {
-      triggerWarning(error);
+      triggerWarning(error)
     } else {
-      triggerPositive("Factura creada");
+      triggerPositive('Factura creada')
     }
   } catch (err) {
-    console.error(err);
-    triggerWarning("Error al crear la factura");
+    console.error(err)
+    triggerWarning('Error al crear la factura')
   } finally {
-    loadingInvoice.value = false;
+    loadingInvoice.value = false
   }
 }
 
-function deleteProduct() {
+function deleteProduct () {
   rows.value = rows.value.filter(
     (item) =>
       !selected.value.some((selectedItem) => selectedItem.id === item.id)
-  );
+  )
   if (selected.value.length > 0) {
-    triggerPositive("Producto eliminado");
+    triggerPositive('Producto eliminado')
   }
 }
 
-function addMount(id) {
-  const item = offers.value.find((item) => item.id === id);
+function addMount (id) {
+  const item = offers.value.find((item) => item.id === id)
   if (item) {
-    item.cantidad++;
-    item.priceTotal = item.priceWidthDiscount * item.cantidad;
+    item.cantidad++
+    item.priceTotal = item.priceWidthDiscount * item.cantidad
   }
 }
 
-function subtractMount(id) {
+function subtractMount (id) {
   const item = offers.value.find((item) => {
-    return item.id === id;
-  });
+    return item.id === id
+  })
 
   if (item && item.cantidad > 1) {
-    item.cantidad--;
-    item.priceTotal = item.priceWidthDiscount * item.cantidad;
-    item.savings = item.savings * item.cantidad;
+    item.cantidad--
+    item.priceTotal = item.priceWidthDiscount * item.cantidad
+    item.savings = item.savings * item.cantidad
   }
 }
 
-function addProduct(product) {
-  const index = rows.value.findIndex((item) => item.id === product.id);
+function addProduct (product) {
+  const index = rows.value.findIndex((item) => item.id === product.id)
   if (index !== -1) {
-    const productExist = rows.value[index];
-    productExist.cantidad += product.cantidad;
+    const productExist = rows.value[index]
+    productExist.cantidad += product.cantidad
     productExist.priceTotal =
-      product.priceWidthDiscount * productExist.cantidad;
-    productExist.savings = product.savings * productExist.cantidad;
+      product.priceWidthDiscount * productExist.cantidad
+    productExist.savings = product.savings * productExist.cantidad
   } else {
-    product.savings = Math.round(100 * product.savings) / 100;
+    product.savings = Math.round(100 * product.savings) / 100
     rows.value.push({
       ...product,
-      priceTotal: product.priceWidthDiscount * product.cantidad,
-    });
+      priceTotal: product.priceWidthDiscount * product.cantidad
+    })
   }
-  triggerPositive("Producto agregado");
+  triggerPositive('Producto agregado')
 }
 
-async function fetchOffers() {
+async function fetchOffers () {
   try {
-    loading.value = true;
+    loading.value = true
     const products = await getOffersFromStore({
       name: search.value,
       page: currentPaginate.value,
-      id: user.value.id,
-    });
+      id: user.value.id
+    })
 
     offers.value = await products.data.map((items) => {
       return {
@@ -256,79 +256,79 @@ async function fetchOffers() {
           items.price_total -
           (items.price_total - (items.descuento / 100) * items.price_total),
         priceTotal:
-          items.price_total - (items.descuento / 100) * items.price_total * 1,
-      };
-    });
+          items.price_total - (items.descuento / 100) * items.price_total * 1
+      }
+    })
   } catch (error) {
-    console.error(error);
+    console.error(error)
   } finally {
-    loading.value = false;
+    loading.value = false
   }
 }
 
 watch(search, async (val) => {
-  await fetchOffers();
-});
+  await fetchOffers()
+})
 
 watch(currentPaginate, async (val) => {
-  await fetchOffers();
-});
+  await fetchOffers()
+})
 
 onMounted(async () => {
-  fetchOffers();
-});
+  fetchOffers()
+})
 
 const columns = [
   {
-    name: "cantidad",
-    align: "center",
-    label: "Cantidad",
-    field: "cantidad",
-    sortable: true,
+    name: 'cantidad',
+    align: 'center',
+    label: 'Cantidad',
+    field: 'cantidad',
+    sortable: true
   },
   {
-    name: "nombre",
-    align: "center",
-    label: "Producto",
-    field: "nombre",
-    sortable: true,
+    name: 'nombre',
+    align: 'center',
+    label: 'Producto',
+    field: 'nombre',
+    sortable: true
   },
   {
-    name: "priceWidthDiscount",
-    align: "center",
-    label: "precio con descuento",
-    field: "priceWidthDiscount",
-    sortable: true,
+    name: 'priceWidthDiscount',
+    align: 'center',
+    label: 'precio con descuento',
+    field: 'priceWidthDiscount',
+    sortable: true
   },
   {
-    name: "savings",
-    align: "center",
-    label: "Ahorrado",
-    field: "savings",
-    sortable: true,
+    name: 'savings',
+    align: 'center',
+    label: 'Ahorrado',
+    field: 'savings',
+    sortable: true
   },
   {
-    name: "price_total",
-    label: "Precio",
-    field: "price_total",
+    name: 'price_total',
+    label: 'Precio',
+    field: 'price_total',
     sortable: true,
-    format: (val) => `$${val}`,
+    format: (val) => `$${val}`
   },
   {
-    name: "descuento",
-    label: "Descuento",
-    field: "descuento",
+    name: 'descuento',
+    label: 'Descuento',
+    field: 'descuento',
     sortable: true,
-    format: (val) => `${val}%`,
+    format: (val) => `${val}%`
   },
   {
-    name: "priceTotal",
-    label: "Precio total",
-    field: "priceTotal",
+    name: 'priceTotal',
+    label: 'Precio total',
+    field: 'priceTotal',
     sortable: true,
-    format: (val) => `$${val}`,
-  },
-];
+    format: (val) => `$${val}`
+  }
+]
 </script>
 
 <style>
