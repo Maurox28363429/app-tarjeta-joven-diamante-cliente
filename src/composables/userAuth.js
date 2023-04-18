@@ -77,7 +77,7 @@ export const userAuth = () => {
       isLoadingMembership.value = true;
       await authStore.addMembership({ user_id });
       triggerPositive("Ha obtenido la membresía con éxito");
-      router.push("/products");
+      router.push("/cliente/products");
     } catch (err) {
       const errorMessage =
         err.code === "ERR_NETWORK"
