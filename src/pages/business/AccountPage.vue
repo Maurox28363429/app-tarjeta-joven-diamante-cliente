@@ -29,7 +29,7 @@
               <q-item-label
                 >Contactanos a
                 <span class="text-weight-bold"
-                  >info@tarjetajovendiamante.com</span
+                  >informacion@tarjetajovendiamante.com</span
                 ></q-item-label
               >
               <q-item-label caption>
