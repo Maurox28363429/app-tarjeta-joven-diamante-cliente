@@ -16,6 +16,9 @@
     },
     "cordova-plugin-android-permissions": {
       "PACKAGE_NAME": "org.cordova.quasar.app"
+    },
+    "cordova-plugin-inappbrowser": {
+      "PACKAGE_NAME": "org.cordova.quasar.app"
     }
   },
   "dependent_plugins": {}

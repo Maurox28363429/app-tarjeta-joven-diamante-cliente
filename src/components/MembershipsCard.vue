@@ -1,48 +1,48 @@
 <script setup>
-import { userAuth } from 'src/composables/userAuth'
-import { ref, computed } from 'vue'
+import { userAuth } from "src/composables/userAuth";
+import { ref, computed } from "vue";
 
 const props = defineProps({
   benefits: {
     type: Array,
-    required: true
+    required: true,
   },
   price: {
     type: Number,
     required: true,
-    default: 0
+    default: 0,
   },
   name: {
     type: String,
     required: true,
-    default: ''
+    default: "",
   },
   image: {
     type: String,
     required: true,
-    default: ''
+    default: "",
   },
   id: {
     type: Number,
-    required: true
-  }
-})
+    required: true,
+  },
+});
 
-const baseurl = '/memberships/'
+const baseurl = "/memberships/";
 
-const { user } = userAuth()
+const { user } = userAuth();
 
 const userIsmembershipFree = ref(
-  Boolean(user?.membresia?.id === 7 || user?.membresia?.status === 'activa')
-)
+  Boolean(user?.membresia?.id === 7 || user?.membresia?.status === "activa")
+);
 
 const planValidate = computed(() => {
-  if (userIsmembershipFree.value && props.name === 'free') {
-    return 'disableGray'
+  if (userIsmembershipFree.value && props.name === "free") {
+    return "disableGray";
   } else {
-    return 'plan-white'
+    return "plan-white";
   }
-})
+});
 </script>
 
 <template>
@@ -52,7 +52,7 @@ const planValidate = computed(() => {
       spinner-color="white"
       style="height: 58px; max-width: 62px"
     />
-    <p class="title-large text-secondary text-uppercase q-my-md">
+    <p class="title-large text-center text-secondary text-uppercase q-my-md">
       {{ name }}
     </p>
     <p class="text-weight-medium text-h3" v-if="price > 0">

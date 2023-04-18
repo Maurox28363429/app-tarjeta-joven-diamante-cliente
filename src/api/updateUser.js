@@ -1,6 +1,6 @@
-import { instance } from '.'
+import { instance } from ".";
 
-export default async function updateUser ({
+export default async function updateUser({
   name,
   email,
   password,
@@ -10,7 +10,7 @@ export default async function updateUser ({
   last_name,
   sex,
   address,
-  id
+  id,
 }) {
   return await instance.put(`user/${id}`, {
     name,
@@ -21,6 +21,6 @@ export default async function updateUser ({
     phone,
     last_name,
     sex,
-    address
-  })
+    address,
+  });
 }

@@ -24,7 +24,8 @@
     "plugins": {
       "cordova-plugin-splashscreen": {},
       "cordova-plugin-camera": {},
-      "cordova-plugin-android-permissions": {}
+      "cordova-plugin-android-permissions": {},
+      "cordova-plugin-inappbrowser": {}
     }
   },
   "dependencies": {
