@@ -14,7 +14,7 @@ export default async function createPayment({
   formData.append("membresia_id", membresia_id);
   formData.append("img", img);
 
-  return await instance.post("/payment", formData, {
+  return await instance.post("/payment-membresia", formData, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
