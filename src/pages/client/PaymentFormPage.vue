@@ -43,6 +43,9 @@
               class="q-gutter-md"
               style="max-width: 400px"
             >
+            <div>
+              <img src="src/assets/yappy_ruta.jpeg" style="max-width:400px;height:auto">
+            </div>
               <div>
                 <q-input
                   @blur="validatInput('referencia')"
