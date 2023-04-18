@@ -1,47 +1,47 @@
 <script setup>
-import { ref } from "vue";
-import { useRouter } from "vue-router";
-import { userAuth } from "src/composables/userAuth.js";
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { userAuth } from 'src/composables/userAuth.js'
 
-const val = ref(false);
-const textError = ref(false);
-const { user, addMembership, isLoadingMembership } = userAuth();
+const val = ref(false)
+const textError = ref(false)
+const { user, addMembership, isLoadingMembership } = userAuth()
 
 const props = defineProps({
   price: {
     type: Number,
-    required: true,
+    required: true
   },
   name: {
     type: String,
     required: true,
-    default: "",
-  },
-});
+    default: ''
+  }
+})
 
-const router = useRouter();
+const router = useRouter()
 
 const goBack = () => {
-  router.go(-1);
-};
+  router.go(-1)
+}
 
 const handledPayment = () => {
   if (val.value) {
-    addMembership({ user_id: user?.id });
-    textError.value = false;
+    addMembership({ user_id: user?.id })
+    textError.value = false
   } else {
-    textError.value = true;
+    textError.value = true
   }
-};
+}
 
-const isFree = Boolean(props.name === "free");
+const isFree = Boolean(props.name === 'free')
 
 const HandlePayment = () => {
-  console.log(router.currentRoute.value.params);
+  console.log(router.currentRoute.value.params)
   router.push(
-    "/memberships/" + router.currentRoute.value.params.id + "/payment"
-  );
-};
+    '/memberships/' + router.currentRoute.value.params.id + '/payment'
+  )
+}
 </script>
 
 <template>

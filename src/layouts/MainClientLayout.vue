@@ -278,62 +278,62 @@ aside {
 </style>
 
 <script setup>
-import { ref, onMounted } from "vue";
-import { useRouter } from "vue-router";
-import { userAuth } from "src/composables/userAuth";
-import UpdateMembershipModal from "../components/UpdateMembershipModal.vue";
-import format from "src/utils/date";
+import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { userAuth } from 'src/composables/userAuth'
+import UpdateMembershipModal from '../components/UpdateMembershipModal.vue'
+import format from 'src/utils/date'
 
-const { user } = userAuth();
+const { user } = userAuth()
 
 const goHome = () => {
-  console.log("goHome");
-  router.push("/empresa");
-};
+  console.log('goHome')
+  router.push('/empresa')
+}
 
-const leftDrawerOpen = ref(false);
-const router = useRouter();
+const leftDrawerOpen = ref(false)
+const router = useRouter()
 
-const show = ref(false);
+const show = ref(false)
 
 const showModalRenovar = () => {
   if (user?.membresia?.days === 1) {
-    return true;
+    return true
   }
-  return false;
-};
+  return false
+}
 
 const showModalNew = () => {
   if (format(user?.membresia?.updated_at) === format(new Date())) {
-    return true;
+    return true
   }
-  return false;
-};
+  return false
+}
 
-const miniState = ref(true);
+const miniState = ref(true)
 
 const handledLogout = (e) => {
-  e.preventDefault();
-  localStorage.removeItem("user");
-  router.push("/login");
-};
+  e.preventDefault()
+  localStorage.removeItem('user')
+  router.push('/login')
+}
 
 const toggleLeftDrawer = () => {
-  leftDrawerOpen.value = true;
-  miniState.value = !miniState.value;
-};
+  leftDrawerOpen.value = true
+  miniState.value = !miniState.value
+}
 
 const drawerClick = (e) => {
   if (miniState.value) {
-    miniState.value = false;
+    miniState.value = false
 
-    e.stopPropagation();
+    e.stopPropagation()
   }
-};
+}
 
 onMounted(() => {
-  if (user?.membresia?.status === "permitir_gratuita") {
-    router.push("/memberships");
+  if (user?.membresia?.status === 'permitir_gratuita') {
+    router.push('/memberships')
   }
-});
+})
 </script>

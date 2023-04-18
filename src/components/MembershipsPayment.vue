@@ -1,40 +1,40 @@
 <script setup>
-import { ref } from "vue";
-import { useRouter } from "vue-router";
-import { userAuth } from "../composables/userAuth.js";
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { userAuth } from '../composables/userAuth.js'
 
-const val = ref(false);
-const textError = ref(false);
-const { user, addMembership, isLoadingMembership } = userAuth();
+const val = ref(false)
+const textError = ref(false)
+const { user, addMembership, isLoadingMembership } = userAuth()
 
 const props = defineProps({
   price: {
     type: Number,
-    required: true,
+    required: true
   },
   name: {
     type: String,
     required: true,
-    default: "",
-  },
-});
+    default: ''
+  }
+})
 
-const router = useRouter();
+const router = useRouter()
 
 const goBack = () => {
-  router.go(-1);
-};
+  router.go(-1)
+}
 
 const handledPayment = () => {
   if (val.value) {
-    addMembership({ user_id: user?.id });
-    textError.value = false;
+    addMembership({ user_id: user?.id })
+    textError.value = false
   } else {
-    textError.value = true;
+    textError.value = true
   }
-};
+}
 
-const isFree = Boolean(props.name === "free") || props.price === 0;
+const isFree = Boolean(props.name === 'free') || props.price === 0
 </script>
 
 <template>
