@@ -18,7 +18,6 @@ const props = defineProps({
     default: ''
   }
 })
-
 const router = useRouter()
 
 const goBack = () => {
