@@ -39,7 +39,7 @@
             <q-item-section>
               <q-item-label class="text-negative">Cerrar sección</q-item-label>
               <q-item-label caption>
-                Cerrar sección y volver a la pagina de inicio.
+                Cerrar la sesión y volver a la pagina de inicio.
               </q-item-label>
             </q-item-section>
           </q-item>
