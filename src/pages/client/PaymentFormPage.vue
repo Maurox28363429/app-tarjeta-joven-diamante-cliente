@@ -96,62 +96,62 @@
 </template>
 
 <script setup>
-import createPayment from "src/api/payment";
-import { onMounted, ref } from "vue";
-import { useRouter } from "vue-router";
-import { useValidateForm } from "src/composables/useValidateForm";
-import getSingleMemberships from "src/api/getSingleMemberships";
-import { userAuth } from "src/composables/userAuth";
-import { paymentShema } from "src/schemas/paymentShema";
+import createPayment from 'src/api/payment'
+import { onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { useValidateForm } from 'src/composables/useValidateForm'
+import getSingleMemberships from 'src/api/getSingleMemberships'
+import { userAuth } from 'src/composables/userAuth'
+import { paymentShema } from 'src/schemas/paymentShema'
 
-const { user } = userAuth();
-const loading = ref(false);
-const membership = ref({});
-const file = ref(null);
-const router = useRouter();
+const { user } = userAuth()
+const loading = ref(false)
+const membership = ref({})
+const file = ref(null)
+const router = useRouter()
 
 const goBack = () => {
-  router.go(-1);
-};
+  router.go(-1)
+}
 
 const INITIAL_VALUES = () => ({
-  referencia: "",
+  referencia: '',
   membresia_id: membership.value.id,
-  img: "",
+  img: '',
   payment: membership.value.price,
-  user_id: user.value.id,
-});
+  user_id: user.value.id
+})
 
-console.log(membership.value, "membership.value");
+console.log(membership.value, 'membership.value')
 
 const { useForm, validatInput, validateMessage, validateForm } =
-  useValidateForm({ initialValue: INITIAL_VALUES(), schema: paymentShema });
+  useValidateForm({ initialValue: INITIAL_VALUES(), schema: paymentShema })
 
 const onSubmit = async () => {
-  validateForm();
-  console.log({ ...useForm.value, img: file.value });
+  validateForm()
+  console.log({ ...useForm.value, img: file.value })
   try {
-    loading.value = true;
-    await createPayment({ ...useForm.value, img: file.value });
+    loading.value = true
+    await createPayment({ ...useForm.value, img: file.value })
   } catch (error) {
-    console.error(error);
+    console.error(error)
   } finally {
-    loading.value = false;
+    loading.value = false
   }
-};
+}
 
 onMounted(async () => {
   try {
     const data = await getSingleMemberships(
       router.currentRoute.value.params.id
-    );
-    console.log(data);
-    membership.value = data;
-    useForm.value = INITIAL_VALUES();
+    )
+    console.log(data)
+    membership.value = data
+    useForm.value = INITIAL_VALUES()
   } catch (error) {
-    console.error(error);
+    console.error(error)
   }
-});
+})
 </script>
 
 <style>
