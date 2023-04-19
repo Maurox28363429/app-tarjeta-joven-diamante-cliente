@@ -1,8 +1,9 @@
-import axios from "axios";
+import axios from 'axios'
 
-const API_URL = "https://app.form.phoenixtechsa.com/api";
+export const API_URL = 'https://api.tarjetajovendiamante.com/api'
+export const APP_URL = 'https://api.tarjetajovendiamante.com'
 
 export const instance = axios.create({
   baseURL: API_URL,
-  headers: { "X-Custom-Header": "foobar" },
-});
+  headers: { 'X-Custom-Header': 'foobar' }
+})

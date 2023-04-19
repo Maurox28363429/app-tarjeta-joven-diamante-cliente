@@ -1,7 +1,7 @@
 {
   "name": "org.cordova.quasar.app",
   "displayName": "Tarjeta joven diamante",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "A sample Apache Cordova application that responds to the deviceready event.",
   "main": "index.js",
   "scripts": {
