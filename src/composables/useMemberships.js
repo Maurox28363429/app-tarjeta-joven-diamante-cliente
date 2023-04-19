@@ -1,12 +1,14 @@
 import { ref, onMounted } from "vue";
 import getMemberships from "src/api/getMemberships";
+import proImage from "../assets/rocket.svg";
+import freeImage from "../assets/plane.svg";
 
 export const useMemberships = () => {
   const loading = ref(false);
   const memberships = ref([]);
 
-  const PRO_IMAGE = "src/assets/rocket.svg";
-  const FREE_IMAGE = "src/assets/plane.svg";
+  const PRO_IMAGE = proImage;
+  const FREE_IMAGE = freeImage;
   const FREE = "Membresia 5 Días";
   const PRO = "Membresia anual";
 

@@ -1,6 +1,12 @@
 cordova.define("cordova/plugin_list", function (require, exports, module) {
   module.exports = [
     {
+      id: "cordova-plugin-android-permissions.Permissions",
+      file: "plugins/cordova-plugin-android-permissions/www/permissions.js",
+      pluginId: "cordova-plugin-android-permissions",
+      clobbers: ["cordova.plugins.permissions"],
+    },
+    {
       id: "cordova-plugin-camera.Camera",
       file: "plugins/cordova-plugin-camera/www/CameraConstants.js",
       pluginId: "cordova-plugin-camera",
@@ -25,35 +31,22 @@ cordova.define("cordova/plugin_list", function (require, exports, module) {
       clobbers: ["CameraPopoverHandle"],
     },
     {
-      id: "cordova-plugin-splashscreen.SplashScreen",
-      file: "plugins/cordova-plugin-splashscreen/www/splashscreen.js",
-      pluginId: "cordova-plugin-splashscreen",
-      clobbers: ["navigator.splashscreen"],
-    },
-    {
-      id: "cordova-plugin-android-permissions.Permissions",
-      file: "plugins/cordova-plugin-android-permissions/www/permissions.js",
-      pluginId: "cordova-plugin-android-permissions",
-      clobbers: ["cordova.plugins.permissions"],
-    },
-    {
       id: "cordova-plugin-inappbrowser.inappbrowser",
       file: "plugins/cordova-plugin-inappbrowser/www/inappbrowser.js",
       pluginId: "cordova-plugin-inappbrowser",
       clobbers: ["cordova.InAppBrowser.open"],
     },
     {
-      id: "cordova-plugin-browsertab.BrowserTab",
-      file: "plugins/cordova-plugin-browsertab/www/browsertab.js",
-      pluginId: "cordova-plugin-browsertab",
-      clobbers: ["cordova.plugins.browsertab"],
+      id: "cordova-plugin-splashscreen.SplashScreen",
+      file: "plugins/cordova-plugin-splashscreen/www/splashscreen.js",
+      pluginId: "cordova-plugin-splashscreen",
+      clobbers: ["navigator.splashscreen"],
     },
   ];
   module.exports.metadata = {
-    "cordova-plugin-camera": "6.0.1-dev",
-    "cordova-plugin-splashscreen": "6.0.2",
     "cordova-plugin-android-permissions": "1.1.5",
+    "cordova-plugin-camera": "6.0.1-dev",
     "cordova-plugin-inappbrowser": "5.0.0",
-    "cordova-plugin-browsertab": "0.2.0",
+    "cordova-plugin-splashscreen": "6.0.2",
   };
 });

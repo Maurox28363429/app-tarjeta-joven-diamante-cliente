@@ -1,4 +1,5 @@
 <script setup>
+/* global cordova */
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { userAuth } from "../composables/userAuth.js";
@@ -37,7 +38,35 @@ const handledFreePayment = () => {
 const HandlePayment = () => {
   const userId = user.value?.id || "";
   const url = `https://app.form.phoenixtechsa.com/pago/Payment_Controller.php?orderId=${userId}`;
-  window.open(url);
+  if (typeof cordova !== "undefined") {
+    const target = "_blank"; // Usa '_blank' para abrir en el navegador incorporado
+    const options = "location=no,zoom=no,toolbar=no,";
+    const inAppBrowser = window.cordova?.InAppBrowser.open(
+      url,
+      target,
+      options
+    );
+
+    // Puedes manejar eventos del navegador incorporado, si lo deseas
+    inAppBrowser.addEventListener("loadstart", (event) => {
+      console.log("InAppBrowser: loadstart", event);
+    });
+
+    inAppBrowser.addEventListener("loadstop", (event) => {
+      console.log("InAppBrowser: loadstop", event);
+    });
+
+    inAppBrowser.addEventListener("loaderror", (event) => {
+      console.log("InAppBrowser: loaderror", event);
+    });
+
+    inAppBrowser.addEventListener("exit", (event) => {
+      console.log("InAppBrowser: exit", event);
+    });
+  } else {
+    console.warn("Cordova no está disponible");
+    window.open(url);
+  }
 };
 const isFree = Boolean(props.name === "free") || props.price === 0;
 </script>
@@ -54,7 +83,7 @@ const isFree = Boolean(props.name === "free") || props.price === 0;
         <q-toolbar-title>
           <q-img
             src="../assets/acronimo.svg"
-            spinner-color="white"
+            spinner-color="dark"
             style="height: 40px; max-width: 98px"
           />
         </q-toolbar-title>
@@ -210,7 +239,7 @@ const isFree = Boolean(props.name === "free") || props.price === 0;
                 <p class="q-ma-none q-ml-xs">
                   Tienes alguna duda?
                   <span class="text-weight-bold cursor-pointer"
-                    >contáctanos</span
+                    >contáctanos: informacion@tarjetajovendiamante.com</span
                   >.
                 </p>
               </div>

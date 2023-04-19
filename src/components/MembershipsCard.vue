@@ -49,7 +49,7 @@ const planValidate = computed(() => {
   <div :class="'plan' + ' ' + planValidate">
     <q-img
       :src="image"
-      spinner-color="white"
+      spinner-color="dark"
       style="height: 58px; max-width: 62px"
     />
     <p class="title-large text-center text-secondary text-uppercase q-my-md">
