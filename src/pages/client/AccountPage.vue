@@ -6,10 +6,7 @@
     <div class="q-pa-md" style="max-width: 400px">
       <div class="row q-mb-md items-center">
         <q-avatar size="80px" class="q-mr-md">
-    <q-img
-      src="./../../assets/profile.png"
-      spinner-color="dark"
-    />
+          <q-img src="./../../assets/profile.png" spinner-color="dark" />
         </q-avatar>
         <div>
           <p class="q-ma-none">{{ user.name + " " + user.last_name }}</p>
@@ -65,20 +62,20 @@
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router'
-import { userAuth } from 'src/composables/userAuth'
+import { useRouter } from "vue-router";
+import { userAuth } from "src/composables/userAuth";
 
-const { user } = userAuth()
+const { user } = userAuth();
 
-const router = useRouter()
+const router = useRouter();
 
 const goBack = () => {
-  router.go(-1)
-}
+  router.go(-1);
+};
 
 const handledLogout = (e) => {
-  e.preventDefault()
-  localStorage.removeItem('user')
-  router.push('/login')
-}
+  e.preventDefault();
+  localStorage.removeItem("user");
+  router.push("/login");
+};
 </script>
