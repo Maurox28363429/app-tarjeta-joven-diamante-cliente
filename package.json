@@ -39,6 +39,7 @@
     "@quasar/app-vite": "^1.0.0",
     "@quasar/quasar-app-extension-qiconpicker": "^2.0.6",
     "autoprefixer": "^10.4.2",
+    "dotenv": "^16.0.3",
     "electron": "^23.2.1",
     "electron-builder": "^22.14.13",
     "electron-packager": "^15.5.2",

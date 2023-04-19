@@ -10,7 +10,14 @@
 
 const { configure } = require("quasar/wrappers");
 
-module.exports = configure(function (/* ctx */) {
+const dotenv = require("dotenv");
+
+const isProd = process.env.NODE_ENV === "production";
+const envFile = isProd ? ".env.production" : ".env.development";
+dotenv.config({ path: envFile });
+
+module.exports = configure(function (ctx) {
+  console.log("API_URL", process.env.VUE_APP_API_URL);
   return {
     eslint: {
       // fix: true,
@@ -48,6 +55,7 @@ module.exports = configure(function (/* ctx */) {
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#build
     build: {
+      env: dotenv.config({ path: envFile }).parsed,
       target: {
         browser: ["es2019", "edge88", "firefox78", "chrome87", "safari13.1"],
         node: "node16",
