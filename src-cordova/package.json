@@ -1,7 +1,7 @@
 {
   "name": "org.cordova.quasar.app",
   "displayName": "Tarjeta joven diamante",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "A sample Apache Cordova application that responds to the deviceready event.",
   "main": "index.js",
   "scripts": {
@@ -14,11 +14,13 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "cordova-android": "^10.1.2",
+    "cordova-ios": "^6.3.0",
     "cordova-plugin-camera": "github:apache/cordova-plugin-camera",
     "cordova-plugin-splashscreen": "^6.0.2"
   },
   "cordova": {
     "platforms": [
+      "ios",
       "android"
     ],
     "plugins": {

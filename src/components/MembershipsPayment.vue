@@ -1,9 +1,8 @@
 <script setup>
-/* global cordova */
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { userAuth } from "../composables/userAuth.js";
-
+import { APP_URL } from "../api/index.js";
 const val = ref(false);
 const textError = ref(false);
 const { user, addMembership, isLoadingMembership } = userAuth();
@@ -37,7 +36,7 @@ const handledFreePayment = () => {
 };
 const HandlePayment = () => {
   const userId = user.value?.id || "";
-  const url = `https://app.form.phoenixtechsa.com/pago/Payment_Controller.php?orderId=${userId}`;
+  const url = `${APP_URL}/pago/Payment_Controller.php?orderId=${userId}`;
   if (typeof cordova !== "undefined") {
     const target = "_blank"; // Usa '_blank' para abrir en el navegador incorporado
     const options = "location=no,zoom=no,toolbar=no,";

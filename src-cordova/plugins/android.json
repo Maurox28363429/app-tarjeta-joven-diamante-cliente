@@ -8,17 +8,17 @@
   },
   "installed_plugins": {
     "cordova-plugin-android-permissions": {
-      "PACKAGE_NAME": "org.cordova.phoenixtechsa.app"
+      "PACKAGE_NAME": "com.phoenixtechsa.app"
     },
     "cordova-plugin-camera": {
       "ANDROIDX_CORE_VERSION": "1.6.+",
-      "PACKAGE_NAME": "org.cordova.phoenixtechsa.app"
+      "PACKAGE_NAME": "com.phoenixtechsa.app"
     },
     "cordova-plugin-inappbrowser": {
-      "PACKAGE_NAME": "org.cordova.phoenixtechsa.app"
+      "PACKAGE_NAME": "com.phoenixtechsa.app"
     },
     "cordova-plugin-splashscreen": {
-      "PACKAGE_NAME": "org.cordova.phoenixtechsa.app"
+      "PACKAGE_NAME": "com.phoenixtechsa.app"
     }
   },
   "dependent_plugins": {}
