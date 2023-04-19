@@ -140,86 +140,86 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue'
-import { instance } from 'src/api/index.js'
-import { userAuth } from 'src/composables/userAuth'
-import { useToast } from 'src/composables/useToast'
+import { ref, onMounted, watch } from "vue";
+import { instance } from "src/api/index.js";
+import { userAuth } from "src/composables/userAuth";
+import { useToast } from "src/composables/useToast";
 
-const { triggerWarning } = useToast()
+const { triggerWarning } = useToast();
 
-const { user } = userAuth()
+const { user } = userAuth();
 
-const currentPaginate = ref(1)
-const paginas = ref(1)
-const prouctos = ref([])
-const dialog = ref(false)
-const maximizedToggle = ref(true)
-const loading = ref(false)
+const currentPaginate = ref(1);
+const paginas = ref(1);
+const prouctos = ref([]);
+const dialog = ref(false);
+const maximizedToggle = ref(true);
+const loading = ref(false);
 
 const columns = [
-  { name: 'id', label: 'ID', field: 'id', align: 'left' },
+  { name: "id", label: "ID", field: "id", align: "left" },
   {
-    name: 'comercio',
-    label: 'Comercio',
+    name: "comercio",
+    label: "Comercio",
     field: (row) => row.comercio.name,
-    align: 'left'
+    align: "left",
   },
-  { name: 'total', label: 'Total', field: (row) => row.total, align: 'left' },
+  { name: "total", label: "Total", field: (row) => row.total, align: "left" },
   {
-    name: 'total_descuento',
-    label: 'Descuento total',
+    name: "total_descuento",
+    label: "Descuento total",
     field: (row) => row.total_descuento,
-    align: 'left'
-  }
-]
+    align: "left",
+  },
+];
 
 if (user.value.role_id === 3) {
   columns[1] = {
-    name: 'client',
-    label: 'Cliente',
+    name: "client",
+    label: "Cliente",
     field: (row) => row.client.name,
-    align: 'left'
-  }
+    align: "left",
+  };
 }
 
-const rows = ref([])
+const rows = ref([]);
 
 watch(currentPaginate, async () => {
-  await cargarDatos(currentPaginate.value)
-})
+  await cargarDatos(currentPaginate.value);
+});
 
 onMounted(async () => {
-  await cargarDatos()
-})
+  await cargarDatos();
+});
 
 const onButtonClick = (evt, row, index) => {
-  dialog.value = true
-  prouctos.value = row.ofertas
-}
+  dialog.value = true;
+  prouctos.value = row.ofertas;
+};
 
 const cargarDatos = async (page = 1) => {
   try {
-    loading.value = true
+    loading.value = true;
     const queryString =
       user.value.role_id === 3
         ? `/cliente-comercio-ofertas?with[]=comercio&with[]=client&page=${page}&client_id=${user.value.id}`
-        : `/cliente-comercio-ofertas?with[]=comercio&with[]=client&page=${page}&comercio_id=${user.value.id}`
+        : `/cliente-comercio-ofertas?with[]=comercio&with[]=client&page=${page}&comercio_id=${user.value.id}`;
 
-    const { data } = await instance.get(queryString)
-    rows.value = data.data
-    paginas.value = data.pagination.lastPage
-    currentPaginate.value = data.pagination.currentPage
+    const { data } = await instance.get(queryString);
+    rows.value = data.data;
+    paginas.value = data.pagination.lastPage;
+    currentPaginate.value = data.pagination.currentPage;
   } catch (error) {
-    console.error(error)
+    console.error(error);
     const errorMessage =
-      error.code === 'ERR_NETWORK'
-        ? 'Verifique su conexión a internet e intente nuevamente'
-        : 'Error desconocido'
-    triggerWarning(errorMessage)
+      error.code === "ERR_NETWORK"
+        ? "Verifique su conexión a internet e intente nuevamente"
+        : "Error desconocido";
+    triggerWarning(errorMessage);
   } finally {
-    loading.value = false
+    loading.value = false;
   }
-}
+};
 </script>
 
 <style scoped>

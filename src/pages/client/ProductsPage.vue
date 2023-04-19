@@ -99,54 +99,54 @@
 
 <script setup>
 // importaciones
-import { ref, onMounted, watch } from 'vue'
-import { instance } from 'src/api/index.js'
-import { useToast } from 'src/composables/useToast'
+import { ref, onMounted, watch } from "vue";
+import { instance } from "src/api/index.js";
+import { useToast } from "src/composables/useToast";
 
-const currentPaginate = ref(1)
-const paginas = ref(0)
-const products = ref([])
-const search = ref('')
-const loading = ref(false)
+const currentPaginate = ref(1);
+const paginas = ref(0);
+const products = ref([]);
+const search = ref("");
+const loading = ref(false);
 
-const { triggerWarning } = useToast()
+const { triggerWarning } = useToast();
 
 // los observadores
 watch(currentPaginate, async (val) => {
-  await getProducts()
-})
+  await getProducts();
+});
 watch(search, async (val) => {
-  await getProducts()
-})
+  await getProducts();
+});
 
-async function getProducts () {
+async function getProducts() {
   try {
-    loading.value = true
+    loading.value = true;
     const { data } = await instance.get(
-      '/comercio-ofertas?with[]=comercio&nombre=' +
+      "/comercio-ofertas?with[]=comercio&nombre=" +
         search.value +
-        '&page=' +
+        "&page=" +
         currentPaginate.value
-    )
-    products.value = data.data
-    paginas.value = data.pagination.lastPage
-    currentPaginate.value = data.pagination.currentPage
+    );
+    products.value = data.data;
+    paginas.value = data.pagination.lastPage;
+    currentPaginate.value = data.pagination.currentPage;
   } catch (error) {
-    console.error(error)
+    console.error(error);
     const errorMessage =
-      error.code === 'ERR_NETWORK'
-        ? 'Verifique su conexión a internet e intente nuevamente'
-        : 'Error desconocido'
-    triggerWarning(errorMessage)
+      error.code === "ERR_NETWORK"
+        ? "Verifique su conexión a internet e intente nuevamente"
+        : "Error desconocido";
+    triggerWarning(errorMessage);
   } finally {
-    loading.value = false
+    loading.value = false;
   }
 }
 
 // eventos hooks
 onMounted(async () => {
-  await getProducts()
-})
+  await getProducts();
+});
 </script>
 
 <style>

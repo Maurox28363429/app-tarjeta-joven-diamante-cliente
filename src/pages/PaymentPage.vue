@@ -1,29 +1,29 @@
 <script setup>
-import { useRouter } from 'vue-router'
-import { ref, onMounted } from 'vue'
-import MembershipsPayment from 'src/components/MembershipsPayment.vue'
-import getSingleMemberships from 'src/api/getSingleMemberships'
+import { useRouter } from "vue-router";
+import { ref, onMounted } from "vue";
+import MembershipsPayment from "src/components/MembershipsPayment.vue";
+import getSingleMemberships from "src/api/getSingleMemberships";
 
-const router = useRouter()
+const router = useRouter();
 
-const { id } = router.currentRoute.value.params
-const plan = ref({})
-const loading = ref(false)
+const { id } = router.currentRoute.value.params;
+const plan = ref({});
+const loading = ref(false);
 
 onMounted(() => {
   const filtrado = async () => {
     try {
-      loading.value = true
-      const data = await getSingleMemberships(Number(id))
-      plan.value = data
+      loading.value = true;
+      const data = await getSingleMemberships(Number(id));
+      plan.value = data;
     } catch (err) {
-      console.error(err)
+      console.error(err);
     } finally {
-      loading.value = false
+      loading.value = false;
     }
-  }
-  filtrado()
-})
+  };
+  filtrado();
+});
 </script>
 
 <template>
