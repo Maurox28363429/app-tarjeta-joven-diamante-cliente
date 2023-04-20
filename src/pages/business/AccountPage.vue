@@ -19,7 +19,7 @@
             <q-item-section>
               <q-item-label>Ver perfil</q-item-label>
               <q-item-label caption>
-                Toda la informacion relacionada de su perfil puede ser editada y
+                Toda la información relacionada de su perfil puede ser editada y
                 la puede visualizar.
               </q-item-label>
             </q-item-section>
@@ -40,7 +40,7 @@
           </q-item>
           <q-item clickable v-ripple @click="handledLogout">
             <q-item-section>
-              <q-item-label class="text-negative">Cerrar sección</q-item-label>
+              <q-item-label class="text-negative">Cerrar sesión</q-item-label>
               <q-item-label caption>
                 Cerrar la sesión y volver a la pagina de inicio.
               </q-item-label>
