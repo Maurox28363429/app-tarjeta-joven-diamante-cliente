@@ -41,7 +41,7 @@ const showPassword = () => {
           class="q-mb-md"
         >
         </q-img>
-        <p class="title-large q-mb-xl">¡Bienvenido de vuelta! :)</p>
+        <p class="title-large q-mb-xl text-center">¡Bienvenido de vuelta! :)</p>
       </div>
 
       <q-form

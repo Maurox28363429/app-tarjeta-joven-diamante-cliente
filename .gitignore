@@ -2,12 +2,9 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos,windows,linux,androidstudio,android,node,vue,vuejs
 
 ### cordova ###
-src-cordova/platforms
-src-cordova/plugins
-src-cordova/www
 
 ### electron ###
-src-electron/
+
 
 ### Android ###
 # Gradle files

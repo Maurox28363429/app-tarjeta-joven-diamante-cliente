@@ -1,6 +1,6 @@
 <template>
   <p class="q-ma-md body-large">
-    Cliente: {{ client ? client.name : "cliente no ingresado" }}
+    Cliente: {{ client ? userScaneo : "cliente no ingresado" }}
   </p>
   <p class="q-ma-md body-small" style="color: #363636">
     {{ !client ? "Por favor ingrese el cliente a través del QR" : "" }}
@@ -114,7 +114,11 @@
             color="positive"
             label="finalizar compra"
             @click="invoice"
-            :disable="!client || rows.length === 0"
+            :disable="
+              !client ||
+              (rows.length === 0 && user.membresia?.status === 'vencida') ||
+              !user.membresia
+            "
           />
           <q-btn color="negative" label="eliminar" @click="deleteProduct" />
         </div>
@@ -147,6 +151,17 @@ const pages = ref(1);
 const currentPaginate = ref(1);
 const selected = ref([]);
 const rows = ref([]);
+
+const userScaneo = computed(() => {
+  console.log(client.value, "user");
+  if (user.value.membresia?.status === "vencida" || !user.value.membresia) {
+    return "Usuario sin membresía ";
+  } else {
+    return user.value.name;
+  }
+});
+
+console.log(userScaneo.value, "user message");
 
 const getTotal = (property) => {
   return (

@@ -38,6 +38,7 @@
   "devDependencies": {
     "@quasar/app-vite": "^1.0.0",
     "@quasar/quasar-app-extension-qiconpicker": "^2.0.6",
+    "@vue/devtools": "^6.5.0",
     "autoprefixer": "^10.4.2",
     "dotenv": "^16.0.3",
     "electron": "^23.2.1",

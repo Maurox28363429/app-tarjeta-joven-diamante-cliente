@@ -31,6 +31,7 @@ export const userAuth = () => {
           ? "Verifique su conexión a internet e intente nuevamente"
           : "Error desconocido";
       triggerWarning(errorMessage);
+
       console.error(err);
     } finally {
       isLoadingLogin.value = false;

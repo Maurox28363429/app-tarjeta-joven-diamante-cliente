@@ -17,7 +17,6 @@ const envFile = isProd ? ".env.production" : ".env.development";
 dotenv.config({ path: envFile });
 
 module.exports = configure(function (ctx) {
-  console.log("API_URL", process.env.VUE_APP_API_URL);
   return {
     eslint: {
       // fix: true,

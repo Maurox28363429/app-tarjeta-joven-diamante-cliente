@@ -1,28 +1,26 @@
 <template>
-  <div>
-    <qrcode-stream
-      @decode="onDecode"
-      @init="onInit"
-      @detect="onDetect"
-      @error="onError"
-    ></qrcode-stream>
+  <div class="column justify-center" style="min-height: 200px">
+    <div>
+      <qrcode-stream
+        v-if="permision || !window?.cordova"
+        @decode="onDecode"
+        @init="onInit"
+        @detect="onDetect"
+        @error="onError"
+      ></qrcode-stream>
+    </div>
     <q-inner-loading
-      :showing="visible || loading"
-      label="Por favor espera..."
+      :showing="loading || visible"
       label-class="text-teal"
       label-style="font-size: 1.1em"
     />
     <div
       v-if="!permision"
-      class="full-width full-height column justify-center items-center"
+      class="full-width q-px-md full-height column justify-center items-center"
     >
-      <p class="title-medium">Activa los permisos para la camara</p>
-      <q-btn
-        class="cordova-only"
-        color="primary"
-        label="Pedir permisos"
-        @click="addPermision"
-      />
+      <p class="title-medium text-center">
+        Activa los permisos de la camara para activar el lector de QR
+      </p>
     </div>
   </div>
 </template>
@@ -32,17 +30,7 @@ import { onMounted, ref, defineEmits } from "vue";
 import { useToast } from "src/composables/useToast";
 import { userCart } from "src/stores/userCart";
 import { useRouter } from "vue-router";
-
-const emits = defineEmits(["close-modal"]);
-
-const router = useRouter();
-
-const client = userCart();
-
-const visible = ref(false);
-const loading = ref(false);
-
-const permision = ref(true);
+import { userAuth } from "src/composables/userAuth";
 
 defineProps({
   closeModal: {
@@ -50,29 +38,47 @@ defineProps({
   },
 });
 
+const emits = defineEmits(["close-modal"]);
+
+const router = useRouter();
+const { user } = userAuth();
+
+const client = userCart();
+
+const visible = ref(false);
+const loading = ref(false);
+
+const permision = ref(false);
+
 const { triggerWarning } = useToast();
 
 function addPermision() {
   if (
-    window.cordova &&
-    window.cordova.plugins &&
-    window.cordova.plugins.permissions
+    window?.cordova &&
+    window?.cordova.plugins &&
+    window?.cordova.plugins.permissions
   ) {
     // Solicitar permiso de cámara
-
-    window.cordova.plugins.permissions.requestPermission(
-      window.cordova.plugins.permissions.CAMERA,
+    const permissions = window.cordova.plugins.permissions;
+    console.log("estoy en cordova", permissions);
+    permissions.requestPermission(
+      permissions.CAMERA,
       function (status) {
         if (status.hasPermission) {
           // El permiso ha sido concedido
           permision.value = true;
+          console.log("tiene permiso");
         } else {
           // El permiso ha sido denegado
-          triggerWarning("Los permisos para la camara estan desactivados");
+          console.log("No tiene permiso");
+          triggerWarning(
+            "El permiso de la cámara fue denegado. Por favor, permite el acceso desde la configuración del dispositivo."
+          );
           permision.value = false;
         }
       },
-      function () {
+      function (error) {
+        console.log("error", error);
         // Error al solicitar el permiso
         console.error("Error al solicitar el permiso de cámara");
         triggerWarning("Los permisos para la camara estan desactivados");
@@ -117,6 +123,9 @@ const onInit = (promise) => {
 
 const onDetect = () => {
   console.log("Código QR detectado.");
+  if (!user.value.membresia) {
+    triggerWarning("Usuario no tiene una membresia activa");
+  }
 };
 
 const onError = (error) => {
