@@ -64,7 +64,8 @@
   "lint-staged": {
     "**/*.{js,vue}": [
       "npm run lint:fix",
-      "npm run prettier:write"
+      "npm run prettier:write",
+      "git add"
     ]
   }
 }
