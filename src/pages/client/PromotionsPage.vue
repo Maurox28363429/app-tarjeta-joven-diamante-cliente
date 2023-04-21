@@ -110,55 +110,55 @@
   </div>
 </template>
 <script setup>
-import { ref, onMounted, watch } from 'vue'
-import getNews from 'src/api/getNews'
-import { useToast } from 'src/composables/useToast'
+import { ref, onMounted, watch } from "vue";
+import getNews from "src/api/getNews";
+import { useToast } from "src/composables/useToast";
 
-const { triggerWarning } = useToast()
+const { triggerWarning } = useToast();
 
-const openModal = ref(false)
-const news = ref([])
-const search = ref('')
-const modalCurrent = ref({})
-const loading = ref(false)
-const currentPaginate = ref(1)
-const paginas = ref(1)
+const openModal = ref(false);
+const news = ref([]);
+const search = ref("");
+const modalCurrent = ref({});
+const loading = ref(false);
+const currentPaginate = ref(1);
+const paginas = ref(1);
 
 const showModal = (modalInfo) => {
-  modalCurrent.value = { ...modalInfo }
-  openModal.value = true
-}
+  modalCurrent.value = { ...modalInfo };
+  openModal.value = true;
+};
 
-async function fetchNews () {
+async function fetchNews() {
   try {
-    loading.value = true
+    loading.value = true;
     const { data } = await getNews({
       page: currentPaginate.value,
-      search: search.value
-    })
-    news.value = data.data
+      search: search.value,
+    });
+    news.value = data.data;
   } catch (err) {
-    console.error(err)
+    console.error(err);
     const errorMessage =
-      err.code === 'ERR_NETWORK'
-        ? 'Verifique su conexión a internet e intente nuevamente'
-        : 'Error desconocido'
-    triggerWarning(errorMessage)
+      err.code === "ERR_NETWORK"
+        ? "Verifique su conexión a internet e intente nuevamente"
+        : "Error desconocido";
+    triggerWarning(errorMessage);
   } finally {
-    loading.value = false
+    loading.value = false;
   }
 }
 
 watch(currentPaginate, async (val) => {
-  await fetchNews()
-})
+  await fetchNews();
+});
 watch(search, async (val) => {
-  await fetchNews()
-})
+  await fetchNews();
+});
 
 onMounted(async () => {
-  await fetchNews()
-})
+  await fetchNews();
+});
 </script>
 <style>
 .promotions {
