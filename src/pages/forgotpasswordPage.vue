@@ -49,48 +49,48 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
-import { useRouter } from "vue-router";
-import { emailSchema } from "src/schemas/emailShema";
-import getCodeForRecoveryPassword from "src/api/getCodeForRecoveryPassword";
-import { useRecoveryPasswordStore } from "src/stores/recoveryPasswordStore";
-import { useValidateForm } from "src/composables/useValidateForm";
-import { useToast } from "src/composables/useToast";
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { emailSchema } from 'src/schemas/emailShema'
+import getCodeForRecoveryPassword from 'src/api/getCodeForRecoveryPassword'
+import { useRecoveryPasswordStore } from 'src/stores/recoveryPasswordStore'
+import { useValidateForm } from 'src/composables/useValidateForm'
+import { useToast } from 'src/composables/useToast'
 
-const loading = ref(false);
-const { triggerPositive, triggerWarning } = useToast();
+const loading = ref(false)
+const { triggerPositive, triggerWarning } = useToast()
 
-const router = useRouter();
+const router = useRouter()
 
 const goBack = () => {
-  router.go(-1);
-};
+  router.go(-1)
+}
 
 const INITIAL_VALUES = {
-  email: "",
-};
+  email: ''
+}
 
 const { useForm, validatInput, validateMessage } = useValidateForm({
   initialValue: INITIAL_VALUES,
-  schema: emailSchema,
-});
+  schema: emailSchema
+})
 
-const recoveryPasswordStore = useRecoveryPasswordStore();
+const recoveryPasswordStore = useRecoveryPasswordStore()
 
 const sendEmail = async () => {
   try {
-    loading.value = true;
-    await getCodeForRecoveryPassword({ email: useForm.value.email });
-    triggerPositive("Código enviado, podría tardar unos minutos en llegar.");
-    recoveryPasswordStore.setEmail(useForm.value.email);
+    loading.value = true
+    await getCodeForRecoveryPassword({ email: useForm.value.email })
+    triggerPositive('Código enviado, podría tardar unos minutos en llegar.')
+    recoveryPasswordStore.setEmail(useForm.value.email)
     router.push({
-      name: "recoveryPassword",
-    });
+      name: 'recoveryPassword'
+    })
   } catch (err) {
-    console.error(err);
-    triggerWarning("¡Up! Ha ocurrido un error, intento nuevamente");
+    console.error(err)
+    triggerWarning('¡Up! Ha ocurrido un error, intento nuevamente')
   } finally {
-    loading.value = false;
+    loading.value = false
   }
-};
+}
 </script>

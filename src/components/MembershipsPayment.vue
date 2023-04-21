@@ -1,73 +1,72 @@
 <script setup>
-import { ref } from "vue";
-import { useRouter } from "vue-router";
-import { userAuth } from "../composables/userAuth.js";
-import { APP_URL } from "../api/index.js";
-const val = ref(false);
-const textError = ref(false);
-const { user, addMembership, isLoadingMembership } = userAuth();
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { userAuth } from '../composables/userAuth.js'
+const val = ref(false)
+const textError = ref(false)
+const { user, addMembership, isLoadingMembership } = userAuth()
 
 const props = defineProps({
   price: {
     type: Number,
     required: true,
-    default: 0,
+    default: 0
   },
   name: {
     type: String,
     required: true,
-    default: "",
-  },
-});
+    default: ''
+  }
+})
 
-const router = useRouter();
+const router = useRouter()
 
 const goBack = () => {
-  router.go(-1);
-};
+  router.go(-1)
+}
 
 const handledFreePayment = () => {
   if (val.value) {
-    addMembership({ user_id: user.value?.id });
-    textError.value = false;
+    addMembership({ user_id: user.value?.id })
+    textError.value = false
   } else {
-    textError.value = true;
+    textError.value = true
   }
-};
+}
 const HandlePayment = () => {
-  const userId = user.value?.id || "";
-  const url = `${APP_URL}/pago/Payment_Controller.php?orderId=${userId}`;
-  if (typeof cordova !== "undefined") {
-    const target = "_blank"; // Usa '_blank' para abrir en el navegador incorporado
-    const options = "location=no,zoom=no,toolbar=no,";
+  const userId = user.value?.id || ''
+  const url = `https://api.tarjetajovendiamante.com/pago/Payment_Controller.php?orderId=${userId}`
+  if (typeof cordova !== 'undefined') {
+    const target = '_blank' // Usa '_blank' para abrir en el navegador incorporado
+    const options = 'location=no,zoom=no,toolbar=no,'
     const inAppBrowser = window.cordova?.InAppBrowser.open(
       url,
       target,
       options
-    );
+    )
 
     // Puedes manejar eventos del navegador incorporado, si lo deseas
-    inAppBrowser.addEventListener("loadstart", (event) => {
-      console.log("InAppBrowser: loadstart", event);
-    });
+    inAppBrowser.addEventListener('loadstart', (event) => {
+      console.log('InAppBrowser: loadstart', event)
+    })
 
-    inAppBrowser.addEventListener("loadstop", (event) => {
-      console.log("InAppBrowser: loadstop", event);
-    });
+    inAppBrowser.addEventListener('loadstop', (event) => {
+      console.log('InAppBrowser: loadstop', event)
+    })
 
-    inAppBrowser.addEventListener("loaderror", (event) => {
-      console.log("InAppBrowser: loaderror", event);
-    });
+    inAppBrowser.addEventListener('loaderror', (event) => {
+      console.log('InAppBrowser: loaderror', event)
+    })
 
-    inAppBrowser.addEventListener("exit", (event) => {
-      console.log("InAppBrowser: exit", event);
-    });
+    inAppBrowser.addEventListener('exit', (event) => {
+      console.log('InAppBrowser: exit', event)
+    })
   } else {
-    console.warn("Cordova no está disponible");
-    window.open(url);
+    console.warn('Cordova no está disponible')
+    window.open(url)
   }
-};
-const isFree = Boolean(props.name === "free") || props.price === 0;
+}
+const isFree = Boolean(props.name === 'free') || props.price === 0
 </script>
 
 <template>
@@ -177,7 +176,8 @@ const isFree = Boolean(props.name === "free") || props.price === 0;
                 class="row justify-between q-pa-md bg-white rounded-borders text-h6"
               >
                 <div class="row items-center">
-                  <p class="q-ma-none text-primary q-mr-md">Plan {{ name }}</p>
+                  <p class="q-ma-none text-primary q-mr-md" v-if="price>0">Plan {{ name }}</p>
+                  <p class="q-ma-none text-primary q-mr-md" v-if="price==0">Plan Membresia 3 Días</p>
                   <q-img
                     src="../assets/rokectPrimarysvg.svg"
                     spinner-color="white"
@@ -189,8 +189,11 @@ const isFree = Boolean(props.name === "free") || props.price === 0;
                   <p class="q-ma-none">${{ price }}</p>
                 </div>
               </div>
-              <p class="text-h6">
+              <p class="text-h6" v-if="price>0">
                 ¿Qué estás adquiriendo con el plan {{ name }}?
+              </p>
+              <p class="text-h6" v-if="price==0">
+                ¿Qué estás adquiriendo con el plan Membresia 3 Día?
               </p>
               <ul class="q-gutter-y-md">
                 <li class="row items-center">
@@ -236,7 +239,7 @@ const isFree = Boolean(props.name === "free") || props.price === 0;
               <div class="row items-center">
                 <q-icon name="help" size="md" color="orange-9" />
                 <p class="q-ma-none q-ml-xs">
-                  Tienes alguna duda?
+                  Tienes alguna duda? <br>
                   <span class="text-weight-bold cursor-pointer"
                     >contáctanos: informacion@tarjetajovendiamante.com</span
                   >.

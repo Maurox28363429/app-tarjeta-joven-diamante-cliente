@@ -62,20 +62,20 @@
 </template>
 
 <script setup>
-import { useRouter } from "vue-router";
-import { userAuth } from "src/composables/userAuth";
+import { useRouter } from 'vue-router'
+import { userAuth } from 'src/composables/userAuth'
 
-const { user } = userAuth();
+const { user } = userAuth()
 
-const router = useRouter();
+const router = useRouter()
 
 const goBack = () => {
-  router.go(-1);
-};
+  router.go(-1)
+}
 
 const handledLogout = (e) => {
-  e.preventDefault();
-  localStorage.removeItem("user");
-  router.push("/login");
-};
+  e.preventDefault()
+  localStorage.removeItem('user')
+  router.push('/login')
+}
 </script>

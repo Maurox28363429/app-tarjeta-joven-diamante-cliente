@@ -46,31 +46,22 @@
 
           <q-card-section class="q-px-xs">
             <q-list>
-              <q-item clickable class="q-ma-none q-pa-none">
-                <div class="q-mr-md q-ml-xs row items-center">
-                  <q-icon size="xs" color="primary" name="add_shopping_cart" />
-                </div>
-
+              <q-item clickable class="q-ma-none q-pa-none" style="padding:1em;">
                 <q-item-section class="q-ma-none q-pa-none">
                   <q-item-label>{{ items.nombre }}</q-item-label>
                   <q-item-label caption>
-                    <q-icon
-                      size="xs"
-                      color="primary"
-                      name="add_shopping_cart"
-                    />
                     {{ items.comercio.name }}
                   </q-item-label>
                 </q-item-section>
               </q-item>
-              <q-item clickable class="q-ma-none q-pa-none">
+              <q-item clickable class="q-ma-none q-pa-none"  v-if="items.price_total>0">
                 <div class="q-mr-md q-ml-xs row items-center">
                   <q-icon size="xs" color="red" name="sell" />
                 </div>
 
                 <q-item-section>
-                  <q-item-label>{{ items.price_total }} $</q-item-label>
-                  <q-item-label caption
+                  <q-item-label v-if="items.price_total>0">{{ items.price_total }} $</q-item-label>
+                  <q-item-label v-if="items.descuento>0" caption
                     >Descuento{{ items.descuento }} %</q-item-label
                   >
                 </q-item-section>
@@ -99,54 +90,54 @@
 
 <script setup>
 // importaciones
-import { ref, onMounted, watch } from "vue";
-import { instance } from "src/api/index.js";
-import { useToast } from "src/composables/useToast";
+import { ref, onMounted, watch } from 'vue'
+import { instance } from 'src/api/index.js'
+import { useToast } from 'src/composables/useToast'
 
-const currentPaginate = ref(1);
-const paginas = ref(0);
-const products = ref([]);
-const search = ref("");
-const loading = ref(false);
+const currentPaginate = ref(1)
+const paginas = ref(0)
+const products = ref([])
+const search = ref('')
+const loading = ref(false)
 
-const { triggerWarning } = useToast();
+const { triggerWarning } = useToast()
 
 // los observadores
 watch(currentPaginate, async (val) => {
-  await getProducts();
-});
+  await getProducts()
+})
 watch(search, async (val) => {
-  await getProducts();
-});
+  await getProducts()
+})
 
-async function getProducts() {
+async function getProducts () {
   try {
-    loading.value = true;
+    loading.value = true
     const { data } = await instance.get(
-      "/comercio-ofertas?with[]=comercio&nombre=" +
+      '/comercio-ofertas?with[]=comercio&nombre=' +
         search.value +
-        "&page=" +
+        '&page=' +
         currentPaginate.value
-    );
-    products.value = data.data;
-    paginas.value = data.pagination.lastPage;
-    currentPaginate.value = data.pagination.currentPage;
+    )
+    products.value = data.data
+    paginas.value = data.pagination.lastPage
+    currentPaginate.value = data.pagination.currentPage
   } catch (error) {
-    console.error(error);
+    console.error(error)
     const errorMessage =
-      error.code === "ERR_NETWORK"
-        ? "Verifique su conexión a internet e intente nuevamente"
-        : "Error desconocido";
-    triggerWarning(errorMessage);
+      error.code === 'ERR_NETWORK'
+        ? 'Verifique su conexión a internet e intente nuevamente'
+        : 'Error desconocido'
+    triggerWarning(errorMessage)
   } finally {
-    loading.value = false;
+    loading.value = false
   }
 }
 
 // eventos hooks
 onMounted(async () => {
-  await getProducts();
-});
+  await getProducts()
+})
 </script>
 
 <style>
