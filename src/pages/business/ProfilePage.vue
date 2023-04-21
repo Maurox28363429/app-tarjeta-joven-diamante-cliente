@@ -243,7 +243,7 @@ const uploadImg = (event) => {
     file.value = fileReader.result;
   };
   fileReader.readAsDataURL(image);
-  useForm.value.img = image.name;
+  useForm.value.img = image;
 };
 
 const handledUpdateUser = async () => {

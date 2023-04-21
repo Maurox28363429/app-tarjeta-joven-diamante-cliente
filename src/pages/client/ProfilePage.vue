@@ -41,25 +41,25 @@
         <q-item>
           <q-item-section>
             <q-item-label>Genero</q-item-label>
-            <q-item-label caption>{{ genderCurrent.label }}</q-item-label>
+            <q-item-label caption>{{ genderCurrent?.label }}</q-item-label>
           </q-item-section>
         </q-item>
         <q-item>
           <q-item-section>
             <q-item-label>Direccion</q-item-label>
-            <q-item-label caption>{{ user.address }}</q-item-label>
+            <q-item-label caption>{{ user?.address }}</q-item-label>
           </q-item-section>
         </q-item>
         <q-item>
           <q-item-section>
             <q-item-label>Membresía</q-item-label>
-            <q-item-label caption>{{ user.membresia.type }}</q-item-label>
+            <q-item-label caption>{{ user.membresia?.type }}</q-item-label>
           </q-item-section>
         </q-item>
         <q-item>
           <q-item-section>
             <q-item-label>Estado de Membresía</q-item-label>
-            <q-item-label caption>{{ user.membresia.status }}</q-item-label>
+            <q-item-label caption>{{ user.membresia?.status }}</q-item-label>
           </q-item-section>
         </q-item>
       </q-list>
@@ -220,9 +220,13 @@ const loading = ref(false);
 const { user: userStore, updatedUser } = userAuth();
 const user = ref(localStorageAuth.getUser().user);
 
-watch(userStore, () => {
-  user.value = userStore;
-});
+watch(
+  userStore,
+  () => {
+    user.value = userStore.value;
+  },
+  { immediate: true }
+);
 
 const GENDER_OPTIONS = [
   { label: "Mujer", value: 0 },
@@ -259,11 +263,12 @@ const uploadImg = (event) => {
     file.value = fileReader.result;
   };
   fileReader.readAsDataURL(image);
-  useForm.value.img = image.name;
+  useForm.value.img = image;
 };
 
 const handledUpdateUser = async () => {
   validateForm();
+  console.log(user.value, "user");
   try {
     loading.value = true;
     const values = {
