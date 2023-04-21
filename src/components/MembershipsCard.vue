@@ -53,7 +53,10 @@ const planValidate = computed(() => {
       style="height: 58px; max-width: 62px"
     />
     <p class="title-large text-center text-secondary text-uppercase q-my-md">
-      {{ name }}
+      <span v-if="price > 0">
+        {{ name }}
+      </span>
+      <span v-if="price == 0"> Membresia 3 Días </span>
     </p>
     <p class="text-weight-medium text-h3" v-if="price > 0">
       <span class="text-h5">$</span>{{ price }}
@@ -70,7 +73,25 @@ const planValidate = computed(() => {
         />
         <p class="body-medium">{{ benefit }}</p>
       </li>
+      <li v-if="price > 0">
+        <q-img
+          src="./../assets/checkIcon.svg"
+          spinner-color="dark"
+          style="height: 22px; max-width: 22px"
+        />
+        <p class="body-medium">
+          Seguro privado 24 horas exclusivo para miembros de tarjeta joven
+          diamante
+        </p>
+      </li>
     </ul>
+    <p
+      class="text-weight-medium text-h3"
+      v-if="price > 0"
+      style="text-align: center !important"
+    >
+      <span style="font-size: 0.5em">Precio de pre-venta por lanzamiento</span>
+    </p>
     <div class="full-width button">
       <q-btn
         outline
