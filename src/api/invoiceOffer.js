@@ -1,18 +1,18 @@
-import { instance } from '.'
+import { instance } from ".";
 
-export default async function invoiceOffer ({
+export default async function invoiceOffer({
   comercio_id,
   total_descuento,
   ofertas,
   total,
-  client_id
+  client_id,
 }) {
-  const { data } = await instance.post('/cliente-comercio-ofertas', {
+  const { data } = await instance.post("/cliente-comercio-ofertas", {
     comercio_id,
     total_descuento,
     ofertas,
     total,
-    client_id
-  })
-  return data
+    client_id,
+  });
+  return data;
 }

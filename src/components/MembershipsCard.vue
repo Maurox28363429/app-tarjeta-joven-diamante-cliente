@@ -1,48 +1,48 @@
 <script setup>
-import { userAuth } from 'src/composables/userAuth'
-import { ref, computed } from 'vue'
+import { userAuth } from "src/composables/userAuth";
+import { ref, computed } from "vue";
 
 const props = defineProps({
   benefits: {
     type: Array,
-    required: true
+    required: true,
   },
   price: {
     type: Number,
     required: true,
-    default: 0
+    default: 0,
   },
   name: {
     type: String,
     required: true,
-    default: ''
+    default: "",
   },
   image: {
     type: String,
     required: true,
-    default: ''
+    default: "",
   },
   id: {
     type: Number,
-    required: true
-  }
-})
+    required: true,
+  },
+});
 
-const baseurl = '/memberships/'
+const baseurl = "/memberships/";
 
-const { user } = userAuth()
+const { user } = userAuth();
 
 const userIsmembershipFree = ref(
-  Boolean(user?.membresia?.id === 7 || user?.membresia?.status === 'activa')
-)
+  Boolean(user?.membresia?.id === 7 || user?.membresia?.status === "activa")
+);
 
 const planValidate = computed(() => {
-  if (userIsmembershipFree.value && props.name === 'free') {
-    return 'disableGray'
+  if (userIsmembershipFree.value && props.name === "free") {
+    return "disableGray";
   } else {
-    return 'plan-white'
+    return "plan-white";
   }
-})
+});
 </script>
 
 <template>
@@ -53,13 +53,10 @@ const planValidate = computed(() => {
       style="height: 58px; max-width: 62px"
     />
     <p class="title-large text-center text-secondary text-uppercase q-my-md">
-      <span v-if="price>0">
+      <span v-if="price > 0">
         {{ name }}
       </span>
-      <span v-if="price==0">
-        Membresia 3 Días
-      </span>
-
+      <span v-if="price == 0"> Membresia 3 Días </span>
     </p>
     <p class="text-weight-medium text-h3" v-if="price > 0">
       <span class="text-h5">$</span>{{ price }}
@@ -76,17 +73,24 @@ const planValidate = computed(() => {
         />
         <p class="body-medium">{{ benefit }}</p>
       </li>
-      <li  v-if="price > 0">
+      <li v-if="price > 0">
         <q-img
           src="./../assets/checkIcon.svg"
           spinner-color="dark"
           style="height: 22px; max-width: 22px"
         />
-        <p class="body-medium">Seguro privado 24 horas exclusivo para miembros de tarjeta joven diamante</p>
+        <p class="body-medium">
+          Seguro privado 24 horas exclusivo para miembros de tarjeta joven
+          diamante
+        </p>
       </li>
     </ul>
-    <p class="text-weight-medium text-h3" v-if="price > 0" style="text-align:center !important">
-      <span style="font-size:0.5em;">Precio de pre-venta por lanzamiento</span>
+    <p
+      class="text-weight-medium text-h3"
+      v-if="price > 0"
+      style="text-align: center !important"
+    >
+      <span style="font-size: 0.5em">Precio de pre-venta por lanzamiento</span>
     </p>
     <div class="full-width button">
       <q-btn

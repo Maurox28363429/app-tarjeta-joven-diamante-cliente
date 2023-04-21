@@ -11,11 +11,11 @@
 </template>
 
 <script setup>
-import { userAuth } from 'src/composables/userAuth'
-import QrcodeVue from 'qrcode.vue'
-import { ref } from 'vue'
+import { userAuth } from "src/composables/userAuth";
+import QrcodeVue from "qrcode.vue";
+import { ref } from "vue";
 
-const { user } = userAuth()
-const sizeQr = ref(284)
-const idUser = user.value.id.toString()
+const { user } = userAuth();
+const sizeQr = ref(284);
+const idUser = user.value.id.toString();
 </script>
