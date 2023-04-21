@@ -3,7 +3,10 @@
     <div class="full-width title-large q-pt-lg q-pl-lg">
       <p>Perfil</p>
     </div>
-    <div class="q-pa-md full-width row wrap justify-center container">
+    <div
+      tyle="gap: 10px;"
+      class="q-pa-md full-width row wrap justify-center container"
+    >
       <q-list bordered padding separator class="profile rounded-borders">
         <q-item>
           <q-item-section class="row justify-center full-width items-center">
@@ -60,6 +63,27 @@
           </q-item>
           <q-item>
             <q-item-section class="formContainer">
+              <div class="column items-center">
+                <label class="cursor-pointer">
+                  <q-avatar size="80px" class="q-mr-md">
+                    <q-img :src="file" spinner-color="dark">
+                      <div
+                        style="font-size: 10px"
+                        class="absolute-bottom absolute-top text-center"
+                      >
+                        Click para cambiar foto
+                      </div>
+                    </q-img>
+                  </q-avatar>
+                  <input
+                    @change="uploadImg"
+                    hidden
+                    type="file"
+                    accept="image/png, image/jpeg"
+                    name="avatar"
+                  />
+                </label>
+              </div>
               <div class="full-width input">
                 <label class="label-large">
                   Name
@@ -178,6 +202,7 @@ import { updateProfileShema } from 'src/schemas/updateProfileShema'
 import updateUser from 'src/api/updateUser'
 import localStorageAuth from 'src/utils/localStorageAuth'
 import { useToast } from 'src/composables/useToast'
+import profile from '../../assets/profile.png'
 
 const { triggerPositive, triggerWarning } = useToast()
 
@@ -194,17 +219,32 @@ const genderCurrent = GENDER_OPTIONS.find((item) => {
   return item.value === user.value.sex
 })
 
+const file = ref(profile)
+
 const INITIAL_VALUES = {
   name: user.value.name,
   email: user.value.email,
   last_name: user.value.last_name,
   phone: user.value.phone,
   sex: genderCurrent,
-  address: user.value.address
+  address: user.value.address,
+  img: user.value.img || profile
 }
 
 const { useForm, validatInput, validateMessage, validateForm } =
   useValidateForm({ initialValue: INITIAL_VALUES, schema: updateProfileShema })
+
+const uploadImg = (event) => {
+  const image = event.target.files[0]
+  console.log(image, 'imagen desde upload')
+
+  const fileReader = new FileReader()
+  fileReader.onload = () => {
+    file.value = fileReader.result
+  }
+  fileReader.readAsDataURL(image)
+  useForm.value.img = image.name
+}
 
 const handledUpdateUser = async () => {
   validateForm()

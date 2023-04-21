@@ -34,9 +34,14 @@
       </template>
 
       <div v-for="items in products" :key="items.id">
-        <q-card class="my-card" style="height: 340px; width: 100%">
+        <q-card class="my-card column" style="height: 400px; width: 100%">
           <img
-            style="height: 120px; width: 100%; max-height: 200px"
+            style="
+              height: 120px;
+              width: 100%;
+              max-height: 200px;
+              object-fit: contain;
+            "
             :src="
               items.img_array_url[0]
                 ? items.img_array_url[0]
@@ -48,7 +53,9 @@
             <q-list>
               <q-item clickable class="q-ma-none q-pa-none" style="padding:1em;">
                 <q-item-section class="q-ma-none q-pa-none">
-                  <q-item-label>{{ items.nombre }}</q-item-label>
+                  <q-item-label>
+                    <p class="line-clamp-1">{{ items.nombre }}</p>
+                  </q-item-label>
                   <q-item-label caption>
                     {{ items.comercio.name }}
                   </q-item-label>
@@ -69,9 +76,18 @@
             </q-list>
           </q-card-section>
 
-          <q-card-section class="q-pt-none">
-            <p class="line-clamp-4">{{ items.description }}</p>
+          <q-card-section class="q-pt-none q-pb-none">
+            <p class="line-clamp-4 q-mb-none">{{ items.description }}</p>
           </q-card-section>
+          <q-card-actions
+            align="right"
+            class="q-pt-none"
+            style="flex: 1; align-items: end"
+          >
+            <q-btn color="primary" @click="showModal({ ...items })" flat
+              >Ver más</q-btn
+            >
+          </q-card-actions>
         </q-card>
       </div>
     </div>
@@ -86,6 +102,26 @@
       />
     </div>
   </div>
+
+  <q-dialog v-model="openModal">
+    <q-card class="news-card modal-card">
+      <img :src="modalCurrent.img_array_url[0]" class="news-image" />
+
+      <q-card-section>
+        <div class="news-title">{{ modalCurrent.nombre }}</div>
+      </q-card-section>
+
+      <q-card-section class="q-pt-none">
+        <div class="news-description">{{ modalCurrent.description }}</div>
+      </q-card-section>
+
+      <q-separator />
+
+      <q-card-actions align="right">
+        <q-btn v-close-popup flat color="primary" label="Cerrar" />
+      </q-card-actions>
+    </q-card>
+  </q-dialog>
 </template>
 
 <script setup>
@@ -99,6 +135,8 @@ const paginas = ref(0)
 const products = ref([])
 const search = ref('')
 const loading = ref(false)
+const modalCurrent = ref({})
+const openModal = ref(false)
 
 const { triggerWarning } = useToast()
 
@@ -109,6 +147,12 @@ watch(currentPaginate, async (val) => {
 watch(search, async (val) => {
   await getProducts()
 })
+
+const showModal = (modalInfo) => {
+  modalCurrent.value = { ...modalInfo }
+  openModal.value = true
+  console.log(modalCurrent.value, 'modal')
+}
 
 async function getProducts () {
   try {
@@ -148,11 +192,50 @@ onMounted(async () => {
   overflow: hidden;
 }
 
+.line-clamp-1 {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
 .product-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   gap: 20px 7px;
   justify-content: center;
   padding: 20px 0;
+}
+
+.news-card {
+  border-radius: 8px;
+
+  display: flex;
+  flex-direction: column;
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px 0px,
+    rgba(0, 0, 0, 0.24) 0px 1px 1px 0px;
+  overflow: hidden;
+}
+
+.news-image {
+  height: 140px;
+  width: 100%;
+  object-fit: contain;
+}
+
+.news-title {
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+}
+
+.news-description {
+  font-size: 0.9rem;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.modal-card {
+  width: 700px;
+  max-width: 80vw;
 }
 </style>
