@@ -11,6 +11,7 @@ export default async function updateUser({
   sex,
   address,
   id,
+  img,
 }) {
   return await instance.put(`user/${id}`, {
     name,
@@ -22,5 +23,6 @@ export default async function updateUser({
     last_name,
     sex,
     address,
+    img,
   });
 }
