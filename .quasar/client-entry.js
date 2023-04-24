@@ -27,7 +27,9 @@ import "@quasar/quasar-ui-qiconpicker/src/index.sass";
 import createQuasarApp from "./app.js";
 import quasarUserOptions from "./quasar-user-options.js";
 
-const publicPath = ``;
+console.info("[Quasar] Running SPA.");
+
+const publicPath = `/`;
 
 async function start({ app, router, store }, bootFiles) {
   let hasRedirected = false;
@@ -85,14 +87,7 @@ async function start({ app, router, store }, bootFiles) {
 
   app.use(router);
 
-  document.addEventListener(
-    "deviceready",
-    () => {
-      app.config.globalProperties.$q.cordova = window.cordova;
-      app.mount("#q-app");
-    },
-    false
-  ); // on deviceready
+  app.mount("#q-app");
 }
 
 createQuasarApp(createApp, quasarUserOptions).then((app) => {
@@ -116,6 +111,8 @@ createQuasarApp(createApp, quasarUserOptions).then((app) => {
     import("boot/axios"),
 
     import("boot/qrcode-reader"),
+
+    import("boot/vue-query"),
 
     import("@quasar/quasar-app-extension-qiconpicker/src/boot/register.js"),
   ]).then((bootFiles) => {

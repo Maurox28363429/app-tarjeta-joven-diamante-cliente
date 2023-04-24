@@ -85,7 +85,7 @@
             </q-item-section>
           </q-item>
           <q-separator inset v-show="!miniState" />
-          <q-item clickable v-ripple to="/cliente/shopping">
+          <q-item clickable v-ripple to="/cliente/transactionsTable">
             <q-item-section avatar>
               <q-icon name="shopping_basket" />
             </q-item-section>
@@ -105,7 +105,7 @@
 
             <q-item-section>Mi perfil</q-item-section>
           </q-item>
-          <q-item clickable v-ripple to="/cliente/products">
+          <q-item clickable v-ripple to="/cliente/Offers">
             <q-item-section avatar>
               <q-icon name="sell" />
             </q-item-section>
@@ -191,7 +191,7 @@
       narrow-indicator
     >
       <router-link
-        to="/cliente/shopping"
+        to="/cliente/transactionsTable"
         style="text-decoration: none; color: #ffff; width: 100%; margin: none"
       >
         <q-tab
@@ -203,7 +203,7 @@
         />
       </router-link>
       <router-link
-        to="/cliente/products"
+        to="/cliente/Offers"
         style="text-decoration: none; color: #ffff; width: 100%; margin: none"
       >
         <q-tab

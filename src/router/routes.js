@@ -35,13 +35,13 @@ const routes = [
         component: () => import("layouts/MainClientLayout.vue"),
         children: [
           {
-            name: "products",
-            path: "products",
-            component: () => import("pages/client/ProductsPage.vue"),
+            name: "Offers",
+            path: "Offers",
+            component: () => import("src/pages/client/OffersPage.vue"),
           },
           {
             path: "",
-            component: () => import("pages/client/ProductsPage.vue"),
+            component: () => import("src/pages/client/OffersPage.vue"),
           },
           {
             path: "account",
@@ -57,9 +57,9 @@ const routes = [
             ],
           },
           {
-            name: "shopping",
-            path: "shopping",
-            component: () => import("pages/ShoppingPage.vue"),
+            name: "transactionsTable",
+            path: "transactionsTable",
+            component: () => import("src/pages/client/ClientTransactions.vue"),
           },
           {
             name: "store",
@@ -80,7 +80,7 @@ const routes = [
         children: [
           {
             path: "",
-            component: () => import("pages/ShoppingPage.vue"),
+            component: () => import("src/components/TransactionsTable.vue"),
           },
           {
             path: "account",
@@ -99,7 +99,8 @@ const routes = [
           {
             name: "orders",
             path: "orders",
-            component: () => import("pages/ShoppingPage.vue"),
+            component: () =>
+              import("src/pages/business/BusinessTransactions.vue"),
           },
           {
             name: "create-order",

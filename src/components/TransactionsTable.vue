@@ -3,7 +3,7 @@
     <!--Container-->
     <div class="full-width" style="position: relative; min-height: 400px">
       <q-inner-loading
-        :showing="loading"
+        :showing="isLoading"
         label="Por favor espera..."
         label-class="text-teal"
         label-style="font-size: 1.1em"
@@ -13,8 +13,8 @@
         flat
         bordered
         :title="user.role_id === 2 ? 'Mis ventas' : 'Mis compras'"
-        :rows="rows"
-        :columns="columns"
+        :rows="transactionsData?.data?.data"
+        :columns="TRANSACTION_COLUMNS"
         hide-bottom
         dense
         :rows-per-page-options="[10, 20, 50]"
@@ -25,8 +25,8 @@
 
       <q-pagination
         style="margin-top: 1em"
-        v-model="currentPaginate"
-        :max="paginas"
+        v-model="currentPage"
+        :max="pages"
         boundary-numbers
       />
     </div>
@@ -76,7 +76,7 @@
           <hr style="opacity: 0.5" />
           <section>
             <div
-              v-for="item in prouctos"
+              v-for="item in proucts"
               :key="item.id"
               style="display: inline-flex"
             >
@@ -140,85 +140,57 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from "vue";
-import { instance } from "src/api/index.js";
+import { ref, watchEffect } from "vue";
 import { userAuth } from "src/composables/userAuth";
-import { useToast } from "src/composables/useToast";
+import { TRANSACTION_COLUMNS } from "src/shared/constants/transanctionColumns";
+import {
+  useGetTransactionsClient,
+  useGetTransactionsBusiness,
+} from "src/querys/transactionsQuerys";
 
-const { triggerWarning } = useToast();
-
-const { user } = userAuth();
-
-const currentPaginate = ref(1);
-const paginas = ref(1);
-const prouctos = ref([]);
+const currentPage = ref(1);
+const proucts = ref([]);
 const dialog = ref(false);
 const maximizedToggle = ref(true);
-const loading = ref(false);
+const { user } = userAuth();
 
-const columns = [
-  { name: "id", label: "ID", field: "id", align: "left" },
-  {
-    name: "comercio",
-    label: "Comercio",
-    field: (row) => row.comercio.name,
-    align: "left",
-  },
-  { name: "total", label: "Total", field: (row) => row.total, align: "left" },
-  {
-    name: "total_descuento",
-    label: "Descuento total",
-    field: (row) => row.total_descuento,
-    align: "left",
-  },
-];
+let transactions;
 
 if (user.value.role_id === 3) {
-  columns[1] = {
+  transactions = useGetTransactionsClient({
+    page: currentPage.value,
+    id: user.value.id,
+  });
+  TRANSACTION_COLUMNS[1] = {
     name: "client",
     label: "Cliente",
     field: (row) => row.client.name,
     align: "left",
   };
+} else {
+  transactions = useGetTransactionsBusiness({
+    page: currentPage.value,
+    id: user.value.id,
+  });
 }
 
-const rows = ref([]);
+const { data: transactionsData, isLoading, refetch } = transactions;
 
-watch(currentPaginate, async () => {
-  await cargarDatos(currentPaginate.value);
+const pages = ref(1);
+
+watchEffect(() => {
+  currentPage.value && refetch();
 });
 
-onMounted(async () => {
-  await cargarDatos();
+watchEffect(() => {
+  if (transactionsData.value) {
+    pages.value = transactionsData.value.data.pagination.lastPage;
+  }
 });
 
 const onButtonClick = (evt, row, index) => {
   dialog.value = true;
-  prouctos.value = row.ofertas;
-};
-
-const cargarDatos = async (page = 1) => {
-  try {
-    loading.value = true;
-    const queryString =
-      user.value.role_id === 3
-        ? `/cliente-comercio-ofertas?with[]=comercio&with[]=client&page=${page}&client_id=${user.value.id}`
-        : `/cliente-comercio-ofertas?with[]=comercio&with[]=client&page=${page}&comercio_id=${user.value.id}`;
-
-    const { data } = await instance.get(queryString);
-    rows.value = data.data;
-    paginas.value = data.pagination.lastPage;
-    currentPaginate.value = data.pagination.currentPage;
-  } catch (error) {
-    console.error(error);
-    const errorMessage =
-      error.code === "ERR_NETWORK"
-        ? "Verifique su conexión a internet e intente nuevamente"
-        : "Error desconocido";
-    triggerWarning(errorMessage);
-  } finally {
-    loading.value = false;
-  }
+  proucts.value = row.ofertas;
 };
 </script>
 
