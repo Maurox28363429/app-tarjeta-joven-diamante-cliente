@@ -49,4 +49,11 @@ const handleLink = () => {
   height: 140px;
   width: 140px;
 }
+
+@media (min-width: 700px) {
+  .my-card {
+    height: 160px;
+    width: 160px;
+  }
+}
 </style>

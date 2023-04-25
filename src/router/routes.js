@@ -35,6 +35,18 @@ const routes = [
         component: () => import("layouts/MainClientLayout.vue"),
         children: [
           {
+            path: "pachama",
+            component: () => import("pages/client/PachamaPage.vue"),
+          },
+          {
+            path: "contact",
+            component: () => import("pages/client/ContactPage.vue"),
+          },
+          {
+            path: "memberships-type",
+            component: () => import("pages/client/MembershipsTypePage.vue"),
+          },
+          {
             name: "products",
             path: "products",
             component: () => import("pages/client/ProductsPage.vue"),
