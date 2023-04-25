@@ -1,20 +1,20 @@
 <script setup>
-import MembershipsCard from 'src/components/MembershipsCard.vue'
-import { useRouter } from 'vue-router'
-import { useMemberships } from 'src/composables/useMemberships'
+import MembershipsCard from "src/components/MembershipsCard.vue";
+import { useRouter } from "vue-router";
+import { useMemberships } from "src/composables/useMemberships";
 
-const router = useRouter()
-const arr = new Array(2).fill(0)
+const router = useRouter();
+const arr = new Array(2).fill(0);
 
-const { loading, memberships } = useMemberships()
+const { loading, memberships } = useMemberships();
 const goBack = () => {
-  router.go(-1)
-}
-console.log(memberships)
+  router.go(-1);
+};
+console.log(memberships);
 const salir = () => {
-  localStorage.removeItem('user')
-  router.push('login')
-}
+  localStorage.removeItem("user");
+  router.push("login");
+};
 </script>
 
 <template>
@@ -29,14 +29,13 @@ const salir = () => {
         class="cursor-pointer"
       />
     </div>
-    <div @click="salir" class="back-button" style="margin-left:4em;cursor:pointer">
-      <q-icon
-        name="logout"
-        size="md"
-        color="white"
-        class="cursor-pointer"
-      />
-      <span style="font-size: 1em;color: white;">Salir</span>
+    <div
+      @click="salir"
+      class="back-button"
+      style="margin-left: 4em; cursor: pointer"
+    >
+      <q-icon name="logout" size="md" color="white" class="cursor-pointer" />
+      <span style="font-size: 1em; color: white">Salir</span>
     </div>
 
     <div class="width-full column justify-center membershipsContainer">

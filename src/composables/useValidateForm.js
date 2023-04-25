@@ -1,12 +1,12 @@
-import { ref } from 'vue'
+import { ref } from "vue";
 
 export const useValidateForm = ({ schema, initialValue = {} }) => {
-  const useForm = ref(initialValue)
+  const useForm = ref(initialValue);
 
   const validateMessage = ref({
     errors: {},
-    isvalid: false
-  })
+    isvalid: false,
+  });
 
   const validateForm = () => {
     schema
@@ -14,26 +14,26 @@ export const useValidateForm = ({ schema, initialValue = {} }) => {
       .then(() => (validateMessage.value = { errors: {}, isvalid: true }))
       .catch((err) => {
         const errors = err.inner.reduce((acc, error) => {
-          acc[error.path] = error.message
-          return acc
-        }, {})
+          acc[error.path] = error.message;
+          return acc;
+        }, {});
         validateForm.value = {
           errors,
-          isvalid: false
-        }
-      })
-  }
+          isvalid: false,
+        };
+      });
+  };
 
   const validatInput = (field) => {
     schema
       .validateAt(field, useForm.value)
-      .then(() => (validateMessage.value.errors[field] = ''))
+      .then(() => (validateMessage.value.errors[field] = ""))
       .catch((err) => {
-        validateMessage.value.errors[err.path] = err.message
-      })
+        validateMessage.value.errors[err.path] = err.message;
+      });
 
-    validateForm()
-  }
+    validateForm();
+  };
 
-  return { validatInput, validateMessage, useForm, validateForm }
-}
+  return { validatInput, validateMessage, useForm, validateForm };
+};
