@@ -1,17 +1,17 @@
-import { defineStore } from 'pinia'
-import getUser from '../api/getUser'
+import { defineStore } from "pinia";
+import getUser from "../api/getUser";
 
-export const userCart = defineStore('cart', {
+export const userCart = defineStore("cart", {
   client: {},
   actions: {
-    setClient (id) {
+    setClient(id) {
       return getUser(id).then((response) => {
-        this.client = response
-        return this.client
-      })
+        this.client = response;
+        return this.client;
+      });
     },
-    getClient () {
-      return this.client
-    }
-  }
-})
+    getClient() {
+      return this.client;
+    },
+  },
+});
