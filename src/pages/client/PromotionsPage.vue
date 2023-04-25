@@ -3,19 +3,26 @@
     <!-- Título y campo de búsqueda -->
     <p style="margin: 20px 0" class="title-large">Promociones</p>
     <div class="search-box">
-      <q-input
-        v-model="search"
-        outlined
-        class="full-width"
-        style="max-width: 400px"
-        type="search"
-        label="Buscar promociones"
-        color="primary"
-      >
-        <template v-slot:append>
-          <q-icon name="search" />
-        </template>
-      </q-input>
+      <q-form class="full-width row justify-center" @submit="handleSearch">
+        <q-input
+          v-model="search"
+          outlined
+          class="full-width"
+          style="max-width: 400px"
+          type="search"
+          label="Buscar promociones"
+          color="primary"
+        >
+          <q-btn
+            size="md"
+            style="right: -12px; bottom: 0; top: 0"
+            color="primary"
+            label="Buscar"
+            icon="search"
+            class="absolute"
+          />
+        </q-input>
+      </q-form>
     </div>
 
     <!-- Cuadrícula de noticias -->
@@ -109,37 +116,37 @@
   </div>
 </template>
 <script setup>
-import { ref, watchEffect, watch } from "vue";
+import { ref, watchEffect } from "vue";
 import { useGetPromotions } from "src/querys/promotionsQuerys";
 
 const openModal = ref(false);
 const modalCurrent = ref({});
 const currentPaginate = ref(1);
-const pagination = ref({
-  pages: 1,
-  search: "",
-});
+
+const pages = ref(1);
+const search = ref("");
 
 const {
   data: promotionsData,
   isLoading,
   refetch,
-} = useGetPromotions(pagination);
+} = useGetPromotions({ search, pages });
 
 const showModal = (modalInfo) => {
   modalCurrent.value = { ...modalInfo };
   openModal.value = true;
 };
 
-watch([pagination], () => {
-  refetch();
-});
-
 watchEffect(() => {
   if (promotionsData.value) {
-    pagination.value.pages = promotionsData?.value?.data?.pagination.lastPage;
+    pages.value = promotionsData?.value?.data?.pagination.lastPage;
   }
 });
+
+const handleSearch = () => {
+  console.log("search");
+  refetch();
+};
 </script>
 <style>
 .promotions {

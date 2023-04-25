@@ -7,7 +7,7 @@ export const useGetTransactionsClient = ({ page, id }) => {
   const { triggerWarning } = useToast();
 
   const data = useQuery(
-    ["transactionsClient"],
+    ["transactionsClient", page],
     () => getTransactionsClient({ page, id }),
     {
       onError: (error) => {
@@ -26,7 +26,7 @@ export const useGetTransactionsBusiness = ({ page, id }) => {
   const { triggerWarning } = useToast();
 
   const data = useQuery(
-    ["transactionsBusiness"],
+    ["transactionsBusiness", page],
     () => getTransactionsBusiness({ page, id }),
     {
       onError: (error) => {

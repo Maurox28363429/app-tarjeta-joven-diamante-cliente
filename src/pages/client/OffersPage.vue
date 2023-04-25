@@ -2,22 +2,30 @@
   <div class="q-px-md">
     <p style="margin: 20px 0" class="title-large">Ofertas</p>
     <div class="full-width full-height row justify-center q-mt-lg">
-      <q-input
-        class="full-width"
-        v-model="search"
-        style="max-width: 400px"
-        outlined
-        type="search"
-        label="Buscar ofertas"
-        color="primary"
-      >
-        <template v-slot:append>
-          <q-icon name="search" v-model="search" />
-        </template>
-      </q-input>
+      <q-form class="full-width row justify-center" @submit="handleSearch">
+        <q-input
+          class="full-width"
+          v-model="search"
+          style="max-width: 400px"
+          outlined
+          type="search"
+          label="Buscar ofertas"
+          color="primary"
+        >
+          <q-btn
+            type="submit"
+            size="md"
+            style="right: -12px; bottom: 0; top: 0"
+            color="primary"
+            label="Buscar"
+            icon="search"
+            class="absolute"
+          />
+        </q-input>
+      </q-form>
     </div>
     <div class="full-width full-height product-grid">
-      <template v-if="loading">
+      <template v-if="isLoading">
         <div v-for="index in 20" :key="index" class="skeleton-card">
           <q-card class="my-card" style="height: 340px; width: 100%">
             <q-skeleton height="120px" width="100%" square />
@@ -32,79 +40,684 @@
           </q-card>
         </div>
       </template>
+      <template v-if="!isLoading">
+        <div v-for="items in data.data.data" :key="items.id">
+          <q-card class="my-card column" style="height: 400px; width: 100%">
+            <img
+              style="
+                height: 120px;
+                width: 100%;
+                max-height: 200px;
+                object-fit: contain;
+              "
+              :src="
+                items.img_array_url[0]
+                  ? items.img_array_url[0]
+                  : 'https://cdn.quasar.dev/img/mountains.jpg'
+              "
+            />
 
-      <div v-for="items in products" :key="items.id">
-        <q-card class="my-card column" style="height: 400px; width: 100%">
-          <img
-            style="
-              height: 120px;
-              width: 100%;
-              max-height: 200px;
-              object-fit: contain;
-            "
-            :src="
-              items.img_array_url[0]
-                ? items.img_array_url[0]
-                : 'https://cdn.quasar.dev/img/mountains.jpg'
-            "
-          />
+            <q-card-section class="q-px-xs">
+              <q-list>
+                <q-item
+                  clickable
+                  class="q-ma-none q-pa-none"
+                  style="padding: 1em"
+                >
+                  <q-item-section class="q-ma-none q-pa-none">
+                    <q-item-label>
+                      <p class="line-clamp-1">{{ items.nombre }}</p>
+                    </q-item-label>
+                    <q-item-label caption>
+                      {{ items.comercio.name }}
+                    </q-item-label>
+                  </q-item-section>
+                </q-item>
+                <q-item
+                  clickable
+                  class="q-ma-none q-pa-none"
+                  v-if="items.price_total > 0"
+                >
+                  <div class="q-mr-md q-ml-xs row items-center">
+                    <q-icon size="xs" color="red" name="sell" />
+                  </div>
 
-          <q-card-section class="q-px-xs">
-            <q-list>
-              <q-item
-                clickable
-                class="q-ma-none q-pa-none"
-                style="padding: 1em"
-              >
-                <q-item-section class="q-ma-none q-pa-none">
-                  <q-item-label>
-                    <p class="line-clamp-1">{{ items.nombre }}</p>
-                  </q-item-label>
-                  <q-item-label caption>
-                    {{ items.comercio.name }}
-                  </q-item-label>
-                </q-item-section>
-              </q-item>
-              <q-item
-                clickable
-                class="q-ma-none q-pa-none"
-                v-if="items.price_total > 0"
-              >
-                <div class="q-mr-md q-ml-xs row items-center">
-                  <q-icon size="xs" color="red" name="sell" />
-                </div>
+                  <q-item-section>
+                    <q-item-label v-if="items.price_total > 0"
+                      >{{ items.price_total }} $</q-item-label
+                    >
+                    <q-item-label v-if="items.descuento > 0" caption
+                      >Descuento{{ items.descuento }} %</q-item-label
+                    >
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </q-card-section>
 
-                <q-item-section>
-                  <q-item-label v-if="items.price_total > 0"
-                    >{{ items.price_total }} $</q-item-label
-                  >
-                  <q-item-label v-if="items.descuento > 0" caption
-                    >Descuento{{ items.descuento }} %</q-item-label
-                  >
-                </q-item-section>
-              </q-item>
-            </q-list>
-          </q-card-section>
-
-          <q-card-section class="q-pt-none q-pb-none">
-            <p class="line-clamp-4 q-mb-none">{{ items.description }}</p>
-          </q-card-section>
-          <q-card-actions
-            align="right"
-            class="q-pt-none"
-            style="flex: 1; align-items: end"
-          >
-            <q-btn color="primary" @click="showModal({ ...items })" flat
-              >Ver más</q-btn
+            <q-card-section class="q-pt-none q-pb-none">
+              <p class="line-clamp-4 q-mb-none">{{ items.description }}</p>
+            </q-card-section>
+            <q-card-actions
+              align="right"
+              class="q-pt-none"
+              style="flex: 1; align-items: end"
             >
-          </q-card-actions>
-        </q-card>
-      </div>
+              <q-btn color="primary" @click="showModal({ ...items })" flat
+                >Ver más</q-btn
+              >
+            </q-card-actions>
+          </q-card>
+        </div>
+        <div v-for="items in data?.data" :key="items.id">
+          <q-card class="my-card column" style="height: 400px; width: 100%">
+            <img
+              style="
+                height: 120px;
+                width: 100%;
+                max-height: 200px;
+                object-fit: contain;
+              "
+              :src="
+                items.img_array_url[0]
+                  ? items.img_array_url[0]
+                  : 'https://cdn.quasar.dev/img/mountains.jpg'
+              "
+            />
+
+            <q-card-section class="q-px-xs">
+              <q-list>
+                <q-item
+                  clickable
+                  class="q-ma-none q-pa-none"
+                  style="padding: 1em"
+                >
+                  <q-item-section class="q-ma-none q-pa-none">
+                    <q-item-label>
+                      <p class="line-clamp-1">{{ items.nombre }}</p>
+                    </q-item-label>
+                    <q-item-label caption>
+                      {{ items.comercio.name }}
+                    </q-item-label>
+                  </q-item-section>
+                </q-item>
+                <q-item
+                  clickable
+                  class="q-ma-none q-pa-none"
+                  v-if="items.price_total > 0"
+                >
+                  <div class="q-mr-md q-ml-xs row items-center">
+                    <q-icon size="xs" color="red" name="sell" />
+                  </div>
+
+                  <q-item-section>
+                    <q-item-label v-if="items.price_total > 0"
+                      >{{ items.price_total }} $</q-item-label
+                    >
+                    <q-item-label v-if="items.descuento > 0" caption
+                      >Descuento{{ items.descuento }} %</q-item-label
+                    >
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </q-card-section>
+
+            <q-card-section class="q-pt-none q-pb-none">
+              <p class="line-clamp-4 q-mb-none">{{ items.description }}</p>
+            </q-card-section>
+            <q-card-actions
+              align="right"
+              class="q-pt-none"
+              style="flex: 1; align-items: end"
+            >
+              <q-btn color="primary" @click="showModal({ ...items })" flat
+                >Ver más</q-btn
+              >
+            </q-card-actions>
+          </q-card>
+        </div>
+        <div v-for="items in data?.data" :key="items.id">
+          <q-card class="my-card column" style="height: 400px; width: 100%">
+            <img
+              style="
+                height: 120px;
+                width: 100%;
+                max-height: 200px;
+                object-fit: contain;
+              "
+              :src="
+                items.img_array_url[0]
+                  ? items.img_array_url[0]
+                  : 'https://cdn.quasar.dev/img/mountains.jpg'
+              "
+            />
+
+            <q-card-section class="q-px-xs">
+              <q-list>
+                <q-item
+                  clickable
+                  class="q-ma-none q-pa-none"
+                  style="padding: 1em"
+                >
+                  <q-item-section class="q-ma-none q-pa-none">
+                    <q-item-label>
+                      <p class="line-clamp-1">{{ items.nombre }}</p>
+                    </q-item-label>
+                    <q-item-label caption>
+                      {{ items.comercio.name }}
+                    </q-item-label>
+                  </q-item-section>
+                </q-item>
+                <q-item
+                  clickable
+                  class="q-ma-none q-pa-none"
+                  v-if="items.price_total > 0"
+                >
+                  <div class="q-mr-md q-ml-xs row items-center">
+                    <q-icon size="xs" color="red" name="sell" />
+                  </div>
+
+                  <q-item-section>
+                    <q-item-label v-if="items.price_total > 0"
+                      >{{ items.price_total }} $</q-item-label
+                    >
+                    <q-item-label v-if="items.descuento > 0" caption
+                      >Descuento{{ items.descuento }} %</q-item-label
+                    >
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </q-card-section>
+
+            <q-card-section class="q-pt-none q-pb-none">
+              <p class="line-clamp-4 q-mb-none">{{ items.description }}</p>
+            </q-card-section>
+            <q-card-actions
+              align="right"
+              class="q-pt-none"
+              style="flex: 1; align-items: end"
+            >
+              <q-btn color="primary" @click="showModal({ ...items })" flat
+                >Ver más</q-btn
+              >
+            </q-card-actions>
+          </q-card>
+        </div>
+        <div v-for="items in data?.data" :key="items.id">
+          <q-card class="my-card column" style="height: 400px; width: 100%">
+            <img
+              style="
+                height: 120px;
+                width: 100%;
+                max-height: 200px;
+                object-fit: contain;
+              "
+              :src="
+                items.img_array_url[0]
+                  ? items.img_array_url[0]
+                  : 'https://cdn.quasar.dev/img/mountains.jpg'
+              "
+            />
+
+            <q-card-section class="q-px-xs">
+              <q-list>
+                <q-item
+                  clickable
+                  class="q-ma-none q-pa-none"
+                  style="padding: 1em"
+                >
+                  <q-item-section class="q-ma-none q-pa-none">
+                    <q-item-label>
+                      <p class="line-clamp-1">{{ items.nombre }}</p>
+                    </q-item-label>
+                    <q-item-label caption>
+                      {{ items.comercio.name }}
+                    </q-item-label>
+                  </q-item-section>
+                </q-item>
+                <q-item
+                  clickable
+                  class="q-ma-none q-pa-none"
+                  v-if="items.price_total > 0"
+                >
+                  <div class="q-mr-md q-ml-xs row items-center">
+                    <q-icon size="xs" color="red" name="sell" />
+                  </div>
+
+                  <q-item-section>
+                    <q-item-label v-if="items.price_total > 0"
+                      >{{ items.price_total }} $</q-item-label
+                    >
+                    <q-item-label v-if="items.descuento > 0" caption
+                      >Descuento{{ items.descuento }} %</q-item-label
+                    >
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </q-card-section>
+
+            <q-card-section class="q-pt-none q-pb-none">
+              <p class="line-clamp-4 q-mb-none">{{ items.description }}</p>
+            </q-card-section>
+            <q-card-actions
+              align="right"
+              class="q-pt-none"
+              style="flex: 1; align-items: end"
+            >
+              <q-btn color="primary" @click="showModal({ ...items })" flat
+                >Ver más</q-btn
+              >
+            </q-card-actions>
+          </q-card>
+        </div>
+        <div v-for="items in data?.data" :key="items.id">
+          <q-card class="my-card column" style="height: 400px; width: 100%">
+            <img
+              style="
+                height: 120px;
+                width: 100%;
+                max-height: 200px;
+                object-fit: contain;
+              "
+              :src="
+                items.img_array_url[0]
+                  ? items.img_array_url[0]
+                  : 'https://cdn.quasar.dev/img/mountains.jpg'
+              "
+            />
+
+            <q-card-section class="q-px-xs">
+              <q-list>
+                <q-item
+                  clickable
+                  class="q-ma-none q-pa-none"
+                  style="padding: 1em"
+                >
+                  <q-item-section class="q-ma-none q-pa-none">
+                    <q-item-label>
+                      <p class="line-clamp-1">{{ items.nombre }}</p>
+                    </q-item-label>
+                    <q-item-label caption>
+                      {{ items.comercio.name }}
+                    </q-item-label>
+                  </q-item-section>
+                </q-item>
+                <q-item
+                  clickable
+                  class="q-ma-none q-pa-none"
+                  v-if="items.price_total > 0"
+                >
+                  <div class="q-mr-md q-ml-xs row items-center">
+                    <q-icon size="xs" color="red" name="sell" />
+                  </div>
+
+                  <q-item-section>
+                    <q-item-label v-if="items.price_total > 0"
+                      >{{ items.price_total }} $</q-item-label
+                    >
+                    <q-item-label v-if="items.descuento > 0" caption
+                      >Descuento{{ items.descuento }} %</q-item-label
+                    >
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </q-card-section>
+
+            <q-card-section class="q-pt-none q-pb-none">
+              <p class="line-clamp-4 q-mb-none">{{ items.description }}</p>
+            </q-card-section>
+            <q-card-actions
+              align="right"
+              class="q-pt-none"
+              style="flex: 1; align-items: end"
+            >
+              <q-btn color="primary" @click="showModal({ ...items })" flat
+                >Ver más</q-btn
+              >
+            </q-card-actions>
+          </q-card>
+        </div>
+        <div v-for="items in data?.data" :key="items.id">
+          <q-card class="my-card column" style="height: 400px; width: 100%">
+            <img
+              style="
+                height: 120px;
+                width: 100%;
+                max-height: 200px;
+                object-fit: contain;
+              "
+              :src="
+                items.img_array_url[0]
+                  ? items.img_array_url[0]
+                  : 'https://cdn.quasar.dev/img/mountains.jpg'
+              "
+            />
+
+            <q-card-section class="q-px-xs">
+              <q-list>
+                <q-item
+                  clickable
+                  class="q-ma-none q-pa-none"
+                  style="padding: 1em"
+                >
+                  <q-item-section class="q-ma-none q-pa-none">
+                    <q-item-label>
+                      <p class="line-clamp-1">{{ items.nombre }}</p>
+                    </q-item-label>
+                    <q-item-label caption>
+                      {{ items.comercio.name }}
+                    </q-item-label>
+                  </q-item-section>
+                </q-item>
+                <q-item
+                  clickable
+                  class="q-ma-none q-pa-none"
+                  v-if="items.price_total > 0"
+                >
+                  <div class="q-mr-md q-ml-xs row items-center">
+                    <q-icon size="xs" color="red" name="sell" />
+                  </div>
+
+                  <q-item-section>
+                    <q-item-label v-if="items.price_total > 0"
+                      >{{ items.price_total }} $</q-item-label
+                    >
+                    <q-item-label v-if="items.descuento > 0" caption
+                      >Descuento{{ items.descuento }} %</q-item-label
+                    >
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </q-card-section>
+
+            <q-card-section class="q-pt-none q-pb-none">
+              <p class="line-clamp-4 q-mb-none">{{ items.description }}</p>
+            </q-card-section>
+            <q-card-actions
+              align="right"
+              class="q-pt-none"
+              style="flex: 1; align-items: end"
+            >
+              <q-btn color="primary" @click="showModal({ ...items })" flat
+                >Ver más</q-btn
+              >
+            </q-card-actions>
+          </q-card>
+        </div>
+        <div v-for="items in data?.data" :key="items.id">
+          <q-card class="my-card column" style="height: 400px; width: 100%">
+            <img
+              style="
+                height: 120px;
+                width: 100%;
+                max-height: 200px;
+                object-fit: contain;
+              "
+              :src="
+                items.img_array_url[0]
+                  ? items.img_array_url[0]
+                  : 'https://cdn.quasar.dev/img/mountains.jpg'
+              "
+            />
+
+            <q-card-section class="q-px-xs">
+              <q-list>
+                <q-item
+                  clickable
+                  class="q-ma-none q-pa-none"
+                  style="padding: 1em"
+                >
+                  <q-item-section class="q-ma-none q-pa-none">
+                    <q-item-label>
+                      <p class="line-clamp-1">{{ items.nombre }}</p>
+                    </q-item-label>
+                    <q-item-label caption>
+                      {{ items.comercio.name }}
+                    </q-item-label>
+                  </q-item-section>
+                </q-item>
+                <q-item
+                  clickable
+                  class="q-ma-none q-pa-none"
+                  v-if="items.price_total > 0"
+                >
+                  <div class="q-mr-md q-ml-xs row items-center">
+                    <q-icon size="xs" color="red" name="sell" />
+                  </div>
+
+                  <q-item-section>
+                    <q-item-label v-if="items.price_total > 0"
+                      >{{ items.price_total }} $</q-item-label
+                    >
+                    <q-item-label v-if="items.descuento > 0" caption
+                      >Descuento{{ items.descuento }} %</q-item-label
+                    >
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </q-card-section>
+
+            <q-card-section class="q-pt-none q-pb-none">
+              <p class="line-clamp-4 q-mb-none">{{ items.description }}</p>
+            </q-card-section>
+            <q-card-actions
+              align="right"
+              class="q-pt-none"
+              style="flex: 1; align-items: end"
+            >
+              <q-btn color="primary" @click="showModal({ ...items })" flat
+                >Ver más</q-btn
+              >
+            </q-card-actions>
+          </q-card>
+        </div>
+        <div v-for="items in data?.data" :key="items.id">
+          <q-card class="my-card column" style="height: 400px; width: 100%">
+            <img
+              style="
+                height: 120px;
+                width: 100%;
+                max-height: 200px;
+                object-fit: contain;
+              "
+              :src="
+                items.img_array_url[0]
+                  ? items.img_array_url[0]
+                  : 'https://cdn.quasar.dev/img/mountains.jpg'
+              "
+            />
+
+            <q-card-section class="q-px-xs">
+              <q-list>
+                <q-item
+                  clickable
+                  class="q-ma-none q-pa-none"
+                  style="padding: 1em"
+                >
+                  <q-item-section class="q-ma-none q-pa-none">
+                    <q-item-label>
+                      <p class="line-clamp-1">{{ items.nombre }}</p>
+                    </q-item-label>
+                    <q-item-label caption>
+                      {{ items.comercio.name }}
+                    </q-item-label>
+                  </q-item-section>
+                </q-item>
+                <q-item
+                  clickable
+                  class="q-ma-none q-pa-none"
+                  v-if="items.price_total > 0"
+                >
+                  <div class="q-mr-md q-ml-xs row items-center">
+                    <q-icon size="xs" color="red" name="sell" />
+                  </div>
+
+                  <q-item-section>
+                    <q-item-label v-if="items.price_total > 0"
+                      >{{ items.price_total }} $</q-item-label
+                    >
+                    <q-item-label v-if="items.descuento > 0" caption
+                      >Descuento{{ items.descuento }} %</q-item-label
+                    >
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </q-card-section>
+
+            <q-card-section class="q-pt-none q-pb-none">
+              <p class="line-clamp-4 q-mb-none">{{ items.description }}</p>
+            </q-card-section>
+            <q-card-actions
+              align="right"
+              class="q-pt-none"
+              style="flex: 1; align-items: end"
+            >
+              <q-btn color="primary" @click="showModal({ ...items })" flat
+                >Ver más</q-btn
+              >
+            </q-card-actions>
+          </q-card>
+        </div>
+        <div v-for="items in data?.data" :key="items.id">
+          <q-card class="my-card column" style="height: 400px; width: 100%">
+            <img
+              style="
+                height: 120px;
+                width: 100%;
+                max-height: 200px;
+                object-fit: contain;
+              "
+              :src="
+                items.img_array_url[0]
+                  ? items.img_array_url[0]
+                  : 'https://cdn.quasar.dev/img/mountains.jpg'
+              "
+            />
+
+            <q-card-section class="q-px-xs">
+              <q-list>
+                <q-item
+                  clickable
+                  class="q-ma-none q-pa-none"
+                  style="padding: 1em"
+                >
+                  <q-item-section class="q-ma-none q-pa-none">
+                    <q-item-label>
+                      <p class="line-clamp-1">{{ items.nombre }}</p>
+                    </q-item-label>
+                    <q-item-label caption>
+                      {{ items.comercio.name }}
+                    </q-item-label>
+                  </q-item-section>
+                </q-item>
+                <q-item
+                  clickable
+                  class="q-ma-none q-pa-none"
+                  v-if="items.price_total > 0"
+                >
+                  <div class="q-mr-md q-ml-xs row items-center">
+                    <q-icon size="xs" color="red" name="sell" />
+                  </div>
+
+                  <q-item-section>
+                    <q-item-label v-if="items.price_total > 0"
+                      >{{ items.price_total }} $</q-item-label
+                    >
+                    <q-item-label v-if="items.descuento > 0" caption
+                      >Descuento{{ items.descuento }} %</q-item-label
+                    >
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </q-card-section>
+
+            <q-card-section class="q-pt-none q-pb-none">
+              <p class="line-clamp-4 q-mb-none">{{ items.description }}</p>
+            </q-card-section>
+            <q-card-actions
+              align="right"
+              class="q-pt-none"
+              style="flex: 1; align-items: end"
+            >
+              <q-btn color="primary" @click="showModal({ ...items })" flat
+                >Ver más</q-btn
+              >
+            </q-card-actions>
+          </q-card>
+        </div>
+        <div v-for="items in data?.data" :key="items.id">
+          <q-card class="my-card column" style="height: 400px; width: 100%">
+            <img
+              style="
+                height: 120px;
+                width: 100%;
+                max-height: 200px;
+                object-fit: contain;
+              "
+              :src="
+                items.img_array_url[0]
+                  ? items.img_array_url[0]
+                  : 'https://cdn.quasar.dev/img/mountains.jpg'
+              "
+            />
+
+            <q-card-section class="q-px-xs">
+              <q-list>
+                <q-item
+                  clickable
+                  class="q-ma-none q-pa-none"
+                  style="padding: 1em"
+                >
+                  <q-item-section class="q-ma-none q-pa-none">
+                    <q-item-label>
+                      <p class="line-clamp-1">{{ items.nombre }}</p>
+                    </q-item-label>
+                    <q-item-label caption>
+                      {{ items.comercio.name }}
+                    </q-item-label>
+                  </q-item-section>
+                </q-item>
+                <q-item
+                  clickable
+                  class="q-ma-none q-pa-none"
+                  v-if="items.price_total > 0"
+                >
+                  <div class="q-mr-md q-ml-xs row items-center">
+                    <q-icon size="xs" color="red" name="sell" />
+                  </div>
+
+                  <q-item-section>
+                    <q-item-label v-if="items.price_total > 0"
+                      >{{ items.price_total }} $</q-item-label
+                    >
+                    <q-item-label v-if="items.descuento > 0" caption
+                      >Descuento{{ items.descuento }} %</q-item-label
+                    >
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </q-card-section>
+
+            <q-card-section class="q-pt-none q-pb-none">
+              <p class="line-clamp-4 q-mb-none">{{ items.description }}</p>
+            </q-card-section>
+            <q-card-actions
+              align="right"
+              class="q-pt-none"
+              style="flex: 1; align-items: end"
+            >
+              <q-btn color="primary" @click="showModal({ ...items })" flat
+                >Ver más</q-btn
+              >
+            </q-card-actions>
+          </q-card>
+        </div>
+      </template>
     </div>
     <div
       class="full-width full-height row wrap q-gutter-lg justify-center q-my-lg"
     >
       <q-pagination
+        v-if="!isLoading"
         style="margin-top: 1em"
         v-model="currentPaginate"
         :max="paginas"
@@ -135,63 +748,36 @@
 </template>
 
 <script setup>
-// importaciones
-import { ref, onMounted, watch } from "vue";
-import { instance } from "src/api/index.js";
-import { useToast } from "src/composables/useToast";
+import { ref, watchEffect } from "vue";
+import { useGetOffersFromBusiness } from "src/querys/offersQuerys";
 
 const currentPaginate = ref(1);
 const paginas = ref(0);
-const products = ref([]);
 const search = ref("");
-const loading = ref(false);
 const modalCurrent = ref({});
 const openModal = ref(false);
 
-const { triggerWarning } = useToast();
-
-// los observadores
-watch(currentPaginate, async (val) => {
-  await getProducts();
+const { data, isLoading, refetch } = useGetOffersFromBusiness({
+  search,
+  page: currentPaginate,
 });
-watch(search, async (val) => {
-  await getProducts();
+
+watchEffect(() => {
+  if (data.value) {
+    currentPaginate.value = data.value?.pagination.currentPage;
+    paginas.value = data.value?.pagination.lastPage;
+    console.log(data?.value?.pagination.currentPage, "pagination");
+  }
 });
 
 const showModal = (modalInfo) => {
   modalCurrent.value = { ...modalInfo };
   openModal.value = true;
-  console.log(modalCurrent.value, "modal");
 };
 
-async function getProducts() {
-  try {
-    loading.value = true;
-    const { data } = await instance.get(
-      "/comercio-ofertas?with[]=comercio&nombre=" +
-        search.value +
-        "&page=" +
-        currentPaginate.value
-    );
-    products.value = data.data;
-    paginas.value = data.pagination.lastPage;
-    currentPaginate.value = data.pagination.currentPage;
-  } catch (error) {
-    console.error(error);
-    const errorMessage =
-      error.code === "ERR_NETWORK"
-        ? "Verifique su conexión a internet e intente nuevamente"
-        : "Error desconocido";
-    triggerWarning(errorMessage);
-  } finally {
-    loading.value = false;
-  }
-}
-
-// eventos hooks
-onMounted(async () => {
-  await getProducts();
-});
+const handleSearch = () => {
+  refetch();
+};
 </script>
 
 <style>

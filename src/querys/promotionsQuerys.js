@@ -2,12 +2,12 @@ import getNews from "src/api/getNews";
 import { useQuery } from "@tanstack/vue-query";
 import { useToast } from "src/composables/useToast";
 
-export const useGetPromotions = (pagination) => {
+export const useGetPromotions = ({ search, pages }) => {
   const { triggerWarning } = useToast();
 
   const data = useQuery(
-    ["promotions", pagination.value.page, pagination.value.search],
-    () => getNews(pagination.value),
+    ["promotions", pages],
+    () => getNews({ search: search.value, pages: pages.value }),
     {
       onError: (error) => {
         console.log(error, "error");
