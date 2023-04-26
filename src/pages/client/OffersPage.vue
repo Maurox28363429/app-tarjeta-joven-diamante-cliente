@@ -766,7 +766,6 @@ watchEffect(() => {
   if (data.value) {
     currentPaginate.value = data.value?.pagination.currentPage;
     paginas.value = data.value?.pagination.lastPage;
-    console.log(data?.value?.pagination.currentPage, "pagination");
   }
 });
 

@@ -181,7 +181,7 @@
               </div>
               <q-item-section class="button">
                 <q-btn
-                  :loading="loading"
+                  :loading="isLoading"
                   type="submit"
                   color="primary"
                   label="Guardar"
@@ -196,17 +196,12 @@
 </template>
 <script setup>
 import { userAuth } from "src/composables/userAuth";
-import { ref } from "vue";
+import { ref, watchEffect } from "vue";
 import { useValidateForm } from "src/composables/useValidateForm";
 import { updateProfileShema } from "src/schemas/updateProfileShema";
-import updateUser from "src/api/updateUser";
 import localStorageAuth from "src/utils/localStorageAuth";
-import { useToast } from "src/composables/useToast";
 import profile from "../../assets/profile.png";
-
-const { triggerPositive, triggerWarning } = useToast();
-
-const loading = ref(false);
+import { useInvoiceOfferMutation } from "src/querys/userQuerys";
 
 const { user, updatedUser } = userAuth();
 
@@ -234,9 +229,16 @@ const INITIAL_VALUES = {
 const { useForm, validatInput, validateMessage, validateForm } =
   useValidateForm({ initialValue: INITIAL_VALUES, schema: updateProfileShema });
 
+const { isLoading, mutate, data } = useInvoiceOfferMutation();
+
+watchEffect(() => {
+  if (data.value) {
+    updatedUser();
+  }
+});
+
 const uploadImg = (event) => {
   const image = event.target.files[0];
-  console.log(image, "imagen desde upload");
 
   const fileReader = new FileReader();
   fileReader.onload = () => {
@@ -246,31 +248,21 @@ const uploadImg = (event) => {
   useForm.value.img = image;
 };
 
-const handledUpdateUser = async () => {
+const handledUpdateUser = () => {
   validateForm();
-  try {
-    loading.value = true;
-    const values = {
-      ...useForm.value,
-      role_id: user.value.role_id,
-      active: user.value.active,
-      id: user.value.id,
-      sex: useForm.value.sex.value,
-    };
-    await updateUser(values);
-    const userCurrent = localStorageAuth.getUser();
-    localStorageAuth.setUser({
-      user: { ...userCurrent.user, ...values },
-      token: userCurrent.token,
-    });
-    updatedUser();
-    triggerPositive("Usuario actualizado con éxito");
-  } catch (err) {
-    console.error(err);
-    triggerWarning("Ah ocurrido un error, intente nuevamente");
-  } finally {
-    loading.value = false;
-  }
+  const values = {
+    ...useForm.value,
+    role_id: user.value.role_id,
+    active: user.value.active,
+    id: user.value.id,
+    sex: useForm.value.sex.value,
+  };
+  mutate(values);
+  const userCurrent = localStorageAuth.getUser();
+  localStorageAuth.setUser({
+    user: { ...userCurrent.user, ...values },
+    token: userCurrent.token,
+  });
 };
 </script>
 

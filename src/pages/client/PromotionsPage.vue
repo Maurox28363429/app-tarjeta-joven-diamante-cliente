@@ -144,7 +144,6 @@ watchEffect(() => {
 });
 
 const handleSearch = () => {
-  console.log("search");
   refetch();
 };
 </script>

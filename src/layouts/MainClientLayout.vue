@@ -287,7 +287,6 @@ import QrUser from "../components/QrUser.vue";
 const { user } = userAuth();
 
 const goHome = () => {
-  console.log("goHome");
   router.push("/empresa");
 };
 
