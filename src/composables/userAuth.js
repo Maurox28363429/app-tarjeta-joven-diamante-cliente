@@ -49,7 +49,8 @@ export const userAuth = () => {
     dni,
     beneficiario_poliza_cedula,
     beneficiario_poliza_name,
-    fecha_nacimiento
+    fecha_nacimiento,
+    vendedor
   }) => {
     try {
       isLoadingRegister.value = true
@@ -64,7 +65,8 @@ export const userAuth = () => {
         dni,
         beneficiario_poliza_cedula,
         beneficiario_poliza_name,
-        fecha_nacimiento
+        fecha_nacimiento,
+        vendedor
       })
       triggerPositive('Usuario registrado con éxito')
     } catch (err) {

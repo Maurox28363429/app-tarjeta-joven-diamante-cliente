@@ -49,7 +49,7 @@ const updateValue = (key, value) => {
 }
 
 const filterFn = (val, update) => {
-  if (val.length < 2) {
+  if (val.length < 1) {
     return
   }
   if (val !== '') {
