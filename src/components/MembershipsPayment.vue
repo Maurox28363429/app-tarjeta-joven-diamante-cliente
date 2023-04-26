@@ -1,7 +1,8 @@
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { userAuth } from "../composables/userAuth.js";
+import { instance } from "src/api/index.js";
 const val = ref(false);
 const textError = ref(false);
 const { user, addMembership, isLoadingMembership } = userAuth();
@@ -36,6 +37,7 @@ const handledFreePayment = () => {
 const HandlePayment = () => {
   const userId = user.value?.id || "";
   const url = `https://api.tarjetajovendiamante.com/pago/Payment_Controller.php?orderId=${userId}`;
+  localStorage.removeItem("user");
   if (typeof cordova !== "undefined") {
     const target = "_blank"; // Usa '_blank' para abrir en el navegador incorporado
     const options = "location=no,zoom=no,toolbar=no,";
@@ -67,6 +69,19 @@ const HandlePayment = () => {
   }
 };
 const isFree = Boolean(props.name === "free") || props.price === 0;
+
+onMounted(async () => {
+  const prueba = await instance.get(
+    "user/" + user.value?.id + "?includes[]=membresia"
+  );
+  if (
+    prueba.data.membresia.type === "Comprada" ||
+    prueba.data.membresia.type === "Prueba"
+  ) {
+    router.push("clientes");
+    console.log(prueba);
+  }
+});
 </script>
 
 <template>

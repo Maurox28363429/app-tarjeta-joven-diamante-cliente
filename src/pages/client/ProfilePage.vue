@@ -89,7 +89,7 @@
                     hidden
                     type="file"
                     accept="image/png, image/jpeg"
-                    name="avatar"
+                    name="img"
                   />
                 </label>
               </div>
@@ -104,6 +104,7 @@
                     v-model="useForm.name"
                     @blur="validatInput('name')"
                     @keypress="validatInput('name')"
+                    name="name"
                   />
                 </label>
                 <p class="error" v-if="!!validateMessage.errors.name">
@@ -121,6 +122,23 @@
                     placeholder="Apellido"
                     @blur="validatInput('last_name')"
                     @keypress="validatInput('last_name')"
+                    name="last_name"
+                  />
+                </label>
+                <p class="error" v-if="!!validateMessage.errors.last_name">
+                  {{ validateMessage.errors.last_name }}
+                </p>
+              </div>
+              <div class="full-width input">
+                <label class="label-large">
+                  Fecha de nacimiento
+                  <q-input
+                    lazy-rules
+                    type="date"
+                    v-model="useForm.fecha_nacimiento"
+                    outlined
+                    placeholder="Fecha de nacimiento"
+                    name="fecha_nacimiento"
                   />
                 </label>
                 <p class="error" v-if="!!validateMessage.errors.last_name">
@@ -138,6 +156,7 @@
                     placeholder="example@gmail.com"
                     @blur="validatInput('email')"
                     @keypress="validatInput('email')"
+                    name="email"
                   />
                 </label>
                 <p class="error" v-if="!!validateMessage.errors.email">
@@ -155,6 +174,7 @@
                     placeholder="0414767997"
                     @blur="validatInput('phone')"
                     @keypress="validatInput('phone')"
+                    name="phone"
                   />
                 </label>
                 <p class="error" v-if="!!validateMessage.errors.phone">
@@ -170,6 +190,7 @@
                     type="text"
                     outlined
                     placeholder=""
+                    name="address"
                   />
                 </label>
               </div>
@@ -182,11 +203,53 @@
                     v-model="useForm.sex"
                     class="full-width q-ma-none"
                     :options="GENDER_OPTIONS"
+                    name="sex"
                   />
                 </label>
                 <p class="error" v-if="!!validateMessage.errors.sex">
                   {{ validateMessage.errors.sex }}
                 </p>
+              </div>
+
+              <div class="q-ma-none full-width input">
+                <label class="label-large">
+                  DNI
+                  <q-input
+                    v-model="useForm.dni"
+                    lazy-rules
+                    type="text"
+                    outlined
+                    placeholder=""
+                    name="dni"
+                  />
+                </label>
+              </div>
+
+              <div class="q-ma-none full-width input">
+                <label class="label-large">
+                  Poliza Beneficiario: DNI
+                  <q-input
+                    v-model="useForm.beneficiario_poliza_cedula"
+                    lazy-rules
+                    type="text"
+                    outlined
+                    placeholder=""
+                    name="beneficiario_poliza_cedula"
+                  />
+                </label>
+              </div>
+              <div class="q-ma-none full-width input">
+                <label class="label-large">
+                  Poliza Beneficiario: Nombre
+                  <q-input
+                    v-model="useForm.beneficiario_poliza_name"
+                    lazy-rules
+                    type="text"
+                    outlined
+                    placeholder=""
+                    name="beneficiario_poliza_name"
+                  />
+                </label>
               </div>
               <q-item-section class="button">
                 <q-btn
@@ -210,7 +273,7 @@ import { useValidateForm } from "src/composables/useValidateForm";
 import { updateProfileShema } from "src/schemas/updateProfileShema";
 import localStorageAuth from "src/utils/localStorageAuth";
 import profile from "../../assets/profile.png";
-import { useInvoiceOfferMutation } from "src/querys/userQuerys";
+import { useUpdateUserMutation } from "src/querys/userQuerys";
 
 const { user: userStore, updatedUser } = userAuth();
 const user = ref(localStorageAuth.getUser().user);
@@ -241,23 +304,22 @@ const INITIAL_VALUES = {
   phone: user.value.phone,
   sex: genderCurrent,
   address: user.value.address,
-  img: user.value.img || profile,
+  img: file.value,
+  dni: user.value.dni || "",
+  beneficiario_poliza_cedula: user.value.beneficiario_poliza_cedula || "",
+  beneficiario_poliza_name: user.value.beneficiario_poliza_name || "",
+  fecha_nacimiento: user.value.fecha_nacimiento || "",
 };
 
 const { useForm, validatInput, validateMessage, validateForm } =
   useValidateForm({ initialValue: INITIAL_VALUES, schema: updateProfileShema });
 
-const { isLoading, mutate, data } = useInvoiceOfferMutation();
+const { isLoading, mutate, data } = useUpdateUserMutation();
 
 const uploadImg = (event) => {
   const image = event.target.files[0];
-
-  const fileReader = new FileReader();
-  fileReader.onload = () => {
-    file.value = fileReader.result;
-  };
-  fileReader.readAsDataURL(image);
   useForm.value.img = image;
+  file.value = URL.createObjectURL(image);
 };
 
 watchEffect(() => {
@@ -275,7 +337,8 @@ const handledUpdateUser = () => {
     id: user.value.id,
     sex: useForm.value.sex.value,
   };
-  mutate(values);
+
+  mutate({ data: values, id: user.value.id });
   const userCurrent = localStorageAuth.getUser();
   localStorageAuth.setUser({
     user: { ...userCurrent.user, ...values },

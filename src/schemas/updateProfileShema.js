@@ -10,4 +10,8 @@ export const updateProfileShema = object({
   phone: string().required(REQUIRED_MESSAGE),
   sex: string(),
   address: string(),
+  dni: string(),
+  beneficiario_poliza_cedula: string(),
+  beneficiario_poliza_name: string(),
+  fecha_nacimiento: string(),
 });

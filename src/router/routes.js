@@ -40,8 +40,29 @@ const routes = [
             component: () => import("src/pages/client/OffersPage.vue"),
           },
           {
+            path: "pachama",
+            component: () => import("pages/client/PachamaPage.vue"),
+          },
+          {
+            path: "contact",
+            component: () => import("pages/client/ContactPage.vue"),
+          },
+          {
+            path: "memberships-type",
+            component: () => import("pages/client/MembershipsTypePage.vue"),
+          },
+          {
+            name: "products",
+            path: "products",
+            component: () => import("pages/client/ProductsPage.vue"),
+          },
+          {
             path: "",
-            component: () => import("src/pages/client/OffersPage.vue"),
+            component: () => import("pages/client/HomePage.vue"),
+          },
+          {
+            path: "home",
+            component: () => import("pages/client/HomePage.vue"),
           },
           {
             path: "account",
@@ -60,11 +81,6 @@ const routes = [
             name: "transactionsTable",
             path: "transactionsTable",
             component: () => import("src/pages/client/ClientTransactions.vue"),
-          },
-          {
-            name: "store",
-            path: "store",
-            component: () => import("pages/client/StorePage.vue"),
           },
           {
             name: "news",

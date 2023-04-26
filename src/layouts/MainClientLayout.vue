@@ -85,6 +85,12 @@
             </q-item-section>
           </q-item>
           <q-separator inset v-show="!miniState" />
+          <q-item clickable v-ripple to="/cliente/home">
+            <q-item-section avatar>
+              <q-icon name="home" />
+            </q-item-section>
+            <q-item-section>Home</q-item-section>
+          </q-item>
           <q-item clickable v-ripple to="/cliente/transactionsTable">
             <q-item-section avatar>
               <q-icon name="shopping_basket" />
@@ -191,7 +197,19 @@
       narrow-indicator
     >
       <router-link
-        to="/cliente/transactionsTable"
+        to="/cliente/home"
+        style="text-decoration: none; color: #ffff; width: 100%; margin: none"
+      >
+        <q-tab
+          name="home"
+          label="Home"
+          color="white"
+          class="text-capitalize q-px-none"
+          icon="home"
+        />
+      </router-link>
+      <router-link
+        to="/cliente/shopping"
         style="text-decoration: none; color: #ffff; width: 100%; margin: none"
       >
         <q-tab
@@ -235,12 +253,40 @@
       :showModal="showModalRenovar()"
       description="Renueva el plan, y recibe ofertas especiales"
     />
+    <q-img
+      src="../assets/triangulo.png"
+      spinner-color="dark"
+      style="
+        height: 150px;
+        max-width: 200px;
+        position: fixed;
+        top: 84px;
+        right: -49px;
+        z-index: 100;
+        transform: rotate(90deg);
+      "
+    />
+    <q-img
+      src="../assets/triangulo.png"
+      class="trianguloBottom"
+      spinner-color="dark"
+    />
   </q-layout>
 </template>
 
 <style>
 aside {
   position: fixed !important;
+}
+
+.trianguloBottom {
+  height: 150px;
+  max-width: 200px;
+  position: fixed;
+  bottom: 0px;
+  left: 26px;
+  z-index: 98;
+  transform: rotate(-0.25turn);
 }
 
 .logoutButton {
@@ -269,6 +315,11 @@ aside {
   }
   .menuMobile {
     display: block;
+  }
+
+  .trianguloBottom {
+    bottom: 80px;
+    left: -49px;
   }
   .qrButton {
     bottom: 64px;

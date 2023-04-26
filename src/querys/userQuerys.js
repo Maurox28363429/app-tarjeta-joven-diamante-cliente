@@ -6,7 +6,7 @@ import changePassword from "src/api/changePassword";
 import { useToast } from "src/composables/useToast";
 import { useRouter } from "vue-router";
 
-export const useInvoiceOfferMutation = () => {
+export const useUpdateUserMutation = () => {
   const { triggerPositive, triggerWarning } = useToast();
 
   const queryClient = useQueryClient();

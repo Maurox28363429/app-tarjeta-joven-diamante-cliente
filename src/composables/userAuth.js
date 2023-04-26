@@ -46,6 +46,11 @@ export const userAuth = () => {
     sex,
     password,
     role_id,
+    dni,
+    beneficiario_poliza_cedula,
+    beneficiario_poliza_name,
+    fecha_nacimiento,
+    vendedor,
   }) => {
     try {
       isLoadingRegister.value = true;
@@ -57,6 +62,11 @@ export const userAuth = () => {
         sex,
         password,
         role_id,
+        dni,
+        beneficiario_poliza_cedula,
+        beneficiario_poliza_name,
+        fecha_nacimiento,
+        vendedor,
       });
       triggerPositive("Usuario registrado con éxito");
     } catch (err) {

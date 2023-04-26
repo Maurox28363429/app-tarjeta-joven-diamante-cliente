@@ -10,6 +10,11 @@ const { loading, memberships } = useMemberships();
 const goBack = () => {
   router.go(-1);
 };
+
+const salir = () => {
+  localStorage.removeItem("user");
+  router.push("login");
+};
 </script>
 
 <template>
@@ -23,6 +28,14 @@ const goBack = () => {
         color="white"
         class="cursor-pointer"
       />
+    </div>
+    <div
+      @click="salir"
+      class="back-button"
+      style="margin-left: 4em; cursor: pointer"
+    >
+      <q-icon name="logout" size="md" color="white" class="cursor-pointer" />
+      <span style="font-size: 1em; color: white">Salir</span>
     </div>
 
     <div class="width-full column justify-center membershipsContainer">

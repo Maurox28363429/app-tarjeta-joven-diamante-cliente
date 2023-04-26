@@ -10,4 +10,5 @@ export const registerSchema = object({
   phone: string().required(REQUIRED_MESSAGE),
   password: string().required(REQUIRED_MESSAGE),
   sex: string(),
+  vendedor: string(),
 });
