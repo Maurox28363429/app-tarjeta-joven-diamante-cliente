@@ -38,10 +38,10 @@
 </template>
 
 <script setup>
-import whatsappIcon from "../../assets/whatsappIcon.png";
+import whatsappIcon from '../../assets/whatsappIcon.png'
 </script>
 
-<style>
+<style scoped>
 .my-card {
   display: flex;
   flex-direction: column;

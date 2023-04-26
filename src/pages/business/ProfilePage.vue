@@ -195,31 +195,31 @@
   </div>
 </template>
 <script setup>
-import { userAuth } from "src/composables/userAuth";
-import { ref } from "vue";
-import { useValidateForm } from "src/composables/useValidateForm";
-import { updateProfileShema } from "src/schemas/updateProfileShema";
-import updateUser from "src/api/updateUser";
-import localStorageAuth from "src/utils/localStorageAuth";
-import { useToast } from "src/composables/useToast";
-import profile from "../../assets/profile.png";
+import { userAuth } from 'src/composables/userAuth'
+import { ref } from 'vue'
+import { useValidateForm } from 'src/composables/useValidateForm'
+import { updateProfileShema } from 'src/schemas/updateProfileShema'
+import updateUser from 'src/api/updateUser'
+import localStorageAuth from 'src/utils/localStorageAuth'
+import { useToast } from 'src/composables/useToast'
+import profile from '../../assets/profile.png'
 
-const { triggerPositive, triggerWarning } = useToast();
+const { triggerPositive, triggerWarning } = useToast()
 
-const loading = ref(false);
+const loading = ref(false)
 
-const { user, updatedUser } = userAuth();
+const { user, updatedUser } = userAuth()
 
 const GENDER_OPTIONS = [
-  { label: "Mujer", value: 0 },
-  { label: "Hombre", value: 1 },
-];
+  { label: 'Mujer', value: 0 },
+  { label: 'Hombre', value: 1 }
+]
 
 const genderCurrent = GENDER_OPTIONS.find((item) => {
-  return item.value === user.value.sex;
-});
+  return item.value === user.value.sex
+})
 
-const file = ref(profile);
+const file = ref(profile)
 
 const INITIAL_VALUES = {
   name: user.value.name,
@@ -228,50 +228,50 @@ const INITIAL_VALUES = {
   phone: user.value.phone,
   sex: genderCurrent,
   address: user.value.address,
-  img: user.value.img || profile,
-};
+  img: user.value.img || profile
+}
 
 const { useForm, validatInput, validateMessage, validateForm } =
-  useValidateForm({ initialValue: INITIAL_VALUES, schema: updateProfileShema });
+  useValidateForm({ initialValue: INITIAL_VALUES, schema: updateProfileShema })
 
 const uploadImg = (event) => {
-  const image = event.target.files[0];
-  console.log(image, "imagen desde upload");
+  const image = event.target.files[0]
+  console.log(image, 'imagen desde upload')
 
-  const fileReader = new FileReader();
+  const fileReader = new FileReader()
   fileReader.onload = () => {
-    file.value = fileReader.result;
-  };
-  fileReader.readAsDataURL(image);
-  useForm.value.img = image;
-};
+    file.value = fileReader.result
+  }
+  fileReader.readAsDataURL(image)
+  useForm.value.img = image
+}
 
 const handledUpdateUser = async () => {
-  validateForm();
+  validateForm()
   try {
-    loading.value = true;
+    loading.value = true
     const values = {
       ...useForm.value,
       role_id: user.value.role_id,
       active: user.value.active,
       id: user.value.id,
-      sex: useForm.value.sex.value,
-    };
-    await updateUser(values);
-    const userCurrent = localStorageAuth.getUser();
+      sex: useForm.value.sex.value
+    }
+    await updateUser(values)
+    const userCurrent = localStorageAuth.getUser()
     localStorageAuth.setUser({
       user: { ...userCurrent.user, ...values },
-      token: userCurrent.token,
-    });
-    updatedUser();
-    triggerPositive("Usuario actualizado con éxito");
+      token: userCurrent.token
+    })
+    updatedUser()
+    triggerPositive('Usuario actualizado con éxito')
   } catch (err) {
-    console.error(err);
-    triggerWarning("Ah ocurrido un error, intente nuevamente");
+    console.error(err)
+    triggerWarning('Ah ocurrido un error, intente nuevamente')
   } finally {
-    loading.value = false;
+    loading.value = false
   }
-};
+}
 </script>
 
 <style scoped>

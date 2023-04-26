@@ -64,7 +64,7 @@
         </q-item>
       </q-list>
       <q-list bordered padding separator class="editContainer rounded-borders">
-        <form @submit.prevent="handledUpdateUser">
+        <form @submit.prevent="handledUpdateUser" id="formUpdateProfile">
           <q-item>
             <q-item-section>
               <q-item-label class="title-medium">Editar</q-item-label>
@@ -89,7 +89,7 @@
                     hidden
                     type="file"
                     accept="image/png, image/jpeg"
-                    name="avatar"
+                    name="img"
                   />
                 </label>
               </div>
@@ -104,6 +104,7 @@
                     v-model="useForm.name"
                     @blur="validatInput('name')"
                     @keypress="validatInput('name')"
+                    name="name"
                   />
                 </label>
                 <p class="error" v-if="!!validateMessage.errors.name">
@@ -121,6 +122,23 @@
                     placeholder="Apellido"
                     @blur="validatInput('last_name')"
                     @keypress="validatInput('last_name')"
+                    name="last_name"
+                  />
+                </label>
+                <p class="error" v-if="!!validateMessage.errors.last_name">
+                  {{ validateMessage.errors.last_name }}
+                </p>
+              </div>
+              <div class="full-width input">
+                <label class="label-large">
+                  Fecha de nacimiento
+                  <q-input
+                    lazy-rules
+                    type="date"
+                    v-model="useForm.fecha_nacimiento"
+                    outlined
+                    placeholder="Fecha de nacimiento"
+                    name="fecha_nacimiento"
                   />
                 </label>
                 <p class="error" v-if="!!validateMessage.errors.last_name">
@@ -138,6 +156,7 @@
                     placeholder="example@gmail.com"
                     @blur="validatInput('email')"
                     @keypress="validatInput('email')"
+                    name="email"
                   />
                 </label>
                 <p class="error" v-if="!!validateMessage.errors.email">
@@ -155,6 +174,7 @@
                     placeholder="0414767997"
                     @blur="validatInput('phone')"
                     @keypress="validatInput('phone')"
+                    name="phone"
                   />
                 </label>
                 <p class="error" v-if="!!validateMessage.errors.phone">
@@ -170,6 +190,7 @@
                     type="text"
                     outlined
                     placeholder=""
+                    name="address"
                   />
                 </label>
               </div>
@@ -182,11 +203,53 @@
                     v-model="useForm.sex"
                     class="full-width q-ma-none"
                     :options="GENDER_OPTIONS"
+                    name="sex"
                   />
                 </label>
                 <p class="error" v-if="!!validateMessage.errors.sex">
                   {{ validateMessage.errors.sex }}
                 </p>
+              </div>
+
+              <div class="q-ma-none full-width input">
+                <label class="label-large">
+                  DNI
+                  <q-input
+                    v-model="useForm.dni"
+                    lazy-rules
+                    type="text"
+                    outlined
+                    placeholder=""
+                    name="dni"
+                  />
+                </label>
+              </div>
+
+              <div class="q-ma-none full-width input">
+                <label class="label-large">
+                  Poliza Beneficiario: DNI
+                  <q-input
+                    v-model="useForm.beneficiario_poliza_cedula"
+                    lazy-rules
+                    type="text"
+                    outlined
+                    placeholder=""
+                    name="beneficiario_poliza_cedula"
+                  />
+                </label>
+              </div>
+              <div class="q-ma-none full-width input">
+                <label class="label-large">
+                  Poliza Beneficiario: Nombre
+                  <q-input
+                    v-model="useForm.beneficiario_poliza_name"
+                    lazy-rules
+                    type="text"
+                    outlined
+                    placeholder=""
+                    name="beneficiario_poliza_name"
+                  />
+                </label>
               </div>
               <q-item-section class="button">
                 <q-btn
@@ -204,40 +267,40 @@
   </div>
 </template>
 <script setup>
-import { userAuth } from "src/composables/userAuth";
-import { ref, watch } from "vue";
-import { useValidateForm } from "src/composables/useValidateForm";
-import { updateProfileShema } from "src/schemas/updateProfileShema";
-import updateUser from "src/api/updateUser";
-import localStorageAuth from "src/utils/localStorageAuth";
-import { useToast } from "src/composables/useToast";
-import profile from "../../assets/profile.png";
+import { userAuth } from 'src/composables/userAuth'
+import { ref, watch } from 'vue'
+import { useValidateForm } from 'src/composables/useValidateForm'
+import { updateProfileShema } from 'src/schemas/updateProfileShema'
+import updateUser from 'src/api/updateUser'
+import localStorageAuth from 'src/utils/localStorageAuth'
+import { useToast } from 'src/composables/useToast'
+import profile from '../../assets/profile.png'
 
-const { triggerPositive, triggerWarning } = useToast();
+const { triggerPositive, triggerWarning } = useToast()
 
-const loading = ref(false);
+const loading = ref(false)
 
-const { user: userStore, updatedUser } = userAuth();
-const user = ref(localStorageAuth.getUser().user);
+const { user: userStore, updatedUser } = userAuth()
+const user = ref(localStorageAuth.getUser().user)
 
 watch(
   userStore,
   () => {
-    user.value = userStore.value;
+    user.value = userStore.value
   },
   { immediate: true }
-);
+)
 
 const GENDER_OPTIONS = [
-  { label: "Mujer", value: 0 },
-  { label: "Hombre", value: 1 },
-];
+  { label: 'Mujer', value: 0 },
+  { label: 'Hombre', value: 1 }
+]
 
 const genderCurrent = GENDER_OPTIONS.find((item) => {
-  return item.value === user.value.sex;
-});
+  return item.value === user.value.sex
+})
 
-const file = ref(profile);
+const file = ref(profile)
 
 const INITIAL_VALUES = {
   name: user.value.name,
@@ -247,52 +310,63 @@ const INITIAL_VALUES = {
   sex: genderCurrent,
   address: user.value.address,
   img: user.value.img || profile,
-};
+  dni: user.value.dni || '',
+  beneficiario_poliza_cedula: user.value.beneficiario_poliza_cedula || '',
+  beneficiario_poliza_name: user.value.beneficiario_poliza_name || '',
+  fecha_nacimiento: user.value.fecha_nacimiento || ''
+}
 
 const { useForm, validatInput, validateMessage, validateForm } =
-  useValidateForm({ initialValue: INITIAL_VALUES, schema: updateProfileShema });
+  useValidateForm({ initialValue: INITIAL_VALUES, schema: updateProfileShema })
 
-console.log(useForm.value.img, "image");
+console.log(useForm.value.img, 'image')
 
 const uploadImg = (event) => {
-  const image = event.target.files[0];
-  console.log(image, "imagen desde upload");
+  const image = event.target.files[0]
+  console.log(image, 'imagen desde upload')
 
-  const fileReader = new FileReader();
+  const fileReader = new FileReader()
   fileReader.onload = () => {
-    file.value = fileReader.result;
-  };
-  fileReader.readAsDataURL(image);
-  useForm.value.img = image;
-};
+    file.value = fileReader.result
+  }
+  fileReader.readAsDataURL(image)
+  useForm.value.img = image
+}
 
 const handledUpdateUser = async () => {
-  validateForm();
-  console.log(user.value, "user");
+  validateForm()
+  console.log(user.value, 'user')
   try {
-    loading.value = true;
+    loading.value = true
     const values = {
       ...useForm.value,
       role_id: user.value.role_id,
       active: user.value.active,
       id: user.value.id,
       sex: useForm.value.sex.value,
-    };
-    await updateUser(values);
-    const userCurrent = localStorageAuth.getUser();
+      dni: useForm.value.dni,
+      beneficiario_poliza_cedula: useForm.value.beneficiario_poliza_cedula,
+      beneficiario_poliza_name: useForm.value.beneficiario_poliza_name,
+      fecha_nacimiento: useForm.value.fecha_nacimiento
+    }
+    const send_data = new FormData(
+      document.getElementById('formUpdateProfile')
+    )
+    await updateUser(values.id, send_data)
+    const userCurrent = localStorageAuth.getUser()
     localStorageAuth.setUser({
       user: { ...userCurrent.user, ...values },
-      token: userCurrent.token,
-    });
-    updatedUser();
-    triggerPositive("Usuario actualizado con éxito");
+      token: userCurrent.token
+    })
+    updatedUser()
+    triggerPositive('Usuario actualizado con éxito')
   } catch (err) {
-    console.error(err);
-    triggerWarning("Ah ocurrido un error, intente nuevamente");
+    console.error(err)
+    triggerWarning('Ah ocurrido un error, intente nuevamente')
   } finally {
-    loading.value = false;
+    loading.value = false
   }
-};
+}
 </script>
 
 <style scoped>
