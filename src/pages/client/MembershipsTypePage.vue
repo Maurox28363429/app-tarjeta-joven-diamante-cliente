@@ -6,27 +6,21 @@
         spinner-color="white"
         style="height: 80px; max-width: 80px"
       />
+
       <p class="title-large" v-if="isMembershipsActive">
         Membresia de tipo {{ user.membresia.type }} activa
-      </p>
-      <p class="title-large" v-else-if="!isMembershipsActive">
-        Membresia Vencida
-        <section>
-          <br><br>
-          <q-btn to="/memberships" color="primary" label="Renovar membresia"></q-btn>
-        </section>
       </p>
     </div>
   </div>
 </template>
 
 <script setup>
-import { userAuth } from 'src/composables/userAuth'
-import { computed } from 'vue'
+import { userAuth } from "src/composables/userAuth";
+import { computed } from "vue";
 
-const { user } = userAuth()
+const { user } = userAuth();
 
 const isMembershipsActive = computed(() => {
-  return !user.value.membresia.status === 'vencida'
-})
+  return !user.value.membresia.status === "vencida";
+});
 </script>
