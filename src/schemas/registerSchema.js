@@ -9,5 +9,6 @@ export const registerSchema = object({
   last_name: string().required(REQUIRED_MESSAGE),
   phone: string().required(REQUIRED_MESSAGE),
   password: string().required(REQUIRED_MESSAGE),
-  sex: string()
+  sex: string(),
+  vendedor: string()
 })

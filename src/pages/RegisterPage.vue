@@ -4,6 +4,7 @@ import { ref, computed } from 'vue'
 import StepOne from '../components/RegisterInputs/StepOne.vue'
 import StepTwo from '../components/RegisterInputs/StepTwo.vue'
 import StepThree from '../components/RegisterInputs/StepThree.vue'
+import StepFour from '../components/RegisterInputs/StepFour.vue'
 
 import { userAuth } from 'src/composables/userAuth'
 import { useValidateForm } from 'src/composables/useValidateForm'
@@ -18,10 +19,11 @@ const INITIAL_VALUES = {
   last_name: '',
   phone: '',
   sex: GENDER_OPTIONS[0],
-  password: ''
+  password: '',
+  vendedor: ''
 }
 
-const lastStep = 3
+const lastStep = 4
 const currentForm = ref(1)
 
 const nextStep = () => currentForm.value++
@@ -35,6 +37,7 @@ const { useForm, validatInput, validateMessage, validateForm } =
 
 const onSubmit = async (e) => {
   validateForm()
+  console.log(useForm.value)
   const roleIdClient = 3
   register({ ...useForm.value, role_id: roleIdClient })
 }
@@ -88,6 +91,14 @@ const updateForm = ({ key, value }) => {
           </div>
           <div v-show="currentForm === 3" class="full-width">
             <StepThree
+              @update:modelValue="updateForm($event)"
+              :validateMessage="validateMessage"
+              :validatInput="validatInput"
+              :useForm="useForm"
+            />
+          </div>
+          <div v-show="currentForm ===4" class="full-width">
+            <StepFour
               @update:modelValue="updateForm($event)"
               :validateMessage="validateMessage"
               :validatInput="validatInput"

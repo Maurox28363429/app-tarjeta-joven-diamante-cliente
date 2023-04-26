@@ -28,7 +28,7 @@ export const useAuthStore = defineStore('userAuth', {
 
       this.router.push({ path: `/${ROLE_ID[this.user.role_id]}` })
     },
-    async register ({ name, email, last_name, phone, sex, password, role_id }) {
+    async register ({ name, email, last_name, phone, sex, password, role_id, vendedor }) {
       const { data } = await registerUser({
         name,
         email,
@@ -36,7 +36,8 @@ export const useAuthStore = defineStore('userAuth', {
         phone,
         sex,
         password,
-        role_id
+        role_id,
+        vendedor
       })
       this.user = data.user
       this.token = data.token
