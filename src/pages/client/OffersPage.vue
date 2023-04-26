@@ -25,6 +25,10 @@
       </q-form>
     </div>
     <div class="full-width full-height product-grid">
+      <q-inner-loading :showing="isFetching && !isLoading" class="innerLoading">
+        <q-spinner-gears size="50px" color="primary" class="loading" />
+      </q-inner-loading>
+
       <template v-if="isLoading">
         <div v-for="index in 20" :key="index" class="skeleton-card">
           <q-card class="my-card" style="height: 340px; width: 100%">
@@ -757,7 +761,7 @@ const search = ref("");
 const modalCurrent = ref({});
 const openModal = ref(false);
 
-const { data, isLoading, refetch } = useGetOffersFromBusiness({
+const { data, isLoading, refetch, isFetching } = useGetOffersFromBusiness({
   search,
   page: currentPaginate,
 });
@@ -780,6 +784,19 @@ const handleSearch = () => {
 </script>
 
 <style>
+.innerLoading {
+  z-index: 40;
+}
+
+.loading {
+  top: 318px !important;
+  left: 0;
+  right: 0;
+  bottom: unset !important;
+  position: absolute;
+  width: 100%;
+}
+
 .line-clamp-4 {
   display: -webkit-box;
   -webkit-line-clamp: 3;

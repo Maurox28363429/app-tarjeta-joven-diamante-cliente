@@ -14,6 +14,7 @@
           color="primary"
         >
           <q-btn
+            type="submit"
             size="md"
             style="right: -12px; bottom: 0; top: 0"
             color="primary"
@@ -28,6 +29,11 @@
     <!-- Cuadrícula de noticias -->
     <div class="news-grid">
       <!-- Si se están cargando las noticias, muestra los esqueletos -->
+
+      <q-inner-loading :showing="isFetching && !isLoading" class="innerLoading">
+        <q-spinner-gears size="50px" color="primary" class="loading" />
+      </q-inner-loading>
+
       <template v-if="isLoading">
         <div v-for="index in 20" :key="index" class="skeleton-card">
           <q-card flat>
@@ -130,6 +136,7 @@ const {
   data: promotionsData,
   isLoading,
   refetch,
+  isFetching,
 } = useGetPromotions({ search, pages });
 
 const showModal = (modalInfo) => {
@@ -150,6 +157,18 @@ const handleSearch = () => {
 <style>
 .promotions {
   padding: 0 24px;
+}
+.loading {
+  top: 318px !important;
+  left: 0;
+  right: 0;
+  bottom: unset !important;
+  position: absolute;
+  width: 100%;
+}
+
+.innerLoading {
+  z-index: 20;
 }
 
 .title-large {
