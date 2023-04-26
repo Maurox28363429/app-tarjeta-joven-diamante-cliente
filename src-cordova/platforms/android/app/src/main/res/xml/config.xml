@@ -18,11 +18,11 @@
     <author email="dev@cordova.apache.org" href="https://cordova.apache.org">
         Apache Cordova Team
     </author>
-    <content src="http://192.168.1.7:9400" />
+    <content src="http://192.168.1.101:9400" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-navigation href="about:*" />
-    <allow-navigation href="http://192.168.1.7:9400" />
+    <allow-navigation href="http://192.168.1.101:9400" />
     <icon density="ldpi" src="res/android/ldpi.png" />
     <icon density="mdpi" src="res/android/mdpi.png" />
     <icon density="hdpi" src="res/android/hdpi.png" />
