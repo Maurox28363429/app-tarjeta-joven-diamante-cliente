@@ -17,8 +17,8 @@
 </template>
 
 <script setup>
-import HomeCard from 'src/components/HomeCard.vue'
-import { HOME_CARD_LIST } from 'src/shared/constansts/homeCardList'
+import HomeCard from "src/components/HomeCard.vue";
+import { HOME_CARD_LIST } from "src/shared/constansts/homeCardList";
 </script>
 
 <style>

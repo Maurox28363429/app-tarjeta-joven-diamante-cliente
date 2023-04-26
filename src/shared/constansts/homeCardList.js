@@ -1,73 +1,73 @@
-import offersIcon from '../../assets/offersIcon.png'
-import messageIcon from '../../assets/messageIcon.png'
-import VIPIcon from '../../assets/VIPIcon.png'
-import speakerIcon from '../../assets/speakerIcon.png'
-import bagIcon from '../../assets/bagIcon.png'
-import giftIcon from '../../assets/giftIcon.png'
-import pachama from '../../assets/GifPachama.gif'
-import universityIcon from '../../assets/universityIcon.png'
-import helpIcon from '../../assets/heartIcon.png'
-import newsIcon from '../../assets/newsIcon.png'
+import offersIcon from "../../assets/offersIcon.png";
+import messageIcon from "../../assets/messageIcon.png";
+import VIPIcon from "../../assets/VIPIcon.png";
+import speakerIcon from "../../assets/speakerIcon.png";
+import bagIcon from "../../assets/bagIcon.png";
+import giftIcon from "../../assets/giftIcon.png";
+import pachama from "../../assets/GifPachama.gif";
+import universityIcon from "../../assets/universityIcon.png";
+import helpIcon from "../../assets/heartIcon.png";
+import newsIcon from "../../assets/newsIcon.png";
 
 export const HOME_CARD_LIST = [
   {
     id: 1,
-    title: 'Contactanos',
+    title: "Contactanos",
     icon: messageIcon,
-    link: '/cliente/contact'
+    link: "/cliente/contact",
   },
   {
     id: 2,
-    title: 'Membrersias',
+    title: "Membrersias",
     icon: VIPIcon,
-    link: '/cliente/memberships-type'
+    link: "/cliente/memberships-type",
   },
   {
     id: 3,
-    title: 'Ofertas',
+    title: "Ofertas",
     icon: offersIcon,
-    link: '/cliente/products'
+    link: "/cliente/products",
   },
   {
     id: 4,
-    title: 'Premios',
+    title: "Premios",
     icon: giftIcon,
-    link: '/cliente/products'
+    link: "/cliente/products",
   },
   {
     id: 5,
-    title: 'Promociones',
+    title: "Promociones",
     icon: speakerIcon,
-    link: '/cliente/news'
+    link: "/cliente/news",
   },
   {
     id: 6,
-    title: 'Compras',
+    title: "Compras",
     icon: bagIcon,
-    link: '/cliente/shopping'
+    link: "/cliente/shopping",
   },
   {
     id: 7,
-    title: 'Pachamá',
+    title: "Pachamá",
     icon: pachama,
-    link: '/cliente/pachama'
+    link: "/cliente/pachama",
   },
   {
     id: 8,
-    title: 'Universidades',
+    title: "Universidades",
     icon: universityIcon,
-    link: '/cliente/account'
+    link: "/cliente/account",
   },
   {
     id: 9,
-    title: 'SOS',
+    title: "SOS",
     icon: helpIcon,
-    link: '/cliente/account'
+    link: "/cliente/account",
   },
   {
     id: 10,
-    title: 'Noticias',
+    title: "Noticias",
     icon: newsIcon,
-    link: '/cliente/account'
-  }
-]
+    link: "/cliente/account",
+  },
+];

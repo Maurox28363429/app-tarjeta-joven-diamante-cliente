@@ -10,6 +10,14 @@
       <p class="title-large" v-if="isMembershipsActive">
         Membresia de tipo {{ user.membresia.type }} activa
       </p>
+
+      <p class="title-large" v-else-if="!isMembershipsActive">
+        Membresia Vencida
+      </p>
+      <section>
+        <br />
+        <q-btn to="/memberships" color="primary" label="Renovar membresia" />
+      </section>
     </div>
   </div>
 </template>

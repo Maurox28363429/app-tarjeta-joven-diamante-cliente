@@ -267,40 +267,40 @@
   </div>
 </template>
 <script setup>
-import { userAuth } from 'src/composables/userAuth'
-import { ref, watch } from 'vue'
-import { useValidateForm } from 'src/composables/useValidateForm'
-import { updateProfileShema } from 'src/schemas/updateProfileShema'
-import updateUser from 'src/api/updateUser'
-import localStorageAuth from 'src/utils/localStorageAuth'
-import { useToast } from 'src/composables/useToast'
-import profile from '../../assets/profile.png'
+import { userAuth } from "src/composables/userAuth";
+import { ref, watch } from "vue";
+import { useValidateForm } from "src/composables/useValidateForm";
+import { updateProfileShema } from "src/schemas/updateProfileShema";
+import updateUser from "src/api/updateUser";
+import localStorageAuth from "src/utils/localStorageAuth";
+import { useToast } from "src/composables/useToast";
+import profile from "../../assets/profile.png";
 
-const { triggerPositive, triggerWarning } = useToast()
+const { triggerPositive, triggerWarning } = useToast();
 
-const loading = ref(false)
+const loading = ref(false);
 
-const { user: userStore, updatedUser } = userAuth()
-const user = ref(localStorageAuth.getUser().user)
+const { user: userStore, updatedUser } = userAuth();
+const user = ref(localStorageAuth.getUser().user);
 
 watch(
   userStore,
   () => {
-    user.value = userStore.value
+    user.value = userStore.value;
   },
   { immediate: true }
-)
+);
 
 const GENDER_OPTIONS = [
-  { label: 'Mujer', value: 0 },
-  { label: 'Hombre', value: 1 }
-]
+  { label: "Mujer", value: 0 },
+  { label: "Hombre", value: 1 },
+];
 
 const genderCurrent = GENDER_OPTIONS.find((item) => {
-  return item.value === user.value.sex
-})
+  return item.value === user.value.sex;
+});
 
-const file = ref(profile)
+const file = ref(profile);
 
 const INITIAL_VALUES = {
   name: user.value.name,
@@ -310,34 +310,34 @@ const INITIAL_VALUES = {
   sex: genderCurrent,
   address: user.value.address,
   img: user.value.img || profile,
-  dni: user.value.dni || '',
-  beneficiario_poliza_cedula: user.value.beneficiario_poliza_cedula || '',
-  beneficiario_poliza_name: user.value.beneficiario_poliza_name || '',
-  fecha_nacimiento: user.value.fecha_nacimiento || ''
-}
+  dni: user.value.dni || "",
+  beneficiario_poliza_cedula: user.value.beneficiario_poliza_cedula || "",
+  beneficiario_poliza_name: user.value.beneficiario_poliza_name || "",
+  fecha_nacimiento: user.value.fecha_nacimiento || "",
+};
 
 const { useForm, validatInput, validateMessage, validateForm } =
-  useValidateForm({ initialValue: INITIAL_VALUES, schema: updateProfileShema })
+  useValidateForm({ initialValue: INITIAL_VALUES, schema: updateProfileShema });
 
-console.log(useForm.value.img, 'image')
+console.log(useForm.value.img, "image");
 
 const uploadImg = (event) => {
-  const image = event.target.files[0]
-  console.log(image, 'imagen desde upload')
+  const image = event.target.files[0];
+  console.log(image, "imagen desde upload");
 
-  const fileReader = new FileReader()
+  const fileReader = new FileReader();
   fileReader.onload = () => {
-    file.value = fileReader.result
-  }
-  fileReader.readAsDataURL(image)
-  useForm.value.img = image
-}
+    file.value = fileReader.result;
+  };
+  fileReader.readAsDataURL(image);
+  useForm.value.img = image;
+};
 
 const handledUpdateUser = async () => {
-  validateForm()
-  console.log(user.value, 'user')
+  validateForm();
+  console.log(user.value, "user");
   try {
-    loading.value = true
+    loading.value = true;
     const values = {
       ...useForm.value,
       role_id: user.value.role_id,
@@ -347,26 +347,26 @@ const handledUpdateUser = async () => {
       dni: useForm.value.dni,
       beneficiario_poliza_cedula: useForm.value.beneficiario_poliza_cedula,
       beneficiario_poliza_name: useForm.value.beneficiario_poliza_name,
-      fecha_nacimiento: useForm.value.fecha_nacimiento
-    }
+      fecha_nacimiento: useForm.value.fecha_nacimiento,
+    };
     const send_data = new FormData(
-      document.getElementById('formUpdateProfile')
-    )
-    await updateUser(values.id, send_data)
-    const userCurrent = localStorageAuth.getUser()
+      document.getElementById("formUpdateProfile")
+    );
+    await updateUser(values.id, send_data);
+    const userCurrent = localStorageAuth.getUser();
     localStorageAuth.setUser({
       user: { ...userCurrent.user, ...values },
-      token: userCurrent.token
-    })
-    updatedUser()
-    triggerPositive('Usuario actualizado con éxito')
+      token: userCurrent.token,
+    });
+    updatedUser();
+    triggerPositive("Usuario actualizado con éxito");
   } catch (err) {
-    console.error(err)
-    triggerWarning('Ah ocurrido un error, intente nuevamente')
+    console.error(err);
+    triggerWarning("Ah ocurrido un error, intente nuevamente");
   } finally {
-    loading.value = false
+    loading.value = false;
   }
-}
+};
 </script>
 
 <style scoped>
