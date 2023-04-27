@@ -6,7 +6,7 @@
         spinner-color="dark"
         style="height: 40px; max-width: 40px"
       />
-      <p class="title-large">Home Page</p>
+      <p class="title-large q-ma-none text-center">Home Page</p>
     </div>
     <div class="cardList">
       <div v-for="card in HOME_CARD_LIST" :key="card.id">

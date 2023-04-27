@@ -26,13 +26,13 @@ export const HOME_CARD_LIST = [
     id: 3,
     title: "Ofertas",
     icon: offersIcon,
-    link: "/cliente/products",
+    link: "/cliente/Offers",
   },
   {
     id: 4,
     title: "Premios",
     icon: giftIcon,
-    link: "/cliente/products",
+    link: "",
   },
   {
     id: 5,
@@ -44,7 +44,7 @@ export const HOME_CARD_LIST = [
     id: 6,
     title: "Compras",
     icon: bagIcon,
-    link: "/cliente/shopping",
+    link: "/cliente/transactionsTable",
   },
   {
     id: 7,
@@ -56,18 +56,18 @@ export const HOME_CARD_LIST = [
     id: 8,
     title: "Universidades",
     icon: universityIcon,
-    link: "/cliente/account",
+    link: "",
   },
   {
     id: 9,
     title: "SOS",
     icon: helpIcon,
-    link: "/cliente/account",
+    link: "",
   },
   {
     id: 10,
     title: "Noticias",
     icon: newsIcon,
-    link: "/cliente/account",
+    link: "",
   },
 ];

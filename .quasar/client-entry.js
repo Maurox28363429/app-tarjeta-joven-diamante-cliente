@@ -112,6 +112,8 @@ createQuasarApp(createApp, quasarUserOptions).then((app) => {
 
     import("boot/qrcode-reader"),
 
+    import("boot/vue-query"),
+
     import("@quasar/quasar-app-extension-qiconpicker/src/boot/register.js"),
   ]).then((bootFiles) => {
     const boot = mapFn(bootFiles).filter(

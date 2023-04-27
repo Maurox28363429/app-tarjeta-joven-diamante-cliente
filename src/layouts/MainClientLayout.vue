@@ -36,7 +36,7 @@
         />
         <router-link to="/cliente/account" class="cursor-pointer">
           <q-avatar size="42px" class="q-ml-md">
-            <q-img src="./../assets/profile.png" spinner-color="dark" />
+            <q-img :src="user.img_url" spinner-color="dark" />
           </q-avatar>
         </router-link>
       </q-toolbar>
@@ -91,7 +91,7 @@
             </q-item-section>
             <q-item-section>Home</q-item-section>
           </q-item>
-          <q-item clickable v-ripple to="/cliente/shopping">
+          <q-item clickable v-ripple to="/cliente/transactionsTable">
             <q-item-section avatar>
               <q-icon name="shopping_basket" />
             </q-item-section>
@@ -111,7 +111,7 @@
 
             <q-item-section>Mi perfil</q-item-section>
           </q-item>
-          <q-item clickable v-ripple to="/cliente/products">
+          <q-item clickable v-ripple to="/cliente/Offers">
             <q-item-section avatar>
               <q-icon name="sell" />
             </q-item-section>
@@ -143,7 +143,7 @@
       <div v-show="!miniState" class="absolute-top" style="height: 150px">
         <div class="column items-center absolute-bottom bg-transparent">
           <q-avatar size="56px" class="q-mb-sm">
-            <img src="src/assets/profile.png" />
+            <img :src="user.img_url" />
           </q-avatar>
           <div class="text-weight-bold">
             ¡Hola, {{ user.name + " " + user.last_name }}!
@@ -209,7 +209,7 @@
         />
       </router-link>
       <router-link
-        to="/cliente/shopping"
+        to="/cliente/transactionsTable"
         style="text-decoration: none; color: #ffff; width: 100%; margin: none"
       >
         <q-tab
@@ -221,7 +221,7 @@
         />
       </router-link>
       <router-link
-        to="/cliente/products"
+        to="/cliente/Offers"
         style="text-decoration: none; color: #ffff; width: 100%; margin: none"
       >
         <q-tab
@@ -338,7 +338,6 @@ import QrUser from "../components/QrUser.vue";
 const { user } = userAuth();
 
 const goHome = () => {
-  console.log("goHome");
   router.push("/empresa");
 };
 

@@ -8,7 +8,7 @@
         <q-item>
           <q-item-section class="row justify-center full-width items-center">
             <q-avatar size="80px" class="q-mr-md">
-              <q-img src="./../../assets/profile.png" spinner-color="dark" />
+              <q-img :src="user.img_url" spinner-color="dark" />
             </q-avatar>
           </q-item-section>
         </q-item>
@@ -41,7 +41,9 @@
         <q-item>
           <q-item-section>
             <q-item-label>Genero</q-item-label>
-            <q-item-label caption>{{ genderCurrent?.label }}</q-item-label>
+            <q-item-label caption>{{
+              genderCurrent ? genderCurrent.label : ""
+            }}</q-item-label>
           </q-item-section>
         </q-item>
         <q-item>
@@ -64,7 +66,7 @@
         </q-item>
       </q-list>
       <q-list bordered padding separator class="editContainer rounded-borders">
-        <form @submit.prevent="handledUpdateUser" id="formUpdateProfile">
+        <form @submit.prevent="handledUpdateUser">
           <q-item>
             <q-item-section>
               <q-item-label class="title-medium">Editar</q-item-label>
@@ -253,7 +255,7 @@
               </div>
               <q-item-section class="button">
                 <q-btn
-                  :loading="loading"
+                  :loading="isLoading"
                   type="submit"
                   color="primary"
                   label="Guardar"
@@ -268,17 +270,12 @@
 </template>
 <script setup>
 import { userAuth } from "src/composables/userAuth";
-import { ref, watch } from "vue";
+import { ref, watch, onMounted } from "vue";
 import { useValidateForm } from "src/composables/useValidateForm";
 import { updateProfileShema } from "src/schemas/updateProfileShema";
-import updateUser from "src/api/updateUser";
 import localStorageAuth from "src/utils/localStorageAuth";
-import { useToast } from "src/composables/useToast";
-import profile from "../../assets/profile.png";
-
-const { triggerPositive, triggerWarning } = useToast();
-
-const loading = ref(false);
+import { useUpdateUserMutation } from "src/querys/userQuerys";
+import { urlToBinary } from "src/utils/urlToBinary";
 
 const { user: userStore, updatedUser } = userAuth();
 const user = ref(localStorageAuth.getUser().user);
@@ -300,7 +297,7 @@ const genderCurrent = GENDER_OPTIONS.find((item) => {
   return item.value === user.value.sex;
 });
 
-const file = ref(profile);
+const file = ref(user.value.img_url);
 
 const INITIAL_VALUES = {
   name: user.value.name,
@@ -309,7 +306,7 @@ const INITIAL_VALUES = {
   phone: user.value.phone,
   sex: genderCurrent,
   address: user.value.address,
-  img: user.value.img || profile,
+  img: undefined,
   dni: user.value.dni || "",
   beneficiario_poliza_cedula: user.value.beneficiario_poliza_cedula || "",
   beneficiario_poliza_name: user.value.beneficiario_poliza_name || "",
@@ -319,54 +316,45 @@ const INITIAL_VALUES = {
 const { useForm, validatInput, validateMessage, validateForm } =
   useValidateForm({ initialValue: INITIAL_VALUES, schema: updateProfileShema });
 
-console.log(useForm.value.img, "image");
+const { isLoading, mutateAsync } = useUpdateUserMutation();
 
 const uploadImg = (event) => {
   const image = event.target.files[0];
-  console.log(image, "imagen desde upload");
-
-  const fileReader = new FileReader();
-  fileReader.onload = () => {
-    file.value = fileReader.result;
-  };
-  fileReader.readAsDataURL(image);
   useForm.value.img = image;
+  file.value = URL.createObjectURL(image);
 };
 
 const handledUpdateUser = async () => {
   validateForm();
-  console.log(user.value, "user");
-  try {
-    loading.value = true;
-    const values = {
-      ...useForm.value,
-      role_id: user.value.role_id,
-      active: user.value.active,
-      id: user.value.id,
-      sex: useForm.value.sex.value,
-      dni: useForm.value.dni,
-      beneficiario_poliza_cedula: useForm.value.beneficiario_poliza_cedula,
-      beneficiario_poliza_name: useForm.value.beneficiario_poliza_name,
-      fecha_nacimiento: useForm.value.fecha_nacimiento,
-    };
-    const send_data = new FormData(
-      document.getElementById("formUpdateProfile")
-    );
-    await updateUser(values.id, send_data);
-    const userCurrent = localStorageAuth.getUser();
-    localStorageAuth.setUser({
-      user: { ...userCurrent.user, ...values },
-      token: userCurrent.token,
-    });
-    updatedUser();
-    triggerPositive("Usuario actualizado con éxito");
-  } catch (err) {
-    console.error(err);
-    triggerWarning("Ah ocurrido un error, intente nuevamente");
-  } finally {
-    loading.value = false;
-  }
+  const values = {
+    ...useForm.value,
+    role_id: user.value.role_id,
+    active: user.value.active,
+    id: user.value.id,
+    sex: useForm.value.sex.value,
+  };
+  const {
+    data: { data: newUserData },
+  } = await mutateAsync({ data: values, id: user.value.id });
+  const userCurrent = localStorageAuth.getUser();
+  localStorageAuth.setUser({
+    user: { ...userCurrent.user, ...newUserData },
+    token: userCurrent.token,
+  });
+  updatedUser();
 };
+
+onMounted(async () => {
+  try {
+    const url = await urlToBinary({
+      url: useForm.value.img,
+      fileName: "avatar",
+    });
+    useForm.value.img = url;
+  } catch (error) {
+    console.log(error);
+  }
+});
 </script>
 
 <style scoped>

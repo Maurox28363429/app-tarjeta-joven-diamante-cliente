@@ -33,7 +33,7 @@
           </div>
           <q-btn
             :disable="!validateMessage.isvalid"
-            :loading="loading"
+            :loading="isLoading"
             label="Enviar"
             size="14px"
             fill
@@ -49,16 +49,11 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { emailSchema } from "src/schemas/emailShema";
-import getCodeForRecoveryPassword from "src/api/getCodeForRecoveryPassword";
 import { useRecoveryPasswordStore } from "src/stores/recoveryPasswordStore";
 import { useValidateForm } from "src/composables/useValidateForm";
-import { useToast } from "src/composables/useToast";
-
-const loading = ref(false);
-const { triggerPositive, triggerWarning } = useToast();
+import { useSendEmail } from "src/querys/userQuerys";
 
 const router = useRouter();
 
@@ -77,20 +72,10 @@ const { useForm, validatInput, validateMessage } = useValidateForm({
 
 const recoveryPasswordStore = useRecoveryPasswordStore();
 
+const { mutate, isLoading } = useSendEmail();
+
 const sendEmail = async () => {
-  try {
-    loading.value = true;
-    await getCodeForRecoveryPassword({ email: useForm.value.email });
-    triggerPositive("Código enviado, podría tardar unos minutos en llegar.");
-    recoveryPasswordStore.setEmail(useForm.value.email);
-    router.push({
-      name: "recoveryPassword",
-    });
-  } catch (err) {
-    console.error(err);
-    triggerWarning("¡Up! Ha ocurrido un error, intento nuevamente");
-  } finally {
-    loading.value = false;
-  }
+  mutate({ email: useForm.value.email });
+  recoveryPasswordStore.setEmail(useForm.value.email);
 };
 </script>

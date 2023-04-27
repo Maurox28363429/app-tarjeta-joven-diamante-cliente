@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="full-width window-height row justify-center items-center q-gutter-x-md"
-  >
+  <div class="full-width q-py-xl row justify-center items-center q-gutter-x-md">
     <a
       href="https://www.instagram.com/grupopachama/"
       rel="noopener noreferrer"

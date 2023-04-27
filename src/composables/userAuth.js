@@ -88,7 +88,7 @@ export const userAuth = () => {
       isLoadingMembership.value = true;
       await authStore.addMembership({ user_id });
       triggerPositive("Ha obtenido la membresía con éxito");
-      router.push("/cliente/products");
+      router.push("/cliente/Offers");
     } catch (error) {
       if (error.response.status === 404) {
         triggerWarning(error.response.data.message);

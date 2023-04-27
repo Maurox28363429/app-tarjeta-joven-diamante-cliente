@@ -23,12 +23,12 @@
       </div>
       <div class="containerCard">
         <q-inner-loading
-          :showing="loading"
+          :showing="isLoadingOffers"
           label="Por favor espera..."
           label-class="text-teal"
           label-style="font-size: 1.1em"
         />
-        <div class="card" v-for="items in offers" :key="items.id">
+        <div class="card" v-for="items in offersData" :key="items.id">
           <div class="">
             <q-img
               class="rounded-borders"
@@ -103,7 +103,7 @@
           :virtual-scroll-sticky-size-start="48"
           title="Carrito"
           :rows="rows"
-          :columns="columns"
+          :columns="ORDER_CREATION_COLUMNS"
           row-key="id"
           selection="multiple"
           v-model:selected="selected"
@@ -129,13 +129,16 @@
 
 <script setup>
 import { ref, onMounted, watch, computed } from "vue";
-import getOffersFromStore from "src/api/getOffersFromStore";
 import { userAuth } from "src/composables/userAuth";
 import { userCart } from "src/stores/userCart";
-import invoiceOffer from "src/api/invoiceOffer";
 import { useToast } from "src/composables/useToast";
+import { useGetOffers } from "src/querys/offersQuerys";
+import { useInvoiceOfferMutation } from "src/querys/invoiceQuerys";
+import { ORDER_CREATION_COLUMNS } from "src/shared/constants/orderCreationColumns";
 
-const { triggerPositive, triggerWarning } = useToast();
+const { triggerPositive } = useToast();
+
+const { mutate, isLoading: loadingInvoice } = useInvoiceOfferMutation();
 
 const storeClient = userCart();
 
@@ -144,24 +147,28 @@ const client = computed(() => storeClient.client);
 const { user } = userAuth();
 
 const search = ref("");
-const offers = ref([]);
-const loading = ref(false);
-const loadingInvoice = ref(false);
 const pages = ref(1);
 const currentPaginate = ref(1);
 const selected = ref([]);
 const rows = ref([]);
 
+const {
+  isLoading: isLoadingOffers,
+  data: offersData,
+  refetch,
+} = useGetOffers({
+  name: search.value,
+  page: currentPaginate.value,
+  id: user.value.id,
+});
+
 const userScaneo = computed(() => {
-  console.log(client.value, "user");
   if (user.value.membresia?.status === "vencida" || !user.value.membresia) {
     return "Usuario sin membresía ";
   } else {
     return user.value.name;
   }
 });
-
-console.log(userScaneo.value, "user message");
 
 const getTotal = (property) => {
   return (
@@ -173,35 +180,20 @@ const total = computed(() => Math.round(100 * getTotal("priceTotal")) / 100);
 
 const totalSaving = computed(() => Math.round(100 * getTotal("savings")) / 100);
 
-async function invoice() {
+function invoice() {
   const products = rows.value.map((item) => {
     return {
       id: item.id,
       cantidad: item.cantidad,
     };
   });
-
-  try {
-    loadingInvoice.value = true;
-    const { error } = await invoiceOffer({
-      comercio_id: user.value.id,
-      total_descuento: totalSaving,
-      ofertas: products,
-      total,
-      client_id: storeClient.client.id,
-    });
-
-    if (error) {
-      triggerWarning(error);
-    } else {
-      triggerPositive("Factura creada");
-    }
-  } catch (err) {
-    console.error(err);
-    triggerWarning("Error al crear la factura");
-  } finally {
-    loadingInvoice.value = false;
-  }
+  mutate({
+    comercio_id: user.value.id,
+    total_descuento: totalSaving,
+    ofertas: products,
+    total,
+    client_id: storeClient.client.id,
+  });
 }
 
 function deleteProduct() {
@@ -215,7 +207,7 @@ function deleteProduct() {
 }
 
 function addMount(id) {
-  const item = offers.value.find((item) => item.id === id);
+  const item = offersData.value.find((item) => item.id === id);
   if (item) {
     item.cantidad++;
     item.priceTotal = item.priceWidthDiscount * item.cantidad;
@@ -223,7 +215,7 @@ function addMount(id) {
 }
 
 function subtractMount(id) {
-  const item = offers.value.find((item) => {
+  const item = offersData.value.find((item) => {
     return item.id === id;
   });
 
@@ -252,98 +244,17 @@ function addProduct(product) {
   triggerPositive("Producto agregado");
 }
 
-async function fetchOffers() {
-  try {
-    loading.value = true;
-    const products = await getOffersFromStore({
-      name: search.value,
-      page: currentPaginate.value,
-      id: user.value.id,
-    });
-
-    offers.value = await products.data.map((items) => {
-      return {
-        ...items,
-        cantidad: 1,
-        priceWidthDiscount:
-          items.price_total - (items.descuento / 100) * items.price_total,
-        savings:
-          items.price_total -
-          (items.price_total - (items.descuento / 100) * items.price_total),
-        priceTotal:
-          items.price_total - (items.descuento / 100) * items.price_total * 1,
-      };
-    });
-  } catch (error) {
-    console.error(error);
-  } finally {
-    loading.value = false;
-  }
-}
-
-watch(search, async (val) => {
-  await fetchOffers();
+watch(search, (val) => {
+  refetch();
 });
 
-watch(currentPaginate, async (val) => {
-  await fetchOffers();
+watch(currentPaginate, (val) => {
+  refetch();
 });
 
 onMounted(async () => {
-  fetchOffers();
+  refetch();
 });
-
-const columns = [
-  {
-    name: "cantidad",
-    align: "center",
-    label: "Cantidad",
-    field: "cantidad",
-    sortable: true,
-  },
-  {
-    name: "nombre",
-    align: "center",
-    label: "Producto",
-    field: "nombre",
-    sortable: true,
-  },
-  {
-    name: "priceWidthDiscount",
-    align: "center",
-    label: "precio con descuento",
-    field: "priceWidthDiscount",
-    sortable: true,
-  },
-  {
-    name: "savings",
-    align: "center",
-    label: "Ahorrado",
-    field: "savings",
-    sortable: true,
-  },
-  {
-    name: "price_total",
-    label: "Precio",
-    field: "price_total",
-    sortable: true,
-    format: (val) => `$${val}`,
-  },
-  {
-    name: "descuento",
-    label: "Descuento",
-    field: "descuento",
-    sortable: true,
-    format: (val) => `${val}%`,
-  },
-  {
-    name: "priceTotal",
-    label: "Precio total",
-    field: "priceTotal",
-    sortable: true,
-    format: (val) => `$${val}`,
-  },
-];
 </script>
 
 <style>

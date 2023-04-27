@@ -3,25 +3,38 @@
     <!-- Título y campo de búsqueda -->
     <p style="margin: 20px 0" class="title-large">Promociones</p>
     <div class="search-box">
-      <q-input
-        v-model="search"
-        outlined
-        class="full-width"
-        style="max-width: 400px"
-        type="search"
-        label="Buscar promociones"
-        color="primary"
-      >
-        <template v-slot:append>
-          <q-icon name="search" />
-        </template>
-      </q-input>
+      <q-form class="full-width row justify-center" @submit="handleSearch">
+        <q-input
+          v-model="search"
+          outlined
+          class="full-width"
+          style="max-width: 400px"
+          type="search"
+          label="Buscar promociones"
+          color="primary"
+        >
+          <q-btn
+            type="submit"
+            size="md"
+            style="right: -12px; bottom: 0; top: 0"
+            color="primary"
+            label="Buscar"
+            icon="search"
+            class="absolute"
+          />
+        </q-input>
+      </q-form>
     </div>
 
     <!-- Cuadrícula de noticias -->
     <div class="news-grid">
       <!-- Si se están cargando las noticias, muestra los esqueletos -->
-      <template v-if="loading">
+
+      <q-inner-loading :showing="isFetching && !isLoading" class="innerLoading">
+        <q-spinner-gears size="50px" color="primary" class="loading" />
+      </q-inner-loading>
+
+      <template v-if="isLoading">
         <div v-for="index in 20" :key="index" class="skeleton-card">
           <q-card flat>
             <q-skeleton height="150px" square />
@@ -41,12 +54,12 @@
 
       <!-- Si las noticias están cargadas, muestra la cuadrícula -->
       <template v-else>
-        <template v-if="news?.length === 0">
+        <template v-if="promotionsData?.data?.data.length === 0">
           <div class="no-results">No se encontraron resultados</div>
         </template>
 
         <template v-else>
-          <template v-for="item in news" :key="item.id">
+          <template v-for="item in promotionsData?.data?.data" :key="item.id">
             <q-card class="news-card">
               <q-img
                 :src="item.img_url"
@@ -80,10 +93,9 @@
     </div>
 
     <div class="q-pa-lg flex flex-center">
-      <q-pagination v-model="currentPaginate" :max="paginas" />
+      <q-pagination v-model="currentPaginate" :max="pages" />
     </div>
 
-    <!-- Diálogo modal de noticias -->
     <q-dialog v-model="openModal">
       <q-card class="news-card modal-card">
         <q-img
@@ -110,59 +122,53 @@
   </div>
 </template>
 <script setup>
-import { ref, onMounted, watch } from "vue";
-import getNews from "src/api/getNews";
-import { useToast } from "src/composables/useToast";
-
-const { triggerWarning } = useToast();
+import { ref, watchEffect } from "vue";
+import { useGetPromotions } from "src/querys/promotionsQuerys";
 
 const openModal = ref(false);
-const news = ref([]);
-const search = ref("");
 const modalCurrent = ref({});
-const loading = ref(false);
 const currentPaginate = ref(1);
-const paginas = ref(1);
+
+const pages = ref(1);
+const search = ref("");
+
+const {
+  data: promotionsData,
+  isLoading,
+  refetch,
+  isFetching,
+} = useGetPromotions({ search, pages });
 
 const showModal = (modalInfo) => {
   modalCurrent.value = { ...modalInfo };
   openModal.value = true;
 };
 
-async function fetchNews() {
-  try {
-    loading.value = true;
-    const { data } = await getNews({
-      page: currentPaginate.value,
-      search: search.value,
-    });
-    news.value = data.data;
-  } catch (err) {
-    console.error(err);
-    const errorMessage =
-      err.code === "ERR_NETWORK"
-        ? "Verifique su conexión a internet e intente nuevamente"
-        : "Error desconocido";
-    triggerWarning(errorMessage);
-  } finally {
-    loading.value = false;
+watchEffect(() => {
+  if (promotionsData.value) {
+    pages.value = promotionsData?.value?.data?.pagination.lastPage;
   }
-}
-
-watch(currentPaginate, async (val) => {
-  await fetchNews();
-});
-watch(search, async (val) => {
-  await fetchNews();
 });
 
-onMounted(async () => {
-  await fetchNews();
-});
+const handleSearch = () => {
+  refetch();
+};
 </script>
 <style>
 .promotions {
   padding: 0 24px;
+}
+.loading {
+  top: 318px;
+  left: 0;
+  right: 0;
+  bottom: unset;
+  position: fixed;
+  width: 100%;
+}
+
+.innerLoading {
+  z-index: 20;
 }
 
 .title-large {

@@ -35,6 +35,11 @@ const routes = [
         component: () => import("layouts/MainClientLayout.vue"),
         children: [
           {
+            name: "Offers",
+            path: "Offers",
+            component: () => import("src/pages/client/OffersPage.vue"),
+          },
+          {
             path: "pachama",
             component: () => import("pages/client/PachamaPage.vue"),
           },
@@ -73,9 +78,9 @@ const routes = [
             ],
           },
           {
-            name: "shopping",
-            path: "shopping",
-            component: () => import("pages/ShoppingPage.vue"),
+            name: "transactionsTable",
+            path: "transactionsTable",
+            component: () => import("src/pages/client/ClientTransactions.vue"),
           },
           {
             name: "news",
@@ -91,7 +96,7 @@ const routes = [
         children: [
           {
             path: "",
-            component: () => import("pages/ShoppingPage.vue"),
+            component: () => import("src/components/TransactionsTable.vue"),
           },
           {
             path: "account",
@@ -101,7 +106,6 @@ const routes = [
                 component: () => import("pages/business/AccountPage.vue"),
               },
               {
-                name: "profile",
                 path: "profile",
                 component: () => import("pages/business/ProfilePage.vue"),
               },
@@ -110,7 +114,8 @@ const routes = [
           {
             name: "orders",
             path: "orders",
-            component: () => import("pages/ShoppingPage.vue"),
+            component: () =>
+              import("src/pages/business/BusinessTransactions.vue"),
           },
           {
             name: "create-order",
@@ -142,17 +147,13 @@ const routes = [
           }
         },
       },
-      {
-        path: "memberships/:id/payment",
-        component: () => import("pages/client/PaymentFormPage.vue"),
-        meta: clientAuthMeta,
-      },
     ],
   },
   {
     name: "error",
-    path: "/:catchAll(.*)*",
+    path: "/error/:errorCode",
     component: () => import("pages/ErrorNotFound.vue"),
+    props: true,
   },
 ];
 
