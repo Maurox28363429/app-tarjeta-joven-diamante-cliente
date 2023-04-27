@@ -36,7 +36,7 @@
         />
         <router-link to="/empresa/account" class="cursor-pointer">
           <q-avatar size="42px" class="q-ml-md">
-            <q-img src="./../assets/profile.png" spinner-color="dark" />
+            <q-img :src="user.img_url" spinner-color="dark" />
           </q-avatar>
         </router-link>
       </q-toolbar>
@@ -112,7 +112,7 @@
       <div v-show="!miniState" class="absolute-top" style="height: 150px">
         <div class="column items-center absolute-bottom bg-transparent">
           <q-avatar size="56px" class="q-mb-sm">
-            <img src="src/assets/profile.png" />
+            <img :src="user.img_url" />
           </q-avatar>
           <div class="text-weight-bold">
             ¡Hola, {{ user.name + " " + user.last_name }}!

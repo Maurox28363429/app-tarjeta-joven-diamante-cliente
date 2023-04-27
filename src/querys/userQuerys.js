@@ -11,7 +11,7 @@ export const useUpdateUserMutation = () => {
 
   const queryClient = useQueryClient();
 
-  const mutation = useMutation(updateUser, {
+  return useMutation(updateUser, {
     onSuccess: () => {
       triggerPositive("Usuario actualizado con éxito");
       queryClient.invalidateQueries({
@@ -27,8 +27,6 @@ export const useUpdateUserMutation = () => {
       }
     },
   });
-
-  return mutation;
 };
 
 export const useSendEmail = () => {

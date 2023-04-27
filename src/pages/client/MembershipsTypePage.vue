@@ -1,5 +1,5 @@
 <template>
-  <div class="full-width window-height row justify-center items-center">
+  <div class="full-width q-py-xl row justify-center items-center">
     <div class="full-width column items-center">
       <q-img
         src="../../assets/ghostIcon.png"

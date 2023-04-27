@@ -33,7 +33,7 @@
         <div v-for="index in 20" :key="index" class="skeleton-card">
           <q-card class="my-card" style="height: 340px; width: 100%">
             <q-skeleton height="120px" width="100%" square />
-            <q-card-section class="q-px-xs">
+            <q-card-section class="q-px-xs full-width">
               <q-skeleton style="margin-bottom: 10px" type="QSlider" />
               <q-skeleton style="margin-bottom: 10px" type="QSlider" />
               <q-skeleton type="text" class="text-caption" />
@@ -381,7 +381,7 @@
           </q-card>
         </div>
         <div v-for="items in data?.data" :key="items.id">
-          <q-card class="my-card column" style="height: 400px; width: 100%">
+          <q-card class="my-card column" style="min-height: 400px; width: 100%">
             <img
               style="
                 height: 120px;
@@ -789,11 +789,11 @@ const handleSearch = () => {
 }
 
 .loading {
-  top: 318px !important;
+  top: 318px;
   left: 0;
   right: 0;
-  bottom: unset !important;
-  position: absolute;
+  bottom: unset;
+  position: fixed;
   width: 100%;
 }
 
@@ -821,7 +821,6 @@ const handleSearch = () => {
 
 .news-card {
   border-radius: 8px;
-
   display: flex;
   flex-direction: column;
   box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px 0px,

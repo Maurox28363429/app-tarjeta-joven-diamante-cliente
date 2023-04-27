@@ -106,7 +106,6 @@ const routes = [
                 component: () => import("pages/business/AccountPage.vue"),
               },
               {
-                name: "profile",
                 path: "profile",
                 component: () => import("pages/business/ProfilePage.vue"),
               },
@@ -152,8 +151,9 @@ const routes = [
   },
   {
     name: "error",
-    path: "/:catchAll(.*)*",
+    path: "/error/:errorCode",
     component: () => import("pages/ErrorNotFound.vue"),
+    props: true,
   },
 ];
 

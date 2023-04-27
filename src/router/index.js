@@ -52,27 +52,21 @@ export default route(function (/* { store, ssrContext } */) {
 
   Router.beforeEach((to, from, next) => {
     const user = localStorageAuth.getUser();
-    if (user) {
-      if (
-        to.path === "/" ||
+
+    if (
+      user &&
+      (to.path === "/" ||
         to.path === "/login" ||
         to.path === "/register" ||
         to.path === "/forgotpassword" ||
-        to.path === "/recoveryPassword"
-      ) {
-        next({ path: `/${ROLE_ID[user?.user?.role_id]}` });
-      }
-      // Si el usuario está autenticado y trata de acceder a la página de inicio de sesión,
-      // redirigirlo a la página correspondiente a su rol
+        to.path === "/recoveryPassword")
+    ) {
+      // Si el usuario está autenticado y trata de acceder a una página pública, redirigirlo a la página correspondiente a su rol
+      next({ path: `/${ROLE_ID[user?.user?.role_id]}` });
+      return;
     }
-    next();
-  });
 
-  Router.beforeEach((to, from, next) => {
     if (to.matched.some((record) => record.meta.requiresAuth)) {
-      // Verificar si el usuario está autenticado
-      const user = localStorageAuth.getUser();
-
       if (user === null) {
         // Si el usuario no está autenticado, redirigir a la página de inicio de sesión
         next({ path: "/login" });
@@ -82,7 +76,7 @@ export default route(function (/* { store, ssrContext } */) {
           ?.meta.role;
         const routeRole = roles.find((role) => role.name === routeRoleName);
 
-        if (routeRole && user.user.role_id !== routeRole.id) {
+        if (routeRole && Number(user.user.role_id) !== Number(routeRole.id)) {
           // Si el rol del usuario no coincide con el rol de la ruta, redirigir a una página de error o de acceso denegado
           next({ name: "error", params: { errorCode: 403 } });
         } else {

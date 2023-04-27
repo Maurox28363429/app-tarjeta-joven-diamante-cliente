@@ -6,7 +6,7 @@
     <div class="q-pa-md" style="max-width: 400px">
       <div class="row q-mb-md items-center">
         <q-avatar size="80px" class="q-mr-md">
-          <q-img src="./../../assets/profile.png" spinner-color="dark" />
+          <q-img :src="user.img_url" spinner-color="dark" />
         </q-avatar>
         <div>
           <p class="q-ma-none">{{ user.name + " " + user.last_name }}</p>

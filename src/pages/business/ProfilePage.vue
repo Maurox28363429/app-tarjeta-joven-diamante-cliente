@@ -11,7 +11,7 @@
         <q-item>
           <q-item-section class="row justify-center full-width items-center">
             <q-avatar size="80px" class="q-mr-md">
-              <img src="src/assets/profile.png" />
+              <img :src="user.img_url" />
             </q-avatar>
           </q-item-section>
         </q-item>
@@ -44,7 +44,9 @@
         <q-item>
           <q-item-section>
             <q-item-label>Genero</q-item-label>
-            <q-item-label caption>{{ genderCurrent.label }}</q-item-label>
+            <q-item-label caption>{{
+              genderCurrent ? genderCurrent.label : ""
+            }}</q-item-label>
           </q-item-section>
         </q-item>
         <q-item>
@@ -196,12 +198,12 @@
 </template>
 <script setup>
 import { userAuth } from "src/composables/userAuth";
-import { ref, watchEffect } from "vue";
+import { onMounted, ref } from "vue";
 import { useValidateForm } from "src/composables/useValidateForm";
 import { updateProfileShema } from "src/schemas/updateProfileShema";
 import localStorageAuth from "src/utils/localStorageAuth";
-import profile from "../../assets/profile.png";
-import { useInvoiceOfferMutation } from "src/querys/userQuerys";
+import { useUpdateUserMutation } from "src/querys/userQuerys";
+import { urlToBinary } from "src/utils/urlToBinary";
 
 const { user, updatedUser } = userAuth();
 
@@ -214,7 +216,7 @@ const genderCurrent = GENDER_OPTIONS.find((item) => {
   return item.value === user.value.sex;
 });
 
-const file = ref(profile);
+const file = ref(user.value.img_url);
 
 const INITIAL_VALUES = {
   name: user.value.name,
@@ -223,47 +225,52 @@ const INITIAL_VALUES = {
   phone: user.value.phone,
   sex: genderCurrent,
   address: user.value.address,
-  img: user.value.img || profile,
+  img: undefined,
 };
 
 const { useForm, validatInput, validateMessage, validateForm } =
   useValidateForm({ initialValue: INITIAL_VALUES, schema: updateProfileShema });
 
-const { isLoading, mutate, data } = useInvoiceOfferMutation();
-
-watchEffect(() => {
-  if (data.value) {
-    updatedUser();
-  }
-});
+const { isLoading, mutateAsync } = useUpdateUserMutation();
 
 const uploadImg = (event) => {
   const image = event.target.files[0];
-
-  const fileReader = new FileReader();
-  fileReader.onload = () => {
-    file.value = fileReader.result;
-  };
-  fileReader.readAsDataURL(image);
   useForm.value.img = image;
+  file.value = URL.createObjectURL(image);
 };
 
-const handledUpdateUser = () => {
+const handledUpdateUser = async () => {
   validateForm();
   const values = {
     ...useForm.value,
     role_id: user.value.role_id,
     active: user.value.active,
     id: user.value.id,
-    sex: useForm.value.sex.value,
+    sex: useForm.value?.sex?.value,
   };
-  mutate(values);
+
+  const {
+    data: { data: newUserData },
+  } = await mutateAsync({ data: values, id: user.value.id });
   const userCurrent = localStorageAuth.getUser();
   localStorageAuth.setUser({
-    user: { ...userCurrent.user, ...values },
+    user: { ...userCurrent.user, ...newUserData },
     token: userCurrent.token,
   });
+  updatedUser();
 };
+
+onMounted(async () => {
+  try {
+    const url = await urlToBinary({
+      url: useForm.value.img,
+      fileName: "avatar",
+    });
+    useForm.value.img = url;
+  } catch (error) {
+    console.log(error);
+  }
+});
 </script>
 
 <style scoped>

@@ -8,7 +8,7 @@
         <q-item>
           <q-item-section class="row justify-center full-width items-center">
             <q-avatar size="80px" class="q-mr-md">
-              <q-img src="./../../assets/profile.png" spinner-color="dark" />
+              <q-img :src="user.img_url" spinner-color="dark" />
             </q-avatar>
           </q-item-section>
         </q-item>
@@ -41,7 +41,9 @@
         <q-item>
           <q-item-section>
             <q-item-label>Genero</q-item-label>
-            <q-item-label caption>{{ genderCurrent?.label }}</q-item-label>
+            <q-item-label caption>{{
+              genderCurrent ? genderCurrent.label : ""
+            }}</q-item-label>
           </q-item-section>
         </q-item>
         <q-item>
@@ -268,12 +270,12 @@
 </template>
 <script setup>
 import { userAuth } from "src/composables/userAuth";
-import { ref, watch, watchEffect } from "vue";
+import { ref, watch, onMounted } from "vue";
 import { useValidateForm } from "src/composables/useValidateForm";
 import { updateProfileShema } from "src/schemas/updateProfileShema";
 import localStorageAuth from "src/utils/localStorageAuth";
-import profile from "../../assets/profile.png";
 import { useUpdateUserMutation } from "src/querys/userQuerys";
+import { urlToBinary } from "src/utils/urlToBinary";
 
 const { user: userStore, updatedUser } = userAuth();
 const user = ref(localStorageAuth.getUser().user);
@@ -295,7 +297,7 @@ const genderCurrent = GENDER_OPTIONS.find((item) => {
   return item.value === user.value.sex;
 });
 
-const file = ref(profile);
+const file = ref(user.value.img_url);
 
 const INITIAL_VALUES = {
   name: user.value.name,
@@ -304,7 +306,7 @@ const INITIAL_VALUES = {
   phone: user.value.phone,
   sex: genderCurrent,
   address: user.value.address,
-  img: file.value,
+  img: undefined,
   dni: user.value.dni || "",
   beneficiario_poliza_cedula: user.value.beneficiario_poliza_cedula || "",
   beneficiario_poliza_name: user.value.beneficiario_poliza_name || "",
@@ -314,7 +316,7 @@ const INITIAL_VALUES = {
 const { useForm, validatInput, validateMessage, validateForm } =
   useValidateForm({ initialValue: INITIAL_VALUES, schema: updateProfileShema });
 
-const { isLoading, mutate, data } = useUpdateUserMutation();
+const { isLoading, mutateAsync } = useUpdateUserMutation();
 
 const uploadImg = (event) => {
   const image = event.target.files[0];
@@ -322,13 +324,7 @@ const uploadImg = (event) => {
   file.value = URL.createObjectURL(image);
 };
 
-watchEffect(() => {
-  if (data.value) {
-    updatedUser();
-  }
-});
-
-const handledUpdateUser = () => {
+const handledUpdateUser = async () => {
   validateForm();
   const values = {
     ...useForm.value,
@@ -337,14 +333,28 @@ const handledUpdateUser = () => {
     id: user.value.id,
     sex: useForm.value.sex.value,
   };
-
-  mutate({ data: values, id: user.value.id });
+  const {
+    data: { data: newUserData },
+  } = await mutateAsync({ data: values, id: user.value.id });
   const userCurrent = localStorageAuth.getUser();
   localStorageAuth.setUser({
-    user: { ...userCurrent.user, ...values },
+    user: { ...userCurrent.user, ...newUserData },
     token: userCurrent.token,
   });
+  updatedUser();
 };
+
+onMounted(async () => {
+  try {
+    const url = await urlToBinary({
+      url: useForm.value.img,
+      fileName: "avatar",
+    });
+    useForm.value.img = url;
+  } catch (error) {
+    console.log(error);
+  }
+});
 </script>
 
 <style scoped>

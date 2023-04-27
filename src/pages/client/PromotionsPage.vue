@@ -159,11 +159,11 @@ const handleSearch = () => {
   padding: 0 24px;
 }
 .loading {
-  top: 318px !important;
+  top: 318px;
   left: 0;
   right: 0;
-  bottom: unset !important;
-  position: absolute;
+  bottom: unset;
+  position: fixed;
   width: 100%;
 }
 
