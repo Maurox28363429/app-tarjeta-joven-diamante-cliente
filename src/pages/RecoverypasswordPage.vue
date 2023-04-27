@@ -16,13 +16,13 @@
           <div class="full-width">
             <PinInput
               :submit="handledSencode"
-              :loading="loadingHandledSencode"
+              :loading="isLoadingHandledSencode"
             />
           </div>
           <p>¿No has recibido el correo electrónico?</p>
           <q-btn
             @click="sendCode"
-            :loading="loadingSendCode"
+            :loading="isLoadingSendEmail"
             label="Reenviar código"
             size="14px"
             fill
@@ -63,7 +63,7 @@
             </div>
             <q-btn
               @click="sendPassword"
-              :loading="loadingSendPassword"
+              :loading="isLoadingPassword"
               :disabled="!validateMessage.isvalid"
               label="Guardar"
               size="14px"
@@ -80,97 +80,81 @@
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router'
-import PinInput from 'src/components/PinInput.vue'
-import { ref } from 'vue'
-import { useValidateForm } from 'src/composables/useValidateForm'
-import { passwordSchema } from 'src/schemas/passwordShema'
-import validatePasswordAndCode from 'src/api/validatePasswordAndCode'
-import changePassword from 'src/api/changePassword'
-import { useToast } from 'src/composables/useToast'
-import getCodeForRecoveryPassword from 'src/api/getCodeForRecoveryPassword'
-import { useRecoveryPasswordStore } from 'src/stores/recoveryPasswordStore'
+import { useRouter } from "vue-router";
+import PinInput from "src/components/PinInput.vue";
+import { ref, watchEffect } from "vue";
+import { useValidateForm } from "src/composables/useValidateForm";
+import { passwordSchema } from "src/schemas/passwordShema";
+import { useRecoveryPasswordStore } from "src/stores/recoveryPasswordStore";
+import {
+  useChangePassword,
+  useValidatePasswordAndCode,
+  useSendEmailAgain,
+} from "src/querys/userQuerys";
 
-const { triggerPositive, triggerWarning } = useToast()
-const loadingSendCode = ref(false)
-const loadingSendPassword = ref(false)
-const loadingHandledSencode = ref(false)
-
-const typePassword = ref('password')
-const iconPassword = ref('visibility_off')
+const typePassword = ref("password");
+const iconPassword = ref("visibility_off");
 
 const showPassword = () => {
-  typePassword.value = typePassword.value === 'password' ? 'text' : 'password'
+  typePassword.value = typePassword.value === "password" ? "text" : "password";
   iconPassword.value =
-    iconPassword.value === 'visibility_off' ? 'visibility' : 'visibility_off'
-}
+    iconPassword.value === "visibility_off" ? "visibility" : "visibility_off";
+};
 
-const recoveryPasswordStore = useRecoveryPasswordStore()
-const recoveryEmail = recoveryPasswordStore.email
+const recoveryPasswordStore = useRecoveryPasswordStore();
+const recoveryEmail = recoveryPasswordStore.email;
 
 const INITIAL_VALUES = {
-  password: ''
-}
+  password: "",
+};
 
 const { useForm, validatInput, validateMessage } = useValidateForm({
   initialValue: INITIAL_VALUES,
-  schema: passwordSchema
-})
+  schema: passwordSchema,
+});
 
-const codeValue = ref(null)
-const showFormCode = ref(true)
+const codeValue = ref(null);
+const showFormCode = ref(true);
 
-const router = useRouter()
+const router = useRouter();
 
 const goBack = () => {
-  router.go(-1)
-}
+  router.go(-1);
+};
+
+const { isLoading: isLoadingSendEmail, mutate: sendEmailMutate } =
+  useSendEmailAgain();
+const {
+  isLoading: isLoadingHandledSencode,
+  mutate: validateMutate,
+  data: validateData,
+} = useValidatePasswordAndCode();
+const { isLoading: isLoadingPassword, mutate: passwordMutate } =
+  useChangePassword();
 
 const sendCode = async () => {
-  try {
-    loadingSendCode.value = true
-    await getCodeForRecoveryPassword({ email: recoveryEmail })
-    triggerPositive('¡Código reenviado!, puede tardar unos minutos')
-  } catch (err) {
-    console.error(err)
-    triggerWarning('¡Up! Ha ocurrido un error, intento nuevamente')
-  } finally {
-    loadingSendCode.value = false
-  }
-}
+  sendEmailMutate({ email: recoveryEmail });
+};
 
-const handledSencode = async (code) => {
-  codeValue.value = code
-  try {
-    loadingHandledSencode.value = true
-    await validatePasswordAndCode({
-      email: recoveryEmail,
-      code
-    })
-    showFormCode.value = false
-    triggerPositive('¡Código verificado!, ahora puede cambiar su contraseña.')
-  } catch (error) {
-    console.error(error)
-  } finally {
-    loadingHandledSencode.value = false
-  }
-}
+const handledSencode = (code) => {
+  codeValue.value = code;
+  validateMutate({
+    email: recoveryEmail,
+    code,
+  });
+};
 
-const sendPassword = async () => {
-  try {
-    loadingSendPassword.value = true
-    await changePassword({
-      recovery_cod: codeValue.value,
-      password: useForm.value.password,
-      email: recoveryEmail
-    })
-    triggerPositive('La contraseña ha sido cambiada exitosamente.')
-    router.push({ name: 'login' })
-  } catch (error) {
-    console.error(error)
-    triggerWarning('¡Up! Códido incorreto, intente de nuevo ')
-  } finally {
-    loadingSendPassword.value = false
+watchEffect(() => {
+  if (validateData.value) {
+    showFormCode.value = false;
   }
-}
+});
+
+const sendPassword = () => {
+  passwordMutate({
+    recovery_cod: codeValue.value,
+    password: useForm.value.password,
+    email: recoveryEmail,
+  });
+};
 </script>

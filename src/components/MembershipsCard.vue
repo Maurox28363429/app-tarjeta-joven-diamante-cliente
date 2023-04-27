@@ -1,48 +1,48 @@
 <script setup>
-import { userAuth } from 'src/composables/userAuth'
-import { ref, computed } from 'vue'
+import { userAuth } from "src/composables/userAuth";
+import { ref, computed } from "vue";
 
 const props = defineProps({
   benefits: {
     type: Array,
-    required: true
+    required: true,
   },
   price: {
     type: Number,
     required: true,
-    default: 0
+    default: 0,
   },
   name: {
     type: String,
     required: true,
-    default: ''
+    default: "",
   },
   image: {
     type: String,
     required: true,
-    default: ''
+    default: "",
   },
   id: {
     type: Number,
-    required: true
-  }
-})
+    required: true,
+  },
+});
 
-const baseurl = '/memberships/'
+const baseurl = "/memberships/";
 
-const { user } = userAuth()
+const { user } = userAuth();
 
 const userIsmembershipFree = ref(
-  Boolean(user?.membresia?.id === 7 || user?.membresia?.status === 'activa')
-)
+  Boolean(user?.membresia?.id === 7 || user?.membresia?.status === "activa")
+);
 
 const planValidate = computed(() => {
-  if (userIsmembershipFree.value && props.name === 'free') {
-    return 'disableGray'
+  if (userIsmembershipFree.value && props.name === "free") {
+    return "disableGray";
   } else {
-    return 'plan-white'
+    return "plan-white";
   }
-})
+});
 </script>
 
 <template>
@@ -67,7 +67,7 @@ const planValidate = computed(() => {
     <ul class="benefitsList">
       <li v-for="(benefit, index) of benefits" :key="index">
         <q-img
-          src="./../assets/checkIcon.svg"
+          src="./../assets/icons/checkIcon.svg"
           spinner-color="dark"
           style="height: 22px; max-width: 22px"
         />
@@ -75,7 +75,7 @@ const planValidate = computed(() => {
       </li>
       <li v-if="price > 0">
         <q-img
-          src="./../assets/checkIcon.svg"
+          src="./../assets/icons/checkIcon.svg"
           spinner-color="dark"
           style="height: 22px; max-width: 22px"
         />

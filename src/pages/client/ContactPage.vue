@@ -1,6 +1,6 @@
 <template>
   <div
-    class="full-width window-height column justify-center items-center q-gutter-y-md"
+    class="full-width q-py-xl column justify-center items-center q-gutter-y-md"
   >
     <a
       href="https://wa.me/50765789280"
@@ -38,7 +38,7 @@
 </template>
 
 <script setup>
-import whatsappIcon from '../../assets/whatsappIcon.png'
+import whatsappIcon from "../../assets/images/whatsappIcon.png";
 </script>
 
 <style scoped>

@@ -4,7 +4,7 @@
       <q-toolbar>
         <q-toolbar-title>
           <q-img
-            src="../assets/acronimo.svg"
+            src="../assets/icons/acronimo.svg"
             spinner-color="white"
             style="height: 40px; max-width: 98px"
           />

@@ -43,7 +43,6 @@ $title-small: (14px, $font-family-nunito, 500, 20px, 0.1px);
   font-size: nth($style, 1);
   font-family: nth($style, 2);
   font-weight: nth($style, 3);
-  line-height: nth($style, 4);
   letter-spacing: nth($style, 5);
 }
 

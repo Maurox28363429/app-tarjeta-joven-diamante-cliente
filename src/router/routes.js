@@ -1,159 +1,155 @@
-const clientAuthMeta = { requiresAuth: true, role: 'cliente' }
-const bussinesAuthMeta = { requiresAuth: true, role: 'empresa' }
+const clientAuthMeta = { requiresAuth: true, role: "cliente" };
+const bussinesAuthMeta = { requiresAuth: true, role: "empresa" };
 
 const routes = [
   {
-    path: '/',
+    path: "/",
     children: [
       {
-        name: 'login',
-        path: 'login',
-        component: () => import('pages/LoginPage.vue')
+        name: "login",
+        path: "login",
+        component: () => import("pages/LoginPage.vue"),
       },
       {
-        path: '',
-        component: () => import('pages/LoginPage.vue')
+        path: "",
+        component: () => import("pages/LoginPage.vue"),
       },
       {
-        name: 'forgotpassword',
-        path: 'forgotpassword',
-        component: () => import('pages/ForgotpasswordPage.vue')
+        name: "forgotpassword",
+        path: "forgotpassword",
+        component: () => import("pages/ForgotpasswordPage.vue"),
       },
       {
-        name: 'register',
-        path: 'register',
-        component: () => import('pages/RegisterPage.vue')
+        name: "register",
+        path: "register",
+        component: () => import("pages/RegisterPage.vue"),
       },
       {
-        name: 'recoveryPassword',
-        path: 'recoveryPassword',
-        component: () => import('pages/RecoverypasswordPage.vue')
+        name: "recoveryPassword",
+        path: "recoveryPassword",
+        component: () => import("pages/RecoverypasswordPage.vue"),
       },
       {
-        path: 'cliente',
+        path: "cliente",
         meta: clientAuthMeta,
-        component: () => import('layouts/MainClientLayout.vue'),
+        component: () => import("layouts/MainClientLayout.vue"),
         children: [
           {
-            path: 'pachama',
-            component: () => import('pages/client/PachamaPage.vue')
+            name: "Offers",
+            path: "Offers",
+            component: () => import("src/pages/client/OffersPage.vue"),
           },
           {
-            path: 'contact',
-            component: () => import('pages/client/ContactPage.vue')
+            path: "pachama",
+            component: () => import("pages/client/PachamaPage.vue"),
           },
           {
-            path: 'memberships-type',
-            component: () => import('pages/client/MembershipsTypePage.vue')
+            path: "contact",
+            component: () => import("pages/client/ContactPage.vue"),
           },
           {
-            name: 'products',
-            path: 'products',
-            component: () => import('pages/client/ProductsPage.vue')
+            path: "memberships-type",
+            component: () => import("pages/client/MembershipsTypePage.vue"),
           },
           {
-            path: '',
-            component: () => import('pages/client/HomePage.vue')
+            path: "",
+            component: () => import("pages/client/HomePage.vue"),
           },
           {
-            path: 'home',
-            component: () => import('pages/client/HomePage.vue')
+            path: "home",
+            component: () => import("pages/client/HomePage.vue"),
           },
           {
-            path: 'account',
+            path: "account",
             children: [
               {
-                path: '',
-                component: () => import('pages/client/AccountPage.vue')
+                path: "",
+                component: () => import("pages/client/AccountPage.vue"),
               },
               {
-                path: 'profile',
-                component: () => import('pages/client/ProfilePage.vue')
-              }
-            ]
+                path: "profile",
+                component: () => import("pages/client/ProfilePage.vue"),
+              },
+            ],
           },
           {
-            name: 'shopping',
-            path: 'shopping',
-            component: () => import('pages/ShoppingPage.vue')
+            name: "transactionsTable",
+            path: "transactionsTable",
+            component: () => import("src/pages/client/ClientTransactions.vue"),
           },
           {
-            name: 'news',
-            path: 'news',
-            component: () => import('pages/client/PromotionsPage.vue')
-          }
-        ]
+            name: "news",
+            path: "news",
+            component: () => import("pages/client/PromotionsPage.vue"),
+          },
+        ],
       },
       {
-        path: 'empresa',
+        path: "empresa",
         meta: bussinesAuthMeta,
-        component: () => import('layouts/MainBussinesLaout.vue'),
+        component: () => import("layouts/MainBussinesLaout.vue"),
         children: [
           {
-            path: '',
-            component: () => import('pages/ShoppingPage.vue')
+            path: "",
+            component: () => import("src/components/TransactionsTable.vue"),
           },
           {
-            path: 'account',
+            path: "account",
             children: [
               {
-                path: '',
-                component: () => import('pages/business/AccountPage.vue')
+                path: "",
+                component: () => import("pages/business/AccountPage.vue"),
               },
               {
-                name: 'profile',
-                path: 'profile',
-                component: () => import('pages/business/ProfilePage.vue')
-              }
-            ]
+                path: "profile",
+                component: () => import("pages/business/ProfilePage.vue"),
+              },
+            ],
           },
           {
-            name: 'orders',
-            path: 'orders',
-            component: () => import('pages/ShoppingPage.vue')
+            name: "orders",
+            path: "orders",
+            component: () =>
+              import("src/pages/business/BusinessTransactions.vue"),
           },
           {
-            name: 'create-order',
-            path: 'create-order',
-            component: () => import('pages/business/CreateOrderPage.vue')
-          }
-        ]
+            name: "create-order",
+            path: "create-order",
+            component: () => import("pages/business/CreateOrderPage.vue"),
+          },
+        ],
       },
       {
-        path: 'memberships',
+        path: "memberships",
         meta: clientAuthMeta,
         children: [
           {
-            path: '',
-            component: () => import('pages/client/MembershipsPage.vue'),
-            meta: clientAuthMeta
-          }
-        ]
+            path: "",
+            component: () => import("pages/client/MembershipsPage.vue"),
+            meta: clientAuthMeta,
+          },
+        ],
       },
       {
-        path: 'memberships/:id',
-        component: () => import('pages/client/PaymentPage.vue'),
+        path: "memberships/:id",
+        component: () => import("pages/client/PaymentPage.vue"),
         meta: clientAuthMeta,
         beforeEnter: (to, from, next) => {
           if (isNaN(parseInt(to.params.id))) {
-            next({ name: 'error', params: { errorCode: 400 } })
+            next({ name: "error", params: { errorCode: 400 } });
           } else {
-            next()
+            next();
           }
-        }
+        },
       },
-      {
-        path: 'memberships/:id/payment',
-        component: () => import('pages/client/PaymentFormPage.vue'),
-        meta: clientAuthMeta
-      }
-    ]
+    ],
   },
   {
-    name: 'error',
-    path: '/:catchAll(.*)*',
-    component: () => import('pages/ErrorNotFound.vue')
-  }
-]
+    name: "error",
+    path: "/error/:errorCode",
+    component: () => import("pages/ErrorNotFound.vue"),
+    props: true,
+  },
+];
 
-export default routes
+export default routes;

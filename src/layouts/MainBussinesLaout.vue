@@ -21,7 +21,7 @@
         />
         <q-toolbar-title class="row items-center">
           <q-img
-            src="../assets/acronimo.svg"
+            src="../assets/icons/acronimo.svg"
             spinner-color="dark"
             @click="goHome"
             style="height: 32px; max-width: 74px; cursor: pointer"
@@ -36,7 +36,7 @@
         />
         <router-link to="/empresa/account" class="cursor-pointer">
           <q-avatar size="42px" class="q-ml-md">
-            <q-img src="./../assets/profile.png" spinner-color="dark" />
+            <q-img :src="user.img_url" spinner-color="dark" />
           </q-avatar>
         </router-link>
       </q-toolbar>
@@ -112,7 +112,7 @@
       <div v-show="!miniState" class="absolute-top" style="height: 150px">
         <div class="column items-center absolute-bottom bg-transparent">
           <q-avatar size="56px" class="q-mb-sm">
-            <img src="src/assets/profile.png" />
+            <img :src="user.img_url" />
           </q-avatar>
           <div class="text-weight-bold">
             ¡Hola, {{ user.name + " " + user.last_name }}!
@@ -129,6 +129,14 @@
       </div>
     </q-drawer>
     <q-page-container style="background: #f8fdff">
+      <div @click="goBack" class="full-width q-pl-md q-pt-md">
+        <q-icon
+          name="arrow_back"
+          size="md"
+          color="dark"
+          class="cursor-pointer"
+        />
+      </div>
       <router-view />
     </q-page-container>
 
@@ -150,7 +158,10 @@
       <div class="qrButton">
         <q-fab color="primary" icon="keyboard_arrow_up" direction="up">
           <q-fab-action color="primary" @click="handledReadQr">
-            <img src="./../assets/qr.jpg" style="width: 24px; height: 24px" />
+            <img
+              src="./../assets/images/qr.jpg"
+              style="width: 24px; height: 24px"
+            />
           </q-fab-action>
         </q-fab>
       </div>
@@ -249,48 +260,52 @@ aside {
 </style>
 
 <script setup>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import QRScanner from 'src/components/QRScanner.vue'
-import { userAuth } from 'src/composables/userAuth'
-import UpdateMembershipModal from '../components/UpdateMembershipModal.vue'
-import format from 'src/utils/date'
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import QRScanner from "src/components/QRScanner.vue";
+import { userAuth } from "src/composables/userAuth";
+import UpdateMembershipModal from "../components/UpdateMembershipModal.vue";
+import format from "src/utils/date";
 
-const { user } = userAuth()
-const router = useRouter()
+const { user } = userAuth();
+const router = useRouter();
 
-const leftDrawerOpen = ref(false)
-const show = ref(false)
-const miniState = ref(true)
+const leftDrawerOpen = ref(false);
+const show = ref(false);
+const miniState = ref(true);
 
 const goHome = () => {
-  router.push('/empresa')
-}
+  router.push("/empresa");
+};
 
-const showModalRenovar = () => user?.membresia?.days === 1
+const showModalRenovar = () => user?.membresia?.days === 1;
 
 const showModalNew = () =>
-  format(user?.membresia?.updated_at) === format(new Date())
+  format(user?.membresia?.updated_at) === format(new Date());
 
 const handledReadQr = () => {
-  show.value = !show.value
-}
+  show.value = !show.value;
+};
 
 const handledLogout = (e) => {
-  e.preventDefault()
-  localStorage.removeItem('user')
-  router.push('/login')
-}
+  e.preventDefault();
+  localStorage.removeItem("user");
+  router.push("/login");
+};
 
 const toggleLeftDrawer = () => {
-  leftDrawerOpen.value = true
-  miniState.value = !miniState.value
-}
+  leftDrawerOpen.value = true;
+  miniState.value = !miniState.value;
+};
 
 const drawerClick = (e) => {
   if (miniState.value) {
-    miniState.value = false
-    e.stopPropagation()
+    miniState.value = false;
+    e.stopPropagation();
   }
-}
+};
+
+const goBack = () => {
+  router.go(-1);
+};
 </script>

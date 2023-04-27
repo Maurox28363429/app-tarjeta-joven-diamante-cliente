@@ -1,51 +1,49 @@
 <script setup>
-import { registerSchema } from 'src/schemas/registerSchema'
-import { ref, computed } from 'vue'
-import StepOne from '../components/RegisterInputs/StepOne.vue'
-import StepTwo from '../components/RegisterInputs/StepTwo.vue'
-import StepThree from '../components/RegisterInputs/StepThree.vue'
-import StepFour from '../components/RegisterInputs/StepFour.vue'
+import { registerSchema } from "src/schemas/registerSchema";
+import { ref, computed } from "vue";
+import StepOne from "../components/RegisterInputs/StepOne.vue";
+import StepTwo from "../components/RegisterInputs/StepTwo.vue";
+import StepThree from "../components/RegisterInputs/StepThree.vue";
+import StepFour from "../components/RegisterInputs/StepFour.vue";
 
-import { userAuth } from 'src/composables/userAuth'
-import { useValidateForm } from 'src/composables/useValidateForm'
+import { userAuth } from "src/composables/userAuth";
+import { useValidateForm } from "src/composables/useValidateForm";
 
-const { register, isLoadingRegister } = userAuth()
+const { register, isLoadingRegister } = userAuth();
 
-const GENDER_OPTIONS = ['Hombre', 'Mujer']
+const GENDER_OPTIONS = ["Hombre", "Mujer"];
 
 const INITIAL_VALUES = {
-  name: '',
-  email: '',
-  last_name: '',
-  phone: '',
+  name: "",
+  email: "",
+  last_name: "",
+  phone: "",
   sex: GENDER_OPTIONS[0],
-  password: '',
-  vendedor: ''
-}
+  password: "",
+  vendedor: "",
+};
 
-const lastStep = 4
-const currentForm = ref(1)
+const lastStep = 4;
+const currentForm = ref(1);
 
-const nextStep = () => currentForm.value++
-const prevStep = () => currentForm.value--
+const nextStep = () => currentForm.value++;
+const prevStep = () => currentForm.value--;
 
-const disableLastButton = computed(() => currentForm.value === 1)
-const isLastStep = computed(() => currentForm.value === lastStep)
+const disableLastButton = computed(() => currentForm.value === 1);
+const isLastStep = computed(() => currentForm.value === lastStep);
 
 const { useForm, validatInput, validateMessage, validateForm } =
-  useValidateForm({ initialValue: INITIAL_VALUES, schema: registerSchema })
+  useValidateForm({ initialValue: INITIAL_VALUES, schema: registerSchema });
 
 const onSubmit = async (e) => {
-  validateForm()
-  console.log(useForm.value)
-  console.log(' errors =>', validateMessage.errors)
-  const roleIdClient = 3
-  register({ ...useForm.value, role_id: roleIdClient })
-}
+  validateForm();
+  const roleIdClient = 3;
+  register({ ...useForm.value, role_id: roleIdClient });
+};
 
 const updateForm = ({ key, value }) => {
-  useForm.value[key] = value
-}
+  useForm.value[key] = value;
+};
 </script>
 
 <template>
@@ -53,7 +51,7 @@ const updateForm = ({ key, value }) => {
     <div class="column items-center q-mx-none register">
       <div class="column items-center justify-center">
         <q-img
-          src="./../assets/logo.svg"
+          src="./../assets/icons/logo.svg"
           width="100px"
           height="80px"
           img-class="my-custom-image"
@@ -98,7 +96,7 @@ const updateForm = ({ key, value }) => {
               :useForm="useForm"
             />
           </div>
-          <div v-show="currentForm ===4" class="full-width">
+          <div v-show="currentForm === 4" class="full-width">
             <StepFour
               @update:modelValue="updateForm($event)"
               :validateMessage="validateMessage"

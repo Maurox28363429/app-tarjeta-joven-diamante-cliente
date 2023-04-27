@@ -26,109 +26,109 @@
 </template>
 
 <script setup>
-import { onMounted, ref, defineEmits } from 'vue'
-import { useToast } from 'src/composables/useToast'
-import { userCart } from 'src/stores/userCart'
-import { useRouter } from 'vue-router'
-import { userAuth } from 'src/composables/userAuth'
+import { onMounted, ref, defineEmits } from "vue";
+import { useToast } from "src/composables/useToast";
+import { userCart } from "src/stores/userCart";
+import { useRouter } from "vue-router";
+import { userAuth } from "src/composables/userAuth";
 
 defineProps({
   closeModal: {
-    type: Object
-  }
-})
+    type: Object,
+  },
+});
 
-const emits = defineEmits(['close-modal'])
+const emits = defineEmits(["close-modal"]);
 
-const router = useRouter()
-const { user } = userAuth()
+const router = useRouter();
+const { user } = userAuth();
 
-const client = userCart()
+const client = userCart();
 
-const visible = ref(false)
-const loading = ref(false)
+const visible = ref(false);
+const loading = ref(false);
 
-const permision = ref(false)
+const permision = ref(false);
 
-const { triggerWarning } = useToast()
+const { triggerWarning } = useToast();
 
-function addPermision () {
+function addPermision() {
   if (
     window?.cordova &&
     window?.cordova.plugins &&
     window?.cordova.plugins.permissions
   ) {
     // Solicitar permiso de cámara
-    const permissions = window.cordova.plugins.permissions
-    console.log('estoy en cordova', permissions)
+    const permissions = window.cordova.plugins.permissions;
+    console.log("estoy en cordova", permissions);
     permissions.requestPermission(
       permissions.CAMERA,
       function (status) {
         if (status.hasPermission) {
           // El permiso ha sido concedido
-          permision.value = true
-          console.log('tiene permiso')
+          permision.value = true;
+          console.log("tiene permiso");
         } else {
           // El permiso ha sido denegado
-          console.log('No tiene permiso')
+          console.log("No tiene permiso");
           triggerWarning(
-            'El permiso de la cámara fue denegado. Por favor, permite el acceso desde la configuración del dispositivo.'
-          )
-          permision.value = false
+            "El permiso de la cámara fue denegado. Por favor, permite el acceso desde la configuración del dispositivo."
+          );
+          permision.value = false;
         }
       },
       function (error) {
-        console.log('error', error)
+        console.log("error", error);
         // Error al solicitar el permiso
-        console.error('Error al solicitar el permiso de cámara')
-        triggerWarning('Los permisos para la camara estan desactivados')
-        permision.value = false
+        console.error("Error al solicitar el permiso de cámara");
+        triggerWarning("Los permisos para la camara estan desactivados");
+        permision.value = false;
       }
-    )
+    );
   }
 }
 
 onMounted(() => {
-  addPermision()
-})
+  addPermision();
+});
 
 const onDecode = async (decodedString) => {
-  loading.value = true
+  loading.value = true;
   try {
-    await client.setClient(decodedString)
-    router.push('/empresa/create-order')
-    emits('close-modal')
+    await client.setClient(decodedString);
+    router.push("/empresa/create-order");
+    emits("close-modal");
   } catch (error) {
-    console.error('Error al asignar el cliente:', error)
+    console.error("Error al asignar el cliente:", error);
   } finally {
-    loading.value = false
+    loading.value = false;
   }
-}
+};
 
 const onInit = (promise) => {
-  visible.value = true
+  visible.value = true;
   promise
     .then(() => {
-      permision.value = true
+      permision.value = true;
     })
     .catch((error) => {
-      console.error('Error al inicializar el lector de QR:', error)
-      triggerWarning('Los permisos para la camara estan desactivados')
-      permision.value = false
+      console.error("Error al inicializar el lector de QR:", error);
+      triggerWarning("Los permisos para la camara estan desactivados");
+      permision.value = false;
     })
     .finally(() => {
-      visible.value = false
-    })
-}
+      visible.value = false;
+    });
+};
 
 const onDetect = () => {
-  console.log('Código QR detectado.')
+  console.log("Código QR detectado.");
   if (!user.value.membresia) {
-    triggerWarning('Usuario no tiene una membresia activa')
+    triggerWarning("Usuario no tiene una membresia activa");
   }
-}
+};
 
 const onError = (error) => {
-  console.error('Error al escanear el código QR:', error)
-}
+  console.error("Error al escanear el código QR:", error);
+};
 </script>

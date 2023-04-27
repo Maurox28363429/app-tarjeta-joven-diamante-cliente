@@ -21,7 +21,7 @@
         />
         <q-toolbar-title class="row items-center">
           <q-img
-            src="../assets/acronimo.svg"
+            src="../assets/icons/acronimo.svg"
             spinner-color="dark"
             @click="goHome"
             style="height: 32px; max-width: 74px; cursor: pointer"
@@ -36,7 +36,7 @@
         />
         <router-link to="/cliente/account" class="cursor-pointer">
           <q-avatar size="42px" class="q-ml-md">
-            <q-img src="./../assets/profile.png" spinner-color="dark" />
+            <q-img :src="user.img_url" spinner-color="dark" />
           </q-avatar>
         </router-link>
       </q-toolbar>
@@ -91,7 +91,7 @@
             </q-item-section>
             <q-item-section>Home</q-item-section>
           </q-item>
-          <q-item clickable v-ripple to="/cliente/shopping">
+          <q-item clickable v-ripple to="/cliente/transactionsTable">
             <q-item-section avatar>
               <q-icon name="shopping_basket" />
             </q-item-section>
@@ -111,7 +111,7 @@
 
             <q-item-section>Mi perfil</q-item-section>
           </q-item>
-          <q-item clickable v-ripple to="/cliente/products">
+          <q-item clickable v-ripple to="/cliente/Offers">
             <q-item-section avatar>
               <q-icon name="sell" />
             </q-item-section>
@@ -143,7 +143,7 @@
       <div v-show="!miniState" class="absolute-top" style="height: 150px">
         <div class="column items-center absolute-bottom bg-transparent">
           <q-avatar size="56px" class="q-mb-sm">
-            <img src="src/assets/profile.png" />
+            <img :src="user.img_url" />
           </q-avatar>
           <div class="text-weight-bold">
             ¡Hola, {{ user.name + " " + user.last_name }}!
@@ -160,8 +160,18 @@
       </div>
     </q-drawer>
     <q-page-container style="background: #f8fdff">
+<<<<<<< HEAD
       <div @click="goBackLayout" class="full-width q-pl-md q-pt-md">
         <q-icon name="arrow_back" size="md" color="dark" class="cursor-pointer" />
+=======
+      <div @click="goBack" class="full-width q-pl-md q-pt-md">
+        <q-icon
+          name="arrow_back"
+          size="md"
+          color="dark"
+          class="cursor-pointer"
+        />
+>>>>>>> 0820f16ecdc5232719c19b6650acc5d056b1dab9
       </div>
       <router-view />
     </q-page-container>
@@ -187,7 +197,10 @@
             color="primary"
             :disable="user.membresia.status == 'vencida' ? true : false"
           >
-            <img src="./../assets/qr.jpg" style="width: 24px; height: 24px" />
+            <img
+              src="./../assets/images/qr.jpg"
+              style="width: 24px; height: 24px"
+            />
           </q-fab-action>
         </q-fab>
       </div>
@@ -212,7 +225,7 @@
         />
       </router-link>
       <router-link
-        to="/cliente/shopping"
+        to="/cliente/transactionsTable"
         style="text-decoration: none; color: #ffff; width: 100%; margin: none"
       >
         <q-tab
@@ -224,7 +237,7 @@
         />
       </router-link>
       <router-link
-        to="/cliente/products"
+        to="/cliente/Offers"
         style="text-decoration: none; color: #ffff; width: 100%; margin: none"
       >
         <q-tab
@@ -257,7 +270,7 @@
       description="Renueva el plan, y recibe ofertas especiales"
     />
     <q-img
-      src="src/assets/triangulo.png"
+      src="../assets/images/triangulo.png"
       spinner-color="dark"
       style="
         height: 150px;
@@ -270,7 +283,7 @@
       "
     />
     <q-img
-      src="src/assets/triangulo.png"
+      src="../assets/images/triangulo.png"
       class="trianguloBottom"
       spinner-color="dark"
     />
@@ -331,71 +344,78 @@ aside {
 </style>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
-import { userAuth } from 'src/composables/userAuth'
-import UpdateMembershipModal from '../components/UpdateMembershipModal.vue'
-import format from 'src/utils/date'
-import QrUser from '../components/QrUser.vue'
+import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
+import { userAuth } from "src/composables/userAuth";
+import UpdateMembershipModal from "../components/UpdateMembershipModal.vue";
+import format from "src/utils/date";
+import QrUser from "../components/QrUser.vue";
 
-const { user } = userAuth()
+const { user } = userAuth();
 
-const goHome = () => {
-  console.log('goHome')
-  router.push('/empresa')
-}
+const leftDrawerOpen = ref(false);
+const router = useRouter();
 
-const leftDrawerOpen = ref(false)
-const router = useRouter()
-
+<<<<<<< HEAD
 const goBackLayout = () => {
   router.go(-1)
 }
 
 const show = ref(false)
+=======
+const show = ref(false);
+>>>>>>> 0820f16ecdc5232719c19b6650acc5d056b1dab9
 
 const showModalRenovar = () => {
   if (user?.membresia?.days === 1) {
-    return true
+    return true;
   }
-  return false
-}
+  return false;
+};
 
 const handleModal = () => {
-  show.value = true
-}
+  show.value = true;
+};
 
 const showModalNew = () => {
   if (format(user?.membresia?.updated_at) === format(new Date())) {
-    return true
+    return true;
   }
-  return false
-}
+  return false;
+};
 
-const miniState = ref(true)
+const miniState = ref(true);
 
 const handledLogout = (e) => {
-  e.preventDefault()
-  localStorage.removeItem('user')
-  router.push('/login')
-}
+  e.preventDefault();
+  localStorage.removeItem("user");
+  router.push("/login");
+};
 
 const toggleLeftDrawer = () => {
-  leftDrawerOpen.value = true
-  miniState.value = !miniState.value
-}
+  leftDrawerOpen.value = true;
+  miniState.value = !miniState.value;
+};
 
 const drawerClick = (e) => {
   if (miniState.value) {
-    miniState.value = false
+    miniState.value = false;
 
-    e.stopPropagation()
+    e.stopPropagation();
   }
-}
+};
 
 onMounted(() => {
-  if (user.value.membresia.type === 'permitir_gratuita') {
-    router.push('/memberships')
+  if (user.value.membresia.type === "permitir_gratuita") {
+    router.push("/memberships");
   }
-})
+});
+
+const goHome = () => {
+  router.push("/cliente/home");
+};
+
+const goBack = () => {
+  router.go(-1);
+};
 </script>
