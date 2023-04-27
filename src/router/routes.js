@@ -52,11 +52,6 @@ const routes = [
             component: () => import("pages/client/MembershipsTypePage.vue"),
           },
           {
-            name: "products",
-            path: "products",
-            component: () => import("pages/client/ProductsPage.vue"),
-          },
-          {
             path: "",
             component: () => import("pages/client/HomePage.vue"),
           },

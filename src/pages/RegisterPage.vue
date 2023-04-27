@@ -37,8 +37,6 @@ const { useForm, validatInput, validateMessage, validateForm } =
 
 const onSubmit = async (e) => {
   validateForm();
-  console.log(useForm.value);
-  console.log(" errors =>", validateMessage.errors);
   const roleIdClient = 3;
   register({ ...useForm.value, role_id: roleIdClient });
 };
