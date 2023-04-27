@@ -338,7 +338,7 @@ import QrUser from "../components/QrUser.vue";
 const { user } = userAuth();
 
 const goHome = () => {
-  router.push("/empresa");
+  router.push("/cliente/home");
 };
 
 const leftDrawerOpen = ref(false);
