@@ -213,7 +213,7 @@
 
               <div class="q-ma-none full-width input">
                 <label class="label-large">
-                  DNI
+                  Cédula / pasaporte
                   <q-input
                     v-model="useForm.dni"
                     lazy-rules
@@ -227,7 +227,7 @@
 
               <div class="q-ma-none full-width input">
                 <label class="label-large">
-                  Poliza Beneficiario: DNI
+                  Poliza Beneficiario: Cédula / pasaporte
                   <q-input
                     v-model="useForm.beneficiario_poliza_cedula"
                     lazy-rules

@@ -160,6 +160,9 @@
       </div>
     </q-drawer>
     <q-page-container style="background: #f8fdff">
+      <div @click="goBackLayout" class="full-width q-pl-md q-pt-md">
+        <q-icon name="arrow_back" size="md" color="dark" class="cursor-pointer" />
+      </div>
       <router-view />
     </q-page-container>
     <q-dialog
@@ -344,6 +347,10 @@ const goHome = () => {
 
 const leftDrawerOpen = ref(false)
 const router = useRouter()
+
+const goBackLayout = () => {
+  router.go(-1)
+}
 
 const show = ref(false)
 
