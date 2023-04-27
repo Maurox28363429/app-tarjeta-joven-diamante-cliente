@@ -46,7 +46,10 @@
       </template>
       <template v-if="!isLoading">
         <div v-for="items in data.data.data" :key="items.id">
-          <q-card class="my-card column" style="height: 400px; width: 100%">
+          <q-card
+            class="my-card column"
+            style="width: 100%; min-height: 400px !important"
+          >
             <img
               style="
                 height: 120px;

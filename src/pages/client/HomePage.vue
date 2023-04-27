@@ -2,7 +2,7 @@
   <div class="q-pa-md">
     <div class="full-width column items-center">
       <q-img
-        src="src/assets/homeIcon.webp"
+        src="../../assets/homeIcon.webp"
         spinner-color="dark"
         style="height: 40px; max-width: 40px"
       />
@@ -13,7 +13,7 @@
         <HomeCard :title="card.title" :icon="card.icon" :link="card.link" />
       </div>
     </div>
-    <div class="full-width row justify-center q-mt-md">
+    <div class="full-width row justify-center q-my-xl">
       <q-btn
         @click="showModal = true"
         color="primary"
