@@ -67,7 +67,7 @@ const planValidate = computed(() => {
     <ul class="benefitsList">
       <li v-for="(benefit, index) of benefits" :key="index">
         <q-img
-          src="./../assets/checkIcon.svg"
+          src="./../assets/icons/checkIcon.svg"
           spinner-color="dark"
           style="height: 22px; max-width: 22px"
         />
@@ -75,7 +75,7 @@ const planValidate = computed(() => {
       </li>
       <li v-if="price > 0">
         <q-img
-          src="./../assets/checkIcon.svg"
+          src="./../assets/icons/checkIcon.svg"
           spinner-color="dark"
           style="height: 22px; max-width: 22px"
         />

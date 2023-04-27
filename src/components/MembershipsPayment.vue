@@ -95,7 +95,7 @@ onMounted(async () => {
       <q-toolbar>
         <q-toolbar-title>
           <q-img
-            src="../assets/acronimo.svg"
+            src="../assets/icons/acronimo.svg"
             spinner-color="dark"
             style="height: 40px; max-width: 98px"
           />
@@ -150,7 +150,7 @@ onMounted(async () => {
                 >
                   <p class="q-ma-none q-mr-md text-weight-medium">Pagar con</p>
                   <q-img
-                    src="./../assets/yappyIcon.svg"
+                    src="./../assets/icons/yappyIcon.svg"
                     spinner-color="white"
                     style="width: 74.75px; height: 17.92px"
                   />
@@ -198,7 +198,7 @@ onMounted(async () => {
                     Plan Membresia 3 Días
                   </p>
                   <q-img
-                    src="../assets/rokectPrimarysvg.svg"
+                    src="../assets/icons/rokectPrimarysvg.svg"
                     spinner-color="white"
                     style="width: 32px; height: 32px"
                   />

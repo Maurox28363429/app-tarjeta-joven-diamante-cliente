@@ -2,11 +2,11 @@
   <div class="q-pa-md">
     <div class="full-width column items-center">
       <q-img
-        src="../../assets/homeIcon.webp"
+        src="../../assets/images/homeIcon.webp"
         spinner-color="dark"
         style="height: 40px; max-width: 40px"
       />
-      <p class="title-large q-ma-none text-center">Home Page</p>
+      <p class="q-ma-none text-center title-large">Home Page</p>
     </div>
     <div class="cardList">
       <div v-for="card in HOME_CARD_LIST" :key="card.id">

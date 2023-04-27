@@ -1,8 +1,5 @@
 <template>
   <div class="full-width full-height row justify-center items-center">
-    <div @click="goBack" class="full-width q-pl-md q-pt-md">
-      <q-icon name="arrow_back" size="md" color="dark" class="cursor-pointer" />
-    </div>
     <div class="q-pa-md" style="max-width: 400px">
       <div class="row q-mb-md items-center">
         <q-avatar size="80px" class="q-mr-md">
@@ -68,10 +65,6 @@ import { userAuth } from "src/composables/userAuth";
 const { user } = userAuth();
 
 const router = useRouter();
-
-const goBack = () => {
-  router.go(-1);
-};
 
 const handledLogout = (e) => {
   e.preventDefault();

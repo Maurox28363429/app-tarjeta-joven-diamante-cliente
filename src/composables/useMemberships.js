@@ -1,7 +1,7 @@
 import { ref, onMounted } from "vue";
 import getMemberships from "src/api/getMemberships";
-import proImage from "../assets/rocket.svg";
-import freeImage from "../assets/plane.svg";
+import proImage from "../assets/icons/rocket.svg";
+import freeImage from "../assets/icons/plane.svg";
 
 export const useMemberships = () => {
   const loading = ref(false);

@@ -331,7 +331,7 @@ const handledUpdateUser = async () => {
     role_id: user.value.role_id,
     active: user.value.active,
     id: user.value.id,
-    sex: useForm.value.sex.value,
+    sex: useForm.value.sex?.value,
   };
   const {
     data: { data: newUserData },

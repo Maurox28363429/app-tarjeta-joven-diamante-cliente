@@ -2,7 +2,7 @@
   <div class="full-width q-py-xl row justify-center items-center">
     <div class="full-width column items-center">
       <q-img
-        src="../../assets/ghostIcon.png"
+        src="../../assets/images/ghostIcon.png"
         spinner-color="white"
         style="height: 80px; max-width: 80px"
       />

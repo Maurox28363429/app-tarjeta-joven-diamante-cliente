@@ -21,7 +21,7 @@
         />
         <q-toolbar-title class="row items-center">
           <q-img
-            src="../assets/acronimo.svg"
+            src="../assets/icons/acronimo.svg"
             spinner-color="dark"
             @click="goHome"
             style="height: 32px; max-width: 74px; cursor: pointer"
@@ -160,6 +160,14 @@
       </div>
     </q-drawer>
     <q-page-container style="background: #f8fdff">
+      <div @click="goBack" class="full-width q-pl-md q-pt-md">
+        <q-icon
+          name="arrow_back"
+          size="md"
+          color="dark"
+          class="cursor-pointer"
+        />
+      </div>
       <router-view />
     </q-page-container>
     <q-dialog
@@ -184,7 +192,10 @@
             color="primary"
             :disable="user.membresia.status == 'vencida' ? true : false"
           >
-            <img src="./../assets/qr.jpg" style="width: 24px; height: 24px" />
+            <img
+              src="./../assets/images/qr.jpg"
+              style="width: 24px; height: 24px"
+            />
           </q-fab-action>
         </q-fab>
       </div>
@@ -254,7 +265,7 @@
       description="Renueva el plan, y recibe ofertas especiales"
     />
     <q-img
-      src="../assets/triangulo.png"
+      src="../assets/images/triangulo.png"
       spinner-color="dark"
       style="
         height: 150px;
@@ -267,7 +278,7 @@
       "
     />
     <q-img
-      src="../assets/triangulo.png"
+      src="../assets/images/triangulo.png"
       class="trianguloBottom"
       spinner-color="dark"
     />
@@ -337,10 +348,6 @@ import QrUser from "../components/QrUser.vue";
 
 const { user } = userAuth();
 
-const goHome = () => {
-  router.push("/cliente/home");
-};
-
 const leftDrawerOpen = ref(false);
 const router = useRouter();
 
@@ -390,4 +397,12 @@ onMounted(() => {
     router.push("/memberships");
   }
 });
+
+const goHome = () => {
+  router.push("/cliente/home");
+};
+
+const goBack = () => {
+  router.go(-1);
+};
 </script>

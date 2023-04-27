@@ -34,7 +34,7 @@ const showPassword = () => {
     <div class="full-width q-mx-none column items-center login">
       <div class="column full-width items-center">
         <q-img
-          src="./../assets/logo.svg"
+          src="./../assets/icons/logo.svg"
           width="200px"
           height="auto"
           img-class="my-custom-image"

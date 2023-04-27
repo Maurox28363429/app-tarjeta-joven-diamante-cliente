@@ -38,7 +38,7 @@
 </template>
 
 <script setup>
-import whatsappIcon from "../../assets/whatsappIcon.png";
+import whatsappIcon from "../../assets/images/whatsappIcon.png";
 </script>
 
 <style scoped>

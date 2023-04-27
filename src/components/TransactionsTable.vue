@@ -142,7 +142,7 @@
 <script setup>
 import { ref, watchEffect } from "vue";
 import { userAuth } from "src/composables/userAuth";
-import { TRANSACTION_COLUMNS } from "src/shared/constants/transanctionColumns";
+import { TRANSACTION_COLUMNS } from "src/shared/constansts/transanctionColumns";
 import {
   useGetTransactionsClient,
   useGetTransactionsBusiness,

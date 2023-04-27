@@ -51,7 +51,7 @@ const updateForm = ({ key, value }) => {
     <div class="column items-center q-mx-none register">
       <div class="column items-center justify-center">
         <q-img
-          src="./../assets/logo.svg"
+          src="./../assets/icons/logo.svg"
           width="100px"
           height="80px"
           img-class="my-custom-image"

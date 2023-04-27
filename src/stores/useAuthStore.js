@@ -4,7 +4,7 @@ import registerUser from "src/api/registerUser";
 import localStorageAuth from "src/utils/localStorageAuth";
 import membershipsTest from "src/api/membershipsTest";
 import ROLE_ID from "src/utils/roleId";
-import profile from "../assets/profile.png";
+import profile from "../assets/images/profile.png";
 
 export const useAuthStore = defineStore("userAuth", {
   state: () => ({
@@ -32,26 +32,8 @@ export const useAuthStore = defineStore("userAuth", {
 
       this.router.push({ path: `/${ROLE_ID[this.user.role_id]}` });
     },
-    async register({
-      name,
-      email,
-      last_name,
-      phone,
-      sex,
-      password,
-      role_id,
-      vendedor,
-    }) {
-      const { data } = await registerUser({
-        name,
-        email,
-        last_name,
-        phone,
-        sex,
-        password,
-        role_id,
-        vendedor,
-      });
+    async register(registerData) {
+      const { data } = await registerUser(registerData);
       this.user = data.user;
       this.token = data.token;
       localStorageAuth.setUser(data);

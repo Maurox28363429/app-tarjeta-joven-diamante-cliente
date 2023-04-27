@@ -37,9 +37,8 @@
 </template>
 
 <script setup>
-import instagramIcon from "../../assets/instagramIcon.png";
-import youtubeIcon from "../../assets/youtubeIcon.png";
-console.log("pachama");
+import instagramIcon from "../../assets/images/instagramIcon.png";
+import youtubeIcon from "../../assets/images/youtubeIcon.png";
 </script>
 
 <style>

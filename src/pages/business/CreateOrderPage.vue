@@ -134,7 +134,7 @@ import { userCart } from "src/stores/userCart";
 import { useToast } from "src/composables/useToast";
 import { useGetOffers } from "src/querys/offersQuerys";
 import { useInvoiceOfferMutation } from "src/querys/invoiceQuerys";
-import { ORDER_CREATION_COLUMNS } from "src/shared/constants/orderCreationColumns";
+import { ORDER_CREATION_COLUMNS } from "src/shared/constansts/orderCreationColumns";
 
 const { triggerPositive } = useToast();
 

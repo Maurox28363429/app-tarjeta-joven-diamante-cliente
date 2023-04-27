@@ -1,18 +1,23 @@
-import { useAuthStore } from "src/stores/useAuthStore";
 import { ref, computed } from "vue";
-import { useToast } from "./useToast";
 import { useRouter } from "vue-router";
+import { useAuthStore } from "src/stores/useAuthStore";
+import { useToast } from "./useToast";
 
 export const userAuth = () => {
   const authStore = useAuthStore();
   const isLoadingLogin = ref(false);
   const isLoadingRegister = ref(false);
   const isLoadingMembership = ref(false);
+
   const { token } = authStore;
   const user = computed(() => authStore?.user);
   const { triggerPositive, triggerWarning } = useToast();
 
   const router = useRouter();
+
+  const ERR_NETWORK_MESSAGE =
+    "Verifique su conexión a internet e intente nuevamente";
+  const ERROR_MESSAGE = "Error desconocido";
 
   const membershipsIsActive = () =>
     userAuth?.user.membresia?.status === "activa" ||
@@ -28,8 +33,8 @@ export const userAuth = () => {
         err.response?.status === 400
           ? "Usuario no encontrado, por favor verifique sus datos e intente nuevamente"
           : err.code === "ERR_NETWORK"
-          ? "Verifique su conexión a internet e intente nuevamente"
-          : "Error desconocido";
+          ? ERR_NETWORK_MESSAGE
+          : ERROR_MESSAGE;
       triggerWarning(errorMessage);
 
       console.error(err);
@@ -38,44 +43,18 @@ export const userAuth = () => {
     }
   };
 
-  const register = async ({
-    name,
-    email,
-    last_name,
-    phone,
-    sex,
-    password,
-    role_id,
-    dni,
-    beneficiario_poliza_cedula,
-    beneficiario_poliza_name,
-    fecha_nacimiento,
-    vendedor,
-  }) => {
+  const register = async (data) => {
     try {
       isLoadingRegister.value = true;
-      await authStore.register({
-        name,
-        email,
-        last_name,
-        phone,
-        sex,
-        password,
-        role_id,
-        dni,
-        beneficiario_poliza_cedula,
-        beneficiario_poliza_name,
-        fecha_nacimiento,
-        vendedor,
-      });
+      await authStore.register(data);
       triggerPositive("Usuario registrado con éxito");
     } catch (err) {
       const errorMessage =
         err.response?.status === 400
           ? "Ese usuario ya exite, por favor ingrese otro correo o número de teléfono"
           : err.code === "ERR_NETWORK"
-          ? "Verifique su conexión a internet e intente nuevamente"
-          : "Error desconocido";
+          ? ERR_NETWORK_MESSAGE
+          : ERROR_MESSAGE;
       triggerWarning(errorMessage);
       console.error(err);
     } finally {
@@ -94,9 +73,7 @@ export const userAuth = () => {
         triggerWarning(error.response.data.message);
       } else {
         const errorMessage =
-          error.code === "ERR_NETWORK"
-            ? "Verifique su conexión a internet e intente nuevamente"
-            : "Error desconocido";
+          error.code === "ERR_NETWORK" ? ERR_NETWORK_MESSAGE : ERROR_MESSAGE;
         triggerWarning(errorMessage);
       }
       console.error(error);

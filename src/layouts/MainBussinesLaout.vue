@@ -21,7 +21,7 @@
         />
         <q-toolbar-title class="row items-center">
           <q-img
-            src="../assets/acronimo.svg"
+            src="../assets/icons/acronimo.svg"
             spinner-color="dark"
             @click="goHome"
             style="height: 32px; max-width: 74px; cursor: pointer"
@@ -129,6 +129,14 @@
       </div>
     </q-drawer>
     <q-page-container style="background: #f8fdff">
+      <div @click="goBack" class="full-width q-pl-md q-pt-md">
+        <q-icon
+          name="arrow_back"
+          size="md"
+          color="dark"
+          class="cursor-pointer"
+        />
+      </div>
       <router-view />
     </q-page-container>
 
@@ -150,7 +158,10 @@
       <div class="qrButton">
         <q-fab color="primary" icon="keyboard_arrow_up" direction="up">
           <q-fab-action color="primary" @click="handledReadQr">
-            <img src="./../assets/qr.jpg" style="width: 24px; height: 24px" />
+            <img
+              src="./../assets/images/qr.jpg"
+              style="width: 24px; height: 24px"
+            />
           </q-fab-action>
         </q-fab>
       </div>
@@ -292,5 +303,9 @@ const drawerClick = (e) => {
     miniState.value = false;
     e.stopPropagation();
   }
+};
+
+const goBack = () => {
+  router.go(-1);
 };
 </script>

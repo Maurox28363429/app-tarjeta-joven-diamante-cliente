@@ -1,10 +1,15 @@
+import { useRouter } from "vue-router";
 import { useMutation, useQueryClient } from "@tanstack/vue-query";
+
 import updateUser from "src/api/updateUser";
 import getCodeForRecoveryPassword from "src/api/getCodeForRecoveryPassword";
 import validatePasswordAndCode from "src/api/validatePasswordAndCode";
 import changePassword from "src/api/changePassword";
+
 import { useToast } from "src/composables/useToast";
-import { useRouter } from "vue-router";
+
+const ERR_NETWORK_MESSAGE = "Verifique su conexión a internet";
+const ERROR_MESSAGE = "Ah ocurrido un error, intente nuevamente";
 
 export const useUpdateUserMutation = () => {
   const { triggerPositive, triggerWarning } = useToast();
@@ -21,9 +26,9 @@ export const useUpdateUserMutation = () => {
     onError: (error) => {
       console.error(error, "error");
       if (error?.code === "ERR_NETWORK") {
-        triggerWarning("Verifique su conexión a internet");
+        triggerWarning(ERR_NETWORK_MESSAGE);
       } else {
-        triggerWarning("Ah ocurrido un error, intente nuevamente");
+        triggerWarning(ERROR_MESSAGE);
       }
     },
   });
@@ -48,9 +53,9 @@ export const useSendEmail = () => {
     onError: (error) => {
       console.error(error, "error");
       if (error?.code === "ERR_NETWORK") {
-        triggerWarning("Verifique su conexión a internet");
+        triggerWarning(ERR_NETWORK_MESSAGE);
       } else {
-        triggerWarning("Ah ocurrido un error, intente nuevamente");
+        triggerWarning(ERROR_MESSAGE);
       }
     },
   });
@@ -75,9 +80,9 @@ export const useChangePassword = () => {
     onError: (error) => {
       console.error(error, "error");
       if (error?.code === "ERR_NETWORK") {
-        triggerWarning("Verifique su conexión a internet");
+        triggerWarning(ERR_NETWORK_MESSAGE);
       } else {
-        triggerWarning("Ah ocurrido un error, intente nuevamente");
+        triggerWarning(ERROR_MESSAGE);
       }
     },
   });
@@ -106,9 +111,9 @@ export const useValidatePasswordAndCode = () => {
     onError: (error) => {
       console.error(error, "error");
       if (error?.code === "ERR_NETWORK") {
-        triggerWarning("Verifique su conexión a internet");
+        triggerWarning(ERR_NETWORK_MESSAGE);
       } else {
-        triggerWarning("Ah ocurrido un error, intente nuevamente");
+        triggerWarning(ERROR_MESSAGE);
       }
     },
   });
@@ -135,9 +140,9 @@ export const useSendEmailAgain = () => {
     onError: (error) => {
       console.error(error, "error");
       if (error?.code === "ERR_NETWORK") {
-        triggerWarning("Verifique su conexión a internet");
+        triggerWarning(ERR_NETWORK_MESSAGE);
       } else {
-        triggerWarning("Ah ocurrido un error, intente nuevamente");
+        triggerWarning(ERROR_MESSAGE);
       }
     },
   });
