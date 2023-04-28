@@ -197,26 +197,26 @@
   </div>
 </template>
 <script setup>
-import { userAuth } from "src/composables/userAuth";
-import { onMounted, ref } from "vue";
-import { useValidateForm } from "src/composables/useValidateForm";
-import { updateProfileShema } from "src/schemas/updateProfileShema";
-import localStorageAuth from "src/utils/localStorageAuth";
-import { useUpdateUserMutation } from "src/querys/userQuerys";
-import { urlToBinary } from "src/utils/urlToBinary";
+import { userAuth } from 'src/composables/userAuth'
+import { onMounted, ref } from 'vue'
+import { useValidateForm } from 'src/composables/useValidateForm'
+import { updateProfileShema } from 'src/schemas/updateProfileShema'
+import localStorageAuth from 'src/utils/localStorageAuth'
+import { useUpdateUserMutation } from 'src/querys/userQuerys'
+import { urlToBinary } from 'src/utils/urlToBinary'
 
-const { user, updatedUser } = userAuth();
+const { user, updatedUser } = userAuth()
 
 const GENDER_OPTIONS = [
-  { label: "Mujer", value: 0 },
-  { label: "Hombre", value: 1 },
-];
+  { label: 'Mujer', value: 0 },
+  { label: 'Hombre', value: 1 }
+]
 
 const genderCurrent = GENDER_OPTIONS.find((item) => {
-  return item.value === user.value.sex;
-});
+  return item.value === user.value.sex
+})
 
-const file = ref(user.value.img_url);
+const file = ref(user.value.img_url)
 
 const INITIAL_VALUES = {
   name: user.value.name,
@@ -225,52 +225,52 @@ const INITIAL_VALUES = {
   phone: user.value.phone,
   sex: genderCurrent,
   address: user.value.address,
-  img: undefined,
-};
+  img: undefined
+}
 
 const { useForm, validatInput, validateMessage, validateForm } =
-  useValidateForm({ initialValue: INITIAL_VALUES, schema: updateProfileShema });
+  useValidateForm({ initialValue: INITIAL_VALUES, schema: updateProfileShema })
 
-const { isLoading, mutateAsync } = useUpdateUserMutation();
+const { isLoading, mutateAsync } = useUpdateUserMutation()
 
 const uploadImg = (event) => {
-  const image = event.target.files[0];
-  useForm.value.img = image;
-  file.value = URL.createObjectURL(image);
-};
+  const image = event.target.files[0]
+  useForm.value.img = image
+  file.value = URL.createObjectURL(image)
+}
 
 const handledUpdateUser = async () => {
-  validateForm();
+  validateForm()
   const values = {
     ...useForm.value,
     role_id: user.value.role_id,
     active: user.value.active,
     id: user.value.id,
-    sex: useForm.value?.sex?.value,
-  };
+    sex: useForm.value?.sex?.value
+  }
 
   const {
-    data: { data: newUserData },
-  } = await mutateAsync({ data: values, id: user.value.id });
-  const userCurrent = localStorageAuth.getUser();
+    data: { data: newUserData }
+  } = await mutateAsync({ data: values, id: user.value.id })
+  const userCurrent = localStorageAuth.getUser()
   localStorageAuth.setUser({
     user: { ...userCurrent.user, ...newUserData },
-    token: userCurrent.token,
-  });
-  updatedUser();
-};
+    token: userCurrent.token
+  })
+  updatedUser()
+}
 
 onMounted(async () => {
   try {
     const url = await urlToBinary({
       url: useForm.value.img,
-      fileName: "avatar",
-    });
-    useForm.value.img = url;
+      fileName: 'avatar'
+    })
+    useForm.value.img = url
   } catch (error) {
-    console.log(error);
+    console.log(error)
   }
-});
+})
 </script>
 
 <style scoped>

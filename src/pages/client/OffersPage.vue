@@ -181,42 +181,42 @@
 </template>
 
 <script setup>
-import { ref, watchEffect } from "vue";
-import { useGetOffersFromBusiness } from "src/querys/offersQuerys";
-import { PANAMA_STATE } from "src/shared/constansts/panamaState";
+import { ref, watchEffect } from 'vue'
+import { useGetOffersFromBusiness } from 'src/querys/offersQuerys'
+import { PANAMA_STATE } from 'src/shared/constansts/panamaState'
 
-const currentPaginate = ref(1);
-const paginas = ref(0);
-const search = ref("");
-const modalCurrent = ref({});
-const openModal = ref(false);
-const state = ref(null);
+const currentPaginate = ref(1)
+const paginas = ref(0)
+const search = ref('')
+const modalCurrent = ref({})
+const openModal = ref(false)
+const state = ref(null)
 
 const { data, isLoading, refetch, isFetching } = useGetOffersFromBusiness({
   search,
   page: currentPaginate,
-  dir: state,
-});
+  dir: state
+})
 
 watchEffect(() => {
   if (data.value) {
-    currentPaginate.value = data.value?.pagination.currentPage;
-    paginas.value = data.value?.pagination.lastPage;
+    currentPaginate.value = data.value?.pagination.currentPage
+    paginas.value = data.value?.pagination.lastPage
   }
-});
+})
 
 const selectState = (opt) => {
-  state.value = opt;
-};
+  state.value = opt
+}
 
 const showModal = (modalInfo) => {
-  modalCurrent.value = { ...modalInfo };
-  openModal.value = true;
-};
+  modalCurrent.value = { ...modalInfo }
+  openModal.value = true
+}
 
 const handleSearch = () => {
-  refetch();
-};
+  refetch()
+}
 </script>
 
 <style>
