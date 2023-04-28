@@ -1,7 +1,7 @@
 <template>
   <div class="q-px-md">
     <div v-if="!state">
-      <p class="title-large">Seleciona un estado</p>
+      <p class="title-large">Selecciona un estado</p>
       <div class="row wrap q-gutter-md justify-center">
         <q-card
           v-for="state in PANAMA_STATE"
