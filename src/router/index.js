@@ -7,7 +7,7 @@ import {
   createWebHashHistory,
 } from "vue-router";
 import routes from "./routes";
-import ROLE_ID from "src/utils/roleId";
+import ROLE_ID from "src/shared/constansts/roleId";
 
 /*
  * If not building with SSR mode, you can

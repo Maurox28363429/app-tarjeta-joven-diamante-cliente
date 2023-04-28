@@ -3,7 +3,7 @@ import loginUser from "src/api/loginUser";
 import registerUser from "src/api/registerUser";
 import localStorageAuth from "src/utils/localStorageAuth";
 import membershipsTest from "src/api/membershipsTest";
-import ROLE_ID from "src/utils/roleId";
+import ROLE_ID from "src/shared/constansts/roleId";
 import profile from "../assets/images/profile.png";
 
 export const useAuthStore = defineStore("userAuth", {
