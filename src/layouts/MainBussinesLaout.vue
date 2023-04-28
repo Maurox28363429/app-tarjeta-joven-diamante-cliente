@@ -260,52 +260,52 @@ aside {
 </style>
 
 <script setup>
-import { ref } from "vue";
-import { useRouter } from "vue-router";
-import QRScanner from "src/components/QRScanner.vue";
-import { userAuth } from "src/composables/userAuth";
-import UpdateMembershipModal from "../components/UpdateMembershipModal.vue";
-import format from "src/utils/date";
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import QRScanner from 'src/components/QRScanner.vue'
+import { userAuth } from 'src/composables/userAuth'
+import UpdateMembershipModal from '../components/UpdateMembershipModal.vue'
+import format from 'src/utils/date'
 
-const { user } = userAuth();
-const router = useRouter();
+const { user } = userAuth()
+const router = useRouter()
 
-const leftDrawerOpen = ref(false);
-const show = ref(false);
-const miniState = ref(true);
+const leftDrawerOpen = ref(false)
+const show = ref(false)
+const miniState = ref(true)
 
 const goHome = () => {
-  router.push("/empresa");
-};
+  router.push('/empresa')
+}
 
-const showModalRenovar = () => user?.membresia?.days === 1;
+const showModalRenovar = () => user?.membresia?.days === 1
 
 const showModalNew = () =>
-  format(user?.membresia?.updated_at) === format(new Date());
+  format(user?.membresia?.updated_at) === format(new Date())
 
 const handledReadQr = () => {
-  show.value = !show.value;
-};
+  show.value = !show.value
+}
 
 const handledLogout = (e) => {
-  e.preventDefault();
-  localStorage.removeItem("user");
-  router.push("/login");
-};
+  e.preventDefault()
+  localStorage.removeItem('user')
+  router.push('/login')
+}
 
 const toggleLeftDrawer = () => {
-  leftDrawerOpen.value = true;
-  miniState.value = !miniState.value;
-};
+  leftDrawerOpen.value = true
+  miniState.value = !miniState.value
+}
 
 const drawerClick = (e) => {
   if (miniState.value) {
-    miniState.value = false;
-    e.stopPropagation();
+    miniState.value = false
+    e.stopPropagation()
   }
-};
+}
 
 const goBack = () => {
-  router.go(-1);
-};
+  router.go(-1)
+}
 </script>

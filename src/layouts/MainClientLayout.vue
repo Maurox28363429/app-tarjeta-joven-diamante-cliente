@@ -169,12 +169,24 @@
         />
       </div>
       <q-dialog v-model="prompt" persistent>
-        <q-card style="min-width: 350px; width: 70%; height: 300px">
+        <q-card style="min-width: 350px; width: 70%; height: 530px">
           <q-card-section>
+            <div align="center">
+              <img src="favicon.ico" style="width:100px;height:auto" />
+            </div>
+            <br>
             <div class="text-h6">Coloca tu beneficiaro de poliza</div>
           </q-card-section>
 
           <q-card-section class="q-pt-none" style="">
+            <div style="padding: 1em">
+                <q-input
+                  placeholder="Cedula o pasaporte del usuario"
+                  dense
+                  v-model="dni"
+                  autofocus
+                />
+              </div>
             <div style="padding: 1em">
               <q-input
                 placeholder="Cedula de tu beneficiario"
@@ -192,15 +204,16 @@
             </div>
           </q-card-section>
 
-          <q-card-actions align="right" class="text-primary">
+          <q-card-actions align="center" class="text-primary">
             <q-btn
-              flat
+              color="primary"
               label="Agregar datos"
               v-close-popup
               @click="actualizar_beneficiario"
               :disable="
                 beneficiario_poliza_cedula != '' &&
-                beneficiario_poliza_name != ''
+                beneficiario_poliza_name != '' &&
+                dni != ''
                   ? false
                   : true
               "
@@ -381,106 +394,109 @@ aside {
 </style>
 
 <script setup>
-import { ref, onMounted } from "vue";
-import { useRouter } from "vue-router";
-import { userAuth } from "src/composables/userAuth";
-import UpdateMembershipModal from "../components/UpdateMembershipModal.vue";
-import format from "src/utils/date";
-import QrUser from "../components/QrUser.vue";
-import localStorageAuth from "src/utils/localStorageAuth";
-import updateUser from "src/api/updateUser";
-import { useQuasar } from "quasar";
-const $q = useQuasar();
+import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { userAuth } from 'src/composables/userAuth'
+import UpdateMembershipModal from '../components/UpdateMembershipModal.vue'
+import format from 'src/utils/date'
+import QrUser from '../components/QrUser.vue'
+import localStorageAuth from 'src/utils/localStorageAuth'
+import updateUser from 'src/api/updateUser'
+import { useQuasar } from 'quasar'
+const $q = useQuasar()
 
-const { user } = userAuth();
+const { user } = userAuth()
 
-const leftDrawerOpen = ref(false);
-const router = useRouter();
-const show = ref(false);
+const leftDrawerOpen = ref(false)
+const router = useRouter()
+const show = ref(false)
 
 const showModalRenovar = () => {
   if (user?.membresia?.days === 1) {
-    return true;
+    return true
   }
-  return false;
-};
+  return false
+}
 
 const handleModal = () => {
-  show.value = true;
-};
+  show.value = true
+}
 
 const showModalNew = () => {
   if (format(user?.membresia?.updated_at) === format(new Date())) {
-    return true;
+    return true
   }
-  return false;
-};
+  return false
+}
 
-const miniState = ref(true);
+const miniState = ref(true)
 
 const handledLogout = (e) => {
-  e.preventDefault();
-  localStorage.removeItem("user");
-  router.push("/login");
-};
+  e.preventDefault()
+  localStorage.removeItem('user')
+  router.push('/login')
+}
 
 const toggleLeftDrawer = () => {
-  leftDrawerOpen.value = true;
-  miniState.value = !miniState.value;
-};
+  leftDrawerOpen.value = true
+  miniState.value = !miniState.value
+}
 
 const drawerClick = (e) => {
   if (miniState.value) {
-    miniState.value = false;
+    miniState.value = false
 
-    e.stopPropagation();
+    e.stopPropagation()
   }
-};
+}
 
 // para el inicio comprobar si tiene beneficiario
-const prompt = ref(false);
-const beneficiario_poliza_cedula = ref("");
-const beneficiario_poliza_name = ref("");
+const prompt = ref(false)
+const dni = ref('')
+const beneficiario_poliza_cedula = ref('')
+const beneficiario_poliza_name = ref('')
 const actualizar_beneficiario = async () => {
-  const userCurrent = localStorageAuth.getUser();
+  const userCurrent = localStorageAuth.getUser()
   const newUserData = {
     beneficiario_poliza_cedula: beneficiario_poliza_cedula.value,
     beneficiario_poliza_name: beneficiario_poliza_name.value,
-  };
+    dni: dni.value
+  }
   updateUser({
     id: user.value.id,
-    data: newUserData,
+    data: newUserData
   }).then((m) => {
     localStorageAuth.setUser({
       user: { ...userCurrent.user, ...newUserData },
-      token: userCurrent.token,
-    });
+      token: userCurrent.token
+    })
     $q.notify({
-      type: "positive",
-      message: "Usuario actualizado",
-    });
-  });
-};
+      type: 'positive',
+      message: 'Usuario actualizado'
+    })
+  })
+}
 
 onMounted(() => {
-  if (user.value.membresia.type === "permitir_gratuita") {
-    router.push("/memberships");
+  if (user.value.membresia.type === 'permitir_gratuita') {
+    router.push('/memberships')
   }
-  if (user.value.membresia.type === "Comprada") {
+  if (user.value.membresia.type === 'Comprada') {
     if (
       user.value.beneficiario_poliza_cedula === null ||
-      user.value.beneficiario_poliza_name === null
+      user.value.beneficiario_poliza_name === null ||
+      user.value.dni === null
     ) {
-      prompt.value = true;
+      prompt.value = true
     }
   }
-});
+})
 
 const goHome = () => {
-  router.push("/cliente/home");
-};
+  router.push('/cliente/home')
+}
 
 const goBack = () => {
-  router.go(-1);
-};
+  router.go(-1)
+}
 </script>
