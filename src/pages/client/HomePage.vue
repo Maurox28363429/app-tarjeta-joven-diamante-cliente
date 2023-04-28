@@ -36,7 +36,7 @@
 
   <q-dialog v-model="showModal">
     <q-card>
-      <q-card-section>
+      <q-card-section class="q-py-xs q-px-md">
         <div class="text-h6">Seguro de accidentes personales 24/7</div>
       </q-card-section>
 
