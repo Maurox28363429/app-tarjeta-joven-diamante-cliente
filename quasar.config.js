@@ -8,13 +8,13 @@
 // Configuration for your app
 // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js
 
-const { configure } = require('quasar/wrappers')
+const { configure } = require("quasar/wrappers");
 
-const dotenv = require('dotenv')
+const dotenv = require("dotenv");
 
-const isProd = process.env.NODE_ENV === 'production'
-const envFile = isProd ? '.env.production' : '.env.development'
-dotenv.config({ path: envFile })
+const isProd = process.env.NODE_ENV === "production";
+const envFile = isProd ? ".env.production" : ".env.development";
+dotenv.config({ path: envFile });
 
 module.exports = configure(function (ctx) {
   return {
@@ -24,7 +24,7 @@ module.exports = configure(function (ctx) {
       // exclude = [],
       // rawOptions = {},
       warnings: false,
-      errors: false
+      errors: false,
     },
 
     // https://v2.quasar.dev/quasar-cli/prefetch-feature
@@ -33,10 +33,10 @@ module.exports = configure(function (ctx) {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli/boot-files
-    boot: ['axios', 'qrcode-reader', 'vue-query'],
+    boot: ["axios", "qrcode-reader", "vue-query"],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#css
-    css: ['app.scss'],
+    css: ["app.scss"],
 
     // https://github.com/quasarframework/quasar/tree/dev/extras
     extras: [
@@ -48,19 +48,19 @@ module.exports = configure(function (ctx) {
       // 'line-awesome',
       // 'roboto-font-latin-ext', // this or either 'roboto-font', NEVER both!
 
-      'roboto-font', // optional, you are not bound to it
-      'material-icons' // optional, you are not bound to it
+      "roboto-font", // optional, you are not bound to it
+      "material-icons", // optional, you are not bound to it
     ],
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#build
     build: {
       env: dotenv.config({ path: envFile }).parsed,
       target: {
-        browser: ['es2019', 'edge88', 'firefox78', 'chrome87', 'safari13.1'],
-        node: 'node16'
+        browser: ["es2019", "edge88", "firefox78", "chrome87", "safari13.1"],
+        node: "node16",
       },
 
-      vueRouterMode: 'hash' // available values: 'hash', 'history'
+      vueRouterMode: "hash", // available values: 'hash', 'history'
       // vueRouterBase,
       // vueDevtools,
       // vueOptionsAPI: false,
@@ -87,7 +87,7 @@ module.exports = configure(function (ctx) {
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#devServer
     devServer: {
       // https: true
-      open: true // opens browser window automatically
+      open: true, // opens browser window automatically
     },
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#framework
@@ -95,7 +95,7 @@ module.exports = configure(function (ctx) {
       config: {
         notify: {
           /* look at QuasarConfOptions from the API card */
-        }
+        },
       },
 
       // iconSet: 'material-icons', // Quasar icon set
@@ -109,7 +109,7 @@ module.exports = configure(function (ctx) {
       // directives: [],
 
       // Quasar plugins
-      plugins: ['Notify', 'Dialog']
+      plugins: ["Notify", "Dialog"],
     },
 
     // animations: 'all', // --- includes all animations
@@ -145,17 +145,17 @@ module.exports = configure(function (ctx) {
       // (gets superseded if process.env.PORT is specified at runtime)
 
       middlewares: [
-        'render' // keep this as last one
-      ]
+        "render", // keep this as last one
+      ],
     },
 
     // https://v2.quasar.dev/quasar-cli/developing-pwa/configuring-pwa
     pwa: {
-      workboxMode: 'generateSW', // or 'injectManifest'
+      workboxMode: "generateSW", // or 'injectManifest'
       injectPwaMetaTags: true,
-      swFilename: 'sw.js',
-      manifestFilename: 'manifest.json',
-      useCredentialsForManifestTag: false
+      swFilename: "sw.js",
+      manifestFilename: "manifest.json",
+      useCredentialsForManifestTag: false,
       // useFilenameHashes: true,
       // extendGenerateSWOptions (cfg) {}
       // extendInjectManifestOptions (cfg) {},
@@ -165,12 +165,12 @@ module.exports = configure(function (ctx) {
 
     // Full list of options: https://v2.quasar.dev/quasar-cli/developing-cordova-apps/configuring-cordova
     cordova: {
-      noIosLegacyBuildFlag: true // uncomment only if you know what you are doing
+      noIosLegacyBuildFlag: true, // uncomment only if you know what you are doing
     },
 
     // Full list of options: https://v2.quasar.dev/quasar-cli/developing-capacitor-apps/configuring-capacitor
     capacitor: {
-      hideSplashscreen: true
+      hideSplashscreen: true,
     },
 
     // Full list of options: https://v2.quasar.dev/quasar-cli/developing-electron-apps/configuring-electron
@@ -180,7 +180,7 @@ module.exports = configure(function (ctx) {
 
       inspectPort: 5858,
 
-      bundler: 'packager', // 'packager' or 'builder'
+      bundler: "packager", // 'packager' or 'builder'
 
       packager: {
         // https://github.com/electron-userland/electron-packager/blob/master/docs/api.md#options
@@ -196,16 +196,16 @@ module.exports = configure(function (ctx) {
       builder: {
         // https://www.electron.build/configuration/configuration
 
-        appId: 'app-cliente'
-      }
+        appId: "app-cliente",
+      },
     },
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/developing-browser-extensions/configuring-bex
     bex: {
-      contentScripts: ['my-content-script']
+      contentScripts: ["my-content-script"],
 
       // extendBexScriptsConf (esbuildConf) {}
       // extendBexManifestJson (json) {}
-    }
-  }
-})
+    },
+  };
+});
