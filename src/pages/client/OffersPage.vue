@@ -149,35 +149,35 @@
 </template>
 
 <script setup>
-import { ref, watchEffect } from "vue";
-import { useGetOffersFromBusiness } from "src/querys/offersQuerys";
+import { ref, watchEffect } from 'vue'
+import { useGetOffersFromBusiness } from 'src/querys/offersQuerys'
 
-const currentPaginate = ref(1);
-const paginas = ref(0);
-const search = ref("");
-const modalCurrent = ref({});
-const openModal = ref(false);
+const currentPaginate = ref(1)
+const paginas = ref(0)
+const search = ref('')
+const modalCurrent = ref({})
+const openModal = ref(false)
 
 const { data, isLoading, refetch, isFetching } = useGetOffersFromBusiness({
   search,
-  page: currentPaginate,
-});
+  page: currentPaginate
+})
 
 watchEffect(() => {
   if (data.value) {
-    currentPaginate.value = data.value?.pagination.currentPage;
-    paginas.value = data.value?.pagination.lastPage;
+    currentPaginate.value = data.value?.pagination.currentPage
+    paginas.value = data.value?.pagination.lastPage
   }
-});
+})
 
 const showModal = (modalInfo) => {
-  modalCurrent.value = { ...modalInfo };
-  openModal.value = true;
-};
+  modalCurrent.value = { ...modalInfo }
+  openModal.value = true
+}
 
 const handleSearch = () => {
-  refetch();
-};
+  refetch()
+}
 </script>
 
 <style>
