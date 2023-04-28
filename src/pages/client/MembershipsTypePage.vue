@@ -23,12 +23,12 @@
 </template>
 
 <script setup>
-import { userAuth } from "src/composables/userAuth";
-import { computed } from "vue";
+import { userAuth } from 'src/composables/userAuth'
+import { computed } from 'vue'
 
-const { user } = userAuth();
+const { user } = userAuth()
 
 const isMembershipsActive = computed(() => {
-  return !user.value.membresia.status === "vencida";
-});
+  return !user.value.membresia.status === 'vencida'
+})
 </script>

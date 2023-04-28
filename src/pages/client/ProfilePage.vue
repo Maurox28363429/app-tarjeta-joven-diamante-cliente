@@ -269,35 +269,35 @@
   </div>
 </template>
 <script setup>
-import { userAuth } from "src/composables/userAuth";
-import { ref, watch, onMounted } from "vue";
-import { useValidateForm } from "src/composables/useValidateForm";
-import { updateProfileShema } from "src/schemas/updateProfileShema";
-import localStorageAuth from "src/utils/localStorageAuth";
-import { useUpdateUserMutation } from "src/querys/userQuerys";
-import { urlToBinary } from "src/utils/urlToBinary";
+import { userAuth } from 'src/composables/userAuth'
+import { ref, watch, onMounted } from 'vue'
+import { useValidateForm } from 'src/composables/useValidateForm'
+import { updateProfileShema } from 'src/schemas/updateProfileShema'
+import localStorageAuth from 'src/utils/localStorageAuth'
+import { useUpdateUserMutation } from 'src/querys/userQuerys'
+import { urlToBinary } from 'src/utils/urlToBinary'
 
-const { user: userStore, updatedUser } = userAuth();
-const user = ref(localStorageAuth.getUser().user);
+const { user: userStore, updatedUser } = userAuth()
+const user = ref(localStorageAuth.getUser().user)
 
 watch(
   userStore,
   () => {
-    user.value = userStore.value;
+    user.value = userStore.value
   },
   { immediate: true }
-);
+)
 
 const GENDER_OPTIONS = [
-  { label: "Mujer", value: 0 },
-  { label: "Hombre", value: 1 },
-];
+  { label: 'Mujer', value: 0 },
+  { label: 'Hombre', value: 1 }
+]
 
 const genderCurrent = GENDER_OPTIONS.find((item) => {
-  return item.value === user.value.sex;
-});
+  return item.value === user.value.sex
+})
 
-const file = ref(user.value.img_url);
+const file = ref(user.value.img_url)
 
 const INITIAL_VALUES = {
   name: user.value.name,
@@ -307,54 +307,54 @@ const INITIAL_VALUES = {
   sex: genderCurrent,
   address: user.value.address,
   img: undefined,
-  dni: user.value.dni || "",
-  beneficiario_poliza_cedula: user.value.beneficiario_poliza_cedula || "",
-  beneficiario_poliza_name: user.value.beneficiario_poliza_name || "",
-  fecha_nacimiento: user.value.fecha_nacimiento || "",
-};
+  dni: user.value.dni || '',
+  beneficiario_poliza_cedula: user.value.beneficiario_poliza_cedula || '',
+  beneficiario_poliza_name: user.value.beneficiario_poliza_name || '',
+  fecha_nacimiento: user.value.fecha_nacimiento || ''
+}
 
 const { useForm, validatInput, validateMessage, validateForm } =
-  useValidateForm({ initialValue: INITIAL_VALUES, schema: updateProfileShema });
+  useValidateForm({ initialValue: INITIAL_VALUES, schema: updateProfileShema })
 
-const { isLoading, mutateAsync } = useUpdateUserMutation();
+const { isLoading, mutateAsync } = useUpdateUserMutation()
 
 const uploadImg = (event) => {
-  const image = event.target.files[0];
-  useForm.value.img = image;
-  file.value = URL.createObjectURL(image);
-};
+  const image = event.target.files[0]
+  useForm.value.img = image
+  file.value = URL.createObjectURL(image)
+}
 
 const handledUpdateUser = async () => {
-  validateForm();
+  validateForm()
   const values = {
     ...useForm.value,
     role_id: user.value.role_id,
     active: user.value.active,
     id: user.value.id,
-    sex: useForm.value.sex?.value,
-  };
+    sex: useForm.value.sex?.value
+  }
   const {
-    data: { data: newUserData },
-  } = await mutateAsync({ data: values, id: user.value.id });
-  const userCurrent = localStorageAuth.getUser();
+    data: { data: newUserData }
+  } = await mutateAsync({ data: values, id: user.value.id })
+  const userCurrent = localStorageAuth.getUser()
   localStorageAuth.setUser({
     user: { ...userCurrent.user, ...newUserData },
-    token: userCurrent.token,
-  });
-  updatedUser();
-};
+    token: userCurrent.token
+  })
+  updatedUser()
+}
 
 onMounted(async () => {
   try {
     const url = await urlToBinary({
       url: useForm.value.img,
-      fileName: "avatar",
-    });
-    useForm.value.img = url;
+      fileName: 'avatar'
+    })
+    useForm.value.img = url
   } catch (error) {
-    console.log(error);
+    console.log(error)
   }
-});
+})
 </script>
 
 <style scoped>
