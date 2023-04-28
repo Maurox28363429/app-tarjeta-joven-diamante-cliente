@@ -71,11 +71,32 @@
                 <div class="news-title line-clamp-2">{{ item.titulo }}</div>
               </q-card-section>
 
-              <q-card-section class="q-pt-none">
+              <q-card-section
+                class="q-pt-none q-px-xs column"
+                style="min-height: 100px; justify-content: end"
+              >
                 <p class="news-description line-clamp-3">
                   {{ item.descripcion }}
-                </p></q-card-section
-              >
+                </p>
+                <div style="justify-self: self-end">
+                  <div class="row">
+                    <a v-if="item.links?.youtube" :href="item.links?.youtube"
+                      ><q-icon name="la la-youtube" color="primary" size="md"
+                    /></a>
+                    <a v-if="item.links?.web" :href="item.links?.web"
+                      ><q-icon name="language" color="primary" size="md"
+                    /></a>
+                    <a
+                      v-if="item.links?.instagram"
+                      :href="item.links?.instagram"
+                      ><q-icon name="la la-instagram" color="primary" size="md"
+                    /></a>
+                    <a v-if="item.links?.facebook" :href="item.links?.facebook"
+                      ><q-icon name="facebook" color="primary" size="md"
+                    /></a>
+                  </div>
+                </div>
+              </q-card-section>
 
               <q-card-actions
                 align="right"
@@ -98,18 +119,42 @@
 
     <q-dialog v-model="openModal">
       <q-card class="news-card modal-card">
-        <q-img
-          :src="modalCurrent.img_url"
-          spinner-color="dark"
-          class="news-image"
-        />
-
-        <q-card-section>
+        <q-card-section class="q-py-xs q-px-md">
           <div class="news-title">{{ modalCurrent.titulo }}</div>
         </q-card-section>
+        <q-separator />
 
-        <q-card-section class="q-pt-none">
+        <q-card-section class="q-pt-none scroll" style="max-height: 50vh">
+          <q-img
+            :src="modalCurrent.img_url"
+            spinner-color="dark"
+            class="body-medium"
+          />
           <div class="news-description">{{ modalCurrent.descripcion }}</div>
+          <div>
+            <p>Redes:</p>
+            <p v-if="!modalCurrent.links">No hay redes</p>
+            <div class="row">
+              <a
+                v-if="modalCurrent.links?.youtube"
+                :href="modalCurrent.links?.youtube"
+                ><q-icon name="la la-youtube" color="primary" size="md"
+              /></a>
+              <a v-if="modalCurrent.links?.web" :href="modalCurrent.links?.web"
+                ><q-icon name="language" color="primary" size="md"
+              /></a>
+              <a
+                v-if="modalCurrent.links?.instagram"
+                :href="modalCurrent.links?.instagram"
+                ><q-icon name="la la-instagram" color="primary" size="md"
+              /></a>
+              <a
+                v-if="modalCurrent.links?.facebook"
+                :href="modalCurrent.links?.facebook"
+                ><q-icon name="facebook" color="primary" size="md"
+              /></a>
+            </div>
+          </div>
         </q-card-section>
 
         <q-separator />
@@ -216,11 +261,6 @@ const handleSearch = () => {
   font-weight: bold;
   font-size: 1.1rem;
   margin-bottom: 8px;
-}
-
-.news-description {
-  font-size: 0.9rem;
-  color: rgba(0, 0, 0, 0.6);
 }
 
 .modal-card {

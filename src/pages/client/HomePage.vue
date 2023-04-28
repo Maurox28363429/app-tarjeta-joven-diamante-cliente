@@ -40,22 +40,22 @@
         <div class="text-h6">Seguro de accidentes personales 24/7</div>
       </q-card-section>
 
-      <div class="full-width row justify-center">
-        <div class="table">
-          <q-table
-            :dense="$q.screen.lt.md"
-            flat
-            bordered
-            :rows="rows"
-            :columns="columns"
-            row-key="name"
-            separator="cell"
-            hide-bottom
-          />
-        </div>
-      </div>
-
       <q-card-section style="max-height: 50vh" class="scroll">
+        <div class="full-width row justify-center">
+          <div class="table">
+            <q-table
+              :dense="$q.screen.lt.md"
+              flat
+              bordered
+              :rows="rows"
+              :columns="columns"
+              row-key="name"
+              separator="cell"
+              hide-bottom
+            />
+          </div>
+        </div>
+
         <p>
           Todas las coberturas son contra reembolso. Se necesita ingresar el
           reclamo a la aseguradora para poder recibir dicha indemnización
