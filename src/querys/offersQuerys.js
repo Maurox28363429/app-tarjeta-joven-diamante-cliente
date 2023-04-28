@@ -26,12 +26,12 @@ export const useGetOffers = ({ name, page, id }) => {
   return data;
 };
 
-export const useGetOffersFromBusiness = ({ search, page }) => {
+export const useGetOffersFromBusiness = ({ search, page, dir }) => {
   const { triggerWarning } = useToast();
 
   const data = useQuery(
-    ["offersFromBusiness", page],
-    () => getOffers({ search: search.value, page: page.value }),
+    ["offersFromBusiness", page, dir],
+    () => getOffers({ search: search.value, page: page.value, dir: dir.value }),
     {
       onError: (error) => {
         console.log(error, "error");

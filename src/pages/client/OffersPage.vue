@@ -1,129 +1,161 @@
 <template>
   <div class="q-px-md">
-    <p style="margin: 20px 0" class="title-large">Ofertas</p>
-    <div class="full-width full-height row justify-center q-mt-lg">
-      <q-form class="full-width row justify-center" @submit="handleSearch">
-        <q-input
-          class="full-width"
-          v-model="search"
-          style="max-width: 400px"
-          outlined
-          type="search"
-          label="Buscar ofertas"
-          color="primary"
+    <div v-if="!state">
+      <p class="title-large">Seleciona un estado</p>
+      <div class="row wrap q-gutter-md justify-center">
+        <q-card
+          v-for="state in PANAMA_STATE"
+          :key="state.name"
+          class="stateCard column items-center cursor-pointer"
+          @click="() => selectState(state.name)"
         >
-          <q-btn
-            type="submit"
-            size="md"
-            style="right: -12px; bottom: 0; top: 0"
-            color="primary"
-            label="Buscar"
-            icon="search"
-            class="absolute"
-          />
-        </q-input>
-      </q-form>
-    </div>
-    <div class="full-width full-height product-grid">
-      <q-inner-loading :showing="isFetching && !isLoading" class="innerLoading">
-        <q-spinner-gears size="50px" color="primary" class="loading" />
-      </q-inner-loading>
-
-      <template v-if="isLoading">
-        <div v-for="index in 20" :key="index" class="skeleton-card">
-          <q-card class="my-card" style="height: 340px; width: 100%">
-            <q-skeleton height="120px" width="100%" square />
-            <q-card-section class="q-px-xs full-width">
-              <q-skeleton style="margin-bottom: 10px" type="QSlider" />
-              <q-skeleton style="margin-bottom: 10px" type="QSlider" />
-              <q-skeleton type="text" class="text-caption" />
-              <q-skeleton type="text" class="text-caption" />
-              <q-skeleton type="text" class="text-caption" />
-              <q-skeleton type="text" class="text-caption" />
-            </q-card-section>
-          </q-card>
-        </div>
-      </template>
-      <template v-if="!isLoading">
-        <div v-for="items in data?.data" :key="items.id">
-          <q-card class="my-card column" style="height: 400px; width: 100%">
-            <img
-              style="
-                height: 120px;
-                width: 100%;
-                max-height: 200px;
-                object-fit: contain;
-              "
-              :src="
-                items.img_array_url[0]
-                  ? items.img_array_url[0]
-                  : 'https://cdn.quasar.dev/img/mountains.jpg'
-              "
+          <q-card-section class="full-width column items-center">
+            <q-img
+              src="../../assets/icons/stateIcon.webp"
+              spinner-color="white"
+              style="height: 80px; max-width: 80px"
             />
-
-            <q-card-section class="q-px-xs">
-              <q-list>
-                <q-item
-                  clickable
-                  class="q-ma-none q-pa-none"
-                  style="padding: 1em"
-                >
-                  <q-item-section class="q-ma-none q-pa-none">
-                    <q-item-label>
-                      <p class="line-clamp-1">{{ items.nombre }}</p>
-                    </q-item-label>
-                    <q-item-label caption>
-                      {{ items.comercio.name }}
-                    </q-item-label>
-                  </q-item-section>
-                </q-item>
-                <q-item
-                  clickable
-                  class="q-ma-none q-pa-none"
-                  v-if="items.price_total > 0"
-                >
-                  <div class="q-mr-md q-ml-xs row items-center">
-                    <q-icon size="xs" color="red" name="sell" />
-                  </div>
-
-                  <q-item-section>
-                    <q-item-label v-if="items.price_total > 0"
-                      >{{ items.price_total }} $</q-item-label
-                    >
-                    <q-item-label v-if="items.descuento > 0" caption
-                      >Descuento{{ items.descuento }} %</q-item-label
-                    >
-                  </q-item-section>
-                </q-item>
-              </q-list>
-            </q-card-section>
-
-            <q-card-section class="q-pt-none q-pb-none">
-              <p class="line-clamp-4 q-mb-none">{{ items.description }}</p>
-            </q-card-section>
-            <q-card-actions
-              align="right"
-              class="q-pt-none"
-              style="flex: 1; align-items: end"
-            >
-              <q-btn color="primary" @click="showModal({ ...items })" flat
-                >Ver más</q-btn
-              >
-            </q-card-actions>
-          </q-card>
-        </div>
-      </template>
+            <p>{{ state.name }}</p>
+          </q-card-section>
+        </q-card>
+      </div>
     </div>
-    <div
-      class="full-width full-height row wrap q-gutter-lg justify-center q-my-lg"
-    >
-      <q-pagination
-        v-if="!isLoading"
-        style="margin-top: 1em"
-        v-model="currentPaginate"
-        :max="paginas"
-        boundary-numbers
-      />
+
+    <div v-if="state">
+      <p style="margin: 20px 0" class="title-large">Ofertas</p>
+      <div class="full-width full-height row justify-center q-mt-lg">
+        <q-form class="full-width row justify-center" @submit="handleSearch">
+          <q-input
+            class="full-width"
+            v-model="search"
+            style="max-width: 400px"
+            outlined
+            type="search"
+            label="Buscar ofertas"
+            color="primary"
+          >
+            <q-btn
+              type="submit"
+              size="md"
+              style="right: -12px; bottom: 0; top: 0"
+              color="primary"
+              label="Buscar"
+              icon="search"
+              class="absolute"
+            />
+          </q-input>
+        </q-form>
+      </div>
+      <div class="full-width full-height product-grid">
+        <q-inner-loading
+          :showing="isFetching && !isLoading"
+          class="innerLoading"
+        >
+          <q-spinner-gears size="50px" color="primary" class="loading" />
+        </q-inner-loading>
+
+        <template v-if="isLoading">
+          <div v-for="index in 20" :key="index" class="skeleton-card">
+            <q-card class="my-card" style="height: 340px; width: 100%">
+              <q-skeleton height="120px" width="100%" square />
+              <q-card-section class="q-px-xs full-width">
+                <q-skeleton style="margin-bottom: 10px" type="QSlider" />
+                <q-skeleton style="margin-bottom: 10px" type="QSlider" />
+                <q-skeleton type="text" class="text-caption" />
+                <q-skeleton type="text" class="text-caption" />
+                <q-skeleton type="text" class="text-caption" />
+                <q-skeleton type="text" class="text-caption" />
+              </q-card-section>
+            </q-card>
+          </div>
+        </template>
+        <div
+          class="full-width row justify-center"
+          v-if="data?.data.length === 0 && !isLoading"
+        >
+          <p class="title-medium">No hay ofertas</p>
+        </div>
+        <template v-if="!isLoading">
+          <div v-for="items in data?.data" :key="items.id">
+            <q-card class="my-card column" style="height: 400px; width: 100%">
+              <img
+                style="
+                  height: 120px;
+                  width: 100%;
+                  max-height: 200px;
+                  object-fit: contain;
+                "
+                :src="
+                  items.img_array_url[0]
+                    ? items.img_array_url[0]
+                    : 'https://cdn.quasar.dev/img/mountains.jpg'
+                "
+              />
+
+              <q-card-section class="q-px-xs q-py-none">
+                <q-list>
+                  <q-item
+                    clickable
+                    class="q-ma-none q-pa-none"
+                    style="padding: 1em"
+                  >
+                    <q-item-section class="q-ma-none q-pa-none">
+                      <q-item-label>
+                        <p class="line-clamp-1">{{ items.nombre }}</p>
+                      </q-item-label>
+                      <q-item-label caption>
+                        {{ items.comercio.name }}
+                      </q-item-label>
+                    </q-item-section>
+                  </q-item>
+                  <q-item
+                    clickable
+                    class="q-ma-none q-pa-none"
+                    v-if="items.price_total > 0"
+                  >
+                    <div class="q-mr-md q-ml-xs row items-center">
+                      <q-icon size="xs" color="red" name="sell" />
+                    </div>
+
+                    <q-item-section>
+                      <q-item-label v-if="items.price_total > 0"
+                        >{{ items.price_total }} $</q-item-label
+                      >
+                      <q-item-label v-if="items.descuento > 0" caption
+                        >Descuento{{ items.descuento }} %</q-item-label
+                      >
+                    </q-item-section>
+                  </q-item>
+                </q-list>
+              </q-card-section>
+
+              <q-card-section class="q-pt-none q-pb-none">
+                <p class="line-clamp-4 q-mb-none">{{ items.description }}</p>
+              </q-card-section>
+              <q-card-actions
+                align="right"
+                class="q-pt-none"
+                style="flex: 1; align-items: end"
+              >
+                <q-btn color="primary" @click="showModal({ ...items })" flat
+                  >Ver más</q-btn
+                >
+              </q-card-actions>
+            </q-card>
+          </div>
+        </template>
+      </div>
+      <div
+        class="full-width full-height row wrap q-gutter-lg justify-center q-my-lg"
+      >
+        <q-pagination
+          v-if="!isLoading"
+          style="margin-top: 1em"
+          v-model="currentPaginate"
+          :max="paginas"
+          boundary-numbers
+        />
+      </div>
     </div>
   </div>
 
@@ -151,16 +183,19 @@
 <script setup>
 import { ref, watchEffect } from "vue";
 import { useGetOffersFromBusiness } from "src/querys/offersQuerys";
+import { PANAMA_STATE } from "src/shared/constansts/panamaState";
 
 const currentPaginate = ref(1);
 const paginas = ref(0);
 const search = ref("");
 const modalCurrent = ref({});
 const openModal = ref(false);
+const state = ref(null);
 
 const { data, isLoading, refetch, isFetching } = useGetOffersFromBusiness({
   search,
   page: currentPaginate,
+  dir: state,
 });
 
 watchEffect(() => {
@@ -169,6 +204,10 @@ watchEffect(() => {
     paginas.value = data.value?.pagination.lastPage;
   }
 });
+
+const selectState = (opt) => {
+  state.value = opt;
+};
 
 const showModal = (modalInfo) => {
   modalCurrent.value = { ...modalInfo };
@@ -212,6 +251,7 @@ const handleSearch = () => {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   gap: 20px 7px;
+  min-height: 70vh;
   justify-content: center;
   padding: 20px 0;
 }
@@ -245,5 +285,10 @@ const handleSearch = () => {
 .modal-card {
   width: 700px;
   max-width: 80vw;
+}
+
+.stateCard {
+  width: 140px;
+  height: 140px;
 }
 </style>
