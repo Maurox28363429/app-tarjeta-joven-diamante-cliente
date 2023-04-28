@@ -7,7 +7,7 @@ export const useInvoiceOfferMutation = () => {
 
   const queryClient = useQueryClient();
 
-  const mutation = useMutation(invoiceOffer, {
+  return useMutation(invoiceOffer, {
     onSuccess: () => {
       triggerPositive("Factura de oferta creada con éxito");
       queryClient.invalidateQueries({
@@ -23,6 +23,4 @@ export const useInvoiceOfferMutation = () => {
       }
     },
   });
-
-  return mutation;
 };
