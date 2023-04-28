@@ -85,7 +85,6 @@ export default route(function (/* { store, ssrContext } */) {
         }
       }
     } else {
-      // Si la ruta no requiere autenticación, permitir el acceso
       next();
     }
   });
