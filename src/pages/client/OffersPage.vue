@@ -77,22 +77,24 @@
         </div>
         <template v-if="!isLoading">
           <div v-for="items in data?.data" :key="items.id">
-            <q-card class="my-card column" style="height: 400px; width: 100%">
-              <img
-                style="
-                  height: 120px;
-                  width: 100%;
-                  max-height: 200px;
-                  object-fit: contain;
-                "
-                :src="
-                  items.img_array_url[0]
-                    ? items.img_array_url[0]
-                    : 'https://cdn.quasar.dev/img/mountains.jpg'
-                "
-              />
-
+            <q-card
+              class="my-card column"
+              style="height: 400px; width: 100%; gap: 0"
+            >
               <q-card-section class="q-px-xs q-py-none">
+                <img
+                  style="
+                    height: 120px;
+                    width: 100%;
+                    max-height: 200px;
+                    object-fit: contain;
+                  "
+                  :src="
+                    items.img_array_url[0]
+                      ? items.img_array_url[0]
+                      : 'https://cdn.quasar.dev/img/mountains.jpg'
+                  "
+                />
                 <q-list>
                   <q-item
                     clickable
@@ -126,20 +128,32 @@
                       >
                     </q-item-section>
                   </q-item>
+                  <p class="line-clamp-4 q-mb-none q-px-md">
+                    {{ items.description }}
+                  </p>
                 </q-list>
-              </q-card-section>
-
-              <q-card-section class="q-pt-none q-pb-none">
-                <p class="line-clamp-4 q-mb-none">{{ items.description }}</p>
               </q-card-section>
               <q-card-actions
                 align="right"
-                class="q-pt-none"
+                class="q-pt-none full-width"
                 style="flex: 1; align-items: end"
               >
-                <q-btn color="primary" @click="showModal({ ...items })" flat
-                  >Ver más</q-btn
-                >
+                <div class="row full-width justify-between">
+                  <q-img
+                    @click="openWaze(items.link_map)"
+                    src="../../assets/images/wazeIcon.jpg"
+                    spinner-color="white"
+                    style="
+                      height: 40px;
+                      max-width: 40px;
+                      border-radius: 8px;
+                      cursor: pointer;
+                    "
+                  />
+                  <q-btn color="primary" @click="showModal({ ...items })" flat
+                    >Ver más</q-btn
+                  >
+                </div>
               </q-card-actions>
             </q-card>
           </div>
@@ -161,16 +175,29 @@
 
   <q-dialog v-model="openModal">
     <q-card class="news-card modal-card">
-      <img :src="modalCurrent.img_array_url[0]" class="news-image" />
-
-      <q-card-section>
+      <q-card-section class="q-py-xs q-px-md">
         <div class="news-title">{{ modalCurrent.nombre }}</div>
       </q-card-section>
+      <q-separator />
 
-      <q-card-section class="q-pt-none">
-        <div class="news-description">{{ modalCurrent.description }}</div>
+      <q-card-section class="q-pt-none scroll" style="max-height: 50vh">
+        <img :src="modalCurrent.img_array_url[0]" class="news-image" />
+        <div class="body-medium">{{ modalCurrent.description }}</div>
+        <div>
+          <p>Dirección:</p>
+          <q-img
+            @click="openWaze(items.link_map)"
+            src="../../assets/images/wazeIcon.jpg"
+            spinner-color="white"
+            style="
+              height: 40px;
+              max-width: 40px;
+              border-radius: 8px;
+              cursor: pointer;
+            "
+          />
+        </div>
       </q-card-section>
-
       <q-separator />
 
       <q-card-actions align="right">
@@ -197,6 +224,10 @@ const { data, isLoading, refetch, isFetching } = useGetOffersFromBusiness({
   page: currentPaginate,
   dir: state
 })
+
+const openWaze = (link) => {
+  window.open(link, "_blank");
+};
 
 watchEffect(() => {
   if (data.value) {
@@ -275,11 +306,6 @@ const handleSearch = () => {
   font-weight: bold;
   font-size: 1.1rem;
   margin-bottom: 8px;
-}
-
-.news-description {
-  font-size: 0.9rem;
-  color: rgba(0, 0, 0, 0.6);
 }
 
 .modal-card {

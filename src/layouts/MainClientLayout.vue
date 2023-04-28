@@ -345,11 +345,11 @@ aside {
 }
 
 .trianguloBottom {
-  height: 150px;
+  height: 140px;
   max-width: 200px;
   position: fixed;
   bottom: 0px;
-  left: 26px;
+  left: 16px;
   z-index: 98;
   transform: rotate(-0.25turn);
 }
@@ -383,8 +383,9 @@ aside {
   }
 
   .trianguloBottom {
-    bottom: 80px;
-    left: -49px;
+    bottom: 36px;
+    left: -60px;
+    height: 90px;
   }
   .qrButton {
     bottom: 64px;
