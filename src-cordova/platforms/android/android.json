@@ -68,7 +68,8 @@
               "xml": "<uses-permission android:name=\"android.permission.CAMERA\" />",
               "count": 2
             }
-          ]
+          ],
+          "/manifest/application": []
         }
       }
     }
