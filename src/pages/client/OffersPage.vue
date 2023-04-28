@@ -226,8 +226,12 @@ const { data, isLoading, refetch, isFetching } = useGetOffersFromBusiness({
 })
 
 const openWaze = (link) => {
-  window.open(link, "_blank");
-};
+  link.forEach(element => {
+    if (element.ubication === state.value) {
+      window.open(element.link, '_blank')
+    }
+  })
+}
 
 watchEffect(() => {
   if (data.value) {
