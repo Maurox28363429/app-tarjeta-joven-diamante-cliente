@@ -168,6 +168,47 @@
           class="cursor-pointer"
         />
       </div>
+      <q-dialog v-model="prompt" persistent>
+        <q-card style="min-width: 350px; width: 70%; height: 300px">
+          <q-card-section>
+            <div class="text-h6">Coloca tu beneficiaro de poliza</div>
+          </q-card-section>
+
+          <q-card-section class="q-pt-none" style="">
+            <div style="padding: 1em">
+              <q-input
+                placeholder="Cedula de tu beneficiario"
+                dense
+                v-model="beneficiario_poliza_cedula"
+                autofocus
+              />
+            </div>
+            <div style="padding: 1em">
+              <q-input
+                placeholder="Nombrel del beneficiario"
+                dense
+                v-model="beneficiario_poliza_name"
+              />
+            </div>
+          </q-card-section>
+
+          <q-card-actions align="right" class="text-primary">
+            <q-btn
+              flat
+              label="Agregar datos"
+              v-close-popup
+              @click="actualizar_beneficiario"
+              :disable="
+                beneficiario_poliza_cedula != '' &&
+                beneficiario_poliza_name != ''
+                  ? false
+                  : true
+              "
+            />
+          </q-card-actions>
+        </q-card>
+      </q-dialog>
+
       <router-view />
     </q-page-container>
     <q-dialog
@@ -345,12 +386,15 @@ import { userAuth } from "src/composables/userAuth";
 import UpdateMembershipModal from "../components/UpdateMembershipModal.vue";
 import format from "src/utils/date";
 import QrUser from "../components/QrUser.vue";
+import localStorageAuth from "src/utils/localStorageAuth";
+import updateUser from "src/api/updateUser";
+import { useQuasar } from "quasar";
+const $q = useQuasar();
 
 const { user } = userAuth();
 
 const leftDrawerOpen = ref(false);
 const router = useRouter();
-
 const show = ref(false);
 
 const showModalRenovar = () => {
@@ -392,9 +436,42 @@ const drawerClick = (e) => {
   }
 };
 
+// para el inicio comprobar si tiene beneficiario
+const prompt = ref(false);
+const beneficiario_poliza_cedula = ref("");
+const beneficiario_poliza_name = ref("");
+const actualizar_beneficiario = async () => {
+  const userCurrent = localStorageAuth.getUser();
+  const newUserData = {
+    beneficiario_poliza_cedula: beneficiario_poliza_cedula.value,
+    beneficiario_poliza_name: beneficiario_poliza_name.value,
+  };
+  updateUser({
+    id: user.value.id,
+    data: newUserData,
+  }).then((m) => {
+    localStorageAuth.setUser({
+      user: { ...userCurrent.user, ...newUserData },
+      token: userCurrent.token,
+    });
+    $q.notify({
+      type: "positive",
+      message: "Usuario actualizado",
+    });
+  });
+};
+
 onMounted(() => {
   if (user.value.membresia.type === "permitir_gratuita") {
     router.push("/memberships");
+  }
+  if (user.value.membresia.type === "Comprada") {
+    if (
+      user.value.beneficiario_poliza_cedula === null ||
+      user.value.beneficiario_poliza_name === null
+    ) {
+      prompt.value = true;
+    }
   }
 });
 

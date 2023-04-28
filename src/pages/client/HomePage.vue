@@ -10,27 +10,40 @@
     </div>
     <div class="cardList">
       <div v-for="card in HOME_CARD_LIST" :key="card.id">
-        <HomeCard :title="card.title" :icon="card.icon" :link="card.link" />
+        <HomeCard
+          :title="card.title"
+          :icon="card.icon"
+          :link="card.link"
+          v-if="!card.evento"
+        />
+        <HomeCard
+          :title="card.title"
+          :icon="card.icon"
+          :link="card.link"
+          v-if="card.evento"
+          @click="showModal = true"
+        />
       </div>
     </div>
-    <div class="full-width row justify-center q-my-xl">
+    <!--     <div class="full-width row justify-center q-my-xl">
       <q-btn
         @click="showModal = true"
         color="primary"
         label="Seguro de accidentes personales 24/7"
       />
-    </div>
+    </div> -->
   </div>
 
   <q-dialog v-model="showModal">
     <q-card>
       <q-card-section>
-        <div class="text-h6">Póliza de Accidentes Personales</div>
+        <div class="text-h6">Seguro de accidentes personales 24/7</div>
       </q-card-section>
 
       <div class="full-width row justify-center">
         <div class="table">
           <q-table
+            :dense="$q.screen.lt.md"
             flat
             bordered
             :rows="rows"
@@ -119,7 +132,7 @@ const rows = [
   margin-top: 20px;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 35px;
 }
 
 .table {
