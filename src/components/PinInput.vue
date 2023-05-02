@@ -30,74 +30,74 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { useToast } from 'src/composables/useToast'
+import { ref } from "vue";
+import { useToast } from "src/composables/useToast";
 
-const { triggerWarning } = useToast()
+const { triggerWarning } = useToast();
 
 defineProps({
   submit: {
     type: Function,
-    required: true
+    required: true,
   },
   loading: {
     type: Boolean,
-    required: true
-  }
-})
+    required: true,
+  },
+});
 
-const values = ref(['', '', '', '', '', '', ''])
+const values = ref(["", "", "", "", "", "", ""]);
 
-function handleKeyDown (event, index) {
-  const key = event.key
-  const input = document.querySelector(`[data-index="${index}"]`)
+function handleKeyDown(event, index) {
+  const key = event.key;
+  const input = document.querySelector(`[data-index="${index}"]`);
 
   if (input) {
-    if (key === 'Backspace') {
-      values.value.splice(index, 1, '')
+    if (key === "Backspace") {
+      values.value.splice(index, 1, "");
 
       if (index > 0) {
-        const prevInput = document.querySelector(`[data-index="${index - 1}"]`)
-        prevInput.focus()
+        const prevInput = document.querySelector(`[data-index="${index - 1}"]`);
+        prevInput.focus();
       }
-    } else if (key === 'ArrowRight' && index < values.value.length - 1) {
-      const nextInput = document.querySelector(`[data-index="${index + 1}"]`)
-      nextInput.focus()
-    } else if (key === 'ArrowLeft' && index > 0) {
-      const prevInput = document.querySelector(`[data-index="${index - 1}"]`)
-      prevInput.focus()
+    } else if (key === "ArrowRight" && index < values.value.length - 1) {
+      const nextInput = document.querySelector(`[data-index="${index + 1}"]`);
+      nextInput.focus();
+    } else if (key === "ArrowLeft" && index > 0) {
+      const prevInput = document.querySelector(`[data-index="${index - 1}"]`);
+      prevInput.focus();
     }
   }
 }
 
-function handleInput (event, index) {
-  const value = event.data
+function handleInput(event, index) {
+  const value = event.data;
   if (value && value.match(/^[0-9a-zA-Z]$/)) {
-    values.value.splice(index, 1, value)
+    values.value.splice(index, 1, value);
 
     if (index < values.value.length - 1) {
-      const nextInput = document.querySelector(`[data-index="${index + 1}"]`)
-      nextInput.focus()
+      const nextInput = document.querySelector(`[data-index="${index + 1}"]`);
+      nextInput.focus();
     }
   } else {
-    values.value.splice(index, 1, '')
+    values.value.splice(index, 1, "");
   }
 }
 
-function handlePaste (event) {
-  event.preventDefault()
-  const pasteData = event.clipboardData.getData('text/plain')
+function handlePaste(event) {
+  event.preventDefault();
+  const pasteData = event.clipboardData.getData("text/plain");
   if (
     pasteData &&
     pasteData.match(/^[0-9a-zA-Z]+$/) &&
     pasteData.length <= values.value.length
   ) {
     for (let i = 0; i < pasteData.length; i++) {
-      values.value.splice(i, 1, pasteData[i])
+      values.value.splice(i, 1, pasteData[i]);
     }
   }
   if (pasteData.length > values.value.length) {
-    triggerWarning('El código debe ser de 7 dígitos.')
+    triggerWarning("El código debe ser de 7 dígitos.");
   }
 }
 </script>
