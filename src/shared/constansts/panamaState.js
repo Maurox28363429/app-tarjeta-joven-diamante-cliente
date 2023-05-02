@@ -24,12 +24,6 @@ export const PANAMA_STATE = [
     name: 'Darien'
   },
   {
-    name: 'Bocas del toro'
-  },
-  {
-    name: 'Darien'
-  },
-  {
     name: 'Veraguas'
   },
   {

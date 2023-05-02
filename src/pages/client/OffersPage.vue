@@ -2,6 +2,22 @@
   <div class="q-px-md">
     <div v-if="!state">
       <p class="title-large">Selecciona un estado</p>
+      <section style="margin:1em;cursor:pointer" @click="() => selectState('todos')">
+        <q-card>
+          <q-card-section>
+            <div align="center">
+              <q-img
+                  src="../../assets/icons/stateIcon.webp"
+                  spinner-color="white"
+                  style="height: 80px; max-width: 80px"
+                />
+            </div>
+            <h5 align="center">
+              Ver todo
+            </h5>
+          </q-card-section>
+        </q-card>
+      </section>
       <div class="row wrap q-gutter-md justify-center">
         <q-card
           v-for="state in PANAMA_STATE"
@@ -140,6 +156,7 @@
               >
                 <div class="row full-width justify-between">
                   <q-img
+                  v-if="state!='todos'"
                     @click="openWaze(items.link_map)"
                     src="../../assets/images/wazeIcon.jpg"
                     spinner-color="white"
@@ -180,7 +197,7 @@
       </q-card-section>
       <q-separator />
 
-      <q-card-section class="q-pt-none scroll" style="max-height: 50vh">
+      <q-card-section class="q-pt-none scroll" style="max-height: 50vh" v-if="state!='todos'">
         <img :src="modalCurrent.img_array_url[0]" class="news-image" />
         <div class="body-medium">{{ modalCurrent.description }}</div>
         <div>
