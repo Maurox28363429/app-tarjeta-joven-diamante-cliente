@@ -3,5 +3,5 @@
 </template>
 
 <script setup>
-import Profile from "src/components/Profile.vue";
+import Profile from "src/components/ProfileComponent.vue";
 </script>
