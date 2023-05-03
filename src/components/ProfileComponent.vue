@@ -45,9 +45,7 @@
           <q-item>
             <q-item-section>
               <q-item-label>Genero</q-item-label>
-              <q-item-label caption>{{
-                genderCurrent ? genderCurrent.label : ""
-              }}</q-item-label>
+              <q-item-label caption>{{ useForm?.sex?.label }}</q-item-label>
             </q-item-section>
           </q-item>
           <q-item>
@@ -90,7 +88,11 @@
                 <div class="column items-center">
                   <label class="cursor-pointer">
                     <q-avatar size="80px" class="q-mr-md">
-                      <q-img :src="file" spinner-color="dark">
+                      <q-img
+                        class="full-height"
+                        :src="file"
+                        spinner-color="dark"
+                      >
                         <div
                           style="font-size: 10px"
                           class="absolute-bottom absolute-top text-center"
@@ -290,7 +292,14 @@ import { useValidateForm } from "src/composables/useValidateForm";
 import { updateProfileShema } from "src/schemas/updateProfileShema";
 import { useUpdateUserMutation } from "src/querys/userQuerys";
 
-const { updatedUser, userData, isLoadingUser, isFetchingUser } = userAuth();
+const {
+  updatedUser,
+  userData,
+  isLoadingUser,
+  isFetchingUser,
+  isFetchedAfterMountUser,
+  isFetchedUser,
+} = userAuth();
 
 console.log("ProfilePage.vue desde componente");
 const props = defineProps({
@@ -309,12 +318,12 @@ const GENDER_OPTIONS = [
   { label: "Hombre", value: 1 },
 ];
 
-const file = ref("");
+const file = ref(userData.value?.img_url ?? "");
 
 const { useForm, validatInput, validateMessage, validateForm } =
   useValidateForm({ initialValue: {}, schema: updateProfileShema });
 
-watch([isFetchingUser, userData], () => {
+watch([userData, isFetchedAfterMountUser, isFetchedUser], () => {
   if (userData.value && !isFetchingUser.value) {
     genderCurrent = GENDER_OPTIONS.find((item) => {
       return item.value === userData.value?.sex;

@@ -20,6 +20,8 @@ export const userAuth = () => {
     isLoading: isLoadingUser,
     data: userData,
     isFetching: isFetchingUser,
+    isFetchedAfterMount: isFetchedAfterMountUser,
+    isFetched: isFetchedUser,
   } = useGetUserQuery({ id: user.value?.id });
 
   console.log(userData, "userData");
@@ -110,6 +112,8 @@ export const userAuth = () => {
     userData,
     isLoadingUser,
     isFetchingUser,
+    isFetchedAfterMountUser,
+    isFetchedUser,
     updatedUser: authStore.updated,
   };
 };

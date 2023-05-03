@@ -8,7 +8,7 @@
         class="q-pa-md column items-center full-width"
         style="max-width: 400px"
       >
-        <p class="title-large q-mb-xl">Recuperar contraseña</p>
+        <p class="title-large q-mx-none q-mb-xl">Recuperar contraseña</p>
 
         <form @submit.prevent="sendEmail" class="full-width">
           <p class="title-medium q-mb-xl text-center">

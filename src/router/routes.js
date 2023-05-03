@@ -36,8 +36,13 @@ const routes = [
         children: [
           {
             name: "Offers",
-            path: "Offers",
+            path: "Offers/:countryName",
             component: () => import("src/pages/client/OffersPage.vue"),
+          },
+          {
+            path: "Offers",
+            component: () =>
+              import("src/pages/client/SelectStateForffersPage.vue"),
           },
           {
             path: "pachama",
