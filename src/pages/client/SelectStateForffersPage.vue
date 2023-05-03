@@ -40,7 +40,7 @@
 </template>
 
 <script setup>
-import { PANAMA_STATE } from "src/shared/constansts/panamaState";
+import { PANAMA_STATE } from 'src/shared/constansts/panamaState'
 </script>
 
 <style>

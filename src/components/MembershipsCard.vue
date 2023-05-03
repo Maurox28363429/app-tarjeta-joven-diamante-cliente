@@ -1,33 +1,33 @@
 <script setup>
-import { defineProps } from "vue";
+import { defineProps } from 'vue'
 
 defineProps({
   benefits: {
     type: Array,
-    required: true,
+    required: true
   },
   price: {
     type: Number,
     required: true,
-    default: 0,
+    default: 0
   },
   name: {
     type: String,
     required: true,
-    default: "",
+    default: ''
   },
   image: {
     type: String,
     required: true,
-    default: "",
+    default: ''
   },
   id: {
     type: Number,
-    required: true,
-  },
-});
+    required: true
+  }
+})
 
-const baseurl = "/memberships/";
+const baseurl = '/memberships/'
 </script>
 
 <template>
