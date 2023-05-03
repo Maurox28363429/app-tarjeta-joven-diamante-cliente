@@ -1,52 +1,37 @@
 <script setup>
-import { userAuth } from 'src/composables/userAuth'
-import { ref, computed } from 'vue'
+import { defineProps } from "vue";
 
-const props = defineProps({
+defineProps({
   benefits: {
     type: Array,
-    required: true
+    required: true,
   },
   price: {
     type: Number,
     required: true,
-    default: 0
+    default: 0,
   },
   name: {
     type: String,
     required: true,
-    default: ''
+    default: "",
   },
   image: {
     type: String,
     required: true,
-    default: ''
+    default: "",
   },
   id: {
     type: Number,
-    required: true
-  }
-})
+    required: true,
+  },
+});
 
-const baseurl = '/memberships/'
-
-const { user } = userAuth()
-
-const userIsmembershipFree = ref(
-  Boolean(user?.membresia?.id === 7 || user?.membresia?.status === 'activa')
-)
-
-const planValidate = computed(() => {
-  if (userIsmembershipFree.value && props.name === 'free') {
-    return 'disableGray'
-  } else {
-    return 'plan-white'
-  }
-})
+const baseurl = "/memberships/";
 </script>
 
 <template>
-  <div :class="'plan' + ' ' + planValidate">
+  <div class="plan">
     <q-img
       :src="image"
       spinner-color="dark"
@@ -115,13 +100,6 @@ const planValidate = computed(() => {
   min-height: 427px;
   border-radius: 4px;
   padding: 32px;
-}
-
-.disableGray {
-  background: #e2e2e2;
-}
-
-.plan-white {
   background: #ffffff;
 }
 

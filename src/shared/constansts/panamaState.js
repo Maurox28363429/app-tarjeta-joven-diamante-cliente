@@ -1,38 +1,38 @@
 export const PANAMA_STATE = [
   {
-    name: 'Panamá'
+    name: "Panamá",
   },
   {
-    name: 'Chiriquí'
+    name: "Chiriquí",
   },
   {
-    name: 'Chorrera'
+    name: "Chorrera",
   },
   {
-    name: 'Colón'
+    name: "Colón",
   },
   {
-    name: 'Los Santos'
+    name: "Los Santos",
   },
   {
-    name: 'Herrera'
+    name: "Herrera",
   },
   {
-    name: 'Bocas del toro'
+    name: "Bocas del toro",
   },
   {
-    name: 'Darien'
+    name: "Darien",
   },
   {
-    name: 'Bocas del toro'
+    name: "Bocas del toro",
   },
   {
-    name: 'Darien'
+    name: "Darien",
   },
   {
-    name: 'Veraguas'
+    name: "Veraguas",
   },
   {
-    name: 'Coclé'
-  }
-]
+    name: "Coclé",
+  },
+];

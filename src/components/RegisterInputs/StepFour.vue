@@ -18,51 +18,51 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref } from "vue";
 
-const OPTIONS = []
+const OPTIONS = [];
 for (let i = 0; i < 50; i++) {
-  OPTIONS.push(`Promotor ${i}`)
+  OPTIONS.push(`Promotor ${i}`);
 }
 
 const props = defineProps({
   useForm: {
     type: Object,
-    required: true
+    required: true,
   },
   validatInput: {
     type: Function,
-    required: true
+    required: true,
   },
   validateMessage: {
     type: Object,
-    required: true
-  }
-})
+    required: true,
+  },
+});
 
-const vendedor = ref(props.useForm.vendedor)
+const vendedor = ref(props.useForm.vendedor);
 
-const emit = defineEmits(['update:modelValue'])
-const stringOptions = ref(OPTIONS)
+const emit = defineEmits(["update:modelValue"]);
+const stringOptions = ref(OPTIONS);
 const updateValue = (key, value) => {
-  emit('update:modelValue', { key, value })
-}
+  emit("update:modelValue", { key, value });
+};
 
 const filterFn = (val, update) => {
   if (val.length < 1) {
-    return
+    return;
   }
-  if (val !== '') {
-    const needle = val.toLowerCase()
+  if (val !== "") {
+    const needle = val.toLowerCase();
     update(() => {
       stringOptions.value = OPTIONS.filter(
         (v) => v.toLowerCase().indexOf(needle) > -1
-      )
-    })
+      );
+    });
   } else {
     update(() => {
-      stringOptions.value = OPTIONS
-    })
+      stringOptions.value = OPTIONS;
+    });
   }
-}
+};
 </script>
