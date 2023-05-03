@@ -36,29 +36,29 @@
 </template>
 
 <script setup>
-import { ref, defineEmits } from 'vue'
+import { ref, defineEmits } from "vue";
 
 const props = defineProps({
   useForm: {
     type: Object,
-    required: true
+    required: true,
   },
   validatInput: {
     type: Function,
-    required: true
+    required: true,
   },
   validateMessage: {
     type: Object,
-    required: true
-  }
-})
+    required: true,
+  },
+});
 
-const name = ref(props.useForm.name)
-const lastName = ref(props.useForm.last_name)
+const name = ref(props.useForm.name);
+const lastName = ref(props.useForm.last_name);
 
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(["update:modelValue"]);
 
 const updateValue = (key, value) => {
-  emit('update:modelValue', { key, value })
-}
+  emit("update:modelValue", { key, value });
+};
 </script>

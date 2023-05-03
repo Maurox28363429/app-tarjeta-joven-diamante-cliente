@@ -19,6 +19,14 @@
           color="dark"
           @click="toggleLeftDrawer"
         />
+        <div @click="goBack">
+          <q-icon
+            name="arrow_back"
+            size="md"
+            color="dark"
+            class="cursor-pointer"
+          />
+        </div>
         <q-toolbar-title class="row items-center">
           <q-img
             src="../assets/icons/acronimo.svg"
@@ -36,7 +44,7 @@
         />
         <router-link to="/cliente/account" class="cursor-pointer">
           <q-avatar size="42px" class="q-ml-md">
-            <q-img :src="user.img_url" spinner-color="dark" />
+            <q-img :src="userData?.img_url" spinner-color="dark" />
           </q-avatar>
         </router-link>
       </q-toolbar>
@@ -75,12 +83,12 @@
           <q-item>
             <q-item-section>
               <p class="text-weight-bold text-h6 q-ma-none">
-                Plan {{ user?.membresia?.type }}
+                Plan {{ userData?.membresia?.type }}
               </p>
               <p
                 class="text-weight-medium text-subtitle2 text-grey-6 q-ma-none"
               >
-                Quendan: {{ user?.membresia?.days }} días
+                Quendan: {{ userData?.membresia?.days }} días
               </p>
             </q-item-section>
           </q-item>
@@ -143,50 +151,42 @@
       <div v-show="!miniState" class="absolute-top" style="height: 150px">
         <div class="column items-center absolute-bottom bg-transparent">
           <q-avatar size="56px" class="q-mb-sm">
-            <img :src="user.img_url" />
+            <img :src="userData?.img_url" />
           </q-avatar>
           <div class="text-weight-bold">
-            ¡Hola, {{ user.name + " " + user.last_name }}!
+            ¡Hola, {{ userData?.name + " " + userData?.last_name }}!
           </div>
           <div>
             <p
               class="text-center"
               style="text-overflow: ellipsis; overflow: hidden; width: 196px"
             >
-              {{ user.email }}
+              {{ userData?.email }}
             </p>
           </div>
         </div>
       </div>
     </q-drawer>
     <q-page-container style="background: #f8fdff">
-      <div @click="goBack" class="full-width q-pl-md q-pt-md">
-        <q-icon
-          name="arrow_back"
-          size="md"
-          color="dark"
-          class="cursor-pointer"
-        />
-      </div>
       <q-dialog v-model="prompt" persistent>
         <q-card style="min-width: 350px; width: 70%; height: 530px">
           <q-card-section>
             <div align="center">
-              <img src="favicon.ico" style="width:100px;height:auto" />
+              <img src="favicon.ico" style="width: 100px; height: auto" />
             </div>
-            <br>
+            <br />
             <div class="text-h6">Coloca tu beneficiaro de poliza</div>
           </q-card-section>
 
           <q-card-section class="q-pt-none" style="">
             <div style="padding: 1em">
-                <q-input
-                  placeholder="Cedula o pasaporte del usuario"
-                  dense
-                  v-model="dni"
-                  autofocus
-                />
-              </div>
+              <q-input
+                placeholder="Cedula o pasaporte del usuario"
+                dense
+                v-model="dni"
+                autofocus
+              />
+            </div>
             <div style="padding: 1em">
               <q-input
                 placeholder="Cedula de tu beneficiario"
@@ -240,18 +240,17 @@
 
     <div class="q-px-sm q-py-lg">
       <div class="qrButton">
-        <q-fab color="primary" icon="keyboard_arrow_up" direction="up">
-          <q-fab-action
-            @click="handleModal"
-            color="primary"
-            :disable="user.membresia.status == 'vencida' ? true : false"
-          >
-            <img
-              src="./../assets/images/qr.jpg"
-              style="width: 24px; height: 24px"
-            />
-          </q-fab-action>
-        </q-fab>
+        <q-btn
+          round
+          @click="handleModal"
+          color="primary"
+          :disable="userData?.membresia?.status == 'vencida' ? true : false"
+        >
+          <img
+            src="./../assets/images/qr.jpg"
+            style="width: 24px; height: 24px"
+          />
+        </q-btn>
       </div>
     </div>
     <q-tabs
@@ -311,25 +310,17 @@
       </router-link>
     </q-tabs>
     <UpdateMembershipModal
-      :showModal="showModalNew()"
+      :showModal="showModalNew"
       description="Obten 5 días de pueba con el plan free, y recibe ofertas especiales"
     />
     <UpdateMembershipModal
-      :showModal="showModalRenovar()"
+      :showModal="showModalRenovar"
       description="Renueva el plan, y recibe ofertas especiales"
     />
     <q-img
       src="../assets/images/triangulo.png"
       spinner-color="dark"
-      style="
-        height: 150px;
-        max-width: 200px;
-        position: fixed;
-        top: 84px;
-        right: -49px;
-        z-index: 100;
-        transform: rotate(90deg);
-      "
+      class="trianguloTop"
     />
     <q-img
       src="../assets/images/triangulo.png"
@@ -351,7 +342,19 @@ aside {
   bottom: 0px;
   left: 16px;
   z-index: 98;
+  clip-path: polygon(0 0, 83% 0, -55% 100%);
   transform: rotate(-0.25turn);
+}
+
+.trianguloTop {
+  height: 150px;
+  max-width: 200px;
+  position: fixed;
+  top: 84px;
+  right: -49px;
+  clip-path: polygon(-32% 0, 94% 0, -70% 99%);
+  z-index: 100;
+  transform: rotate(90deg);
 }
 
 .logoutButton {
@@ -394,109 +397,104 @@ aside {
 </style>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
-import { userAuth } from 'src/composables/userAuth'
-import UpdateMembershipModal from '../components/UpdateMembershipModal.vue'
-import format from 'src/utils/date'
-import QrUser from '../components/QrUser.vue'
-import localStorageAuth from 'src/utils/localStorageAuth'
-import updateUser from 'src/api/updateUser'
-import { useQuasar } from 'quasar'
-const $q = useQuasar()
+import { ref, onMounted, computed } from "vue";
+import { useRouter } from "vue-router";
+import { userAuth } from "src/composables/userAuth";
+import UpdateMembershipModal from "../components/UpdateMembershipModal.vue";
+import format from "src/utils/date";
+import QrUser from "../components/QrUser.vue";
+import localStorageAuth from "src/utils/localStorageAuth";
+import updateUser from "src/api/updateUser";
+import { useQuasar } from "quasar";
+const $q = useQuasar();
 
-const { user } = userAuth()
+const { userData } = userAuth();
 
-const leftDrawerOpen = ref(false)
-const router = useRouter()
-const show = ref(false)
+const leftDrawerOpen = ref(false);
+const router = useRouter();
+const show = ref(false);
 
-const showModalRenovar = () => {
-  if (user?.membresia?.days === 1) {
-    return true
-  }
-  return false
-}
+const showModalRenovar = computed(
+  () => userData?.value?.membresia?.status === "vencida"
+);
+
+console.log(showModalRenovar.value, "showModalRenovar");
+const showModalNew = computed(
+  () => format(userData?.value?.membresia?.updated_at) === format(new Date())
+);
 
 const handleModal = () => {
-  show.value = true
-}
+  show.value = true;
+};
 
-const showModalNew = () => {
-  if (format(user?.membresia?.updated_at) === format(new Date())) {
-    return true
-  }
-  return false
-}
-
-const miniState = ref(true)
+const miniState = ref(true);
 
 const handledLogout = (e) => {
-  e.preventDefault()
-  localStorage.removeItem('user')
-  router.push('/login')
-}
+  e.preventDefault();
+  localStorage.removeItem("user");
+  router.push("/login");
+};
 
 const toggleLeftDrawer = () => {
-  leftDrawerOpen.value = true
-  miniState.value = !miniState.value
-}
+  leftDrawerOpen.value = true;
+  miniState.value = !miniState.value;
+};
 
 const drawerClick = (e) => {
   if (miniState.value) {
-    miniState.value = false
+    miniState.value = false;
 
-    e.stopPropagation()
+    e.stopPropagation();
   }
-}
+};
 
 // para el inicio comprobar si tiene beneficiario
-const prompt = ref(false)
-const dni = ref('')
-const beneficiario_poliza_cedula = ref('')
-const beneficiario_poliza_name = ref('')
+const prompt = ref(false);
+const dni = ref("");
+const beneficiario_poliza_cedula = ref("");
+const beneficiario_poliza_name = ref("");
 const actualizar_beneficiario = async () => {
-  const userCurrent = localStorageAuth.getUser()
+  const userCurrent = localStorageAuth.getUser();
   const newUserData = {
     beneficiario_poliza_cedula: beneficiario_poliza_cedula.value,
     beneficiario_poliza_name: beneficiario_poliza_name.value,
-    dni: dni.value
-  }
+    dni: dni.value,
+  };
   updateUser({
-    id: user.value.id,
-    data: newUserData
+    id: userData.value.id,
+    data: newUserData,
   }).then((m) => {
     localStorageAuth.setUser({
       user: { ...userCurrent.user, ...newUserData },
-      token: userCurrent.token
-    })
+      token: userCurrent.token,
+    });
     $q.notify({
-      type: 'positive',
-      message: 'Usuario actualizado'
-    })
-  })
-}
+      type: "positive",
+      message: "Usuario actualizado",
+    });
+  });
+};
 
 onMounted(() => {
-  if (user.value.membresia.type === 'permitir_gratuita') {
-    router.push('/memberships')
+  if (userData.value?.membresia?.type === "permitir_gratuita") {
+    router.push("/memberships");
   }
-  if (user.value.membresia.type === 'Comprada') {
+  if (userData.value?.membresia?.type === "Comprada") {
     if (
-      user.value.beneficiario_poliza_cedula === null ||
-      user.value.beneficiario_poliza_name === null ||
-      user.value.dni === null
+      userData.value.beneficiario_poliza_cedula === null ||
+      userData.value.beneficiario_poliza_name === null ||
+      userData.value.dni === null
     ) {
-      prompt.value = true
+      prompt.value = true;
     }
   }
-})
+});
 
 const goHome = () => {
-  router.push('/cliente/home')
-}
+  router.push("/cliente/home");
+};
 
 const goBack = () => {
-  router.go(-1)
-}
+  router.go(-1);
+};
 </script>

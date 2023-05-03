@@ -8,7 +8,7 @@
         class="q-pa-md column items-center full-width"
         style="max-width: 400px"
       >
-        <p class="title-large q-mb-xl">Recuperar contraseña</p>
+        <p class="title-large q-mx-none q-mb-xl">Recuperar contraseña</p>
 
         <form @submit.prevent="sendEmail" class="full-width">
           <p class="title-medium q-mb-xl text-center">
@@ -49,33 +49,33 @@
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router'
-import { emailSchema } from 'src/schemas/emailShema'
-import { useRecoveryPasswordStore } from 'src/stores/recoveryPasswordStore'
-import { useValidateForm } from 'src/composables/useValidateForm'
-import { useSendEmail } from 'src/querys/userQuerys'
+import { useRouter } from "vue-router";
+import { emailSchema } from "src/schemas/emailShema";
+import { useRecoveryPasswordStore } from "src/stores/recoveryPasswordStore";
+import { useValidateForm } from "src/composables/useValidateForm";
+import { useSendEmail } from "src/querys/userQuerys";
 
-const router = useRouter()
+const router = useRouter();
 
 const goBack = () => {
-  router.go(-1)
-}
+  router.go(-1);
+};
 
 const INITIAL_VALUES = {
-  email: ''
-}
+  email: "",
+};
 
 const { useForm, validatInput, validateMessage } = useValidateForm({
   initialValue: INITIAL_VALUES,
-  schema: emailSchema
-})
+  schema: emailSchema,
+});
 
-const recoveryPasswordStore = useRecoveryPasswordStore()
+const recoveryPasswordStore = useRecoveryPasswordStore();
 
-const { mutate, isLoading } = useSendEmail()
+const { mutate, isLoading } = useSendEmail();
 
 const sendEmail = async () => {
-  mutate({ email: useForm.value.email })
-  recoveryPasswordStore.setEmail(useForm.value.email)
-}
+  mutate({ email: useForm.value.email });
+  recoveryPasswordStore.setEmail(useForm.value.email);
+};
 </script>
