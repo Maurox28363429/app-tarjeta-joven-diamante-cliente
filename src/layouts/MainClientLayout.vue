@@ -311,11 +311,11 @@
       </router-link>
     </q-tabs>
     <UpdateMembershipModal
-      :showModal="showModalNew()"
+      :showModal="showModalNew"
       description="Obten 5 días de pueba con el plan free, y recibe ofertas especiales"
     />
     <UpdateMembershipModal
-      :showModal="showModalRenovar()"
+      :showModal="showModalRenovar"
       description="Renueva el plan, y recibe ofertas especiales"
     />
     <q-img
@@ -394,7 +394,7 @@ aside {
 </style>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { useRouter } from "vue-router";
 import { userAuth } from "src/composables/userAuth";
 import UpdateMembershipModal from "../components/UpdateMembershipModal.vue";
@@ -411,22 +411,15 @@ const leftDrawerOpen = ref(false);
 const router = useRouter();
 const show = ref(false);
 
-const showModalRenovar = () => {
-  if (userData?.membresia?.days === 1) {
-    return true;
-  }
-  return false;
-};
+const showModalRenovar = computed(
+  () => userData?.value?.membresia?.status === "vencida"
+);
+const showModalNew = computed(
+  () => format(userData?.value?.membresia?.updated_at) === format(new Date())
+);
 
 const handleModal = () => {
   show.value = true;
-};
-
-const showModalNew = () => {
-  if (format(userData?.membresia?.updated_at) === format(new Date())) {
-    return true;
-  }
-  return false;
 };
 
 const miniState = ref(true);
