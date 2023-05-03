@@ -471,7 +471,7 @@ const actualizar_beneficiario = async () => {
 };
 
 onMounted(() => {
-  if (userData.value?.membresia.type === "permitir_gratuita") {
+  if (userData.value?.membresia?.type === "permitir_gratuita") {
     router.push("/memberships");
   }
   if (userData.value?.membresia?.type === "Comprada") {
