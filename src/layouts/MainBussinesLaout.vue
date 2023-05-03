@@ -19,6 +19,14 @@
           color="dark"
           @click="toggleLeftDrawer"
         />
+        <div @click="goBack">
+          <q-icon
+            name="arrow_back"
+            size="md"
+            color="dark"
+            class="cursor-pointer"
+          />
+        </div>
         <q-toolbar-title class="row items-center">
           <q-img
             src="../assets/icons/acronimo.svg"
@@ -129,14 +137,6 @@
       </div>
     </q-drawer>
     <q-page-container style="background: #f8fdff">
-      <div @click="goBack" class="full-width q-pl-md q-pt-md">
-        <q-icon
-          name="arrow_back"
-          size="md"
-          color="dark"
-          class="cursor-pointer"
-        />
-      </div>
       <router-view />
     </q-page-container>
 

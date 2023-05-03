@@ -12,7 +12,7 @@
         class="my-sticky-header-table"
         flat
         bordered
-        :title="user.role_id === 2 ? 'Mis ventas' : 'Mis compras'"
+        :title="userData.role_id === 2 ? 'Mis ventas' : 'Mis compras'"
         :rows="transactionsData?.data?.data"
         :columns="TRANSACTION_COLUMNS"
         hide-bottom
@@ -76,7 +76,7 @@
           <hr style="opacity: 0.5" />
           <section>
             <div
-              v-for="item in proucts"
+              v-for="item in products"
               :key="item.id"
               style="display: inline-flex"
             >
@@ -149,17 +149,17 @@ import {
 } from "src/querys/transactionsQuerys";
 
 const currentPage = ref(1);
-const proucts = ref([]);
+const products = ref([]);
 const dialog = ref(false);
 const maximizedToggle = ref(true);
-const { user } = userAuth();
+const { userData } = userAuth();
 
 let transactions;
 
-if (user.value.role_id === 3) {
+if (userData.value.role_id === 3) {
   transactions = useGetTransactionsClient({
     page: currentPage.value,
-    id: user.value.id,
+    id: userData.value.id,
   });
   TRANSACTION_COLUMNS[1] = {
     name: "client",
@@ -170,7 +170,7 @@ if (user.value.role_id === 3) {
 } else {
   transactions = useGetTransactionsBusiness({
     page: currentPage.value,
-    id: user.value.id,
+    id: userData.value.id,
   });
 }
 
@@ -190,7 +190,7 @@ watchEffect(() => {
 
 const onButtonClick = (evt, row, index) => {
   dialog.value = true;
-  proucts.value = row.ofertas;
+  products.value = row.ofertas;
 };
 </script>
 

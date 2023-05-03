@@ -298,6 +298,7 @@ const {
   isLoadingUser,
   isFetchingUser,
   isFetchedAfterMountUser,
+  isFetchedUser,
 } = userAuth();
 
 console.log("ProfilePage.vue desde componente");
@@ -322,7 +323,7 @@ const file = ref(userData.value?.img_url ?? "");
 const { useForm, validatInput, validateMessage, validateForm } =
   useValidateForm({ initialValue: {}, schema: updateProfileShema });
 
-watch([userData, isFetchedAfterMountUser], () => {
+watch([userData, isFetchedAfterMountUser, isFetchedUser], () => {
   if (userData.value && !isFetchingUser.value) {
     genderCurrent = GENDER_OPTIONS.find((item) => {
       return item.value === userData.value?.sex;
