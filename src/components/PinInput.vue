@@ -120,7 +120,6 @@ function handlePaste(event) {
 
 .pin-input-box {
   border: none;
-  border-bottom: 4px solid #4d57a9;
   background: #dfe0ff;
   border-radius: 4px;
   font-size: 32px;

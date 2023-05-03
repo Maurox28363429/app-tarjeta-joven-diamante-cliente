@@ -1,44 +1,6 @@
 <template>
   <div class="q-px-md">
-    <div v-if="!state">
-      <p class="title-large">Selecciona un estado</p>
-      <section
-        style="margin: 1em; cursor: pointer"
-        @click="() => selectState('todos')"
-      >
-        <q-card>
-          <q-card-section>
-            <div align="center">
-              <q-img
-                src="../../assets/icons/stateIcon.webp"
-                spinner-color="white"
-                style="height: 80px; max-width: 80px"
-              />
-            </div>
-            <h5 align="center">Ver todo</h5>
-          </q-card-section>
-        </q-card>
-      </section>
-      <div class="row wrap q-gutter-md justify-center">
-        <q-card
-          v-for="state in PANAMA_STATE"
-          :key="state.name"
-          class="stateCard column items-center cursor-pointer"
-          @click="() => selectState(state.name)"
-        >
-          <q-card-section class="full-width column items-center">
-            <q-img
-              src="../../assets/icons/stateIcon.webp"
-              spinner-color="white"
-              style="height: 80px; max-width: 80px"
-            />
-            <p>{{ state.name }}</p>
-          </q-card-section>
-        </q-card>
-      </div>
-    </div>
-
-    <div v-if="state">
+    <div>
       <p style="margin: 20px 0" class="title-large">Ofertas</p>
       <div class="full-width full-height row justify-center q-mt-lg">
         <q-form class="full-width row justify-center" @submit="handleSearch">
@@ -94,10 +56,7 @@
         </div>
         <template v-if="!isLoading">
           <div v-for="items in data?.data" :key="items.id">
-            <q-card
-              class="my-card column"
-              style="height: 400px; width: 100%; gap: 0"
-            >
+            <q-card class="column" style="height: 400px; width: 100%; gap: 0">
               <q-card-section class="q-px-xs q-py-none">
                 <img
                   style="
@@ -232,14 +191,18 @@
 <script setup>
 import { ref, watchEffect } from "vue";
 import { useGetOffersFromBusiness } from "src/querys/offersQuerys";
-import { PANAMA_STATE } from "src/shared/constansts/panamaState";
+import { useRoute } from "vue-router";
 
 const currentPaginate = ref(1);
 const paginas = ref(0);
 const search = ref("");
 const modalCurrent = ref({});
 const openModal = ref(false);
-const state = ref(null);
+
+const { params } = useRoute();
+const state = ref(params.countryName);
+
+console.log(params.countryName, "params.countryName");
 
 const { data, isLoading, refetch, isFetching } = useGetOffersFromBusiness({
   search,
@@ -261,10 +224,6 @@ watchEffect(() => {
     paginas.value = data.value?.pagination.lastPage;
   }
 });
-
-const selectState = (opt) => {
-  state.value = opt;
-};
 
 const showModal = (modalInfo) => {
   modalCurrent.value = { ...modalInfo };
@@ -337,10 +296,5 @@ const handleSearch = () => {
 .modal-card {
   width: 700px;
   max-width: 80vw;
-}
-
-.stateCard {
-  width: 140px;
-  height: 140px;
 }
 </style>

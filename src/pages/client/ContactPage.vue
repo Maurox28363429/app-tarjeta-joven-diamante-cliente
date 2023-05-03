@@ -2,44 +2,30 @@
   <div
     class="full-width q-py-xl column justify-center items-center q-gutter-y-md"
   >
-    <a
-      href="https://wa.me/50765789280"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      <q-card class="my-card">
-        <q-card-section class="column items-center justify-center">
-          <q-img
-            :src="whatsappIcon"
-            spinner-color="white"
-            style="height: 70px; max-width: 70px"
-          />
-          <p class="q-ma-none text-dark">Contactanos</p>
-          <p class="q-ma-none text-dark">+507 6578-9280</p>
-        </q-card-section>
-      </q-card>
-    </a>
-    <a
-      href="mailto:informacion@tarjetajovendiamante.com"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      <q-card class="my-card">
-        <q-card-section class="column items-center justify-center full-height">
-          <p class="q-ma-none text-dark">
-            Nuestro correo: informacion@tarjetajovendiamante.com Estamos para
-            ayudarte si tienes alguna duda o problema con tu cuenta puedes
-            contactarnos
-          </p>
-        </q-card-section>
-      </q-card>
-    </a>
+    <q-img src="../../assets/images/contact.png" />
+    <ul class="d style">
+      <li class="row items-center">
+        <q-icon name="email" class="q-mr-xs" />
+        <p class="q-ma-none">informacion@tarjetajovendiamante.com</p>
+      </li>
+      <li class="row items-center">
+        <q-icon name="la la-whatsapp" class="q-mr-xs" />
+        <p class="q-ma-none">+507 6578-9280</p>
+      </li>
+    </ul>
+
+    <div class="row q-gutter-md">
+      <a href="https://wa.me/50765789280">
+        <q-btn round color="positive" size="md" icon="la la-whatsapp" />
+      </a>
+      <a href="mailto:informacion@tarjetajovendiamante.com">
+        <q-btn round color="primary" size="md" icon="email" />
+      </a>
+    </div>
   </div>
 </template>
 
-<script setup>
-import whatsappIcon from "../../assets/images/whatsappIcon.png";
-</script>
+<script setup></script>
 
 <style scoped>
 .my-card {

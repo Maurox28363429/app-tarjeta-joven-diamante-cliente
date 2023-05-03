@@ -19,6 +19,14 @@
           color="dark"
           @click="toggleLeftDrawer"
         />
+        <div @click="goBack">
+          <q-icon
+            name="arrow_back"
+            size="md"
+            color="dark"
+            class="cursor-pointer"
+          />
+        </div>
         <q-toolbar-title class="row items-center">
           <q-img
             src="../assets/icons/acronimo.svg"
@@ -160,14 +168,6 @@
       </div>
     </q-drawer>
     <q-page-container style="background: #f8fdff">
-      <div @click="goBack" class="full-width q-pl-md q-pt-md">
-        <q-icon
-          name="arrow_back"
-          size="md"
-          color="dark"
-          class="cursor-pointer"
-        />
-      </div>
       <q-dialog v-model="prompt" persistent>
         <q-card style="min-width: 350px; width: 70%; height: 530px">
           <q-card-section>
@@ -240,18 +240,17 @@
 
     <div class="q-px-sm q-py-lg">
       <div class="qrButton">
-        <q-fab color="primary" icon="keyboard_arrow_up" direction="up">
-          <q-fab-action
-            @click="handleModal"
-            color="primary"
-            :disable="userData?.membresia?.status == 'vencida' ? true : false"
-          >
-            <img
-              src="./../assets/images/qr.jpg"
-              style="width: 24px; height: 24px"
-            />
-          </q-fab-action>
-        </q-fab>
+        <q-btn
+          round
+          @click="handleModal"
+          color="primary"
+          :disable="userData?.membresia?.status == 'vencida' ? true : false"
+        >
+          <img
+            src="./../assets/images/qr.jpg"
+            style="width: 24px; height: 24px"
+          />
+        </q-btn>
       </div>
     </div>
     <q-tabs
@@ -321,15 +320,7 @@
     <q-img
       src="../assets/images/triangulo.png"
       spinner-color="dark"
-      style="
-        height: 150px;
-        max-width: 200px;
-        position: fixed;
-        top: 84px;
-        right: -49px;
-        z-index: 100;
-        transform: rotate(90deg);
-      "
+      class="trianguloTop"
     />
     <q-img
       src="../assets/images/triangulo.png"
@@ -351,7 +342,19 @@ aside {
   bottom: 0px;
   left: 16px;
   z-index: 98;
+  clip-path: polygon(0 0, 83% 0, -55% 100%);
   transform: rotate(-0.25turn);
+}
+
+.trianguloTop {
+  height: 150px;
+  max-width: 200px;
+  position: fixed;
+  top: 84px;
+  right: -49px;
+  clip-path: polygon(-32% 0, 94% 0, -70% 99%);
+  z-index: 100;
+  transform: rotate(90deg);
 }
 
 .logoutButton {
@@ -414,6 +417,8 @@ const show = ref(false);
 const showModalRenovar = computed(
   () => userData?.value?.membresia?.status === "vencida"
 );
+
+console.log(showModalRenovar.value, "showModalRenovar");
 const showModalNew = computed(
   () => format(userData?.value?.membresia?.updated_at) === format(new Date())
 );
