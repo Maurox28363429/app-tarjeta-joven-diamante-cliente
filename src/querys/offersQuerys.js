@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/vue-query";
 
 import getOffersFromStore from "src/api/getOffersFromStore";
 import getOffers from "src/api/getOffers";
+import getStates from "src/api/getStates";
 
 import { useToast } from "src/composables/useToast";
 
@@ -10,7 +11,7 @@ const ERR_NETWORK_MESSAGE = "Verifique su conexión a internet";
 export const useGetOffers = ({ name, page, id }) => {
   const { triggerWarning } = useToast();
 
-  const data = useQuery(
+  return useQuery(
     ["offers", page],
     () => getOffersFromStore({ name, page, id }),
     {
@@ -22,14 +23,12 @@ export const useGetOffers = ({ name, page, id }) => {
       },
     }
   );
-
-  return data;
 };
 
 export const useGetOffersFromBusiness = ({ search, page, dir }) => {
   const { triggerWarning } = useToast();
 
-  const data = useQuery(
+  return useQuery(
     ["offersFromBusiness", page, dir],
     () => getOffers({ search: search.value, page: page.value, dir: dir.value }),
     {
@@ -41,6 +40,17 @@ export const useGetOffersFromBusiness = ({ search, page, dir }) => {
       },
     }
   );
+};
 
-  return data;
+export const useGetStates = () => {
+  const { triggerWarning } = useToast();
+
+  return useQuery(["states"], () => getStates(), {
+    onError: (error) => {
+      console.log(error, "error");
+      if (error?.code === "ERR_NETWORK") {
+        triggerWarning(ERR_NETWORK_MESSAGE);
+      }
+    },
+  });
 };

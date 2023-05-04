@@ -1,18 +1,7 @@
 <template>
   <div class="promotions">
     <!-- Título y campo de búsqueda -->
-    <p style="margin: 20px 0" class="title-large">Noticias de pachamá</p>
-    <div class="row q-mt-md q-gutter-x-xs">
-      <p class="q-ma-none text-weight-medium">Redes:</p>
-      <div class="row q-gutter-xs">
-        <a href="https://www.instagram.com/grupopachama/">
-          <q-btn round color="purple-4" size="xs" icon="la la-instagram" />
-        </a>
-        <a href="https://www.youtube.com/@pachamaecologico5714">
-          <q-btn round color="red" size="xs" icon="la la-youtube" />
-        </a>
-      </div>
-    </div>
+    <p style="margin: 20px 0" class="title-large">Noticias</p>
     <div class="search-box">
       <q-form class="full-width row justify-center" @submit="handleSearch">
         <q-input
@@ -137,7 +126,7 @@
 </template>
 <script setup>
 import { ref, watchEffect } from "vue";
-import { useGetPachamaNews } from "src/querys/pachamaNewsQuerys.js";
+import { useGetNewsInformative } from "src/querys/newsQuerys";
 
 const openModal = ref(false);
 const modalCurrent = ref({});
@@ -151,7 +140,7 @@ const {
   isLoading,
   refetch,
   isFetching,
-} = useGetPachamaNews({ search, pages });
+} = useGetNewsInformative({ search, pages });
 
 const showModal = (modalInfo) => {
   modalCurrent.value = { ...modalInfo };
