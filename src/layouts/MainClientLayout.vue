@@ -105,7 +105,7 @@
             </q-item-section>
             <q-item-section>Mis compras</q-item-section>
           </q-item>
-          <q-item clickable v-ripple to="/cliente/news">
+          <q-item clickable v-ripple to="/cliente/promotions">
             <q-item-section avatar>
               <q-icon name="newspaper" />
             </q-item-section>
@@ -297,7 +297,7 @@
         />
       </router-link>
       <router-link
-        to="/cliente/news"
+        to="/cliente/promotions"
         style="text-decoration: none; color: #ffff; width: 100%; margin: none"
       >
         <q-tab

@@ -83,9 +83,14 @@ const routes = [
             component: () => import("src/pages/client/ClientTransactions.vue"),
           },
           {
+            name: "promotions",
+            path: "promotions",
+            component: () => import("pages/client/PromotionsPage.vue"),
+          },
+          {
             name: "news",
             path: "news",
-            component: () => import("pages/client/PromotionsPage.vue"),
+            component: () => import("pages/client/NewsPage.vue"),
           },
         ],
       },

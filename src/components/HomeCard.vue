@@ -1,6 +1,6 @@
 <template>
   <q-card class="my-card" @click="handleLink">
-    <q-card-section class="column items-center justify-center">
+    <q-card-section class="column items-center justify-center full-width">
       <q-img
         :src="icon"
         spinner-color="dark"
@@ -27,14 +27,23 @@ const props = defineProps({
     type: String,
     default: "#",
   },
+  enabled: {
+    type: Boolean,
+    default: true,
+    required: true,
+  },
   icon: {
     type: String,
     default: "",
   },
 });
-
 const handleLink = () => {
-  router.push(props.link);
+  if (props.enabled) {
+    router.push(props.link);
+    console.log("hablitado");
+  } else {
+    console.log("deshabilitado");
+  }
 };
 </script>
 
