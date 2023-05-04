@@ -1,87 +1,87 @@
 <script setup>
-import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
-import { userAuth } from '../composables/userAuth.js'
-import { instance } from 'src/api/index.js'
-const val = ref(false)
-const textError = ref(false)
-const { userData, addMembership, isLoadingMembership } = userAuth()
+import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
+import { userAuth } from "../composables/userAuth.js";
+import { instance } from "src/api/index.js";
+const val = ref(false);
+const textError = ref(false);
+const { userData, addMembership, isLoadingMembership } = userAuth();
 
 const props = defineProps({
   price: {
     type: Number,
     required: true,
-    default: 0
+    default: 0,
   },
   name: {
     type: String,
     required: true,
-    default: ''
-  }
-})
+    default: "",
+  },
+});
 
-const router = useRouter()
+const router = useRouter();
 
 const goBack = () => {
-  router.go(-1)
-}
+  router.go(-1);
+};
 
 const handledFreePayment = () => {
   if (val.value) {
-    addMembership({ user_id: userData.value?.id })
-    textError.value = false
+    addMembership({ user_id: userData.value?.id });
+    textError.value = false;
   } else {
-    textError.value = true
+    textError.value = true;
   }
-}
+};
 const HandlePayment = () => {
-  const userId = userData.value?.id || ''
-  const url = `https://api.tarjetajovendiamante.com/pago/Payment_Controller.php?orderId=${userId}`
-  localStorage.removeItem('user')
-  if (typeof cordova !== 'undefined') {
-    const target = '_blank' // Usa '_blank' para abrir en el navegador incorporado
-    const options = 'location=no,zoom=no,toolbar=no,'
+  const userId = userData.value?.id || "";
+  const url = `https://api.tarjetajovendiamante.com/pago/Payment_Controller.php?orderId=${userId}`;
+  localStorage.removeItem("user");
+  if (typeof cordova !== "undefined") {
+    const target = "_blank"; // Usa '_blank' para abrir en el navegador incorporado
+    const options = "location=no,zoom=no,toolbar=no,";
     const inAppBrowser = window.cordova?.InAppBrowser.open(
       url,
       target,
       options
-    )
+    );
 
     // Puedes manejar eventos del navegador incorporado, si lo deseas
-    inAppBrowser.addEventListener('loadstart', (event) => {
-      console.log('InAppBrowser: loadstart', event)
-    })
+    inAppBrowser.addEventListener("loadstart", (event) => {
+      console.log("InAppBrowser: loadstart", event);
+    });
 
-    inAppBrowser.addEventListener('loadstop', (event) => {
-      console.log('InAppBrowser: loadstop', event)
-    })
+    inAppBrowser.addEventListener("loadstop", (event) => {
+      console.log("InAppBrowser: loadstop", event);
+    });
 
-    inAppBrowser.addEventListener('loaderror', (event) => {
-      console.log('InAppBrowser: loaderror', event)
-    })
+    inAppBrowser.addEventListener("loaderror", (event) => {
+      console.log("InAppBrowser: loaderror", event);
+    });
 
-    inAppBrowser.addEventListener('exit', (event) => {
-      console.log('InAppBrowser: exit', event)
-    })
+    inAppBrowser.addEventListener("exit", (event) => {
+      console.log("InAppBrowser: exit", event);
+    });
   } else {
-    console.warn('Cordova no está disponible')
-    window.open(url)
+    console.warn("Cordova no está disponible");
+    window.open(url);
   }
-}
-const isFree = Boolean(props.name === 'free') || props.price === 0
+};
+const isFree = Boolean(props.name === "free") || props.price === 0;
 
 onMounted(async () => {
   const prueba = await instance.get(
-    'user/' + userData.value?.id + '?includes[]=membresia'
-  )
+    "user/" + userData.value?.id + "?includes[]=membresia"
+  );
   if (
-    prueba.data.membresia.type === 'Comprada' ||
-    prueba.data.membresia.type === 'Prueba'
+    prueba.data.membresia.type === "Comprada" ||
+    prueba.data.membresia.type === "Prueba"
   ) {
-    router.push('clientes')
-    console.log(prueba)
+    router.push("clientes");
+    console.log(prueba);
   }
-})
+});
 </script>
 
 <template>

@@ -1,134 +1,165 @@
 <template>
-  <div class="column justify-center" style="min-height: 200px">
+  <div v-if="!loading">
     <div>
-      <qrcode-stream
-        v-if="permision || !window?.cordova"
-        @decode="onDecode"
-        @init="onInit"
-        @detect="onDetect"
-        @error="onError"
-      ></qrcode-stream>
+      <video
+        id="video"
+        style="width: 100%; height: 240px; object-fit: cover"
+      ></video>
     </div>
-    <q-inner-loading
-      :showing="loading || visible"
-      label-class="text-teal"
-      label-style="font-size: 1.1em"
-    />
-    <div
-      v-if="!permision"
-      class="full-width q-px-md full-height column justify-center items-center"
-    >
-      <p class="title-medium text-center">
-        Activa los permisos de la camara para activar el lector de QR
-      </p>
+    <div class="q-pa-md">
+      <q-select
+        outlined
+        v-model="selectedDeviceId"
+        :options="videoInputDevices"
+        label="video source"
+        class="full-width"
+      />
+    </div>
+    <div class="row justify-center q-gutter-x-md">
+      <q-btn
+        class="button"
+        @click="startDecode"
+        label="scanear"
+        color="primary"
+      />
+      <q-btn class="button" @click="reset" label="reset" color="secondary" />
     </div>
   </div>
+  <q-inner-loading
+    :showing="loading"
+    label-class="text-teal"
+    label-style="font-size: 1.1em"
+  />
 </template>
 
 <script setup>
-import { onMounted, ref, defineEmits } from 'vue'
-import { useToast } from 'src/composables/useToast'
-import { userCart } from 'src/stores/userCart'
-import { useRouter } from 'vue-router'
-import { userAuth } from 'src/composables/userAuth'
+import { BrowserMultiFormatReader, NotFoundException } from "@zxing/library";
+import { ref, onMounted, defineEmits, defineProps } from "vue";
+import { useToast } from "src/composables/useToast";
+import { useRouter } from "vue-router";
+import { userAuth } from "src/composables/userAuth";
+import { userCart } from "src/stores/userCart";
 
 defineProps({
   closeModal: {
-    type: Object
-  }
-})
+    type: Object,
+  },
+});
 
-const emits = defineEmits(['close-modal'])
+const emits = defineEmits(["close-modal"]);
+const router = useRouter();
+const { userData } = userAuth();
 
-const router = useRouter()
-const { user } = userAuth()
+const client = userCart();
+const loading = ref(false);
 
-const client = userCart()
+const { triggerWarning } = useToast();
 
-const visible = ref(false)
-const loading = ref(false)
+const selectedDeviceId = ref("");
+const codeReader = ref(null);
+const videoInputDevices = ref([]);
+const sourceSelectPanelVisible = ref(false);
+const resultText = ref("");
+const permision = ref(false);
 
-const permision = ref(false)
+onMounted(() => {
+  addPermision();
+  codeReader.value = new BrowserMultiFormatReader();
+  console.log("ZXing code reader initialized");
+  console.log("Video devices: ", videoInputDevices.value);
+  codeReader.value
+    .listVideoInputDevices()
+    .then((videoInputDevicesSelect) => {
+      console.log(videoInputDevicesSelect, "videoInputDevicesSelect");
+      videoInputDevices.value = videoInputDevicesSelect.map((element) => {
+        return { ...element, value: element.deviceId, label: element.label };
+      });
+      console.log("Video devices: ", videoInputDevices.value);
+      selectedDeviceId.value = videoInputDevices.value[0];
+      if (videoInputDevices.value.length >= 1) {
+        sourceSelectPanelVisible.value = true;
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+});
 
-const { triggerWarning } = useToast()
+function startDecode() {
+  console.log(selectedDeviceId.value, "selectedDeviceId");
+  codeReader.value.decodeFromVideoDevice(
+    selectedDeviceId.value.value,
+    "video",
+    async (result, err) => {
+      if (result) {
+        console.log(result);
+        resultText.value = result.text;
+        loading.value = true;
+        try {
+          await client.setClient(result.text);
+          router.push("/empresa/create-order");
+          emits("close-modal");
+          console.log("Cliente asignado correctamente", result.text);
+          if (!userData.value.membresia) {
+            triggerWarning("Usuario no tiene una membresia activa");
+          }
+        } catch (error) {
+          console.error("Error al asignar el cliente:", error);
+        } finally {
+          loading.value = false;
+          reset();
+        }
+      }
+      if (err && !(err instanceof NotFoundException)) {
+        console.error(err);
+        resultText.value = err;
+      }
+    }
+  );
+  console.log(
+    `Started continous decode from camera with id ${selectedDeviceId.value.value}`
+  );
+}
 
-function addPermision () {
+function reset() {
+  codeReader.value.reset();
+  resultText.value = "";
+  console.log("Reset.");
+}
+
+function addPermision() {
   if (
     window?.cordova &&
     window?.cordova.plugins &&
     window?.cordova.plugins.permissions
   ) {
     // Solicitar permiso de cámara
-    const permissions = window.cordova.plugins.permissions
-    console.log('estoy en cordova', permissions)
+    const permissions = window.cordova.plugins.permissions;
+    console.log("estoy en cordova", permissions);
     permissions.requestPermission(
       permissions.CAMERA,
       function (status) {
         if (status.hasPermission) {
           // El permiso ha sido concedido
-          permision.value = true
-          console.log('tiene permiso')
+          permision.value = true;
+          console.log("tiene permiso");
         } else {
           // El permiso ha sido denegado
-          console.log('No tiene permiso')
+          console.log("No tiene permiso");
           triggerWarning(
-            'El permiso de la cámara fue denegado. Por favor, permite el acceso desde la configuración del dispositivo.'
-          )
-          permision.value = false
+            "El permiso de la cámara fue denegado. Por favor, permite el acceso desde la configuración del dispositivo."
+          );
+          permision.value = false;
         }
       },
       function (error) {
-        console.log('error', error)
+        console.log("error", error);
         // Error al solicitar el permiso
-        console.error('Error al solicitar el permiso de cámara')
-        triggerWarning('Los permisos para la camara estan desactivados')
-        permision.value = false
+        console.error("Error al solicitar el permiso de cámara");
+        triggerWarning("Los permisos para la camara estan desactivados");
+        permision.value = false;
       }
-    )
+    );
   }
-}
-
-onMounted(() => {
-  addPermision()
-})
-
-const onDecode = async (decodedString) => {
-  loading.value = true
-  try {
-    await client.setClient(decodedString)
-    router.push('/empresa/create-order')
-    emits('close-modal')
-  } catch (error) {
-    console.error('Error al asignar el cliente:', error)
-  } finally {
-    loading.value = false
-  }
-}
-
-const onInit = (promise) => {
-  visible.value = true
-  promise
-    .then(() => {
-      permision.value = true
-    })
-    .catch((error) => {
-      console.error('Error al inicializar el lector de QR:', error)
-      triggerWarning('Los permisos para la camara estan desactivados')
-      permision.value = false
-    })
-    .finally(() => {
-      visible.value = false
-    })
-}
-
-const onDetect = () => {
-  console.log('Código QR detectado.')
-  if (!user.value.membresia) {
-    triggerWarning('Usuario no tiene una membresia activa')
-  }
-}
-
-const onError = (error) => {
-  console.error('Error al escanear el código QR:', error)
 }
 </script>

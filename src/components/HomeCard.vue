@@ -13,29 +13,29 @@
 </template>
 
 <script setup>
-import { defineProps } from 'vue'
-import { useRouter } from 'vue-router'
+import { defineProps } from "vue";
+import { useRouter } from "vue-router";
 
-const router = useRouter()
+const router = useRouter();
 
 const props = defineProps({
   title: {
     type: String,
-    required: true
+    required: true,
   },
   link: {
     type: String,
-    default: '#'
+    default: "#",
   },
   icon: {
     type: String,
-    default: ''
-  }
-})
+    default: "",
+  },
+});
 
 const handleLink = () => {
-  router.push(props.link)
-}
+  router.push(props.link);
+};
 </script>
 
 <style>

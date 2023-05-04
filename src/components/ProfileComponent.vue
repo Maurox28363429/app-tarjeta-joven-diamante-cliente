@@ -286,11 +286,11 @@
 </template>
 
 <script setup>
-import { userAuth } from 'src/composables/userAuth'
-import { ref, watch, defineProps } from 'vue'
-import { useValidateForm } from 'src/composables/useValidateForm'
-import { updateProfileShema } from 'src/schemas/updateProfileShema'
-import { useUpdateUserMutation } from 'src/querys/userQuerys'
+import { userAuth } from "src/composables/userAuth";
+import { ref, watch, defineProps } from "vue";
+import { useValidateForm } from "src/composables/useValidateForm";
+import { updateProfileShema } from "src/schemas/updateProfileShema";
+import { useUpdateUserMutation } from "src/querys/userQuerys";
 
 const {
   updatedUser,
@@ -298,37 +298,37 @@ const {
   isLoadingUser,
   isFetchingUser,
   isFetchedAfterMountUser,
-  isFetchedUser
-} = userAuth()
+  isFetchedUser,
+} = userAuth();
 
-console.log('ProfilePage.vue desde componente')
+console.log("ProfilePage.vue desde componente");
 const props = defineProps({
   user: {
     type: String,
-    required: true
-  }
-})
+    required: true,
+  },
+});
 
-const isBusiness = props.user === 'business'
+const isBusiness = props.user === "business";
 
-let genderCurrent = { label: '', value: '' }
+let genderCurrent = { label: "", value: "" };
 
 const GENDER_OPTIONS = [
-  { label: 'Mujer', value: 0 },
-  { label: 'Hombre', value: 1 }
-]
+  { label: "Mujer", value: 0 },
+  { label: "Hombre", value: 1 },
+];
 
-const file = ref(userData.value?.img_url ?? '')
+const file = ref(userData.value?.img_url ?? "");
 
 const { useForm, validatInput, validateMessage, validateForm } =
-  useValidateForm({ initialValue: {}, schema: updateProfileShema })
+  useValidateForm({ initialValue: {}, schema: updateProfileShema });
 
 watch([userData, isFetchedAfterMountUser, isFetchedUser], () => {
   if (userData.value && !isFetchingUser.value) {
     genderCurrent = GENDER_OPTIONS.find((item) => {
-      return item.value === userData.value?.sex
-    })
-    file.value = userData.value?.img_url
+      return item.value === userData.value?.sex;
+    });
+    file.value = userData.value?.img_url;
     useForm.value = {
       name: userData.value?.name,
       email: userData.value?.email,
@@ -337,37 +337,37 @@ watch([userData, isFetchedAfterMountUser, isFetchedUser], () => {
       sex: genderCurrent,
       address: userData.value?.address,
       img: null,
-      dni: userData.value?.dni || '',
+      dni: userData.value?.dni || "",
       beneficiario_poliza_cedula:
-        userData.value?.beneficiario_poliza_cedula || '',
-      beneficiario_poliza_name: userData.value?.beneficiario_poliza_name || '',
-      fecha_nacimiento: userData.value?.fecha_nacimiento || ''
-    }
+        userData.value?.beneficiario_poliza_cedula || "",
+      beneficiario_poliza_name: userData.value?.beneficiario_poliza_name || "",
+      fecha_nacimiento: userData.value?.fecha_nacimiento || "",
+    };
   }
-})
+});
 
-const { isLoading, mutateAsync } = useUpdateUserMutation()
+const { isLoading, mutateAsync } = useUpdateUserMutation();
 
 const uploadImg = (event) => {
-  const image = event.target.files[0]
-  useForm.value.img = image
-  file.value = URL.createObjectURL(image)
-}
+  const image = event.target.files[0];
+  useForm.value.img = image;
+  file.value = URL.createObjectURL(image);
+};
 
 const handledUpdateUser = async () => {
-  validateForm()
+  validateForm();
 
   const values = {
     ...useForm.value,
     role_id: userData.value.role_id,
     active: userData.value.active,
     id: userData.value.id,
-    sex: useForm.value.sex?.value
-  }
-  await mutateAsync({ data: values, id: userData.value.id })
+    sex: useForm.value.sex?.value,
+  };
+  await mutateAsync({ data: values, id: userData.value.id });
 
-  updatedUser()
-}
+  updatedUser();
+};
 </script>
 
 <style scoped>
