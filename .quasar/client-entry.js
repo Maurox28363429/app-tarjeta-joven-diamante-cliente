@@ -29,9 +29,7 @@ import "@quasar/quasar-ui-qiconpicker/src/index.sass";
 import createQuasarApp from "./app.js";
 import quasarUserOptions from "./quasar-user-options.js";
 
-console.info("[Quasar] Running SPA.");
-
-const publicPath = `/`;
+const publicPath = ``;
 
 async function start({ app, router, store }, bootFiles) {
   let hasRedirected = false;
@@ -89,7 +87,14 @@ async function start({ app, router, store }, bootFiles) {
 
   app.use(router);
 
-  app.mount("#q-app");
+  document.addEventListener(
+    "deviceready",
+    () => {
+      app.config.globalProperties.$q.cordova = window.cordova;
+      app.mount("#q-app");
+    },
+    false
+  ); // on deviceready
 }
 
 createQuasarApp(createApp, quasarUserOptions).then((app) => {
