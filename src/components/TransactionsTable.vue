@@ -12,7 +12,7 @@
         class="my-sticky-header-table"
         flat
         bordered
-        :title="userData.role_id === 2 ? 'Mis ventas' : 'Mis compras'"
+        :title="userData?.role_id === 2 ? 'Mis ventas' : 'Mis compras'"
         :rows="transactionsData?.data?.data"
         :columns="TRANSACTION_COLUMNS"
         hide-bottom
@@ -156,7 +156,7 @@ const { userData } = userAuth();
 
 let transactions;
 
-if (userData.value.role_id === 3) {
+if (userData?.value?.role_id === 3) {
   transactions = useGetTransactionsClient({
     page: currentPage.value,
     id: userData.value.id,
@@ -170,7 +170,7 @@ if (userData.value.role_id === 3) {
 } else {
   transactions = useGetTransactionsBusiness({
     page: currentPage.value,
-    id: userData.value.id,
+    id: userData?.value?.id,
   });
 }
 
