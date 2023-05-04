@@ -14,11 +14,13 @@
           :title="card.title"
           :icon="card.icon"
           :link="card.link"
+          :enabled="card.enabled"
           v-if="!card.evento"
         />
         <HomeCard
           :title="card.title"
           :icon="card.icon"
+          :enabled="card.enabled"
           :link="card.link"
           v-if="card.evento"
           @click="showModal = true"

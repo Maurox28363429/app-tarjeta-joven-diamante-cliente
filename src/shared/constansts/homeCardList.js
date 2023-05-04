@@ -3,13 +3,14 @@ import messageIcon from "../../assets/images/messageIcon.png";
 import VIPIcon from "../../assets/images/VIPIcon.png";
 import speakerIcon from "../../assets/images/speakerIcon.png";
 import bagIcon from "../../assets/images/bagIcon.png";
-import giftIcon from "../../assets/images/giftIcon.png";
+// import giftIcon from "../../assets/images/giftIcon.png";
 import pachama from "../../assets/images/GifPachama.gif";
-import universityIcon from "../../assets/images/universityIcon.png";
-import helpIcon from "../../assets/images/heartIcon.png";
+// import universityIcon from "../../assets/images/universityIcon.png";
+// import helpIcon from "../../assets/images/heartIcon.png";
 import newsIcon from "../../assets/images/newsIcon.png";
 import iconoTarjeta from "../../assets/images/t.webp";
 import profileIcon from "../../assets/images/profileIcon.png";
+import disableIcon from "../../assets/images/bandImage.png";
 
 export const HOME_CARD_LIST = [
   {
@@ -18,71 +19,83 @@ export const HOME_CARD_LIST = [
     icon: iconoTarjeta,
     link: "#",
     evento: true,
+    enabled: true,
   },
   {
     id: 2,
     title: "Contactanos",
     icon: messageIcon,
     link: "/cliente/contact",
+    enabled: true,
   },
   {
     id: 3,
     title: "Membrersias",
     icon: VIPIcon,
     link: "/cliente/memberships-type",
+    enabled: true,
   },
   {
     id: 4,
     title: "Ofertas",
     icon: offersIcon,
     link: "/cliente/Offers",
+    enabled: true,
   },
   {
     id: 5,
     title: "Premios",
-    icon: giftIcon,
+    icon: disableIcon,
     link: "",
+    enabled: false,
   },
   {
     id: 6,
     title: "Promociones",
     icon: speakerIcon,
-    link: "/cliente/news",
+    link: "/cliente/promotions",
+    enabled: true,
   },
   {
     id: 7,
     title: "Compras",
     icon: bagIcon,
     link: "/cliente/transactionsTable",
+    enabled: true,
   },
   {
     id: 8,
     title: "Pachamá",
     icon: pachama,
     link: "/cliente/pachama",
+    enabled: true,
   },
   {
     id: 9,
     title: "Universidades",
-    icon: universityIcon,
+    icon: disableIcon,
     link: "",
+    enabled: false,
   },
   {
     id: 10,
     title: "SOS",
-    icon: helpIcon,
+    icon: disableIcon,
     link: "",
+    enabled: false,
   },
   {
     id: 11,
     title: "Noticias",
     icon: newsIcon,
-    link: "",
+    link: "/cliente/news",
+    enabled: true,
   },
   {
     id: 12,
     title: "Perfil",
     icon: profileIcon,
     link: "/cliente/account/profile",
+    enabled: true,
   },
 ];
