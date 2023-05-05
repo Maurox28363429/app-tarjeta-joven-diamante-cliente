@@ -14,6 +14,16 @@
       "ANDROIDX_CORE_VERSION": "1.6.+",
       "PACKAGE_NAME": "com.phoenixtechsa.app"
     },
+    "cordova-plugin-customurlscheme": {
+      "URL_SCHEME": "mycoolapp",
+      "ANDROID_SCHEME": " ",
+      "ANDROID_HOST": " ",
+      "ANDROID_PATHPREFIX": "/",
+      "PACKAGE_NAME": "com.phoenixtechsa.app"
+    },
+    "cordova-plugin-deeplinks": {
+      "PACKAGE_NAME": "com.phoenixtechsa.app"
+    },
     "cordova-plugin-inappbrowser": {
       "PACKAGE_NAME": "com.phoenixtechsa.app"
     },
@@ -21,5 +31,9 @@
       "PACKAGE_NAME": "com.phoenixtechsa.app"
     }
   },
-  "dependent_plugins": {}
+  "dependent_plugins": {
+    "cordova-support-android-plugin": {
+      "PACKAGE_NAME": "com.phoenixtechsa.app"
+    }
+  }
 }

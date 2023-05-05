@@ -38,5 +38,39 @@
     },
     "is_top_level": false,
     "variables": {}
+  },
+  "cordova-plugin-deeplinks": {
+    "source": {
+      "type": "registry",
+      "id": "https://github.com/e-imaxina/cordova-plugin-deeplinks.git"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-customurlscheme": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-customurlscheme@^5.0.2"
+    },
+    "is_top_level": true,
+    "variables": {
+      "URL_SCHEME": "mycoolapp"
+    }
+  },
+  "cordova-plugin-deeplink": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-deeplink"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-support-android-plugin": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-support-android-plugin@~2.0.4"
+    },
+    "is_top_level": false,
+    "variables": {}
   }
 }

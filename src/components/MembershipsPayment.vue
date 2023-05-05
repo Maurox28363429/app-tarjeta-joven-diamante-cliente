@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { useRouter } from "vue-router";
 import { userAuth } from "../composables/userAuth.js";
 import { instance } from "src/api/index.js";
@@ -34,9 +34,22 @@ const handledFreePayment = () => {
     textError.value = true;
   }
 };
+
+const urlScheme = "tarjetajovendiamante";
+
+const urlSucces = computed(() => {
+  if (typeof cordova !== "undefined") {
+    return `${urlScheme}://`;
+  } else {
+    return "https://app.tarjetajovendiamante.com/#/cliente";
+  }
+});
+
+console.log(urlSucces.value, "deepLink");
+
 const HandlePayment = () => {
   const userId = userData.value?.id || "";
-  const url = `https://api.tarjetajovendiamante.com/pago/Payment_Controller.php?orderId=${userId}`;
+  const url = `https://api.tarjetajovendiamante.com/pago/Payment_Controller.php?orderId=${userId}&successURL=${urlSucces.value}`;
   localStorage.removeItem("user");
   if (typeof cordova !== "undefined") {
     const target = "_blank"; // Usa '_blank' para abrir en el navegador incorporado
@@ -127,6 +140,18 @@ onMounted(async () => {
               <p class="text-weight-medium text-h5 q-mb-lg">
                 Detalles del pago
               </p>
+              <a href="myapp://cliente">Open my app</a>
+              <a href="mycoolapp://">Open my app</a>
+              <button
+                @click="
+                  cordova.InAppBrowser.open(
+                    'tarjetajovendiamante://',
+                    '_system'
+                  )
+                "
+              >
+                Open my app on place 123
+              </button>
               <div class="row items-center">
                 <q-icon name="gpp_good" size="xl" color="primary" />
                 <p

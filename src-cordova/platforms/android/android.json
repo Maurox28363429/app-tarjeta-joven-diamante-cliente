@@ -17,6 +17,14 @@
               "count": 1
             },
             {
+              "xml": "<feature name=\"LaunchMyApp\"><param name=\"android-package\" value=\"nl.xservices.plugins.LaunchMyApp\" /></feature>",
+              "count": 1
+            },
+            {
+              "xml": "<feature name=\"UniversalLinks\"><param name=\"android-package\" value=\"com.nordnetab.cordova.ul.UniversalLinksPlugin\" /><param name=\"onload\" value=\"true\" /></feature>",
+              "count": 1
+            },
+            {
               "xml": "<feature name=\"InAppBrowser\"><param name=\"android-package\" value=\"org.apache.cordova.inappbrowser.InAppBrowser\" /></feature>",
               "count": 1
             },
@@ -58,6 +66,16 @@
               "xml": "<intent><action android:name=\"com.android.camera.action.CROP\" /><data android:mimeType=\"image/*\" android:scheme=\"content\" /></intent>",
               "count": 1
             }
+          ],
+          "/manifest/application/activity": [
+            {
+              "xml": "<intent-filter><action android:name=\"android.intent.action.VIEW\" /><category android:name=\"android.intent.category.DEFAULT\" /><category android:name=\"android.intent.category.BROWSABLE\" /><data android:scheme=\"mycoolapp\" /></intent-filter>",
+              "count": 1
+            },
+            {
+              "xml": "<intent-filter><action android:name=\"android.intent.action.VIEW\" /><category android:name=\"android.intent.category.DEFAULT\" /><category android:name=\"android.intent.category.BROWSABLE\" /><data android:host=\" \" android:pathPrefix=\"/\" android:scheme=\" \" /></intent-filter>",
+              "count": 1
+            }
           ]
         }
       }
@@ -71,10 +89,23 @@
       "ANDROIDX_CORE_VERSION": "1.6.+",
       "PACKAGE_NAME": "com.phoenixtechsa.app"
     },
+    "cordova-plugin-customurlscheme": {
+      "URL_SCHEME": "mycoolapp",
+      "ANDROID_SCHEME": " ",
+      "ANDROID_HOST": " ",
+      "ANDROID_PATHPREFIX": "/",
+      "PACKAGE_NAME": "com.phoenixtechsa.app"
+    },
+    "cordova-plugin-deeplinks": {
+      "PACKAGE_NAME": "com.phoenixtechsa.app"
+    },
     "cordova-plugin-inappbrowser": {
       "PACKAGE_NAME": "com.phoenixtechsa.app"
     },
     "cordova-plugin-splashscreen": {
+      "PACKAGE_NAME": "com.phoenixtechsa.app"
+    },
+    "cordova-support-android-plugin": {
       "PACKAGE_NAME": "com.phoenixtechsa.app"
     }
   },
@@ -121,6 +152,22 @@
       ]
     },
     {
+      "id": "cordova-plugin-customurlscheme.LaunchMyApp",
+      "file": "plugins/cordova-plugin-customurlscheme/www/android/LaunchMyApp.js",
+      "pluginId": "cordova-plugin-customurlscheme",
+      "clobbers": [
+        "window.plugins.launchmyapp"
+      ]
+    },
+    {
+      "id": "cordova-plugin-deeplinks.universalLinks",
+      "file": "plugins/cordova-plugin-deeplinks/www/universal_links.js",
+      "pluginId": "cordova-plugin-deeplinks",
+      "clobbers": [
+        "universalLinks"
+      ]
+    },
+    {
       "id": "cordova-plugin-inappbrowser.inappbrowser",
       "file": "plugins/cordova-plugin-inappbrowser/www/inappbrowser.js",
       "pluginId": "cordova-plugin-inappbrowser",
@@ -140,7 +187,10 @@
   "plugin_metadata": {
     "cordova-plugin-android-permissions": "1.1.5",
     "cordova-plugin-camera": "6.0.1-dev",
+    "cordova-plugin-customurlscheme": "5.0.2",
+    "cordova-plugin-deeplinks": "1.1.1",
     "cordova-plugin-inappbrowser": "5.0.0",
-    "cordova-plugin-splashscreen": "6.0.2"
+    "cordova-plugin-splashscreen": "6.0.2",
+    "cordova-support-android-plugin": "2.0.4"
   }
 }
