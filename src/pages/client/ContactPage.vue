@@ -2,7 +2,7 @@
   <div
     class="full-width q-py-xl column justify-center items-center q-gutter-y-md"
   >
-    <q-img src="../../assets/images/contact.png" />
+    <q-img src="../../assets/images/contact.png" width="360px" height="240px" />
     <ul class="d style">
       <li class="row items-center">
         <q-icon name="email" class="q-mr-xs" />

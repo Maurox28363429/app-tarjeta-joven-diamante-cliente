@@ -13,16 +13,27 @@
         style="height: 200px; max-width: 200px"
       />
 
-      <p class="q-ma-none title-large text-center" v-if="isMembershipsActive">
+      <p
+        class="q-ma-none title-large text-center maxText"
+        v-if="isMembershipsActive"
+      >
         La membresía se encuentra activa, sigue disfrutando de tus beneficios
       </p>
 
       <p
-        class="q-ma-none title-large text-center"
+        class="q-ma-none title-large text-center maxText"
         v-else-if="!isMembershipsActive"
       >
         La membresía esta vencida haz click en el botón de abajo para renovar
       </p>
+      <div class="text-grey-7 q-mt-md">
+        <p>
+          Fecha de activación: {{ getDate(userData?.membresia?.created_at) }}
+        </p>
+        <p>
+          Fecha de vencimiento: {{ getDate(userData?.membresia?.fecha_cobro) }}
+        </p>
+      </div>
       <section>
         <br />
         <q-btn
@@ -46,5 +57,18 @@ const isMembershipsActive = computed(() => {
   return userData.value?.membresia?.status === "activa";
 });
 
-console.log(isMembershipsActive.value, "isMembershipsActive");
+const getDate = (fechaString) => {
+  const date = new Date(fechaString);
+  const day = date.getDate();
+  const month = date.getMonth() + 1; // Los meses en JavaScript empiezan desde cero, por lo que debemos sumar 1
+  const year = date.getFullYear();
+
+  return `${day}/${month}/${year}`;
+};
 </script>
+
+<style>
+.maxText {
+  max-width: 300px;
+}
+</style>

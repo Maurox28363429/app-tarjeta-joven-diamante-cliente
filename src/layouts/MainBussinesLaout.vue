@@ -146,7 +146,7 @@
       transition-show="scale"
       transition-hide="scale"
     >
-      <q-card>
+      <q-card class="qrModal">
         <QRScanner :close-modal="show" @close-modal="show = false" />
         <q-card-actions align="right" class="text-primary">
           <q-btn flat label="Close" v-close-popup />
@@ -236,6 +236,11 @@ aside {
   bottom: 6px;
 }
 
+.qrModal {
+  min-width: 480px;
+  min-height: 424px;
+}
+
 @media (max-width: 700px) {
   .menu {
     display: none;
@@ -245,6 +250,9 @@ aside {
   }
   .qrButton {
     bottom: 64px;
+  }
+  .qrModal {
+    min-width: 100%;
   }
 }
 </style>

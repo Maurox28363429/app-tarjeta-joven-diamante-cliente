@@ -65,6 +65,7 @@
                 :src="item.img_url"
                 spinner-color="dark"
                 class="news-image"
+                fit="contain"
               />
 
               <q-card-section>
