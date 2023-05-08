@@ -48,22 +48,22 @@
 </template>
 
 <script setup>
-import { useGetStates } from 'src/querys/offersQuerys'
-import { useRouter } from 'vue-router'
+import { useGetStates } from "src/querys/offersQuerys";
+import { useRouter } from "vue-router";
 
-const router = useRouter()
-const { data, isLoading } = useGetStates()
+const router = useRouter();
+const { data, isLoading } = useGetStates();
 
 const openOffers = ({ state, offers }) => {
   if (offers !== 0) {
-    router.push(`/cliente/Offers/${state}`)
-    console.log('hay ofertas')
+    router.push(`/cliente/Offers/${state}`);
+    console.log("hay ofertas");
   } else {
-    console.log('no hay ofertas', offers)
+    console.log("no hay ofertas", offers);
   }
-}
+};
 
-console.log(data?.value?.data, 'data')
+console.log(data?.value?.data, "data");
 </script>
 
 <style>

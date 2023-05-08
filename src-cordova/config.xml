@@ -80,11 +80,11 @@
     <allow-navigation href="about:*" />
     <universal-links>
         <host name="phoenixtechsa.app">
-            <path event="openNewsListPage" url="/*"  scheme="https"/>
-            <path event="openNewsDetailedPage" url="/cliente/*" scheme="https"/>
-            <path event="launchedAppFromLink" url="*" scheme="https"/>
-             <path event="launchedAppFromLink" url="*" scheme="mycoolapp"/>
+            <path event="openNewsListPage" scheme="https" url="/*" />
+            <path event="openNewsDetailedPage" scheme="https" url="/cliente/*" />
+            <path event="launchedAppFromLink" scheme="https" url="*" />
+            <path event="launchedAppFromLink" scheme="mycoolapp" url="*" />
         </host>
-        <host name="*"/>
+        <host name="*" />
     </universal-links>
 </widget>
