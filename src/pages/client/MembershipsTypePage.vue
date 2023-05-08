@@ -37,14 +37,14 @@
 </template>
 
 <script setup>
-import { userAuth } from "src/composables/userAuth";
-import { computed } from "vue";
+import { userAuth } from 'src/composables/userAuth'
+import { computed } from 'vue'
 
-const { userData, isLoadingUser } = userAuth();
+const { userData, isLoadingUser } = userAuth()
 
 const isMembershipsActive = computed(() => {
-  return userData.value?.membresia?.status === "activa";
-});
+  return userData.value?.membresia?.status === 'activa'
+})
 
-console.log(isMembershipsActive.value, "isMembershipsActive");
+console.log(isMembershipsActive.value, 'isMembershipsActive')
 </script>

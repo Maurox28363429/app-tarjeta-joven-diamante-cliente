@@ -80,81 +80,81 @@
 </template>
 
 <script setup>
-import { useRouter } from "vue-router";
-import PinInput from "src/components/PinInput.vue";
-import { ref, watchEffect } from "vue";
-import { useValidateForm } from "src/composables/useValidateForm";
-import { passwordSchema } from "src/schemas/passwordShema";
-import { useRecoveryPasswordStore } from "src/stores/recoveryPasswordStore";
+import { useRouter } from 'vue-router'
+import PinInput from 'src/components/PinInput.vue'
+import { ref, watchEffect } from 'vue'
+import { useValidateForm } from 'src/composables/useValidateForm'
+import { passwordSchema } from 'src/schemas/passwordShema'
+import { useRecoveryPasswordStore } from 'src/stores/recoveryPasswordStore'
 import {
   useChangePassword,
   useValidatePasswordAndCode,
-  useSendEmailAgain,
-} from "src/querys/userQuerys";
+  useSendEmailAgain
+} from 'src/querys/userQuerys'
 
-const typePassword = ref("password");
-const iconPassword = ref("visibility_off");
+const typePassword = ref('password')
+const iconPassword = ref('visibility_off')
 
 const showPassword = () => {
-  typePassword.value = typePassword.value === "password" ? "text" : "password";
+  typePassword.value = typePassword.value === 'password' ? 'text' : 'password'
   iconPassword.value =
-    iconPassword.value === "visibility_off" ? "visibility" : "visibility_off";
-};
+    iconPassword.value === 'visibility_off' ? 'visibility' : 'visibility_off'
+}
 
-const recoveryPasswordStore = useRecoveryPasswordStore();
-const recoveryEmail = recoveryPasswordStore.email;
+const recoveryPasswordStore = useRecoveryPasswordStore()
+const recoveryEmail = recoveryPasswordStore.email
 
 const INITIAL_VALUES = {
-  password: "",
-};
+  password: ''
+}
 
 const { useForm, validatInput, validateMessage } = useValidateForm({
   initialValue: INITIAL_VALUES,
-  schema: passwordSchema,
-});
+  schema: passwordSchema
+})
 
-const codeValue = ref(null);
-const showFormCode = ref(true);
+const codeValue = ref(null)
+const showFormCode = ref(true)
 
-const router = useRouter();
+const router = useRouter()
 
 const goBack = () => {
-  router.go(-1);
-};
+  router.go(-1)
+}
 
 const { isLoading: isLoadingSendEmail, mutate: sendEmailMutate } =
-  useSendEmailAgain();
+  useSendEmailAgain()
 const {
   isLoading: isLoadingHandledSencode,
   mutate: validateMutate,
-  data: validateData,
-} = useValidatePasswordAndCode();
+  data: validateData
+} = useValidatePasswordAndCode()
 const { isLoading: isLoadingPassword, mutate: passwordMutate } =
-  useChangePassword();
+  useChangePassword()
 
 const sendCode = async () => {
-  sendEmailMutate({ email: recoveryEmail });
-};
+  sendEmailMutate({ email: recoveryEmail })
+}
 
 const handledSencode = (code) => {
-  codeValue.value = code;
+  codeValue.value = code
   validateMutate({
     email: recoveryEmail,
-    code,
-  });
-};
+    code
+  })
+}
 
 watchEffect(() => {
   if (validateData.value) {
-    showFormCode.value = false;
+    showFormCode.value = false
   }
-});
+})
 
 const sendPassword = () => {
   passwordMutate({
     recovery_cod: codeValue.value,
     password: useForm.value.password,
-    email: recoveryEmail,
-  });
-};
+    email: recoveryEmail
+  })
+}
 </script>
