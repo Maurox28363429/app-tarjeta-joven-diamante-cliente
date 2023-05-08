@@ -6,11 +6,11 @@
     <feature name="Camera">
         <param name="android-package" value="org.apache.cordova.camera.CameraLauncher" />
     </feature>
-    <feature name="InAppBrowser">
-        <param name="android-package" value="org.apache.cordova.inappbrowser.InAppBrowser" />
+    <feature name="LaunchMyApp">
+        <param name="android-package" value="nl.xservices.plugins.LaunchMyApp" />
     </feature>
-    <feature name="SplashScreen">
-        <param name="android-package" value="org.apache.cordova.splashscreen.SplashScreen" />
+    <feature name="UniversalLinks">
+        <param name="android-package" value="com.nordnetab.cordova.ul.UniversalLinksPlugin" />
         <param name="onload" value="true" />
     </feature>
     <name>Tarjeta joven diamante</name>
@@ -22,6 +22,13 @@
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-navigation href="about:*" />
+    <universal-links>
+        <host name="phoenixtechsa.app">
+            <path event="openNewsListPage" url="/*" />
+            <path event="openNewsDetailedPage" url="/cliente/*" />
+            <path event="launchedAppFromLink" url="*" />
+        </host>
+    </universal-links>
     <icon density="ldpi" src="res/android/ldpi.png" />
     <icon density="mdpi" src="res/android/mdpi.png" />
     <icon density="hdpi" src="res/android/hdpi.png" />
@@ -43,4 +50,5 @@
     <preference name="loglevel" value="DEBUG" />
     <preference name="SplashMaintainAspectRatio" value="true" />
     <preference name="android-targetSdkVersion" value="31" />
+    <preference name="AndroidLaunchMode" value="singleInstance" />
 </widget>

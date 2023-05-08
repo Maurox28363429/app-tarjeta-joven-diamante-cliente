@@ -16,18 +16,23 @@
     "cordova-android": "^10.1.2",
     "cordova-ios": "^6.3.0",
     "cordova-plugin-camera": "github:apache/cordova-plugin-camera",
+    "cordova-plugin-deeplinks": "github:e-imaxina/cordova-plugin-deeplinks",
     "cordova-plugin-splashscreen": "^6.0.2"
   },
   "cordova": {
     "platforms": [
-      "ios",
-      "android"
+      "ios"
     ],
     "plugins": {
       "cordova-plugin-splashscreen": {},
       "cordova-plugin-camera": {},
       "cordova-plugin-android-permissions": {},
-      "cordova-plugin-inappbrowser": {}
+      "cordova-plugin-inappbrowser": {},
+      "cordova-plugin-customurlscheme": {
+        "URL_SCHEME": "mycoolapp"
+      },
+      "cordova-plugin-deeplinks": {},
+      "LaunchMyApp": {}
     }
   },
   "dependencies": {

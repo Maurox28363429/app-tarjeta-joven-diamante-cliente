@@ -38,5 +38,23 @@
     },
     "is_top_level": false,
     "variables": {}
+  },
+  "cordova-plugin-customurlscheme": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-customurlscheme"
+    },
+    "is_top_level": true,
+    "variables": {
+      "URL_SCHEME": "mycoolapp"
+    }
+  },
+  "cordova-plugin-deeplinks": {
+    "source": {
+      "type": "registry",
+      "id": "https://github.com/e-imaxina/cordova-plugin-deeplinks.git"
+    },
+    "is_top_level": true,
+    "variables": {}
   }
 }

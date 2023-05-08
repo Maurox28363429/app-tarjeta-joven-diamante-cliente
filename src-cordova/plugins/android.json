@@ -14,10 +14,14 @@
       "ANDROIDX_CORE_VERSION": "1.6.+",
       "PACKAGE_NAME": "com.phoenixtechsa.app"
     },
-    "cordova-plugin-inappbrowser": {
+    "cordova-plugin-customurlscheme": {
+      "URL_SCHEME": "mycoolapp",
+      "ANDROID_SCHEME": " ",
+      "ANDROID_HOST": " ",
+      "ANDROID_PATHPREFIX": "/",
       "PACKAGE_NAME": "com.phoenixtechsa.app"
     },
-    "cordova-plugin-splashscreen": {
+    "cordova-plugin-deeplinks": {
       "PACKAGE_NAME": "com.phoenixtechsa.app"
     }
   },
