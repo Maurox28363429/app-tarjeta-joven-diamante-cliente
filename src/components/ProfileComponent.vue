@@ -391,7 +391,7 @@ const uploadImg = (event) => {
 
 const handledUpdateUser = async () => {
   validateForm();
-  console.log(useForm.value, "value");
+
   const values = {
     ...useForm.value,
     role_id: userData.value.role_id,
