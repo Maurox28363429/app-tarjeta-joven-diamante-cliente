@@ -32,19 +32,27 @@ import { useGetStates } from "src/querys/offersQuerys";
 import { useRouter } from "vue-router";
 import disableIcon from "../../assets/images/bandImage.png";
 import activeIcon from "../../assets/icons/stateIcon.webp";
+import { defineProps } from "vue";
+
+const props = defineProps({
+  typeOffers: {
+    type: String,
+    required: true,
+  },
+});
+
 const router = useRouter();
+
 const { data, isLoading } = useGetStates();
 
 const openOffers = ({ state, offers }) => {
   if (offers !== 0) {
-    router.push(`/cliente/Offers/${state}`);
+    router.push(`/cliente/${props.typeOffers}/${state}`);
     console.log("hay ofertas");
   } else {
     console.log("no hay ofertas", offers);
   }
 };
-
-console.log(data?.value?.data, "data");
 </script>
 
 <style>

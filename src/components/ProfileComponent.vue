@@ -268,6 +268,20 @@
                     />
                   </label>
                 </div>
+                <div class="q-ma-none full-width input">
+                  <label class="label-large" v-if="!isBusiness">
+                    Provincia que suele visitar
+                    <q-select
+                      outlined
+                      v-model="useForm.provincia"
+                      multiple
+                      :options="provinceOptions"
+                      use-chips
+                      stack-label
+                      label="Provincias"
+                    />
+                  </label>
+                </div>
                 <q-item-section class="button">
                   <q-btn
                     :loading="isLoading"
@@ -287,10 +301,11 @@
 
 <script setup>
 import { userAuth } from "src/composables/userAuth";
-import { ref, watch, defineProps } from "vue";
+import { ref, watch, defineProps, computed, watchEffect } from "vue";
 import { useValidateForm } from "src/composables/useValidateForm";
 import { updateProfileShema } from "src/schemas/updateProfileShema";
 import { useUpdateUserMutation } from "src/querys/userQuerys";
+import { useGetStates } from "src/querys/offersQuerys";
 
 const {
   updatedUser,
@@ -301,13 +316,20 @@ const {
   isFetchedUser,
 } = userAuth();
 
-console.log("ProfilePage.vue desde componente");
 const props = defineProps({
   user: {
     type: String,
     required: true,
   },
 });
+
+const { data } = useGetStates();
+
+const provinceOptions = computed(() =>
+  data.value?.data.map((element) => {
+    return element.name;
+  })
+);
 
 const isBusiness = props.user === "business";
 
@@ -323,13 +345,26 @@ const file = ref(userData.value?.img_url ?? "");
 const { useForm, validatInput, validateMessage, validateForm } =
   useValidateForm({ initialValue: {}, schema: updateProfileShema });
 
+console.log(useForm.value, "value");
+
+watchEffect(() => {
+  if (useForm.value?.provincia?.length > 2 && userData.value) {
+    useForm.value?.provincia.pop();
+  }
+});
+
 watch([userData, isFetchedAfterMountUser, isFetchedUser], () => {
+  console.log(useForm.value, "value");
   if (userData.value && !isFetchingUser.value) {
     genderCurrent = GENDER_OPTIONS.find((item) => {
       return item.value === userData.value?.sex;
     });
     file.value = userData.value?.img_url;
+    console.log(useForm.value, "value");
     useForm.value = {
+      provincia: Array.isArray(userData.value.provincia)
+        ? userData.value.provincia
+        : JSON.parse(userData.value.provincia),
       name: userData.value?.name,
       email: userData.value?.email,
       last_name: userData.value?.last_name,
@@ -356,7 +391,7 @@ const uploadImg = (event) => {
 
 const handledUpdateUser = async () => {
   validateForm();
-
+  console.log(useForm.value, "value");
   const values = {
     ...useForm.value,
     role_id: userData.value.role_id,

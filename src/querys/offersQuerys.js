@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/vue-query";
 import getOffersFromStore from "src/api/getOffersFromStore";
 import getOffers from "src/api/getOffers";
 import getStates from "src/api/getStates";
+import getOffersForUniversitys from "src/api/getOffersForUniversitys";
 
 import { useToast } from "src/composables/useToast";
 
@@ -53,4 +54,26 @@ export const useGetStates = () => {
       }
     },
   });
+};
+
+export const useGetOffersForUniversity = ({ search, page, dir }) => {
+  const { triggerWarning } = useToast();
+
+  return useQuery(
+    ["offersForUniversity", page, dir],
+    () =>
+      getOffersForUniversitys({
+        search: search.value,
+        page: page.value,
+        dir: dir.value,
+      }),
+    {
+      onError: (error) => {
+        console.log(error, "error");
+        if (error?.code === "ERR_NETWORK") {
+          triggerWarning(ERR_NETWORK_MESSAGE);
+        }
+      },
+    }
+  );
 };

@@ -310,11 +310,11 @@
       </router-link>
     </q-tabs>
     <UpdateMembershipModal
-      :showModal="showModalNew"
+      :showModal="showModalNew && showModalIsExpired"
       description="Obten 5 días de pueba con el plan free, y recibe ofertas especiales"
     />
     <UpdateMembershipModal
-      :showModal="showModalRenovar"
+      :showModal="showModalIsExpired"
       description="Renueva el plan, y recibe ofertas especiales"
     />
     <q-img
@@ -414,11 +414,10 @@ const leftDrawerOpen = ref(false);
 const router = useRouter();
 const show = ref(false);
 
-const showModalRenovar = computed(
+const showModalIsExpired = computed(
   () => userData?.value?.membresia?.status === "vencida"
 );
 
-console.log(showModalRenovar.value, "showModalRenovar");
 const showModalNew = computed(
   () => format(userData?.value?.membresia?.updated_at) === format(new Date())
 );

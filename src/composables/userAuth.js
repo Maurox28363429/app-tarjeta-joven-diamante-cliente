@@ -22,10 +22,8 @@ export const userAuth = () => {
     isFetching: isFetchingUser,
     isFetchedAfterMount: isFetchedAfterMountUser,
     isFetched: isFetchedUser,
+    refetch: refetchUser,
   } = useGetUserQuery({ id: user.value?.id });
-
-  console.log(userData, "userData");
-  console.log(isLoadingUser.value, "loadingUser");
 
   const ERR_NETWORK_MESSAGE =
     "Verifique su conexión a internet e intente nuevamente";
@@ -79,7 +77,7 @@ export const userAuth = () => {
       isLoadingMembership.value = true;
       await authStore.addMembership({ user_id });
       triggerPositive("Ha obtenido la membresía con éxito");
-      router.push("/cliente/Offers");
+      router.push("/cliente");
     } catch (error) {
       if (error.response.status === 404) {
         triggerWarning(error.response.data.message);
@@ -115,5 +113,6 @@ export const userAuth = () => {
     isFetchedAfterMountUser,
     isFetchedUser,
     updatedUser: authStore.updated,
+    refetchUser,
   };
 };

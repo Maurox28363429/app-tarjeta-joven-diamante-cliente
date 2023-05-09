@@ -15,15 +15,39 @@
       ></q-select>
     </label>
   </div>
+  <div class="q-ma-none full-width input">
+    <label class="label-large">
+      Provincia que suele visitar
+      <q-select
+        filled
+        v-model="provincia"
+        multiple
+        :options="provinceOptions"
+        @update:modelValue="updateValue('provincia', $event)"
+        use-chips
+        stack-label
+        label="Provincias"
+      />
+    </label>
+  </div>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { computed, ref, watchEffect } from "vue";
+import { useGetStates } from "src/querys/offersQuerys";
 
 const OPTIONS = [];
 for (let i = 0; i < 50; i++) {
   OPTIONS.push(`Promotor ${i}`);
 }
+
+const { data } = useGetStates();
+
+const provinceOptions = computed(() =>
+  data.value?.data.map((element) => {
+    return element.name;
+  })
+);
 
 const props = defineProps({
   useForm: {
@@ -41,9 +65,17 @@ const props = defineProps({
 });
 
 const vendedor = ref(props.useForm.vendedor);
+const provincia = ref([]);
+
+watchEffect(() => {
+  if (provincia.value.length > 2) {
+    provincia.value.pop();
+  }
+});
 
 const emit = defineEmits(["update:modelValue"]);
 const stringOptions = ref(OPTIONS);
+
 const updateValue = (key, value) => {
   emit("update:modelValue", { key, value });
 };

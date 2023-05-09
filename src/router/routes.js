@@ -40,9 +40,20 @@ const routes = [
             component: () => import("src/pages/client/OffersPage.vue"),
           },
           {
+            path: "OffersForUniversitys/:countryName",
+            component: () => import("src/pages/client/OffersForUniversity.vue"),
+          },
+          {
             path: "Offers",
             component: () =>
               import("src/pages/client/SelectStateForffersPage.vue"),
+            props: { typeOffers: "Offers" },
+          },
+          {
+            path: "OffersForUniversitys",
+            component: () =>
+              import("src/pages/client/SelectStateForffersPage.vue"),
+            props: { typeOffers: "OffersForUniversitys" },
           },
           {
             path: "pachama",
@@ -69,18 +80,20 @@ const routes = [
             children: [
               {
                 path: "",
-                component: () => import("pages/client/AccountPage.vue"),
+                component: () => import("components/UserAccount.vue"),
+                props: { user: "business" },
               },
               {
                 path: "profile",
-                component: () => import("pages/client/ProfilePage.vue"),
+                component: () => import("components/ProfileComponent.vue"),
+                props: { user: "client" },
               },
             ],
           },
           {
             name: "transactionsTable",
             path: "transactionsTable",
-            component: () => import("src/pages/client/ClientTransactions.vue"),
+            component: () => import("components/TransactionsTable.vue"),
           },
           {
             name: "promotions",
@@ -108,19 +121,20 @@ const routes = [
             children: [
               {
                 path: "",
-                component: () => import("pages/business/AccountPage.vue"),
+                component: () => import("components/UserAccount.vue"),
+                props: { user: "business" },
               },
               {
                 path: "profile",
-                component: () => import("pages/business/ProfilePage.vue"),
+                component: () => import("components/ProfileComponent.vue"),
+                props: { user: "business" },
               },
             ],
           },
           {
             name: "orders",
             path: "orders",
-            component: () =>
-              import("src/pages/business/BusinessTransactions.vue"),
+            component: () => import("components/TransactionsTable.vue"),
           },
           {
             name: "create-order",

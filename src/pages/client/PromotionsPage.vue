@@ -3,7 +3,7 @@
     <!-- Título y campo de búsqueda -->
     <p style="margin: 20px 0" class="title-large">Promociones</p>
     <div class="search-box">
-      <q-form class="full-width row justify-center" @submit="handleSearch">
+      <q-form class="full-width row justify-center" @submit="refetch">
         <q-input
           v-model="search"
           outlined
@@ -195,10 +195,6 @@ watchEffect(() => {
     pages.value = promotionsData?.value?.data?.pagination.lastPage;
   }
 });
-
-const handleSearch = () => {
-  refetch();
-};
 </script>
 <style>
 .promotions {

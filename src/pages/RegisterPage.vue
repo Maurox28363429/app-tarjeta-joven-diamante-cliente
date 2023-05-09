@@ -21,6 +21,7 @@ const INITIAL_VALUES = {
   sex: GENDER_OPTIONS[0],
   password: "",
   vendedor: "",
+  provincia: [],
 };
 
 const lastStep = 4;

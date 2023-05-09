@@ -7,6 +7,7 @@ const router = useRouter();
 const arr = new Array(2).fill(0);
 
 const { loading, memberships } = useMemberships();
+
 const goBack = () => {
   router.go(-1);
 };

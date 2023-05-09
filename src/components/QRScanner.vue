@@ -124,7 +124,6 @@ function startDecode() {
 function reset() {
   codeReader.value.reset();
   resultText.value = "";
-  console.log("Reset.");
 }
 
 function addPermision() {

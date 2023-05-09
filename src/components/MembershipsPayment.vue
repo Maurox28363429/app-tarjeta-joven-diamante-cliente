@@ -80,7 +80,7 @@ onMounted(async () => {
     prueba.data.membresia.type === "Comprada" ||
     prueba.data.membresia.type === "Prueba"
   ) {
-    router.push("clientes");
+    router.push("cliente");
     console.log(prueba);
   }
 });

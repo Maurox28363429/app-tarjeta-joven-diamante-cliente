@@ -85,7 +85,7 @@
 
 <script setup>
 import { ref, watchEffect } from "vue";
-import { useGetOffersFromBusiness } from "src/querys/offersQuerys";
+import { useGetOffersForUniversity } from "src/querys/offersQuerys";
 import { useRoute } from "vue-router";
 import CardOffers from "src/components/CardOffers.vue";
 
@@ -96,7 +96,7 @@ const search = ref("");
 const route = useRoute();
 const state = ref(route.params.countryName);
 
-const { data, isLoading, refetch, isFetching } = useGetOffersFromBusiness({
+const { data, isLoading, refetch, isFetching } = useGetOffersForUniversity({
   search,
   page: currentPaginate,
   dir: state,

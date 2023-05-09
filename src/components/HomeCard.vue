@@ -40,7 +40,6 @@ const props = defineProps({
 const handleLink = () => {
   if (props.enabled) {
     router.push(props.link);
-    console.log("hablitado");
   } else {
     console.log("deshabilitado");
   }

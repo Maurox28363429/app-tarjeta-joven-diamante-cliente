@@ -11,6 +11,7 @@ export default async function registerUser({
   sex,
   address,
   vendedor,
+  provincia,
 }) {
   return await instance.post("/register", {
     name,
@@ -23,5 +24,6 @@ export default async function registerUser({
     sex,
     address,
     vendedor,
+    provincia,
   });
 }
