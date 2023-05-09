@@ -96,7 +96,7 @@
 
 <script setup>
 import { defineProps, ref } from "vue";
-import wazeIcon from "../../assets/images/wazeIcon.jpg";
+import wazeIcon from "./../assets/images/wazeIcon.jpg";
 
 const openModal = ref(false);
 
