@@ -28,11 +28,7 @@
       "cordova-plugin-camera": {},
       "cordova-plugin-android-permissions": {},
       "cordova-plugin-inappbrowser": {},
-      "cordova-plugin-customurlscheme": {
-        "URL_SCHEME": "mycoolapp"
-      },
-      "cordova-plugin-deeplinks": {},
-      "LaunchMyApp": {}
+      "cordova-plugin-deeplinks": {}
     }
   },
   "dependencies": {

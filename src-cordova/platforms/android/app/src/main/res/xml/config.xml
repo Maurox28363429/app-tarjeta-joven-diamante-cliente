@@ -6,11 +6,15 @@
     <feature name="Camera">
         <param name="android-package" value="org.apache.cordova.camera.CameraLauncher" />
     </feature>
-    <feature name="LaunchMyApp">
-        <param name="android-package" value="nl.xservices.plugins.LaunchMyApp" />
-    </feature>
     <feature name="UniversalLinks">
         <param name="android-package" value="com.nordnetab.cordova.ul.UniversalLinksPlugin" />
+        <param name="onload" value="true" />
+    </feature>
+    <feature name="InAppBrowser">
+        <param name="android-package" value="org.apache.cordova.inappbrowser.InAppBrowser" />
+    </feature>
+    <feature name="SplashScreen">
+        <param name="android-package" value="org.apache.cordova.splashscreen.SplashScreen" />
         <param name="onload" value="true" />
     </feature>
     <name>Tarjeta joven diamante</name>
@@ -18,17 +22,20 @@
     <author email="dev@cordova.apache.org" href="https://cordova.apache.org">
         Apache Cordova Team
     </author>
-    <content src="index.html" />
+    <content src="http://192.168.186.182:9400" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-navigation href="about:*" />
     <universal-links>
         <host name="phoenixtechsa.app">
-            <path event="openNewsListPage" url="/*" />
-            <path event="openNewsDetailedPage" url="/cliente/*" />
-            <path event="launchedAppFromLink" url="*" />
+            <path event="openNewsListPage" scheme="https" url="/*" />
+            <path event="openNewsDetailedPage" scheme="https" url="/cliente/*" />
+            <path event="launchedAppFromLink" scheme="https" url="*" />
+            <path event="launchedAppFromLink" scheme="mycoolapp" url="*" />
         </host>
+        <host name="*" />
     </universal-links>
+    <allow-navigation href="http://192.168.186.182:9400" />
     <icon density="ldpi" src="res/android/ldpi.png" />
     <icon density="mdpi" src="res/android/mdpi.png" />
     <icon density="hdpi" src="res/android/hdpi.png" />

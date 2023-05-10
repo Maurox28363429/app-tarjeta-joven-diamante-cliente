@@ -31,22 +31,30 @@ cordova.define("cordova/plugin_list", function (require, exports, module) {
       clobbers: ["CameraPopoverHandle"],
     },
     {
-      id: "cordova-plugin-customurlscheme.LaunchMyApp",
-      file: "plugins/cordova-plugin-customurlscheme/www/android/LaunchMyApp.js",
-      pluginId: "cordova-plugin-customurlscheme",
-      clobbers: ["window.plugins.launchmyapp"],
-    },
-    {
       id: "cordova-plugin-deeplinks.universalLinks",
       file: "plugins/cordova-plugin-deeplinks/www/universal_links.js",
       pluginId: "cordova-plugin-deeplinks",
       clobbers: ["universalLinks"],
     },
+    {
+      id: "cordova-plugin-inappbrowser.inappbrowser",
+      file: "plugins/cordova-plugin-inappbrowser/www/inappbrowser.js",
+      pluginId: "cordova-plugin-inappbrowser",
+      clobbers: ["cordova.InAppBrowser.open"],
+    },
+    {
+      id: "cordova-plugin-splashscreen.SplashScreen",
+      file: "plugins/cordova-plugin-splashscreen/www/splashscreen.js",
+      pluginId: "cordova-plugin-splashscreen",
+      clobbers: ["navigator.splashscreen"],
+    },
   ];
   module.exports.metadata = {
     "cordova-plugin-android-permissions": "1.1.5",
     "cordova-plugin-camera": "6.0.1-dev",
-    "cordova-plugin-customurlscheme": "5.0.2",
     "cordova-plugin-deeplinks": "1.1.1",
+    "cordova-plugin-inappbrowser": "5.0.0",
+    "cordova-plugin-splashscreen": "6.0.2",
+    "cordova-support-android-plugin": "2.0.4",
   };
 });

@@ -11,14 +11,6 @@
     <preference name="SplashMaintainAspectRatio" value="true" />
     <preference name="android-targetSdkVersion" value="31" />
     <preference name="AndroidLaunchMode" value="singleInstance" />
-    <gap:plugin name="cordova-plugin-customurlscheme" source="npm">
-        <param name="URL_SCHEME" value="mycoolapp" />
-    </gap:plugin>
-    <feature name="Custom URL scheme">
-        <param name="id" value="cordova-plugin-customurlscheme" />
-        <param name="url" value="https://github.com/EddyVerbruggen/Custom-URL-scheme.git" />
-        <variable name="URL_SCHEME" value="mycoolapp" />
-    </feature>
     <platform name="android">
         <feature name="Camera">
             <param name="android-package" value="org.apache.cordova.camera.CameraLauncher" />
@@ -79,11 +71,10 @@
     </platform>
     <allow-navigation href="about:*" />
     <universal-links>
-        <host name="phoenixtechsa.app">
-            <path event="openNewsListPage" scheme="https" url="/*" />
-            <path event="openNewsDetailedPage" scheme="https" url="/cliente/*" />
-            <path event="launchedAppFromLink" scheme="https" url="*" />
-            <path event="launchedAppFromLink" scheme="mycoolapp" url="*" />
+        <host name="phoenixtechsa.com">
+            <path event="openNewsListPage" scheme="http" url="/*" />
+            <path event="openNewsDetailedPage" scheme="http" url="/cliente/*" />
+            <path event="launchedAppFromLink" scheme="http" url="*" />
         </host>
         <host name="*" />
     </universal-links>

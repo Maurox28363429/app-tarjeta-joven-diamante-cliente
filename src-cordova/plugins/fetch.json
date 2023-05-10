@@ -13,7 +13,9 @@
       "id": "github:apache/cordova-plugin-camera"
     },
     "is_top_level": true,
-    "variables": {}
+    "variables": {
+      "ANDROIDX_CORE_VERSION": "1.6.+"
+    }
   },
   "cordova-plugin-android-permissions": {
     "source": {
@@ -42,12 +44,10 @@
   "cordova-plugin-customurlscheme": {
     "source": {
       "type": "registry",
-      "id": "cordova-plugin-customurlscheme"
+      "id": "github:EddyVerbruggen/Custom-URL-scheme"
     },
     "is_top_level": true,
-    "variables": {
-      "URL_SCHEME": "mycoolapp"
-    }
+    "variables": {}
   },
   "cordova-plugin-deeplinks": {
     "source": {
