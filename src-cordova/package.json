@@ -16,7 +16,6 @@
     "cordova-android": "^10.1.2",
     "cordova-ios": "^6.3.0",
     "cordova-plugin-camera": "github:apache/cordova-plugin-camera",
-    "cordova-plugin-customurlscheme": "^5.0.2",
     "cordova-plugin-splashscreen": "^6.0.2"
   },
   "cordova": {
@@ -28,13 +27,7 @@
       "cordova-plugin-splashscreen": {},
       "cordova-plugin-camera": {},
       "cordova-plugin-android-permissions": {},
-      "cordova-plugin-inappbrowser": {},
-      "cordova-plugin-customurlscheme": {
-        "URL_SCHEME": "mycoolapp",
-        "ANDROID_SCHEME": " ",
-        "ANDROID_HOST": " ",
-        "ANDROID_PATHPREFIX": "/"
-      }
+      "cordova-plugin-inappbrowser": {}
     }
   },
   "dependencies": {

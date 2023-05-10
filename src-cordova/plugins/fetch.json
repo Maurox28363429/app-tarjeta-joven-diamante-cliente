@@ -42,11 +42,14 @@
   "cordova-plugin-customurlscheme": {
     "source": {
       "type": "registry",
-      "id": "cordova-plugin-customurlscheme"
+      "id": "cordova-plugin-customurlscheme@^5.0.2"
     },
     "is_top_level": true,
     "variables": {
-      "URL_SCHEME": "mycoolapp"
+      "URL_SCHEME": "mycoolapp",
+      "ANDROID_SCHEME": " ",
+      "ANDROID_HOST": " ",
+      "ANDROID_PATHPREFIX": "/"
     }
   }
 }
