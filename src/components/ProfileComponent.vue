@@ -357,7 +357,7 @@ watch([userData, isFetchedAfterMountUser, isFetchedUser], () => {
   console.log(useForm.value, "value");
   if (userData.value && !isFetchingUser.value) {
     genderCurrent = GENDER_OPTIONS.find((item) => {
-      return item.value === userData.value?.sex;
+      return item.value === Number(userData.value?.sex);
     });
     file.value = userData.value?.img_url;
     console.log(useForm.value, "value");

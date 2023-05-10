@@ -81,7 +81,7 @@ const routes = [
               {
                 path: "",
                 component: () => import("components/UserAccount.vue"),
-                props: { user: "business" },
+                props: { user: "client" },
               },
               {
                 path: "profile",
