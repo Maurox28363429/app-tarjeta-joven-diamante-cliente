@@ -42,11 +42,18 @@ cordova.define("cordova/plugin_list", function (require, exports, module) {
       pluginId: "cordova-plugin-splashscreen",
       clobbers: ["navigator.splashscreen"],
     },
+    {
+      id: "cordova-plugin-customurlscheme.LaunchMyApp",
+      file: "plugins/cordova-plugin-customurlscheme/www/android/LaunchMyApp.js",
+      pluginId: "cordova-plugin-customurlscheme",
+      clobbers: ["window.plugins.launchmyapp"],
+    },
   ];
   module.exports.metadata = {
     "cordova-plugin-android-permissions": "1.1.5",
     "cordova-plugin-camera": "6.0.1-dev",
     "cordova-plugin-inappbrowser": "5.0.0",
     "cordova-plugin-splashscreen": "6.0.2",
+    "cordova-plugin-customurlscheme": "5.0.2",
   };
 });

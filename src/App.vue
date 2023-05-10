@@ -2,10 +2,58 @@
   <router-view />
 </template>
 
-<script>
-import { defineComponent } from "vue";
+<script setup>
+import { useGetAppVersion } from "src/querys/versionAppQuerys";
+import { watchEffect } from "vue";
+import { useQuasar } from "quasar";
 
-export default defineComponent({
-  name: "App",
+const { data: versionApp, isLoading } = useGetAppVersion();
+const $q = useQuasar();
+
+function alert() {
+  $q.dialog({
+    title: `Actualización disponible: ${versionApp.value?.version}`,
+    message: "hay una nueva version, por favor actualiza la app",
+    persistent: true,
+    cancel: true,
+  })
+    .onOk(() => {
+      // console.log('OK')
+      window.open(
+        "https://play.google.com/store/apps/details?id=com.phoenixtechsa.app",
+        "_system"
+      );
+    })
+    .onCancel(() => {
+      // console.log('Cancel')
+    })
+    .onDismiss(() => {
+      // console.log('I am triggered on both OK and Cancel')
+    });
+}
+
+watchEffect(() => {
+  console.log(
+    process.env.VUE_APP_VERSION,
+    "version",
+    "versionApp",
+    versionApp.value?.version
+  );
+
+  if (!isLoading.value) {
+    if (process.env.VUE_APP_VERSION && versionApp.value) {
+      if (
+        Number(process.env.VUE_APP_VERSION) < Number(versionApp.value?.version)
+      ) {
+        console.log("hay una nueva version");
+        alert();
+      } else {
+        console.log("no hay una nueva version");
+      }
+    } else {
+      console.log("hay una nueva version");
+      alert();
+    }
+  }
 });
 </script>

@@ -19,6 +19,13 @@
     },
     "cordova-plugin-splashscreen": {
       "PACKAGE_NAME": "com.phoenixtechsa.app"
+    },
+    "cordova-plugin-customurlscheme": {
+      "URL_SCHEME": "mycoolapp",
+      "ANDROID_SCHEME": " ",
+      "ANDROID_HOST": " ",
+      "ANDROID_PATHPREFIX": "/",
+      "PACKAGE_NAME": "com.phoenixtechsa.app"
     }
   },
   "dependent_plugins": {}
