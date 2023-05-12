@@ -1,9 +1,7 @@
 <template>
   <div class="q-px-md">
     <div>
-      <p style="margin: 20px 0" class="title-large">
-        Ofertas para universidades
-      </p>
+      <p style="margin: 20px 0" class="title-large">Ofertas de servicios</p>
       <div class="full-width full-height row justify-center q-mt-lg">
         <q-form class="full-width row justify-center" @submit="refetch">
           <q-input
@@ -66,6 +64,7 @@
               :totalPrice="items.price_total"
               :discount="items.descuento"
               :mapLink="items.link_map"
+              :withModal="false"
             />
           </div>
         </template>
@@ -87,7 +86,7 @@
 
 <script setup>
 import { ref, watchEffect } from "vue";
-import { useGetOffersForUniversity } from "src/querys/offersQuerys";
+import { useGetOffersFromBusiness } from "src/querys/offersQuerys";
 import { useRoute } from "vue-router";
 import CardOffers from "src/components/CardOffers.vue";
 
@@ -98,7 +97,7 @@ const search = ref("");
 const route = useRoute();
 const state = ref(route.params.countryName);
 
-const { data, isLoading, refetch, isFetching } = useGetOffersForUniversity({
+const { data, isLoading, refetch, isFetching } = useGetOffersFromBusiness({
   search,
   page: currentPaginate,
   dir: state,

@@ -50,6 +50,16 @@ const routes = [
             props: { typeOffers: "Offers" },
           },
           {
+            path: "services/:countryName",
+            component: () => import("src/pages/client/ServicesPage.vue"),
+          },
+          {
+            path: "services",
+            component: () =>
+              import("src/pages/client/SelectStateForffersPage.vue"),
+            props: { typeOffers: "services" },
+          },
+          {
             path: "OffersForUniversitys",
             component: () =>
               import("src/pages/client/SelectStateForffersPage.vue"),

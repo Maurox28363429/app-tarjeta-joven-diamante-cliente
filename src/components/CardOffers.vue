@@ -25,10 +25,10 @@
           </div>
 
           <q-item-section>
-            <q-item-label v-if="items.price_total > 0"
+            <q-item-label v-if="totalPrice > 0"
               >{{ totalPrice }} $</q-item-label
             >
-            <q-item-label v-if="items.descuento > 0" caption
+            <q-item-label v-if="discount > 0" caption
               >Descuento{{ discount }} %</q-item-label
             >
           </q-item-section>
@@ -43,7 +43,13 @@
       class="q-pt-none full-width"
       style="flex: 1; align-items: end"
     >
-      <div class="row full-width justify-between">
+      <q-btn
+        v-if="!withModal"
+        color="primary"
+        @click="handleBuy"
+        label="Comprar"
+      />
+      <div class="row full-width justify-between" v-if="withModal">
         <q-img
           @click="openWaze(mapLink)"
           :src="wazeIcon"
@@ -106,6 +112,10 @@ const openWaze = (link) => {
   });
 };
 
+const handleBuy = () => {
+  console.log("buy");
+};
+
 const showModal = () => {
   openModal.value = true;
   console.log("modal true");
@@ -139,6 +149,10 @@ defineProps({
   images: {
     type: Array,
     required: true,
+  },
+  withModal: {
+    type: Boolean,
+    default: true,
   },
 });
 </script>
