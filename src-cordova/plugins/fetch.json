@@ -51,5 +51,13 @@
       "ANDROID_HOST": " ",
       "ANDROID_PATHPREFIX": "/"
     }
+  },
+  "cordova-in-app-update": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-in-app-update"
+    },
+    "is_top_level": true,
+    "variables": {}
   }
 }

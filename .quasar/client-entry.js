@@ -29,6 +29,8 @@ import "@quasar/quasar-ui-qiconpicker/src/index.sass";
 import createQuasarApp from "./app.js";
 import quasarUserOptions from "./quasar-user-options.js";
 
+console.info("[Quasar] Running CORDOVA.");
+
 const publicPath = ``;
 
 async function start({ app, router, store }, bootFiles) {
@@ -116,8 +118,6 @@ createQuasarApp(createApp, quasarUserOptions).then((app) => {
 
   return Promise[method]([
     import("boot/axios"),
-
-    import("boot/qrcode-reader"),
 
     import("boot/vue-query"),
 
