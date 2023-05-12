@@ -231,14 +231,27 @@
                 <div class="q-ma-none full-width input" v-if="!isBusiness">
                   <label class="label-large">
                     Cédula / pasaporte
-                    <q-input
-                      v-model="useForm.dni"
-                      lazy-rules
-                      type="text"
+                    <q-file
                       outlined
-                      placeholder=""
-                      name="dni"
-                    />
+                      bottom-slots
+                      v-model="useForm.dni"
+                      label="archivo.jpg/.png/.pdf"
+                      :filter="checkFileType"
+                      max-files="1"
+                    >
+                      <template v-slot:before>
+                        <q-icon name="cloud_upload" />
+                      </template>
+
+                      <template
+                        v-slot:hint
+                        v-if="
+                          useForm.dni !== null &&
+                          typeof useForm.dni !== 'object'
+                        "
+                        >{{ useForm.dni }}</template
+                      >
+                    </q-file>
                   </label>
                 </div>
 
@@ -316,6 +329,15 @@ const {
   isFetchedUser,
 } = userAuth();
 
+const checkFileType = (files) => {
+  return files.filter(
+    (file) =>
+      file.type === "image/jpeg" ||
+      file.type === "image/png" ||
+      file.type === "application/pdf"
+  );
+};
+
 const props = defineProps({
   user: {
     type: String,
@@ -372,7 +394,7 @@ watch([userData, isFetchedAfterMountUser, isFetchedUser], () => {
       sex: genderCurrent,
       address: userData.value?.address,
       img: null,
-      dni: userData.value?.dni || "",
+      dni: userData.value?.dni || null,
       beneficiario_poliza_cedula:
         userData.value?.beneficiario_poliza_cedula || "",
       beneficiario_poliza_name: userData.value?.beneficiario_poliza_name || "",
