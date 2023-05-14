@@ -23,10 +23,6 @@
             {
               "xml": "<feature name=\"SplashScreen\"><param name=\"android-package\" value=\"org.apache.cordova.splashscreen.SplashScreen\" /><param name=\"onload\" value=\"true\" /></feature>",
               "count": 1
-            },
-            {
-              "xml": "<feature name=\"LaunchMyApp\"><param name=\"android-package\" value=\"nl.xservices.plugins.LaunchMyApp\" /></feature>",
-              "count": 1
             }
           ]
         }
@@ -62,16 +58,6 @@
               "xml": "<intent><action android:name=\"com.android.camera.action.CROP\" /><data android:mimeType=\"image/*\" android:scheme=\"content\" /></intent>",
               "count": 1
             }
-          ],
-          "/manifest/application/activity": [
-            {
-              "xml": "<intent-filter><action android:name=\"android.intent.action.VIEW\" /><category android:name=\"android.intent.category.DEFAULT\" /><category android:name=\"android.intent.category.BROWSABLE\" /><data android:scheme=\"mycoolapp\" /></intent-filter>",
-              "count": 1
-            },
-            {
-              "xml": "<intent-filter><action android:name=\"android.intent.action.VIEW\" /><category android:name=\"android.intent.category.DEFAULT\" /><category android:name=\"android.intent.category.BROWSABLE\" /><data android:host=\" \" android:pathPrefix=\"/\" android:scheme=\" \" /></intent-filter>",
-              "count": 1
-            }
           ]
         }
       }
@@ -89,13 +75,6 @@
       "PACKAGE_NAME": "com.phoenixtechsa.app"
     },
     "cordova-plugin-splashscreen": {
-      "PACKAGE_NAME": "com.phoenixtechsa.app"
-    },
-    "cordova-plugin-customurlscheme": {
-      "URL_SCHEME": "mycoolapp",
-      "ANDROID_SCHEME": " ",
-      "ANDROID_HOST": " ",
-      "ANDROID_PATHPREFIX": "/",
       "PACKAGE_NAME": "com.phoenixtechsa.app"
     }
   },
@@ -156,21 +135,12 @@
       "clobbers": [
         "navigator.splashscreen"
       ]
-    },
-    {
-      "id": "cordova-plugin-customurlscheme.LaunchMyApp",
-      "file": "plugins/cordova-plugin-customurlscheme/www/android/LaunchMyApp.js",
-      "pluginId": "cordova-plugin-customurlscheme",
-      "clobbers": [
-        "window.plugins.launchmyapp"
-      ]
     }
   ],
   "plugin_metadata": {
     "cordova-plugin-android-permissions": "1.1.5",
     "cordova-plugin-camera": "6.0.1-dev",
     "cordova-plugin-inappbrowser": "5.0.0",
-    "cordova-plugin-splashscreen": "6.0.2",
-    "cordova-plugin-customurlscheme": "5.0.2"
+    "cordova-plugin-splashscreen": "6.0.2"
   }
 }
