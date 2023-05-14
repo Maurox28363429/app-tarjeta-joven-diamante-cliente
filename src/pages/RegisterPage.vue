@@ -22,10 +22,18 @@ const INITIAL_VALUES = {
   sex: GENDER_OPTIONS[0],
   password: '',
   vendedor: '',
+<<<<<<< HEAD
   provincia: []
 }
 
 const lastStep = 4
+=======
+  provincia: [],
+  dni: null
+}
+
+const lastStep = 5
+>>>>>>> maria_estable
 const currentForm = ref(1)
 
 const nextStep = () => currentForm.value++
@@ -34,7 +42,12 @@ const prevStep = () => currentForm.value--
 const disableLastButton = computed(() => currentForm.value === 1)
 const isLastStep = computed(() => currentForm.value === lastStep)
 
+<<<<<<< HEAD
 // const { useForm, validatInput, validateMessage, validateForm } =
+=======
+const { useForm, validatInput, validateMessage, validateForm } =
+  useValidateForm({ initialValue: INITIAL_VALUES, schema: registerSchema })
+>>>>>>> maria_estable
 
 const onSubmit = async (e) => {
   validateForm()

@@ -37,7 +37,11 @@ const handledFreePayment = () => {
 const HandlePayment = () => {
   const userId = userData.value?.id || ''
   const url =
+<<<<<<< HEAD
     'https://api.tarjetajovendiamante.com' +
+=======
+    process.env.VUE_APP_API_URL +
+>>>>>>> maria_estable
     `/pago/Payment_Controller.php?orderId=${userId}`
   localStorage.removeItem('user')
   if (typeof cordova !== 'undefined') {
