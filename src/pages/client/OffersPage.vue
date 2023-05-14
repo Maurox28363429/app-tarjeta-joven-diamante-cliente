@@ -57,13 +57,13 @@
         <template v-if="!isLoading">
           <div v-for="items in data?.data" :key="items.id">
             <CardOffers
-              :commerce-name="items.comercio.name"
+              :commerceName="items.comercio.name"
               :description="items.description"
               :images="items.img_array_url"
               :name="items.nombre"
-              :total-price="items.price_total"
+              :totalPrice="items.price_total"
               :discount="items.descuento"
-              :map-link="items.link_map"
+              :mapLink="items.link_map"
             />
           </div>
         </template>

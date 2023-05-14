@@ -1,30 +1,27 @@
 <template>
   <div v-if="!loading">
-    <div>
+    <div
+      class="row justify-center items-center"
+      style="height: 327px; width: 100%"
+    >
       <video
         id="video"
-        style="width: 100%; height: 240px; object-fit: cover"
+        v-if="staredScan"
+        style="width: 100%; height: 327px; object-fit: cover"
+        autoplay
       ></video>
+      <p v-if="!staredScan">Haz click a scanear</p>
     </div>
-    <div class="q-pa-md">
-      <q-select
-        outlined
-        v-model="selectedDeviceId"
-        :options="videoInputDevices"
-        label="video source"
-        class="full-width"
-      />
-    </div>
-    <div class="row justify-center q-gutter-x-md">
+    <div class="row justify-center q-gutter-x-md q-mt-md">
       <q-btn
         class="button"
         @click="startDecode"
         label="scanear"
         color="primary"
       />
-      <q-btn class="button" @click="reset" label="reset" color="secondary" />
     </div>
   </div>
+  <q-spinner color="white" size="xs" />
   <q-inner-loading
     :showing="loading"
     label-class="text-teal"
@@ -42,9 +39,9 @@ import { userCart } from 'src/stores/userCart'
 
 defineProps({
   closeModal: {
-    type: Object
-  }
-})
+    type: Boolean,
+  },
+});
 
 const emits = defineEmits(['close-modal'])
 const router = useRouter()
@@ -55,29 +52,30 @@ const loading = ref(false)
 
 const { triggerWarning } = useToast()
 
-const selectedDeviceId = ref('')
-const codeReader = ref(null)
-const videoInputDevices = ref([])
-const sourceSelectPanelVisible = ref(false)
-const resultText = ref('')
-const permision = ref(false)
+const selectedDeviceId = ref("");
+const codeReader = ref(null);
+const videoInputDevices = ref([]);
+const resultText = ref("");
+const permision = ref(false);
+const staredScan = ref(false);
 
 onMounted(() => {
-  addPermision()
-  codeReader.value = new BrowserMultiFormatReader()
-  console.log('ZXing code reader initialized')
-  console.log('Video devices: ', videoInputDevices.value)
+  addPermision();
+  codeReader.value = new BrowserMultiFormatReader();
+
   codeReader.value
     .listVideoInputDevices()
     .then((videoInputDevicesSelect) => {
-      console.log(videoInputDevicesSelect, 'videoInputDevicesSelect')
       videoInputDevices.value = videoInputDevicesSelect.map((element) => {
-        return { ...element, value: element.deviceId, label: element.label }
-      })
-      console.log('Video devices: ', videoInputDevices.value)
-      selectedDeviceId.value = videoInputDevices.value[0]
-      if (videoInputDevices.value.length >= 1) {
-        sourceSelectPanelVisible.value = true
+        return { ...element, value: element.deviceId, label: element.label };
+      });
+
+      console.log(videoInputDevices.value);
+
+      if (window.cordova) {
+        selectedDeviceId.value = videoInputDevices.value[1];
+      } else {
+        selectedDeviceId.value = videoInputDevices.value[0];
       }
     })
     .catch((err) => {
@@ -85,40 +83,54 @@ onMounted(() => {
     })
 })
 
-function startDecode () {
-  console.log(selectedDeviceId.value, 'selectedDeviceId')
-  codeReader.value.decodeFromVideoDevice(
-    selectedDeviceId.value.value,
-    'video',
-    async (result, err) => {
-      if (result) {
-        console.log(result)
-        resultText.value = result.text
-        loading.value = true
-        try {
-          await client.setClient(result.text)
-          router.push('/empresa/create-order')
-          emits('close-modal')
-          console.log('Cliente asignado correctamente', result.text)
-          if (!userData.value.membresia) {
-            triggerWarning('Usuario no tiene una membresia activa')
+async function startDecode() {
+  try {
+    staredScan.value = true;
+
+    codeReader.value.decodeFromVideoDevice(
+      selectedDeviceId.value.value,
+      "video",
+      async (result, err) => {
+        if (result) {
+          console.log(result);
+          resultText.value = result.text;
+          loading.value = true;
+          try {
+            await client.setClient(result.text);
+            router.push("/empresa/create-order");
+            emits("close-modal");
+            console.log("Cliente asignado correctamente", result.text);
+            if (!userData.value.membresia) {
+              triggerWarning("Usuario no tiene una membresia activa");
+            }
+          } catch (error) {
+            console.error("Error al asignar el cliente:", error);
+          } finally {
+            loading.value = false;
+            reset();
           }
-        } catch (error) {
-          console.error('Error al asignar el cliente:', error)
-        } finally {
-          loading.value = false
-          reset()
+        }
+        if (err && !(err instanceof NotFoundException)) {
+          console.error(err);
+          resultText.value = err;
         }
       }
-      if (err && !(err instanceof NotFoundException)) {
-        console.error(err)
-        resultText.value = err
-      }
-    }
-  )
-  console.log(
-    `Started continous decode from camera with id ${selectedDeviceId.value.value}`
-  )
+    );
+
+    const video = document.getElementById("video");
+
+    video.addEventListener("touchstart", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      alert("touchstart");
+    });
+
+    console.log(
+      `Started continous decode from camera with id ${selectedDeviceId.value.value}`
+    );
+  } catch (err) {
+    console.error(err);
+  }
 }
 
 function reset () {
@@ -144,7 +156,6 @@ function addPermision () {
           console.log('tiene permiso')
         } else {
           // El permiso ha sido denegado
-          console.log('No tiene permiso')
           triggerWarning(
             'El permiso de la cámara fue denegado. Por favor, permite el acceso desde la configuración del dispositivo.'
           )

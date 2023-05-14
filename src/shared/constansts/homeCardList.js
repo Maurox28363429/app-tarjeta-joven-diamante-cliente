@@ -1,7 +1,6 @@
 import offersIcon from '../../assets/images/offersIcon.png'
 import messageIcon from '../../assets/images/messageIcon.png'
 import VIPIcon from '../../assets/images/VIPIcon.png'
-import speakerIcon from '../../assets/images/speakerIcon.png'
 import bagIcon from '../../assets/images/bagIcon.png'
 // import giftIcon from "../../assets/images/giftIcon.png";
 import pachama from '../../assets/images/GifPachama.gif'
@@ -44,7 +43,14 @@ export const HOME_CARD_LIST = [
   },
   {
     id: 5,
-    title: 'Premios',
+    title: "Servicios",
+    icon: bagIcon,
+    link: "/cliente/services",
+    enabled: true,
+  },
+  {
+    id: 6,
+    title: "Premios",
     icon: disableIcon,
     link: '',
     enabled: false
@@ -52,48 +58,47 @@ export const HOME_CARD_LIST = [
   {
     id: 6,
     title: 'Promociones',
-    icon: speakerIcon,
     link: '/cliente/promotions',
     enabled: true
   },
   {
-    id: 7,
-    title: 'Compras',
+    id: 8,
+    title: "Compras",
     icon: bagIcon,
     link: '/cliente/transactionsTable',
     enabled: true
   },
   {
-    id: 8,
-    title: 'Pachamá',
+    id: 9,
+    title: "Pachamá",
     icon: pachama,
     link: '/cliente/pachama',
     enabled: true
   },
   {
-    id: 9,
-    title: 'Universidades',
+    id: 10,
+    title: "Universidades",
     icon: universityIcon,
     link: '/cliente/OffersForUniversitys',
     enabled: true
   },
   {
-    id: 10,
-    title: 'SOS',
+    id: 11,
+    title: "SOS",
     icon: disableIcon,
     link: '',
     enabled: false
   },
   {
-    id: 11,
-    title: 'Noticias',
+    id: 12,
+    title: "Noticias",
     icon: newsIcon,
     link: '/cliente/news',
     enabled: true
   },
   {
-    id: 12,
-    title: 'Perfil',
+    id: 13,
+    title: "Perfil",
     icon: profileIcon,
     link: '/cliente/account/profile',
     enabled: true

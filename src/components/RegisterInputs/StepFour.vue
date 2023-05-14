@@ -3,7 +3,7 @@
     <label class="label-large">
       Promotor que lo atendio
       <q-select
-        filled
+        outlined
         use-input
         input-debounce="0"
         label="promotores"
@@ -19,7 +19,7 @@
     <label class="label-large">
       Provincia que suele visitar
       <q-select
-        filled
+        outlined
         v-model="provincia"
         multiple
         :options="provinceOptions"

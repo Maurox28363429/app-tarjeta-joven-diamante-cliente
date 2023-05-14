@@ -109,6 +109,7 @@ ext {
 }
 
 // PLUGIN GRADLE EXTENSIONS START
+apply from: "../cordova-in-app-update/app-build-extra.gradle"
 // PLUGIN GRADLE EXTENSIONS END
 
 def hasBuildExtras1 = file('build-extras.gradle').exists()
@@ -295,6 +296,8 @@ dependencies {
     // SUB-PROJECT DEPENDENCIES START
     implementation(project(path: ":CordovaLib"))
     implementation "androidx.core:core:1.6.+"
+    implementation "com.android.support:appcompat-v7:+"
+    implementation "com.android.support:design:+"
     // SUB-PROJECT DEPENDENCIES END
 }
 
