@@ -1,19 +1,19 @@
 const localStorageAuth = {
-  getUser() {
-    return JSON.parse(localStorage.getItem("user"));
+  getUser () {
+    return JSON.parse(localStorage.getItem('user'))
   },
-  setUser(token) {
-    localStorage.setItem("user", JSON.stringify(token));
+  setUser (token) {
+    localStorage.setItem('user', JSON.stringify(token))
   },
-  removeUser() {
-    localStorage.removeItem("user");
+  removeUser () {
+    localStorage.removeItem('user')
   },
-  isAuthenticated() {
-    return !!localStorageAuth.getUser();
+  isAuthenticated () {
+    return !!localStorageAuth.getUser()
   },
-  logout() {
-    localStorageAuth.removeUser();
-  },
-};
+  logout () {
+    localStorageAuth.removeUser()
+  }
+}
 
-export default localStorageAuth;
+export default localStorageAuth
