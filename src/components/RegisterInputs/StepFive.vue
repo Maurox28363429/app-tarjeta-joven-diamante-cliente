@@ -30,37 +30,37 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref } from 'vue'
 
 const checkFileType = (files) => {
   return files.filter(
     (file) =>
-      file.type === "image/jpeg" ||
-      file.type === "image/png" ||
-      file.type === "application/pdf"
-  );
-};
+      file.type === 'image/jpeg' ||
+      file.type === 'image/png' ||
+      file.type === 'application/pdf'
+  )
+}
 
 const props = defineProps({
   useForm: {
     type: Object,
-    required: true,
+    required: true
   },
   validatInput: {
     type: Function,
-    required: true,
+    required: true
   },
   validateMessage: {
     type: Object,
-    required: true,
-  },
-});
+    required: true
+  }
+})
 
-const idCard = ref(props.useForm.dni);
+const idCard = ref(props.useForm.dni)
 
-const emit = defineEmits(["update:modelValue"]);
+const emit = defineEmits(['update:modelValue'])
 
 const updateValue = (key, value) => {
-  emit("update:modelValue", { key, value });
-};
+  emit('update:modelValue', { key, value })
+}
 </script>

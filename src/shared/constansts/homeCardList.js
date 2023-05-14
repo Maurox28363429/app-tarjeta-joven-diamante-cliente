@@ -43,14 +43,14 @@ export const HOME_CARD_LIST = [
   },
   {
     id: 5,
-    title: "Servicios",
+    title: 'Servicios',
     icon: bagIcon,
-    link: "/cliente/services",
-    enabled: true,
+    link: '/cliente/services',
+    enabled: true
   },
   {
     id: 6,
-    title: "Premios",
+    title: 'Premios',
     icon: disableIcon,
     link: '',
     enabled: false
@@ -63,42 +63,42 @@ export const HOME_CARD_LIST = [
   },
   {
     id: 8,
-    title: "Compras",
+    title: 'Compras',
     icon: bagIcon,
     link: '/cliente/transactionsTable',
     enabled: true
   },
   {
     id: 9,
-    title: "Pachamá",
+    title: 'Pachamá',
     icon: pachama,
     link: '/cliente/pachama',
     enabled: true
   },
   {
     id: 10,
-    title: "Universidades",
+    title: 'Universidades',
     icon: universityIcon,
     link: '/cliente/OffersForUniversitys',
     enabled: true
   },
   {
     id: 11,
-    title: "SOS",
+    title: 'SOS',
     icon: disableIcon,
     link: '',
     enabled: false
   },
   {
     id: 12,
-    title: "Noticias",
+    title: 'Noticias',
     icon: newsIcon,
     link: '/cliente/news',
     enabled: true
   },
   {
     id: 13,
-    title: "Perfil",
+    title: 'Perfil',
     icon: profileIcon,
     link: '/cliente/account/profile',
     enabled: true

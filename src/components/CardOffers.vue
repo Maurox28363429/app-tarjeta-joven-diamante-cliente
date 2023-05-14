@@ -113,8 +113,8 @@ const openWaze = (link) => {
 }
 
 const handleBuy = () => {
-  console.log("buy");
-};
+  console.log('buy')
+}
 
 const showModal = () => {
   openModal.value = true
@@ -148,19 +148,13 @@ defineProps({
   },
   images: {
     type: Array,
-<<<<<<< HEAD
     required: true
-  }
-})
-=======
-    required: true,
   },
   withModal: {
     type: Boolean,
-    default: true,
-  },
-});
->>>>>>> 73da8a22e725230e59e20ed5dfa4560806b0b111
+    default: true
+  }
+})
 </script>
 
 <style>

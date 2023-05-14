@@ -1,11 +1,11 @@
 <script setup>
-import { registerSchema } from "src/schemas/registerSchema";
-import { ref, computed } from "vue";
-import StepOne from "../components/RegisterInputs/StepOne.vue";
-import StepTwo from "../components/RegisterInputs/StepTwo.vue";
-import StepThree from "../components/RegisterInputs/StepThree.vue";
-import StepFour from "../components/RegisterInputs/StepFour.vue";
-import StepFive from "../components/RegisterInputs/StepFive.vue";
+import { registerSchema } from 'src/schemas/registerSchema'
+import { ref, computed } from 'vue'
+import StepOne from '../components/RegisterInputs/StepOne.vue'
+import StepTwo from '../components/RegisterInputs/StepTwo.vue'
+import StepThree from '../components/RegisterInputs/StepThree.vue'
+import StepFour from '../components/RegisterInputs/StepFour.vue'
+import StepFive from '../components/RegisterInputs/StepFive.vue'
 
 import { userAuth } from 'src/composables/userAuth'
 import { useValidateForm } from 'src/composables/useValidateForm'
@@ -34,7 +34,7 @@ const prevStep = () => currentForm.value--
 const disableLastButton = computed(() => currentForm.value === 1)
 const isLastStep = computed(() => currentForm.value === lastStep)
 
-const { useForm, validatInput, validateMessage, validateForm } =
+// const { useForm, validatInput, validateMessage, validateForm } =
 
 const onSubmit = async (e) => {
   validateForm()

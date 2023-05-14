@@ -332,11 +332,11 @@ const {
 const checkFileType = (files) => {
   return files.filter(
     (file) =>
-      file.type === "image/jpeg" ||
-      file.type === "image/png" ||
-      file.type === "application/pdf"
-  );
-};
+      file.type === 'image/jpeg' ||
+      file.type === 'image/png' ||
+      file.type === 'application/pdf'
+  )
+}
 
 const props = defineProps({
   user: {

@@ -39,9 +39,9 @@ import { userCart } from 'src/stores/userCart'
 
 defineProps({
   closeModal: {
-    type: Boolean,
-  },
-});
+    type: Boolean
+  }
+})
 
 const emits = defineEmits(['close-modal'])
 const router = useRouter()
@@ -52,30 +52,30 @@ const loading = ref(false)
 
 const { triggerWarning } = useToast()
 
-const selectedDeviceId = ref("");
-const codeReader = ref(null);
-const videoInputDevices = ref([]);
-const resultText = ref("");
-const permision = ref(false);
-const staredScan = ref(false);
+const selectedDeviceId = ref('')
+const codeReader = ref(null)
+const videoInputDevices = ref([])
+const resultText = ref('')
+const permision = ref(false)
+const staredScan = ref(false)
 
 onMounted(() => {
-  addPermision();
-  codeReader.value = new BrowserMultiFormatReader();
+  addPermision()
+  codeReader.value = new BrowserMultiFormatReader()
 
   codeReader.value
     .listVideoInputDevices()
     .then((videoInputDevicesSelect) => {
       videoInputDevices.value = videoInputDevicesSelect.map((element) => {
-        return { ...element, value: element.deviceId, label: element.label };
-      });
+        return { ...element, value: element.deviceId, label: element.label }
+      })
 
-      console.log(videoInputDevices.value);
+      console.log(videoInputDevices.value)
 
       if (window.cordova) {
-        selectedDeviceId.value = videoInputDevices.value[1];
+        selectedDeviceId.value = videoInputDevices.value[1]
       } else {
-        selectedDeviceId.value = videoInputDevices.value[0];
+        selectedDeviceId.value = videoInputDevices.value[0]
       }
     })
     .catch((err) => {
@@ -83,53 +83,53 @@ onMounted(() => {
     })
 })
 
-async function startDecode() {
+async function startDecode () {
   try {
-    staredScan.value = true;
+    staredScan.value = true
 
     codeReader.value.decodeFromVideoDevice(
       selectedDeviceId.value.value,
-      "video",
+      'video',
       async (result, err) => {
         if (result) {
-          console.log(result);
-          resultText.value = result.text;
-          loading.value = true;
+          console.log(result)
+          resultText.value = result.text
+          loading.value = true
           try {
-            await client.setClient(result.text);
-            router.push("/empresa/create-order");
-            emits("close-modal");
-            console.log("Cliente asignado correctamente", result.text);
+            await client.setClient(result.text)
+            router.push('/empresa/create-order')
+            emits('close-modal')
+            console.log('Cliente asignado correctamente', result.text)
             if (!userData.value.membresia) {
-              triggerWarning("Usuario no tiene una membresia activa");
+              triggerWarning('Usuario no tiene una membresia activa')
             }
           } catch (error) {
-            console.error("Error al asignar el cliente:", error);
+            console.error('Error al asignar el cliente:', error)
           } finally {
-            loading.value = false;
-            reset();
+            loading.value = false
+            reset()
           }
         }
         if (err && !(err instanceof NotFoundException)) {
-          console.error(err);
-          resultText.value = err;
+          console.error(err)
+          resultText.value = err
         }
       }
-    );
+    )
 
-    const video = document.getElementById("video");
+    const video = document.getElementById('video')
 
-    video.addEventListener("touchstart", (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      alert("touchstart");
-    });
+    video.addEventListener('touchstart', (e) => {
+      e.preventDefault()
+      e.stopPropagation()
+      alert('touchstart')
+    })
 
     console.log(
       `Started continous decode from camera with id ${selectedDeviceId.value.value}`
-    );
+    )
   } catch (err) {
-    console.error(err);
+    console.error(err)
   }
 }
 
