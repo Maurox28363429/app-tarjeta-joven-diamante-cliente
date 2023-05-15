@@ -90,7 +90,6 @@ async function startDecode() {
       "video",
       async (result, err) => {
         if (result) {
-          console.log(result);
           resultText.value = result.text;
           loading.value = true;
 
