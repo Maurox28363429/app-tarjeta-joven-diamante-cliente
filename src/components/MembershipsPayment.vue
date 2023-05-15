@@ -37,7 +37,7 @@ const handledFreePayment = () => {
 const HandlePayment = () => {
   const userId = userData.value?.id || "";
   const url =
-    "https://api.tarjetajovendiamante.com" +
+    process.env.VUE_APP_API_URL +
     `/pago/Payment_Controller.php?orderId=${userId}`;
   localStorage.removeItem("user");
   if (typeof cordova !== "undefined") {
@@ -70,7 +70,7 @@ const HandlePayment = () => {
     window.open(url);
   }
 };
-const isFree = Boolean(props.name === "free") || props.price === 0;
+const isFree = Boolean(props.name === "free") || props.price <= 0;
 
 onMounted(async () => {
   const prueba = await instance.get(

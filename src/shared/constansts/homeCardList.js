@@ -1,6 +1,7 @@
 import offersIcon from "../../assets/images/offersIcon.png";
 import messageIcon from "../../assets/images/messageIcon.png";
 import VIPIcon from "../../assets/images/VIPIcon.png";
+import speakerIcon from "../../assets/images/speakerIcon.png";
 import bagIcon from "../../assets/images/bagIcon.png";
 // import giftIcon from "../../assets/images/giftIcon.png";
 import pachama from "../../assets/images/GifPachama.gif";
@@ -56,8 +57,9 @@ export const HOME_CARD_LIST = [
     enabled: false,
   },
   {
-    id: 6,
+    id: 7,
     title: "Promociones",
+    icon: speakerIcon,
     link: "/cliente/promotions",
     enabled: true,
   },

@@ -23,9 +23,10 @@ const INITIAL_VALUES = {
   password: "",
   vendedor: "",
   provincia: [],
+  dni: null,
 };
 
-const lastStep = 4;
+const lastStep = 5;
 const currentForm = ref(1);
 
 const nextStep = () => currentForm.value++;
