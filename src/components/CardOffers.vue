@@ -118,7 +118,6 @@ const handleBuy = () => {
 
 const showModal = () => {
   openModal.value = true;
-  console.log("modal true");
 };
 
 defineProps({

@@ -93,6 +93,11 @@ async function startDecode() {
           console.log(result);
           resultText.value = result.text;
           loading.value = true;
+
+          if (Number(result.text) === "NaN") {
+            triggerWarning("El qr no corresponde a un cliente");
+          }
+
           try {
             const getClient = await client.setClient(Number(result.text));
             router.push("/empresa/create-order");
@@ -103,6 +108,9 @@ async function startDecode() {
             }
           } catch (error) {
             console.error("Error al asignar el cliente:", error);
+
+            triggerWarning(client.client.message);
+            console.log(client.client.message);
           } finally {
             loading.value = false;
             reset();
