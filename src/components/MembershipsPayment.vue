@@ -70,7 +70,7 @@ const HandlePayment = () => {
     window.open(url)
   }
 }
-const isFree = Boolean(props.name === 'free') || props.price === 0
+const isFree = Boolean(props.name === 'free') || props.price <= 0
 
 onMounted(async () => {
   const prueba = await instance.get(
