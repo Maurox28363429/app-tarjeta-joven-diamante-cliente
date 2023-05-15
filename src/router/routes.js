@@ -8,16 +8,16 @@ const routes = [
       {
         name: "login",
         path: "login",
-        component: () => import("src/pages/LoginPage.vue"),
+        component: () => import("pages/LoginPage.vue"),
       },
       {
         path: "",
-        component: () => import("src/pages/LoginPage.vue"),
+        component: () => import("pages/LoginPage.vue"),
       },
       {
         name: "forgotpassword",
         path: "forgotpassword",
-        component: () => import("src/pages/ForgotpasswordPage.vue"),
+        component: () => import("pages/ForgotpasswordPage.vue"),
       },
       {
         name: "register",
@@ -27,7 +27,7 @@ const routes = [
       {
         name: "recoveryPassword",
         path: "recoveryPassword",
-        component: () => import("src/spages/RecoverypasswordPage.vue"),
+        component: () => import("pages/RecoverypasswordPage.vue"),
       },
       {
         path: "cliente",
