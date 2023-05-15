@@ -8,31 +8,31 @@ const routes = [
       {
         name: "login",
         path: "login",
-        component: () => import("pages/LoginPage.vue"),
+        component: () => import("src/pages/LoginPage.vue"),
       },
       {
         path: "",
-        component: () => import("pages/LoginPage.vue"),
+        component: () => import("src/pages/LoginPage.vue"),
       },
       {
         name: "forgotpassword",
         path: "forgotpassword",
-        component: () => import("pages/ForgotpasswordPage.vue"),
+        component: () => import("src/pages/ForgotpasswordPage.vue"),
       },
       {
         name: "register",
         path: "register",
-        component: () => import("pages/RegisterPage.vue"),
+        component: () => import("src/pages/RegisterPage.vue"),
       },
       {
         name: "recoveryPassword",
         path: "recoveryPassword",
-        component: () => import("pages/RecoverypasswordPage.vue"),
+        component: () => import("src/spages/RecoverypasswordPage.vue"),
       },
       {
         path: "cliente",
         meta: clientAuthMeta,
-        component: () => import("layouts/MainClientLayout.vue"),
+        component: () => import("src/layouts/MainClientLayout.vue"),
         children: [
           {
             name: "Offers",
