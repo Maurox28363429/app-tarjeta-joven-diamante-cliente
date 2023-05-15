@@ -126,37 +126,37 @@
   </div>
 </template>
 <script setup>
-import { ref, watchEffect } from 'vue'
-import { useGetNewsInformative } from 'src/querys/newsQuerys'
+import { ref, watchEffect } from "vue";
+import { useGetNewsInformative } from "src/querys/newsQuerys";
 
-const openModal = ref(false)
-const modalCurrent = ref({})
-const currentPaginate = ref(1)
+const openModal = ref(false);
+const modalCurrent = ref({});
+const currentPaginate = ref(1);
 
-const pages = ref(1)
-const search = ref('')
+const pages = ref(1);
+const search = ref("");
 
 const {
   data: NewsData,
   isLoading,
   refetch,
-  isFetching
-} = useGetNewsInformative({ search, pages })
+  isFetching,
+} = useGetNewsInformative({ search, pages });
 
 const showModal = (modalInfo) => {
-  modalCurrent.value = { ...modalInfo }
-  openModal.value = true
-}
+  modalCurrent.value = { ...modalInfo };
+  openModal.value = true;
+};
 
 watchEffect(() => {
   if (NewsData.value) {
-    pages.value = NewsData?.value?.data?.pagination.lastPage
+    pages.value = NewsData?.value?.data?.pagination.lastPage;
   }
-})
+});
 
 const handleSearch = () => {
-  refetch()
-}
+  refetch();
+};
 </script>
 <style>
 .promotions {

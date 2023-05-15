@@ -30,12 +30,11 @@
 </template>
 
 <script setup>
-import { BrowserMultiFormatReader, NotFoundException } from '@zxing/library'
-import { ref, onMounted, defineEmits, defineProps } from 'vue'
-import { useToast } from 'src/composables/useToast'
-import { useRouter } from 'vue-router'
-import { userAuth } from 'src/composables/userAuth'
-import { userCart } from 'src/stores/userCart'
+import { BrowserMultiFormatReader, NotFoundException } from "@zxing/library";
+import { ref, onMounted, defineEmits, defineProps } from "vue";
+import { useToast } from "src/composables/useToast";
+import { useRouter } from "vue-router";
+import { userCart } from "src/stores/userCart";
 
 defineProps({
   closeModal: {
@@ -43,14 +42,13 @@ defineProps({
   },
 });
 
-const emits = defineEmits(['close-modal'])
-const router = useRouter()
-const { userData } = userAuth()
+const emits = defineEmits(["close-modal"]);
+const router = useRouter();
 
-const client = userCart()
-const loading = ref(false)
+const client = userCart();
+const loading = ref(false);
 
-const { triggerWarning } = useToast()
+const { triggerWarning } = useToast();
 
 const selectedDeviceId = ref("");
 const codeReader = ref(null);
@@ -79,9 +77,9 @@ onMounted(() => {
       }
     })
     .catch((err) => {
-      console.error(err)
-    })
-})
+      console.error(err);
+    });
+});
 
 async function startDecode() {
   try {
@@ -96,11 +94,11 @@ async function startDecode() {
           resultText.value = result.text;
           loading.value = true;
           try {
-            await client.setClient(result.text);
+            const getClient = await client.setClient(Number(result.text));
             router.push("/empresa/create-order");
             emits("close-modal");
             console.log("Cliente asignado correctamente", result.text);
-            if (!userData.value.membresia) {
+            if (getClient.membresia?.status !== "activa") {
               triggerWarning("Usuario no tiene una membresia activa");
             }
           } catch (error) {
@@ -117,14 +115,6 @@ async function startDecode() {
       }
     );
 
-    const video = document.getElementById("video");
-
-    video.addEventListener("touchstart", (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      alert("touchstart");
-    });
-
     console.log(
       `Started continous decode from camera with id ${selectedDeviceId.value.value}`
     );
@@ -133,43 +123,43 @@ async function startDecode() {
   }
 }
 
-function reset () {
-  codeReader.value.reset()
-  resultText.value = ''
+function reset() {
+  codeReader.value.reset();
+  resultText.value = "";
 }
 
-function addPermision () {
+function addPermision() {
   if (
     window?.cordova &&
     window?.cordova.plugins &&
     window?.cordova.plugins.permissions
   ) {
     // Solicitar permiso de cámara
-    const permissions = window.cordova.plugins.permissions
-    console.log('estoy en cordova', permissions)
+    const permissions = window.cordova.plugins.permissions;
+    console.log("estoy en cordova", permissions);
     permissions.requestPermission(
       permissions.CAMERA,
       function (status) {
         if (status.hasPermission) {
           // El permiso ha sido concedido
-          permision.value = true
-          console.log('tiene permiso')
+          permision.value = true;
+          console.log("tiene permiso");
         } else {
           // El permiso ha sido denegado
           triggerWarning(
-            'El permiso de la cámara fue denegado. Por favor, permite el acceso desde la configuración del dispositivo.'
-          )
-          permision.value = false
+            "El permiso de la cámara fue denegado. Por favor, permite el acceso desde la configuración del dispositivo."
+          );
+          permision.value = false;
         }
       },
       function (error) {
-        console.log('error', error)
+        console.log("error", error);
         // Error al solicitar el permiso
-        console.error('Error al solicitar el permiso de cámara')
-        triggerWarning('Los permisos para la camara estan desactivados')
-        permision.value = false
+        console.error("Error al solicitar el permiso de cámara");
+        triggerWarning("Los permisos para la camara estan desactivados");
+        permision.value = false;
       }
-    )
+    );
   }
 }
 </script>
