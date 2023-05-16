@@ -15,14 +15,14 @@ const routes = [
         component: () => import("pages/LoginPage.vue"),
       },
       {
-        name: "forgotpassword",
-        path: "forgotpassword",
-        component: () => import("pages/ForgotpasswordPage.vue"),
-      },
-      {
         name: "register",
         path: "register",
         component: () => import("src/pages/RegisterPage.vue"),
+      },
+      {
+        name: "forgotpassword",
+        path: "forgotpassword",
+        component: () => import("pages/ForgotpasswordPage.vue"),
       },
       {
         name: "recoveryPassword",
