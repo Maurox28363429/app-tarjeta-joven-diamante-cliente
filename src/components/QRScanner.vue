@@ -90,8 +90,8 @@ async function startDecode () {
       'video',
       async (result, err) => {
         if (result) {
-          resultText.value = result.text;
-          loading.value = true;
+          resultText.value = result.text
+          loading.value = true
 
           if (Number(result.text) === 'NaN') {
             triggerWarning('El qr no corresponde a un cliente')
