@@ -37,12 +37,13 @@ const handledFreePayment = () => {
 const HandlePayment = () => {
   const userId = userData.value?.id || "";
   const url =
-    process.env.VUE_APP_API_URL +
+    "https://api.tarjetajovendiamante.com" +
     `/pago/Payment_Controller.php?orderId=${userId}`;
   localStorage.removeItem("user");
   if (typeof cordova !== "undefined") {
     const target = "_blank"; // Usa '_blank' para abrir en el navegador incorporado
     const options = "location=no,zoom=no,toolbar=no,";
+
     const inAppBrowser = window.cordova?.InAppBrowser.open(
       url,
       target,

@@ -35,6 +35,8 @@ const prevStep = () => currentForm.value--;
 const disableLastButton = computed(() => currentForm.value === 1);
 const isLastStep = computed(() => currentForm.value === lastStep);
 
+// const { useForm, validatInput, validateMessage, validateForm } =
+
 const { useForm, validatInput, validateMessage, validateForm } =
   useValidateForm({ initialValue: INITIAL_VALUES, schema: registerSchema });
 
