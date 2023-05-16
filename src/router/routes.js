@@ -8,11 +8,11 @@ const routes = [
       {
         name: "login",
         path: "login",
-        component: () => import("pages/LoginPage.vue"),
+        component: () => import("src/pages/loginPage.vue"),
       },
       {
         path: "",
-        component: () => import("pages/LoginPage.vue"),
+        component: () => import("src/pages/loginPage.vue"),
       },
       {
         name: "register",
@@ -22,12 +22,12 @@ const routes = [
       {
         name: "forgotpassword",
         path: "forgotpassword",
-        component: () => import("pages/ForgotpasswordPage.vue"),
+        component: () => import("src/pages/forgotpasswordPage.vue"),
       },
       {
         name: "recoveryPassword",
         path: "recoveryPassword",
-        component: () => import("pages/RecoverypasswordPage.vue"),
+        component: () => import("src/pages/recoverypasswordPage.vue"),
       },
       {
         path: "cliente",
