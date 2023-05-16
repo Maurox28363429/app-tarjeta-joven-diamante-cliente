@@ -376,7 +376,6 @@ watchEffect(() => {
 });
 
 watch([userData, isFetchedAfterMountUser, isFetchedUser], () => {
-  console.log(useForm.value, "value");
   if (userData.value && !isFetchingUser.value) {
     genderCurrent = GENDER_OPTIONS.find((item) => {
       return item.value === Number(userData.value?.sex);
