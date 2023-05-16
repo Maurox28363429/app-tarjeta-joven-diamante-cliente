@@ -1,31 +1,18 @@
-name: Build
-
-on:
+name: build
+run-name: ${{ github.actor }}
+on: 
   push:
     branches:
       - main
-
 jobs:
-  build:
+  check-bats-version:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: '19'
-
-      - name: event
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-    
-      - name: Install dependencies
-        run: npm install
-
-      - name: Build project
-        run: npm run build
-
-      - name: Build Android
-        run: npm run build:android
+      - run: npm install
+      - run: npm run build
+      - run: npm run build:android
