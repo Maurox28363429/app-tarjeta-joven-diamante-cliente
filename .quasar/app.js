@@ -35,9 +35,13 @@ export default async function (createAppFn, quasarUserOptions) {
   app.config.performance = true
   
 
+<<<<<<< HEAD
   app.use(Quasar, quasarUserOptions)
 
   
+=======
+  app.use(Quasar, quasarUserOptions);
+>>>>>>> 61b9d8d6513396876a0d4c6e2c0763be638ae3d4
 
   
     const store = typeof createStore === 'function'

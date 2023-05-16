@@ -35,6 +35,7 @@ import 'quasar/dist/quasar.sass'
 
 
 
+<<<<<<< HEAD
 import 'src/css/app.scss'
 
 import '@quasar/quasar-ui-qiconpicker/src/index.sass'
@@ -46,6 +47,9 @@ import quasarUserOptions from './quasar-user-options.js'
 
 
 
+=======
+const publicPath = `/`;
+>>>>>>> 61b9d8d6513396876a0d4c6e2c0763be638ae3d4
 
 
 console.info('[Quasar] Running SPA.')

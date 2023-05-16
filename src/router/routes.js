@@ -20,9 +20,9 @@ const routes = [
         component: () => import('pages/ForgotpasswordPage.vue')
       },
       {
-        name: 'register',
-        path: 'register',
-        component: () => import('pages/RegisterPage.vue')
+        name: "register",
+        path: "register",
+        component: () => import("src/pages/RegisterPage.vue"),
       },
       {
         name: 'recoveryPassword',
@@ -32,7 +32,7 @@ const routes = [
       {
         path: 'cliente',
         meta: clientAuthMeta,
-        component: () => import('layouts/MainClientLayout.vue'),
+        component: () => import("src/layouts/MainClientLayout.vue"),
         children: [
           {
             name: 'Offers',
