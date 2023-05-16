@@ -27,7 +27,7 @@ const routes = [
       {
         name: "recoveryPassword",
         path: "recoveryPassword",
-        component: () => import("src/pages/recoverypasswordPage.vue"),
+        component: () => import("src/pages/RecoverypasswordPage.vue"),
       },
       {
         path: "cliente",
