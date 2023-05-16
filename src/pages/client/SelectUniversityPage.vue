@@ -1,9 +1,7 @@
 <template>
   <div class="q-px-md">
     <div>
-      <p style="margin: 20px 0" class="title-large">
-        Ofertas para universidades
-      </p>
+      <p style="margin: 20px 0" class="title-large">Ofertas</p>
       <div class="full-width full-height row justify-center q-mt-lg">
         <q-form class="full-width row justify-center" @submit="refetch">
           <q-input
@@ -57,17 +55,53 @@
           <p class="title-medium">No hay ofertas</p>
         </div>
         <template v-if="!isLoading">
-          <div v-for="items in data?.data" :key="items.id">
-            <CardOffers
-              :commerceName="items.comercio.name"
-              :description="items.description"
-              :images="items.img_array_url"
-              :name="items.nombre"
-              :totalPrice="items.price_total"
-              :discount="items.descuento"
-              :mapLink="items.link_map"
-            />
-          </div>
+          <template v-for="university in data?.data" :key="university.id">
+            <q-card
+              class="column"
+              style="height: 340px; width: 100%; gap: 0; max-width: 200px"
+            >
+              <q-card-section class="q-px-xs q-py-none">
+                <q-img
+                  style="height: 120px; width: 100%; max-height: 200px"
+                  fit="contain"
+                  :src="university.img_array_url[0]"
+                />
+                <q-list>
+                  <q-item
+                    clickable
+                    class="q-ma-none q-pa-none"
+                    style="padding: 1em"
+                  >
+                    <q-item-section class="q-ma-none q-pa-none">
+                      <q-item-label>
+                        <p class="line-clamp-1">{{ university.nombre }}</p>
+                      </q-item-label>
+                    </q-item-section>
+                  </q-item>
+                  <p class="line-clamp-4 q-mb-none q-px-md">
+                    {{ university.description }}
+                  </p>
+                </q-list>
+              </q-card-section>
+              <q-card-actions
+                align="right"
+                class="q-pt-none full-width"
+                style="flex: 1; align-items: end"
+              >
+                <q-img
+                  @click="openWaze(university.link_map)"
+                  :src="wazeIcon"
+                  spinner-color="white"
+                  style="
+                    height: 40px;
+                    max-width: 40px;
+                    border-radius: 8px;
+                    cursor: pointer;
+                  "
+                />
+              </q-card-actions>
+            </q-card>
+          </template>
         </template>
       </div>
       <div
@@ -87,9 +121,10 @@
 
 <script setup>
 import { ref, watchEffect } from "vue";
-import { useGetOffersForUniversity } from "src/querys/offersQuerys";
 import { useRoute } from "vue-router";
-import CardOffers from "src/components/CardOffers.vue";
+
+import { useGetUniversities } from "src/querys/offersQuerys";
+import wazeIcon from "../../assets/images/wazeIcon.jpg";
 
 const currentPaginate = ref(1);
 const paginas = ref(0);
@@ -98,11 +133,17 @@ const search = ref("");
 const route = useRoute();
 const state = ref(route.params.countryName);
 
-const { data, isLoading, refetch, isFetching } = useGetOffersForUniversity({
+const { data, isLoading, refetch, isFetching } = useGetUniversities({
   search,
   page: currentPaginate,
   dir: state,
 });
+
+const openWaze = (link) => {
+  link.forEach((element) => {
+    window.open(element.link, "_blank");
+  });
+};
 
 watchEffect(() => {
   if (data.value) {

@@ -4,6 +4,7 @@ import getOffersFromStore from "src/api/getOffersFromStore";
 import getOffers from "src/api/getOffers";
 import getStates from "src/api/getStates";
 import getOffersForUniversitys from "src/api/getOffersForUniversitys";
+import getUniversities from "src/api/getUniversity";
 
 import { useToast } from "src/composables/useToast";
 
@@ -54,6 +55,28 @@ export const useGetStates = () => {
       }
     },
   });
+};
+
+export const useGetUniversities = ({ search, page, dir }) => {
+  const { triggerWarning } = useToast();
+
+  return useQuery(
+    ["universities", search, page],
+    () =>
+      getUniversities({
+        search: search.value,
+        page: page.value,
+        dir: dir.value,
+      }),
+    {
+      onError: (error) => {
+        console.log(error, "error");
+        if (error?.code === "ERR_NETWORK") {
+          triggerWarning(ERR_NETWORK_MESSAGE);
+        }
+      },
+    }
+  );
 };
 
 export const useGetOffersForUniversity = ({ search, page, dir }) => {
