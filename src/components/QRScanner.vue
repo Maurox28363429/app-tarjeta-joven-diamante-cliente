@@ -2,7 +2,7 @@
   <div v-if="!loading">
     <div
       class="row justify-center items-center"
-      style="height: 327px; width: 100%"
+      style="min-height: 327px; width: 100%"
     >
       <video
         id="video"
@@ -10,9 +10,17 @@
         style="width: 100%; height: 327px; object-fit: cover"
         autoplay
       ></video>
-      <p v-if="!staredScan">Haz click a scanear</p>
+      <q-select
+        class="q-my-md q-px-md"
+        v-if="staredScan"
+        outlined
+        v-model="selectedDeviceId"
+        :options="videoInputDevices"
+        label="camaras"
+      />
+      <p v-if="!staredScan" class="q-ma-none q-pa-none">Haz click a scanear</p>
     </div>
-    <div class="row justify-center q-gutter-x-md q-mt-md">
+    <div class="row justify-center q-gutter-x-md q-ma-none q-pa-none">
       <q-btn
         class="button"
         @click="startDecode"
