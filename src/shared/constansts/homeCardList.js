@@ -1,10 +1,7 @@
 import offersIcon from '../../assets/images/offersIcon.png'
 import messageIcon from '../../assets/images/messageIcon.png'
 import VIPIcon from '../../assets/images/VIPIcon.png'
-<<<<<<< HEAD
-=======
 import speakerIcon from '../../assets/images/speakerIcon.png'
->>>>>>> maria_estable
 import bagIcon from '../../assets/images/bagIcon.png'
 // import giftIcon from "../../assets/images/giftIcon.png";
 import pachama from '../../assets/images/GifPachama.gif'
@@ -60,14 +57,9 @@ export const HOME_CARD_LIST = [
     enabled: false
   },
   {
-<<<<<<< HEAD
-    id: 6,
-    title: 'Promociones',
-=======
     id: 7,
     title: 'Promociones',
     icon: speakerIcon,
->>>>>>> maria_estable
     link: '/cliente/promotions',
     enabled: true
   },

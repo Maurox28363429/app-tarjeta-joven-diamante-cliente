@@ -37,16 +37,13 @@ const handledFreePayment = () => {
 const HandlePayment = () => {
   const userId = userData.value?.id || ''
   const url =
-<<<<<<< HEAD
     'https://api.tarjetajovendiamante.com' +
-=======
-    process.env.VUE_APP_API_URL +
->>>>>>> maria_estable
     `/pago/Payment_Controller.php?orderId=${userId}`
   localStorage.removeItem('user')
   if (typeof cordova !== 'undefined') {
     const target = '_blank' // Usa '_blank' para abrir en el navegador incorporado
     const options = 'location=no,zoom=no,toolbar=no,'
+
     const inAppBrowser = window.cordova?.InAppBrowser.open(
       url,
       target,
@@ -74,7 +71,7 @@ const HandlePayment = () => {
     window.open(url)
   }
 }
-const isFree = Boolean(props.name === 'free') || props.price === 0
+const isFree = Boolean(props.name === 'free') || props.price <= 0
 
 onMounted(async () => {
   const prueba = await instance.get(

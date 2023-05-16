@@ -116,8 +116,8 @@
             @click="invoice"
             :disable="
               !client ||
-              (rows.length === 0 && user.membresia?.status === 'vencida') ||
-              !user.membresia
+              (rows.length === 0 && client.membresia?.status === 'vencida') ||
+              !client.membresia
             "
           />
           <q-btn color="negative" label="eliminar" @click="deleteProduct" />
@@ -163,10 +163,10 @@ const {
 })
 
 const userScaneo = computed(() => {
-  if (user.value.membresia?.status === 'vencida' || !user.value.membresia) {
+  if (client.value.membresia?.status === 'vencida' || !client.value.membresia) {
     return 'Usuario sin membresía '
   } else {
-    return user.value.name
+    return client.value.name
   }
 })
 

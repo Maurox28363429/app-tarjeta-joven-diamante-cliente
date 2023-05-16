@@ -34,7 +34,6 @@ import { BrowserMultiFormatReader, NotFoundException } from '@zxing/library'
 import { ref, onMounted, defineEmits, defineProps } from 'vue'
 import { useToast } from 'src/composables/useToast'
 import { useRouter } from 'vue-router'
-import { userAuth } from 'src/composables/userAuth'
 import { userCart } from 'src/stores/userCart'
 
 defineProps({
@@ -45,7 +44,6 @@ defineProps({
 
 const emits = defineEmits(['close-modal'])
 const router = useRouter()
-const { userData } = userAuth()
 
 const client = userCart()
 const loading = ref(false)
@@ -95,16 +93,24 @@ async function startDecode () {
           console.log(result)
           resultText.value = result.text
           loading.value = true
+
+          if (Number(result.text) === 'NaN') {
+            triggerWarning('El qr no corresponde a un cliente')
+          }
+
           try {
-            await client.setClient(result.text)
+            const getClient = await client.setClient(Number(result.text))
             router.push('/empresa/create-order')
             emits('close-modal')
             console.log('Cliente asignado correctamente', result.text)
-            if (!userData.value.membresia) {
+            if (getClient.membresia?.status !== 'activa') {
               triggerWarning('Usuario no tiene una membresia activa')
             }
           } catch (error) {
             console.error('Error al asignar el cliente:', error)
+
+            triggerWarning(client.client.message)
+            console.log(client.client.message)
           } finally {
             loading.value = false
             reset()
@@ -116,14 +122,6 @@ async function startDecode () {
         }
       }
     )
-
-    const video = document.getElementById('video')
-
-    video.addEventListener('touchstart', (e) => {
-      e.preventDefault()
-      e.stopPropagation()
-      alert('touchstart')
-    })
 
     console.log(
       `Started continous decode from camera with id ${selectedDeviceId.value.value}`
