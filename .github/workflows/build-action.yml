@@ -15,4 +15,3 @@ jobs:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
       - run: npm install
       - run: npm run build
-      - run: npm run build:android
