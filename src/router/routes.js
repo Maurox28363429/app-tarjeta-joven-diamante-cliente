@@ -45,10 +45,6 @@ const routes = [
               import("src/pages/client/SelectUniversityPage.vue"),
           },
           {
-            path: "OffersForUniversitys/:countryName/:id",
-            component: () => import("src/pages/client/OffersForUniversity.vue"),
-          },
-          {
             path: "Offers",
             component: () =>
               import("src/pages/client/SelectStateForffersPage.vue"),
