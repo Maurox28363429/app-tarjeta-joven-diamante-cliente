@@ -10,7 +10,7 @@
             style="max-width: 400px"
             outlined
             type="search"
-            label="Buscar ofertas"
+            label="Buscar universidades"
             color="primary"
           >
             <q-btn
