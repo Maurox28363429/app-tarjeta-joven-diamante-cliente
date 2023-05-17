@@ -1,7 +1,7 @@
 <template>
   <div v-if="!loading">
     <div
-      class="row justify-center items-center"
+      class="column items-center justify-center items-center"
       style="min-height: 327px; width: 100%"
     >
       <video
@@ -10,24 +10,31 @@
         style="width: 100%; height: 327px; object-fit: cover"
         autoplay
       ></video>
+      <p v-if="!staredScan" class="q-ma-none q-pa-none">Haz click a scanear</p>
       <q-select
         class="q-my-md q-px-md"
-        v-if="staredScan"
         outlined
         v-model="selectedDeviceId"
         :options="videoInputDevices"
         label="camaras"
       />
-      <p v-if="!staredScan" class="q-ma-none q-pa-none">Haz click a scanear</p>
     </div>
-    <div class="row justify-center q-gutter-x-md q-ma-none q-pa-none">
+    <q-card-actions align="center">
       <q-btn
+        size="md"
         class="button"
         @click="startDecode"
         label="scanear"
         color="primary"
       />
-    </div>
+      <q-btn
+        size="md"
+        class="button"
+        @click="reset"
+        label="reset"
+        color="secondary"
+      />
+    </q-card-actions>
   </div>
   <q-spinner color="white" size="xs" />
   <q-inner-loading
@@ -65,6 +72,13 @@ const resultText = ref("");
 const permision = ref(false);
 const staredScan = ref(false);
 
+console.log(
+  videoInputDevices.value,
+  "videoInputDevices",
+  selectedDeviceId.value,
+  "selectedDeviceId"
+);
+
 onMounted(() => {
   addPermision();
   codeReader.value = new BrowserMultiFormatReader();
@@ -76,13 +90,7 @@ onMounted(() => {
         return { ...element, value: element.deviceId, label: element.label };
       });
 
-      console.log(videoInputDevices.value);
-
-      if (window.cordova) {
-        selectedDeviceId.value = videoInputDevices.value[1];
-      } else {
-        selectedDeviceId.value = videoInputDevices.value[0];
-      }
+      selectedDeviceId.value = videoInputDevices.value[0];
     })
     .catch((err) => {
       console.error(err);

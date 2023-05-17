@@ -15,12 +15,34 @@
     </ul>
 
     <div class="row q-gutter-md">
-      <a href="https://wa.me/50765789280">
+      <a
+        href="https://wa.me/50765789280"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         <q-btn round color="positive" size="md" icon="la la-whatsapp" />
       </a>
-      <a href="mailto:informacion@tarjetajovendiamante.com">
+      <a
+        href="mailto:informacion@tarjetajovendiamante.com"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         <q-btn round color="primary" size="md" icon="email" />
       </a>
+      <a
+        href="https://www.instagram.com/tarjetajovendiamante/"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <q-btn round icon="la la-instagram" color="purple-4" size="md"
+      /></a>
+      <a
+        href="https://www.tarjetajovendiamante.com/"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <q-btn round icon="language" color="primary" size="md"
+      /></a>
     </div>
   </div>
 </template>
