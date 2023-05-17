@@ -397,7 +397,7 @@ aside {
 </style>
 
 <script setup>
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted, computed, watch } from "vue";
 import { useRouter } from "vue-router";
 import { userAuth } from "src/composables/userAuth";
 import UpdateMembershipModal from "../components/UpdateMembershipModal.vue";
@@ -413,6 +413,18 @@ const { userData } = userAuth();
 const leftDrawerOpen = ref(false);
 const router = useRouter();
 const show = ref(false);
+
+watch(show, () => {
+  if (window.plugins.preventscreenshot && window.cordova) {
+    if (show.value) {
+      window.plugins.preventscreenshot.disable();
+      console.log("disable screenshot");
+    } else {
+      window.plugins.preventscreenshot.enable();
+      console.log("enable screenshot");
+    }
+  }
+});
 
 const showModalIsExpired = computed(
   () => userData?.value?.membresia?.status === "vencida"
