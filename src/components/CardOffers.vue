@@ -135,15 +135,15 @@ defineProps({
   },
   discount: {
     type: Number,
-    required: true,
+    required: false,
   },
   commerceName: {
     type: String,
-    required: true,
+    required: false,
   },
   totalPrice: {
     type: Number,
-    required: true,
+    required: false,
   },
   images: {
     type: Array,

@@ -41,7 +41,7 @@ for (let i = 0; i < 50; i++) {
   OPTIONS.push(`Promotor ${i}`);
 }
 
-const { data } = useGetStates();
+const { data } = useGetStates({});
 
 const provinceOptions = computed(() =>
   data.value?.data.map((element) => {

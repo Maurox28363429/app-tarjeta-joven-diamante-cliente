@@ -44,10 +44,10 @@ export const useGetOffersFromBusiness = ({ search, page, dir }) => {
   );
 };
 
-export const useGetStates = () => {
+export const useGetStates = ({ sort_ofertas, sort_uni }) => {
   const { triggerWarning } = useToast();
 
-  return useQuery(["states"], () => getStates(), {
+  return useQuery(["states"], () => getStates({ sort_ofertas, sort_uni }), {
     onError: (error) => {
       console.log(error, "error");
       if (error?.code === "ERR_NETWORK") {

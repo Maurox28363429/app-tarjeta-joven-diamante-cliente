@@ -8,14 +8,20 @@
     </div>
 
     <div class="row wrap q-gutter-md justify-center q-my-lg">
-      <template v-for="state in data?.data" :key="state.id">
+      <template v-for="state in data" :key="state.id">
         <q-card
           class="stateCard column items-center cursor-pointer"
-          @click="openOffers({ state: state.name, offers: state.ofertas })"
+          @click="
+            openOffers({
+              state: state.name,
+              offers: state.ofertas,
+              universidades: state.universidades,
+            })
+          "
         >
           <q-card-section class="full-width column items-center">
             <q-img
-              :src="`${state.ofertas === 0 ? disableIcon : activeIcon}`"
+              :src="icon(state.ofertas, state.universidades)"
               spinner-color="white"
               style="height: 80px; max-width: 80px"
             />
@@ -32,7 +38,7 @@ import { useGetStates } from "src/querys/offersQuerys";
 import { useRouter } from "vue-router";
 import disableIcon from "../../assets/images/bandImage.png";
 import activeIcon from "../../assets/icons/stateIcon.webp";
-import { defineProps } from "vue";
+import { defineProps, ref } from "vue";
 
 const props = defineProps({
   typeOffers: {
@@ -43,14 +49,56 @@ const props = defineProps({
 
 const router = useRouter();
 
-const { data, isLoading } = useGetStates();
+const sort = ref({});
 
-const openOffers = ({ state, offers }) => {
-  if (offers !== 0) {
-    router.push(`/cliente/${props.typeOffers}/${state}`);
-    console.log("hay ofertas");
+const icon = (ofertas, universidades) => {
+  if (props.typeOffers === "Offers") {
+    if (ofertas === 0) {
+      return disableIcon;
+    } else {
+      return activeIcon;
+    }
   } else {
-    console.log("no hay ofertas", offers);
+    if (universidades === 0) {
+      return disableIcon;
+    } else {
+      return activeIcon;
+    }
+  }
+};
+
+switch (props.typeOffers) {
+  case "Offers":
+    sort.value = { sort_ofertas: 1 };
+
+    break;
+  case "OffersForUniversitys":
+    sort.value = { sort_uni: 1 };
+
+    break;
+
+  default:
+    sort.value = {};
+    break;
+}
+
+const { data, isLoading } = useGetStates(sort.value);
+
+const openOffers = ({ state, offers, universidades }) => {
+  if (props.typeOffers === "Offers") {
+    if (offers !== 0) {
+      router.push(`/cliente/${props.typeOffers}/${state}`);
+      console.log("hay ofertas");
+    } else {
+      console.log("no hay ofertas", offers);
+    }
+  } else {
+    if (universidades !== 0) {
+      router.push(`/cliente/${props.typeOffers}/${state}`);
+      console.log("hay universidades");
+    } else {
+      console.log("no hay universidades", universidades);
+    }
   }
 };
 </script>

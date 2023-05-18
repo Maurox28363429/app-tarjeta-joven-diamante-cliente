@@ -5,7 +5,6 @@ import StepOne from "../components/RegisterInputs/StepOne.vue";
 import StepTwo from "../components/RegisterInputs/StepTwo.vue";
 import StepThree from "../components/RegisterInputs/StepThree.vue";
 import StepFour from "../components/RegisterInputs/StepFour.vue";
-import StepFive from "../components/RegisterInputs/StepFive.vue";
 
 import { userAuth } from "src/composables/userAuth";
 import { useValidateForm } from "src/composables/useValidateForm";
@@ -26,7 +25,7 @@ const INITIAL_VALUES = {
   dni: null,
 };
 
-const lastStep = 5;
+const lastStep = 4;
 const currentForm = ref(1);
 
 const nextStep = () => currentForm.value++;
@@ -94,14 +93,6 @@ const updateForm = ({ key, value }) => {
             />
           </div>
           <div v-show="currentForm === 3" class="full-width">
-            <StepThree
-              @update:modelValue="updateForm($event)"
-              :validateMessage="validateMessage"
-              :validatInput="validatInput"
-              :useForm="useForm"
-            />
-          </div>
-          <div v-show="currentForm === 4" class="full-width">
             <StepFour
               @update:modelValue="updateForm($event)"
               :validateMessage="validateMessage"
@@ -109,8 +100,8 @@ const updateForm = ({ key, value }) => {
               :useForm="useForm"
             />
           </div>
-          <div v-show="currentForm === 5" class="full-width">
-            <StepFive
+          <div v-show="currentForm === 4" class="full-width">
+            <StepThree
               @update:modelValue="updateForm($event)"
               :validateMessage="validateMessage"
               :validatInput="validatInput"
