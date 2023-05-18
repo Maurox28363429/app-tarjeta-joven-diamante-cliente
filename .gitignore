@@ -21,6 +21,8 @@ output.json
 
 /.quasar
 .quasar/
+.quasar
+.quasar/client-entry.js
 # Quasar CLI generated files and folders
 
 # IntelliJ
