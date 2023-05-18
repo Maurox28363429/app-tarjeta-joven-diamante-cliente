@@ -22,7 +22,6 @@ const INITIAL_VALUES = {
   password: "",
   vendedor: "",
   provincia: [],
-  dni: null,
 };
 
 const lastStep = 4;

@@ -4,7 +4,7 @@
 
 <script setup>
 import { useGetAppVersion } from "src/querys/versionAppQuerys";
-import { watchEffect } from "vue";
+import { watchEffect, onMounted } from "vue";
 import { useQuasar } from "quasar";
 
 const { data: versionApp, isLoading } = useGetAppVersion();
@@ -31,6 +31,13 @@ function alert() {
       // console.log('I am triggered on both OK and Cancel')
     });
 }
+
+onMounted(() => {
+  if (window.plugins.preventscreenshot && window.cordova) {
+    window.plugins.preventscreenshot.enable();
+    console.log("enable screenshot");
+  }
+});
 
 watchEffect(() => {
   console.log(
