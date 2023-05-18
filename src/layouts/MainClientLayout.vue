@@ -415,7 +415,7 @@ const router = useRouter();
 const show = ref(false);
 
 watch(show, () => {
-  if (window.plugins.preventscreenshot && window.cordova) {
+  if (window.plugins?.preventscreenshot && window.cordova) {
     if (show.value) {
       window.plugins.preventscreenshot.disable();
       console.log("disable screenshot");

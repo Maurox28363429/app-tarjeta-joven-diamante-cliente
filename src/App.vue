@@ -33,7 +33,7 @@ function alert() {
 }
 
 onMounted(() => {
-  if (window.plugins.preventscreenshot && window.cordova) {
+  if (window.plugins?.preventscreenshot && window.cordova) {
     window.plugins.preventscreenshot.enable();
     console.log("enable screenshot");
   }

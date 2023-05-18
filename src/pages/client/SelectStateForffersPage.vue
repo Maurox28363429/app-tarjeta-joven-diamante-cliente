@@ -78,7 +78,7 @@ switch (props.typeOffers) {
     break;
 
   default:
-    sort.value = {};
+    sort.value = { sort_ofertas: 1 };
     break;
 }
 
