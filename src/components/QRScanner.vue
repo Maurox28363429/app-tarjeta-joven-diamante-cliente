@@ -72,13 +72,6 @@ const resultText = ref("");
 const permision = ref(false);
 const staredScan = ref(false);
 
-console.log(
-  videoInputDevices.value,
-  "videoInputDevices",
-  selectedDeviceId.value,
-  "selectedDeviceId"
-);
-
 onMounted(() => {
   addPermision();
   codeReader.value = new BrowserMultiFormatReader();
@@ -117,7 +110,6 @@ async function startDecode() {
             const getClient = await client.setClient(Number(result.text));
             router.push("/empresa/create-order");
             emits("close-modal");
-            console.log("Cliente asignado correctamente", result.text);
             if (getClient.membresia?.status !== "activa") {
               triggerWarning("Usuario no tiene una membresia activa");
             }
@@ -125,7 +117,6 @@ async function startDecode() {
             console.error("Error al asignar el cliente:", error);
 
             triggerWarning(client.client.message);
-            console.log(client.client.message);
           } finally {
             loading.value = false;
             reset();
@@ -136,10 +127,6 @@ async function startDecode() {
           resultText.value = err;
         }
       }
-    );
-
-    console.log(
-      `Started continous decode from camera with id ${selectedDeviceId.value.value}`
     );
   } catch (err) {
     console.error(err);

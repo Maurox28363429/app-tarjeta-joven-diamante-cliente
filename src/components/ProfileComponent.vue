@@ -396,11 +396,11 @@ const props = defineProps({
   },
 });
 
-const { data } = useGetStates();
+const { data } = useGetStates({});
 
 const provinceOptions = computed(() =>
-  data.value?.data.map((element) => {
-    return element.name;
+  data.value?.data?.map(({ name }) => {
+    return name;
   })
 );
 
@@ -418,8 +418,6 @@ const file = ref(userData.value?.img_url ?? "");
 const { useForm, validatInput, validateMessage, validateForm } =
   useValidateForm({ initialValue: {}, schema: updateProfileShema });
 
-console.log(useForm.value, "value");
-
 watchEffect(() => {
   if (useForm.value?.provincia?.length > 2 && userData.value) {
     useForm.value?.provincia.pop();
@@ -432,7 +430,6 @@ watch([userData, isFetchedAfterMountUser, isFetchedUser], () => {
       return item.value === Number(userData.value?.sex);
     });
     file.value = userData.value?.img_url;
-    console.log(useForm.value, "value");
     useForm.value = {
       provincia: Array.isArray(userData.value.provincia)
         ? userData.value.provincia
@@ -452,7 +449,6 @@ watch([userData, isFetchedAfterMountUser, isFetchedUser], () => {
     };
   }
 });
-console.log(useForm.value?.dni, "dni");
 
 const onPhotoDataSuccess = (imageData) => {
   photo.value = "data:image/jpeg;base64," + imageData;
@@ -468,7 +464,6 @@ const onPhotoDataSuccess = (imageData) => {
   }
   const blob = new Blob([ab], { type: mimeString });
   const file = new File([blob], "image.jpg", { type: mimeString });
-  console.log(file, "file");
   useForm.value.dni = file;
 };
 
@@ -477,7 +472,6 @@ const onFail = (message) => {
 };
 
 const openCamera = () => {
-  console.log("open camera");
   navigator.camera.getPicture(onPhotoDataSuccess, onFail, {
     quality: 20,
     allowEdit: false,

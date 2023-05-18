@@ -10,7 +10,7 @@ import { useQuasar } from "quasar";
 const { data: versionApp, isLoading } = useGetAppVersion();
 const $q = useQuasar();
 
-function alert() {
+function alertMessage() {
   $q.dialog({
     title: `Actualización disponible: ${versionApp.value?.version}`,
     message: "hay una nueva version, por favor actualiza la app",
@@ -35,31 +35,23 @@ function alert() {
 onMounted(() => {
   if (window.plugins?.preventscreenshot && window.cordova) {
     window.plugins.preventscreenshot.enable();
-    console.log("enable screenshot");
   }
 });
 
 watchEffect(() => {
-  console.log(
-    process.env.VUE_APP_VERSION,
-    "version",
-    "versionApp",
-    versionApp.value?.version
-  );
-
   if (!isLoading.value) {
     if (process.env.VUE_APP_VERSION && versionApp.value) {
       if (
         Number(process.env.VUE_APP_VERSION) < Number(versionApp.value?.version)
       ) {
-        console.log("hay una nueva version");
-        alert();
+        // console.log("hay una nueva version");
+        alertMessage();
       } else {
-        console.log("no hay una nueva version");
+        // console.log("no hay una nueva version");
       }
     } else {
-      console.log("hay una nueva version");
-      alert();
+      // console.log("hay una nueva version");
+      alertMessage();
     }
   }
 });

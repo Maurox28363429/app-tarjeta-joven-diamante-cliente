@@ -82,7 +82,6 @@ onMounted(async () => {
     prueba.data.membresia.type === "Prueba"
   ) {
     router.push("cliente");
-    console.log(prueba);
   }
 });
 </script>

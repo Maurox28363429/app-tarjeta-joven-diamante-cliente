@@ -44,7 +44,7 @@ export const useGetOffersFromBusiness = ({ search, page, dir }) => {
   );
 };
 
-export const useGetStates = ({ sort_ofertas, sort_uni }) => {
+export const useGetStates = ({ sort_ofertas = 0, sort_uni = 0 }) => {
   const { triggerWarning } = useToast();
 
   return useQuery(["states"], () => getStates({ sort_ofertas, sort_uni }), {
