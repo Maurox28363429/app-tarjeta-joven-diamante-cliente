@@ -168,37 +168,76 @@
       </div>
     </q-drawer>
     <q-page-container style="background: #f8fdff">
-      <q-dialog v-model="prompt" persistent>
-        <q-card style="min-width: 350px; width: 70%; height: 530px">
+      <q-dialog v-model="prompt" persistent :maximized="true">
+        <q-card style="width: 100%; height: 100%">
           <q-card-section>
             <div align="center">
               <img src="favicon.ico" style="width: 100px; height: auto" />
             </div>
             <br />
-            <div class="text-h6">Coloca tu beneficiaro de poliza</div>
+            <div class="text-h6 text-center">
+              Coloca tu beneficiaro de poliza
+            </div>
           </q-card-section>
 
-          <q-card-section class="q-pt-none" style="">
-            <div style="padding: 1em">
-              <q-input
-                placeholder="Cedula o pasaporte del usuario"
-                dense
-                v-model="dni"
-                autofocus
-              />
+          <q-card-section class="q-pt-none q-gutter-y-md">
+            <div
+              class="row full-width no-wrap q-gutter-xs"
+              style="height: 56px"
+            >
+              <div class="label-large" style="min-width: 220px">
+                <q-file
+                  outlined
+                  class="full-width"
+                  bottom-slots
+                  v-model="dni"
+                  label="Cédula / pasaporte"
+                  :filter="checkFileType"
+                  max-files="1"
+                >
+                </q-file>
+              </div>
+              <div class="cordova-only">
+                <q-btn
+                  label="Tomar foto"
+                  color="primary"
+                  class="full-height"
+                  @click="openCameraDniUser"
+                />
+              </div>
             </div>
-            <div style="padding: 1em">
-              <q-input
-                placeholder="Cedula de tu beneficiario"
-                dense
-                v-model="beneficiario_poliza_cedula"
-                autofocus
-              />
+            <div>
+              <div
+                class="row full-width no-wrap q-gutter-xs"
+                style="height: 56px"
+              >
+                <div class="label-large" style="min-width: 220px">
+                  <q-file
+                    outlined
+                    bottom-slots
+                    v-model="beneficiario_poliza_cedula"
+                    label="Cédula de tu beneficiario"
+                    :filter="checkFileType"
+                    max-files="1"
+                  >
+                  </q-file>
+                </div>
+                <div class="cordova-only">
+                  <q-btn
+                    label="Tomar foto"
+                    color="primary"
+                    class="full-height"
+                    @click="openCameraDniUserBeneficiary"
+                  />
+                </div>
+              </div>
             </div>
-            <div style="padding: 1em">
+            <div style="height: 56px">
               <q-input
+                class="full-height"
                 placeholder="Nombrel del beneficiario"
                 dense
+                outlined
                 v-model="beneficiario_poliza_name"
               />
             </div>
@@ -209,14 +248,9 @@
               color="primary"
               label="Agregar datos"
               v-close-popup
-              @click="actualizar_beneficiario"
-              :disable="
-                beneficiario_poliza_cedula != '' &&
-                beneficiario_poliza_name != '' &&
-                dni != ''
-                  ? false
-                  : true
-              "
+              :loading="isLoading"
+              @click="handledUpdateUser"
+              :disable="!disablePolicy"
             />
           </q-card-actions>
         </q-card>
@@ -397,15 +431,15 @@ aside {
 </style>
 
 <script setup>
-import { ref, onMounted, computed, watch } from "vue";
+import { ref, computed, watch } from "vue";
 import { useRouter } from "vue-router";
 import { userAuth } from "src/composables/userAuth";
 import UpdateMembershipModal from "../components/UpdateMembershipModal.vue";
 import format from "src/utils/date";
 import QrUser from "../components/QrUser.vue";
-import localStorageAuth from "src/utils/localStorageAuth";
-import updateUser from "src/api/updateUser";
 import { useQuasar } from "quasar";
+import { convertToFile, openCamera } from "src/utils/openCamera";
+import { useUpdateUserMutation } from "src/querys/userQuerys";
 const $q = useQuasar();
 
 const { userData } = userAuth();
@@ -413,6 +447,8 @@ const { userData } = userAuth();
 const leftDrawerOpen = ref(false);
 const router = useRouter();
 const show = ref(false);
+
+const { isLoading, mutateAsync } = useUpdateUserMutation();
 
 watch(show, () => {
   if (window.plugins?.preventscreenshot && window.cordova) {
@@ -461,45 +497,77 @@ const drawerClick = (e) => {
 
 // para el inicio comprobar si tiene beneficiario
 const prompt = ref(false);
+
 const dni = ref("");
 const beneficiario_poliza_cedula = ref("");
 const beneficiario_poliza_name = ref("");
-const actualizar_beneficiario = async () => {
-  const userCurrent = localStorageAuth.getUser();
-  const newUserData = {
-    beneficiario_poliza_cedula: beneficiario_poliza_cedula.value,
-    beneficiario_poliza_name: beneficiario_poliza_name.value,
-    dni: dni.value,
-  };
-  updateUser({
-    id: userData.value.id,
-    data: newUserData,
-  }).then((m) => {
-    localStorageAuth.setUser({
-      user: { ...userCurrent.user, ...newUserData },
-      token: userCurrent.token,
-    });
-    $q.notify({
-      type: "positive",
-      message: "Usuario actualizado",
-    });
-  });
-};
 
-onMounted(() => {
-  if (userData.value?.membresia?.type === "permitir_gratuita") {
-    router.push("/memberships");
-  }
+const disablePolicy = computed(
+  () =>
+    beneficiario_poliza_cedula.value !== "" &&
+    beneficiario_poliza_name.value !== "" &&
+    dni.value !== ""
+);
+
+watch(userData, () => {
   if (userData.value?.membresia?.type === "Comprada") {
+    console.log("membresia comprada");
     if (
-      userData.value.beneficiario_poliza_cedula === null ||
-      userData.value.beneficiario_poliza_name === null ||
-      userData.value.dni === null
+      userData.value?.beneficiario_poliza_cedula === null ||
+      userData.value?.beneficiario_poliza_name === null ||
+      userData.value?.dni === null
     ) {
+      console.log("sin poliza");
       prompt.value = true;
     }
   }
 });
+
+const checkFileType = (files) => {
+  return files.filter(
+    (file) =>
+      file.type === "image/jpeg" ||
+      file.type === "image/png" ||
+      file.type === "application/pdf"
+  );
+};
+
+const onPhotoDataSuccessDniUser = (imageData) => {
+  const img = "data:image/jpeg;base64," + imageData;
+  dni.value = convertToFile(img);
+};
+
+const onFailDniUser = (message) => {
+  alert("Failed because: " + message);
+};
+
+const openCameraDniUser = () => {
+  openCamera(onPhotoDataSuccessDniUser, onFailDniUser);
+};
+
+const onPhotoDataSuccessDniBeneficiary = (imageData) => {
+  const img = "data:image/jpeg;base64," + imageData;
+  beneficiario_poliza_cedula.value = convertToFile(img);
+};
+
+const onFailDniUserBeneficiary = (message) => {
+  alert("Failed because: " + message);
+};
+
+const openCameraDniUserBeneficiary = () => {
+  openCamera(onPhotoDataSuccessDniBeneficiary, onFailDniUserBeneficiary);
+};
+
+const handledUpdateUser = async () => {
+  await mutateAsync({
+    id: userData?.value?.id,
+    data: {
+      beneficiario_poliza_cedula: beneficiario_poliza_cedula.value,
+      beneficiario_poliza_name: beneficiario_poliza_name.value,
+      dni: dni.value,
+    },
+  });
+};
 
 const goHome = () => {
   router.push("/cliente/home");
