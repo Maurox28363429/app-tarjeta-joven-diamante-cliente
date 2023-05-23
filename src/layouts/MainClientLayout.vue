@@ -467,7 +467,9 @@ const showModalIsExpired = computed(
 );
 
 const showModalNew = computed(
-  () => format(userData?.value?.membresia?.updated_at) === format(new Date())
+  () =>
+    format(userData?.value?.membresia?.updated_at) === format(new Date()) &&
+    userData?.value?.membresia?.status === "vencida"
 );
 
 const handleModal = () => {

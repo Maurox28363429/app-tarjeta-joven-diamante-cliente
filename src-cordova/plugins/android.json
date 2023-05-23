@@ -17,10 +17,10 @@
     "cordova-plugin-inappbrowser": {
       "PACKAGE_NAME": "com.phoenixtechsa.app"
     },
-    "cordova-plugin-splashscreen": {
+    "cordova-plugin-prevent-screenshot": {
       "PACKAGE_NAME": "com.phoenixtechsa.app"
     },
-    "cordova-plugin-prevent-screenshot": {
+    "cordova-plugin-splashscreen": {
       "PACKAGE_NAME": "com.phoenixtechsa.app"
     }
   },
