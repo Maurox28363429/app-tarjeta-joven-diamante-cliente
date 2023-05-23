@@ -431,132 +431,132 @@ aside {
 </style>
 
 <script setup>
-import { ref, computed, watch } from "vue";
-import { useRouter } from "vue-router";
-import { userAuth } from "src/composables/userAuth";
-import UpdateMembershipModal from "../components/UpdateMembershipModal.vue";
-import format from "src/utils/date";
-import QrUser from "../components/QrUser.vue";
-import { useQuasar } from "quasar";
-import { convertToFile, openCamera } from "src/utils/openCamera";
-import { useUpdateUserMutation } from "src/querys/userQuerys";
-const $q = useQuasar();
+import { ref, computed, watch } from 'vue'
+import { useRouter } from 'vue-router'
+import { userAuth } from 'src/composables/userAuth'
+import UpdateMembershipModal from '../components/UpdateMembershipModal.vue'
+import format from 'src/utils/date'
+import QrUser from '../components/QrUser.vue'
+import { useQuasar } from 'quasar'
+import { convertToFile, openCamera } from 'src/utils/openCamera'
+import { useUpdateUserMutation } from 'src/querys/userQuerys'
+const $q = useQuasar()
 
-const { userData } = userAuth();
+const { userData } = userAuth()
 
-const leftDrawerOpen = ref(false);
-const router = useRouter();
-const show = ref(false);
+const leftDrawerOpen = ref(false)
+const router = useRouter()
+const show = ref(false)
 
-const { isLoading, mutateAsync } = useUpdateUserMutation();
+const { isLoading, mutateAsync } = useUpdateUserMutation()
 
 watch(show, () => {
   if (window.plugins?.preventscreenshot && window.cordova) {
     if (show.value) {
-      window.plugins.preventscreenshot.disable();
-      console.log("disable screenshot");
+      window.plugins.preventscreenshot.disable()
+      console.log('disable screenshot')
     } else {
-      window.plugins.preventscreenshot.enable();
-      console.log("enable screenshot");
+      window.plugins.preventscreenshot.enable()
+      console.log('enable screenshot')
     }
   }
-});
+})
 
 const showModalIsExpired = computed(
-  () => userData?.value?.membresia?.status === "vencida"
-);
+  () => userData?.value?.membresia?.status === 'vencida'
+)
 
 const showModalNew = computed(
   () => format(userData?.value?.membresia?.updated_at) === format(new Date())
-);
+)
 
 const handleModal = () => {
-  show.value = true;
-};
+  show.value = true
+}
 
-const miniState = ref(true);
+const miniState = ref(true)
 
 const handledLogout = (e) => {
-  e.preventDefault();
-  localStorage.removeItem("user");
-  router.push("/login");
-};
+  e.preventDefault()
+  localStorage.removeItem('user')
+  router.push('/login')
+}
 
 const toggleLeftDrawer = () => {
-  leftDrawerOpen.value = true;
-  miniState.value = !miniState.value;
-};
+  leftDrawerOpen.value = true
+  miniState.value = !miniState.value
+}
 
 const drawerClick = (e) => {
   if (miniState.value) {
-    miniState.value = false;
+    miniState.value = false
 
-    e.stopPropagation();
+    e.stopPropagation()
   }
-};
+}
 
 // para el inicio comprobar si tiene beneficiario
-const prompt = ref(false);
+const prompt = ref(false)
 
-const dni = ref("");
-const beneficiario_poliza_cedula = ref("");
-const beneficiario_poliza_name = ref("");
+const dni = ref('')
+const beneficiario_poliza_cedula = ref('')
+const beneficiario_poliza_name = ref('')
 
 const disablePolicy = computed(
   () =>
-    beneficiario_poliza_cedula.value !== "" &&
-    beneficiario_poliza_name.value !== "" &&
-    dni.value !== ""
-);
+    beneficiario_poliza_cedula.value !== '' &&
+    beneficiario_poliza_name.value !== '' &&
+    dni.value !== ''
+)
 
 watch(userData, () => {
-  if (userData.value?.membresia?.type === "Comprada") {
-    console.log("membresia comprada");
+  if (userData.value?.membresia?.type === 'Comprada') {
+    console.log('membresia comprada')
     if (
       userData.value?.beneficiario_poliza_cedula === null ||
       userData.value?.beneficiario_poliza_name === null ||
       userData.value?.dni === null
     ) {
-      console.log("sin poliza");
-      prompt.value = true;
+      console.log('sin poliza')
+      prompt.value = true
     }
   }
-});
+})
 
 const checkFileType = (files) => {
   return files.filter(
     (file) =>
-      file.type === "image/jpeg" ||
-      file.type === "image/png" ||
-      file.type === "application/pdf"
-  );
-};
+      file.type === 'image/jpeg' ||
+      file.type === 'image/png' ||
+      file.type === 'application/pdf'
+  )
+}
 
 const onPhotoDataSuccessDniUser = (imageData) => {
-  const img = "data:image/jpeg;base64," + imageData;
-  dni.value = convertToFile(img);
-};
+  const img = 'data:image/jpeg;base64,' + imageData
+  dni.value = convertToFile(img)
+}
 
 const onFailDniUser = (message) => {
-  alert("Failed because: " + message);
-};
+  alert('Failed because: ' + message)
+}
 
 const openCameraDniUser = () => {
-  openCamera(onPhotoDataSuccessDniUser, onFailDniUser);
-};
+  openCamera(onPhotoDataSuccessDniUser, onFailDniUser)
+}
 
 const onPhotoDataSuccessDniBeneficiary = (imageData) => {
-  const img = "data:image/jpeg;base64," + imageData;
-  beneficiario_poliza_cedula.value = convertToFile(img);
-};
+  const img = 'data:image/jpeg;base64,' + imageData
+  beneficiario_poliza_cedula.value = convertToFile(img)
+}
 
 const onFailDniUserBeneficiary = (message) => {
-  alert("Failed because: " + message);
-};
+  alert('Failed because: ' + message)
+}
 
 const openCameraDniUserBeneficiary = () => {
-  openCamera(onPhotoDataSuccessDniBeneficiary, onFailDniUserBeneficiary);
-};
+  openCamera(onPhotoDataSuccessDniBeneficiary, onFailDniUserBeneficiary)
+}
 
 const handledUpdateUser = async () => {
   await mutateAsync({
@@ -564,16 +564,16 @@ const handledUpdateUser = async () => {
     data: {
       beneficiario_poliza_cedula: beneficiario_poliza_cedula.value,
       beneficiario_poliza_name: beneficiario_poliza_name.value,
-      dni: dni.value,
-    },
-  });
-};
+      dni: dni.value
+    }
+  })
+}
 
 const goHome = () => {
-  router.push("/cliente/home");
-};
+  router.push('/cliente/home')
+}
 
 const goBack = () => {
-  router.go(-1);
-};
+  router.go(-1)
+}
 </script>

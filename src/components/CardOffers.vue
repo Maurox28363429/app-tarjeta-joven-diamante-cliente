@@ -101,59 +101,59 @@
 </template>
 
 <script setup>
-import { defineProps, ref } from "vue";
-import wazeIcon from "./../assets/images/wazeIcon.jpg";
+import { defineProps, ref } from 'vue'
+import wazeIcon from './../assets/images/wazeIcon.jpg'
 
-const openModal = ref(false);
+const openModal = ref(false)
 
 const openWaze = (link) => {
   link.forEach((element) => {
-    window.open(element.link, "_blank");
-  });
-};
+    window.open(element.link, '_blank')
+  })
+}
 
 const handleBuy = () => {
-  console.log("buy");
-};
+  console.log('buy')
+}
 
 const showModal = () => {
-  openModal.value = true;
-};
+  openModal.value = true
+}
 
 defineProps({
   mapLink: {
     type: Object,
-    required: true,
+    required: true
   },
   name: {
     type: String,
-    required: true,
+    required: true
   },
   description: {
     type: String,
-    required: true,
+    required: true
   },
   discount: {
     type: Number,
-    required: false,
+    required: false
   },
   commerceName: {
     type: String,
-    required: false,
+    required: false
   },
   totalPrice: {
     type: Number,
-    required: false,
+    required: false
   },
   images: {
     type: Array,
-    required: true,
+    required: true
   },
   withModal: {
     type: Boolean,
-    default: true,
-  },
-});
+    default: true
+  }
+})
 </script>
 
 <style>

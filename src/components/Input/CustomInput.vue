@@ -13,20 +13,20 @@
 </template>
 
 <script setup>
-import { defineProps, ref, defineEmits } from "vue";
+import { defineProps, ref, defineEmits } from 'vue'
 
 const props = defineProps({
   label: String,
   inputId: String,
   modelValue: String,
   placeholder: String,
-  validatInput: Function,
-});
-const value = ref(props.modelValue);
+  validatInput: Function
+})
+const value = ref(props.modelValue)
 
-const emit = defineEmits(["update:modelValue"]);
+const emit = defineEmits(['update:modelValue'])
 
 const updateValue = (key, value) => {
-  emit("update:modelValue", { key, value });
-};
+  emit('update:modelValue', { key, value })
+}
 </script>
