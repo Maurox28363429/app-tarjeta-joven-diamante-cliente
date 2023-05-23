@@ -1,7 +1,7 @@
 <template>
   <div class="q-px-md">
     <div>
-      <p style="margin: 20px 0" class="title-large">Ofertas</p>
+      <p style="margin: 20px 0" class="title-large">Universidades y Otros</p>
       <div class="full-width full-height row justify-center q-mt-lg">
         <q-form class="full-width row justify-center" @submit="refetch">
           <q-input

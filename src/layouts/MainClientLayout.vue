@@ -319,6 +319,18 @@
         />
       </router-link>
       <router-link
+          to="/cliente/news"
+          style="text-decoration: none; color: #ffff; width: 100%; margin: none"
+        >
+          <q-tab
+            name="news"
+            label="Noticias"
+            color="white"
+            class="text-capitalize q-px-none"
+            icon="shopping_basket"
+          />
+        </router-link>
+      <router-link
         to="/cliente/Offers"
         style="text-decoration: none; color: #ffff; width: 100%; margin: none"
       >
@@ -344,8 +356,8 @@
       </router-link>
     </q-tabs>
     <UpdateMembershipModal
-      :showModal="showModalNew && showModalIsExpired"
-      description="Obten 5 días de pueba con el plan free, y recibe ofertas especiales"
+      :showModal="showModalNew"
+      description="Obten 3 días de pueba con el plan free, y recibe ofertas especiales"
     />
     <UpdateMembershipModal
       :showModal="showModalIsExpired"
@@ -435,7 +447,7 @@ import { ref, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { userAuth } from 'src/composables/userAuth'
 import UpdateMembershipModal from '../components/UpdateMembershipModal.vue'
-import format from 'src/utils/date'
+// import format from 'src/utils/date'
 import QrUser from '../components/QrUser.vue'
 import { useQuasar } from 'quasar'
 import { convertToFile, openCamera } from 'src/utils/openCamera'
@@ -463,13 +475,16 @@ watch(show, () => {
 })
 
 const showModalIsExpired = computed(
-  () => userData?.value?.membresia?.status === 'vencida'
+  () => userData?.value?.membresia?.status === 'vencida' && userData?.value?.membresia?.type === 'Comprada'
 )
 
 const showModalNew = computed(
-  () => format(userData?.value?.membresia?.updated_at) === format(new Date())
+  () =>
+    userData?.value?.membresia?.type === 'permitir_gratuita'
 )
-
+if (userData?.value?.membresia?.type === 'permitir_gratuita') {
+  router.push('/memberships')
+}
 const handleModal = () => {
   show.value = true
 }

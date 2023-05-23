@@ -79,9 +79,9 @@ export const HOME_CARD_LIST = [
   },
   {
     id: 10,
-    title: 'Universidades',
+    title: 'Universidades y otros',
     icon: universityIcon,
-    link: '/cliente/OffersForUniversitys',
+    link: '/cliente/OffersForUniversitys/Panamá',
     enabled: true
   },
   {

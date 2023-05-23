@@ -6,7 +6,8 @@ export default async function getUniversities ({
   dir
 } = {}) {
   const { data } = await instance.get(
-    `/universidades?nombre=${search}&page=${page}&dir=${dir}`
+    // `/universidades?nombre=${search}&page=${page}&dir=${dir}`
+    `/universidades?nombre=${search}&page=${page}`
   )
   return data
 }

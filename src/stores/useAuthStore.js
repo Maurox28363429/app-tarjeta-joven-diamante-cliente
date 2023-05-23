@@ -4,8 +4,8 @@ import registerUser from 'src/api/registerUser'
 import localStorageAuth from 'src/utils/localStorageAuth'
 import membershipsTest from 'src/api/membershipsTest'
 import ROLE_ID from 'src/shared/constansts/roleId'
-import profile from '../assets/images/profile.png'
 
+const profile = 'https://api.tarjetajovendiamante.com/assets/img/hombre.png'
 export const useAuthStore = defineStore('userAuth', {
   state: () => ({
     user: localStorageAuth.getUser()?.user || null,
@@ -29,8 +29,6 @@ export const useAuthStore = defineStore('userAuth', {
         this.user.img_url = profile
       }
       localStorageAuth.setUser(data)
-
-      this.router.push({ path: `/${ROLE_ID[this.user.role_id]}` })
     },
     async register (registerData) {
       const { data } = await registerUser(registerData)
