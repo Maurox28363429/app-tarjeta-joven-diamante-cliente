@@ -12,7 +12,7 @@
     "dev": "quasar dev",
     "dev:android": "quasar dev -m cordova -T android",
     "build": "quasar build",
-    "build:android": " quasar build  -m cordova -T android",
+    "build:android": " quasar build  -m cordova -T android --ide",
     "lint:fix": "eslint --ext .js,.vue ./ --fix",
     "build:pwa": "quasar build -m pwa",
     "prepare": "husky install",
