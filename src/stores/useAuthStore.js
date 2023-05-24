@@ -29,6 +29,7 @@ export const useAuthStore = defineStore('userAuth', {
         this.user.img_url = profile
       }
       localStorageAuth.setUser(data)
+      this.router.push({ path: `/${ROLE_ID[this.user.role_id]}` })
     },
     async register (registerData) {
       const { data } = await registerUser(registerData)
