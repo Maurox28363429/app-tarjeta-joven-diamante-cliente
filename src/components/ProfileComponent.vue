@@ -82,7 +82,7 @@
               </q-item-label>
             </q-item-section>
           </q-item>
-          <q-item v-if="!isBusiness && userData?.beneficiario_poliza_cedula">
+          <!-- <q-item v-if="!isBusiness && userData?.beneficiario_poliza_cedula">
             <q-item-section>
               <q-item-label>Documento de beneficiario</q-item-label>
               <q-item-label caption>
@@ -93,7 +93,7 @@
                 />
               </q-item-label>
             </q-item-section>
-          </q-item>
+          </q-item> -->
         </q-list>
         <q-list
           bordered
@@ -276,8 +276,18 @@
                   </div>
                 </div>
                 <div class="q-ma-none full-width input" v-if="!isBusiness">
-                  Poliza Beneficiario: Cédula / pasaporte
-                  <div class="label-large row no-wrap q-gutter-md">
+                   <label class="label-large">
+                      Poliza Beneficiario: Cédula / pasaporte
+                      <q-input
+                        lazy-rules
+                        type="text"
+                        outlined
+                        placeholder="Cédula / pasaporte del beneficiario"
+                        v-model="useForm.beneficiario_poliza_cedula"
+                        name="beneficiario_poliza_cedula"
+                      />
+                    </label>
+                  <!-- <div class="label-large row no-wrap q-gutter-md">
                     <q-file
                       outlined
                       style="min-width: 220px"
@@ -296,7 +306,7 @@
                         @click="handledCameraBeneficiary"
                       />
                     </div>
-                  </div>
+                  </div> -->
                 </div>
                 <div class="q-ma-none full-width input" v-if="!isBusiness">
                   <label class="label-large">
@@ -359,7 +369,7 @@
     </q-card>
   </q-dialog>
 
-  <q-dialog v-model="showBeneficiaryDni">
+<!--   <q-dialog v-model="showBeneficiaryDni">
     <q-card style="min-width: 350px">
       <q-card-section>
         <p class="text-h6">Documento de beneficiario</p>
@@ -375,7 +385,7 @@
         <q-btn flat label="Cerrar" v-close-popup />
       </q-card-actions>
     </q-card>
-  </q-dialog>
+  </q-dialog> -->
 </template>
 
 <script setup>
@@ -397,7 +407,7 @@ const {
 } = userAuth()
 
 const showDni = ref(false)
-const showBeneficiaryDni = ref(false)
+// const showBeneficiaryDni = ref(false)
 
 const checkFileType = (files) => {
   return files.filter(
@@ -475,26 +485,26 @@ const onPhotoDataSuccess = (imageData) => {
   useForm.value.dni = convertToFile(img)
 }
 
-const onPhotoDataSuccessUserBeneficiary = (imageData) => {
+/* const onPhotoDataSuccessUserBeneficiary = (imageData) => {
   const img = 'data:image/jpeg;base64,' + imageData
   useForm.value.beneficiario_poliza_cedula = convertToFile(img)
-}
+} */
 
 const onFail = (message) => {
   alert('Failed because: ' + message)
 }
 
-const onFailDniUserBeneficiary = (message) => {
+/* const onFailDniUserBeneficiary = (message) => {
   alert('Failed because: ' + message)
-}
+} */
 
 const handledCamera = () => {
   openCamera(onPhotoDataSuccess, onFail)
 }
 
-const handledCameraBeneficiary = () => {
+/* const handledCameraBeneficiary = () => {
   openCamera(onPhotoDataSuccessUserBeneficiary, onFailDniUserBeneficiary)
-}
+} */
 
 const { isLoading, mutateAsync } = useUpdateUserMutation()
 

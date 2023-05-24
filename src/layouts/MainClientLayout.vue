@@ -182,9 +182,11 @@
 
           <q-card-section class="q-pt-none q-gutter-y-md">
             <div
-              class="row full-width no-wrap q-gutter-xs"
-              style="height: 56px"
+              class=" full-width no-wrap q-gutter-xs"
             >
+            <label class="label-large">
+                  Foto Cédula / pasaporte
+            </label>
               <div class="label-large" style="min-width: 220px">
                 <q-file
                   outlined
@@ -208,38 +210,37 @@
             </div>
             <div>
               <div
-                class="row full-width no-wrap q-gutter-xs"
-                style="height: 56px"
+                class=" full-width no-wrap q-gutter-xs"
               >
-                <div class="label-large" style="min-width: 220px">
-                  <q-file
-                    outlined
-                    bottom-slots
-                    v-model="beneficiario_poliza_cedula"
-                    label="Cédula de tu beneficiario"
-                    :filter="checkFileType"
-                    max-files="1"
-                  >
-                  </q-file>
-                </div>
-                <div class="cordova-only">
-                  <q-btn
-                    label="Tomar foto"
-                    color="primary"
-                    class="full-height"
-                    @click="openCameraDniUserBeneficiary"
-                  />
-                </div>
+              <label class="label-large">
+                Poliza Beneficiario: Cédula / pasaporte
+                <q-input
+                  type="text"
+                  placeholder="Cédula / pasaporte del beneficiario"
+                  v-model="beneficiario_poliza_cedula"
+                  name="beneficiario_poliza_cedula"
+                  class="full-height"
+                  style="width:100%;"
+                  dense
+                  outlined
+                />
+              </label>
               </div>
             </div>
-            <div style="height: 56px">
-              <q-input
-                class="full-height"
-                placeholder="Nombrel del beneficiario"
-                dense
-                outlined
-                v-model="beneficiario_poliza_name"
-              />
+            <div
+              class=" full-width no-wrap q-gutter-xs"
+            >
+            <label class="label-large">
+              Poliza Beneficiario: Nombre del beneficiario
+                <q-input
+                  class="full-height"
+                  style="width:100%;"
+                  placeholder="Nombrel del beneficiario"
+                  dense
+                  outlined
+                  v-model="beneficiario_poliza_name"
+                />
+            </label>
             </div>
           </q-card-section>
 
@@ -327,7 +328,7 @@
             label="Noticias"
             color="white"
             class="text-capitalize q-px-none"
-            icon="shopping_basket"
+            icon="newspaper"
           />
         </router-link>
       <router-link
@@ -523,21 +524,34 @@ const disablePolicy = computed(
     beneficiario_poliza_name.value !== '' &&
     dni.value !== ''
 )
-
+if (userData.value?.membresia?.type === 'Comprada' || userData.value?.membresia?.type === 'comprada') {
+  if (
+    userData.value?.beneficiario_poliza_cedula === null ||
+    userData.value?.beneficiario_poliza_name === null ||
+    userData.value?.dni === null ||
+    userData.value?.beneficiario_poliza_cedula === '' ||
+    userData.value?.beneficiario_poliza_name === '' ||
+    userData.value?.dni === ''
+  ) {
+    prompt.value = true
+  }
+}
 watch(userData, () => {
-  if (userData.value?.membresia?.type === 'Comprada') {
+  if (userData.value?.membresia?.type === 'Comprada' || userData.value?.membresia?.type === 'comprada') {
     console.log('membresia comprada')
     if (
       userData.value?.beneficiario_poliza_cedula === null ||
       userData.value?.beneficiario_poliza_name === null ||
-      userData.value?.dni === null
+      userData.value?.dni === null ||
+      userData.value?.beneficiario_poliza_cedula === '' ||
+      userData.value?.beneficiario_poliza_name === '' ||
+      userData.value?.dni === ''
     ) {
       console.log('sin poliza')
       prompt.value = true
     }
   }
 })
-
 const checkFileType = (files) => {
   return files.filter(
     (file) =>
@@ -560,19 +574,18 @@ const openCameraDniUser = () => {
   openCamera(onPhotoDataSuccessDniUser, onFailDniUser)
 }
 
-const onPhotoDataSuccessDniBeneficiary = (imageData) => {
+/* const onPhotoDataSuccessDniBeneficiary = (imageData) => {
   const img = 'data:image/jpeg;base64,' + imageData
   beneficiario_poliza_cedula.value = convertToFile(img)
-}
+} */
 
-const onFailDniUserBeneficiary = (message) => {
+/* const onFailDniUserBeneficiary = (message) => {
   alert('Failed because: ' + message)
-}
+} */
 
-const openCameraDniUserBeneficiary = () => {
+/* const openCameraDniUserBeneficiary = () => {
   openCamera(onPhotoDataSuccessDniBeneficiary, onFailDniUserBeneficiary)
-}
-
+} */
 const handledUpdateUser = async () => {
   await mutateAsync({
     id: userData?.value?.id,
