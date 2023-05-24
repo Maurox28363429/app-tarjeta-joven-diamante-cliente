@@ -82,18 +82,6 @@
               </q-item-label>
             </q-item-section>
           </q-item>
-          <q-item v-if="!isBusiness && userData?.beneficiario_poliza_cedula">
-            <q-item-section>
-              <q-item-label>Documento de beneficiario</q-item-label>
-              <q-item-label caption>
-                <q-btn
-                  label="Ver beneficiario"
-                  @click="showBeneficiaryDni = true"
-                  color="primary"
-                />
-              </q-item-label>
-            </q-item-section>
-          </q-item>
         </q-list>
         <q-list
           bordered
@@ -253,10 +241,9 @@
                 </div>
 
                 <div class="q-ma-none full-width input" v-if="!isBusiness">
-                  Cédula / pasaporte
-                  <div class="label-large row no-wrap q-gutter-md">
+                  <label class="label-large">
+                    Cédula / pasaporte
                     <q-file
-                      style="min-width: 220px"
                       outlined
                       bottom-slots
                       v-model="useForm.dni"
@@ -264,39 +251,52 @@
                       :filter="checkFileType"
                       max-files="1"
                     >
+                      <template v-slot:before>
+                        <q-icon name="cloud_upload" />
+                      </template>
+
+                      <template
+                        v-slot:hint
+                        v-if="
+                          useForm.dni !== null &&
+                          typeof useForm.dni !== 'object'
+                        "
+                        ><p class="dniText">{{ useForm.dni }}</p></template
+                      >
                     </q-file>
-                    <div class="cordova-only" style="height: 56px">
+                  </label>
+                  <div class="cordova-only">
+                    <p class="full-width text-center">o tome una foto</p>
+
+                    <div class="row q-gutter-x-md full-width justify-center">
                       <q-btn
-                        class="full-height"
                         label="Tomar foto"
                         color="primary"
-                        @click="handledCamera"
+                        icon="camera"
+                        @click="openCamera"
+                      />
+                      <q-img
+                        v-if="photo"
+                        :src="photo"
+                        spinner-color="primary"
+                        style="height: 50px; max-width: 50px"
                       />
                     </div>
                   </div>
                 </div>
+
                 <div class="q-ma-none full-width input" v-if="!isBusiness">
-                  Poliza Beneficiario: Cédula / pasaporte
-                  <div class="label-large row no-wrap q-gutter-md">
-                    <q-file
-                      outlined
-                      style="min-width: 220px"
-                      bottom-slots
+                  <label class="label-large">
+                    Poliza Beneficiario: Cédula / pasaporte
+                    <q-input
                       v-model="useForm.beneficiario_poliza_cedula"
-                      label="archivo.jpg/.png/.pdf"
-                      :filter="checkFileType"
-                      max-files="1"
-                    >
-                    </q-file>
-                    <div class="cordova-only" style="height: 56px">
-                      <q-btn
-                        class="full-height"
-                        label="Tomar foto"
-                        color="primary"
-                        @click="handledCameraBeneficiary"
-                      />
-                    </div>
-                  </div>
+                      lazy-rules
+                      type="text"
+                      outlined
+                      placeholder=""
+                      name="beneficiario_poliza_cedula"
+                    />
+                  </label>
                 </div>
                 <div class="q-ma-none full-width input" v-if="!isBusiness">
                   <label class="label-large">
@@ -358,24 +358,6 @@
       </q-card-actions>
     </q-card>
   </q-dialog>
-
-  <q-dialog v-model="showBeneficiaryDni">
-    <q-card style="min-width: 350px">
-      <q-card-section>
-        <p class="text-h6">Documento de beneficiario</p>
-      </q-card-section>
-      <q-card-section class="full-width row justify-center">
-        <q-img
-          :src="userData?.beneficiario_poliza_cedula"
-          spinner-color="primary"
-          style="height: 320px; max-width: 320px"
-        />
-      </q-card-section>
-      <q-card-actions align="right" class="text-primary">
-        <q-btn flat label="Cerrar" v-close-popup />
-      </q-card-actions>
-    </q-card>
-  </q-dialog>
 </template>
 
 <script setup>
@@ -385,7 +367,6 @@ import { useValidateForm } from "src/composables/useValidateForm";
 import { updateProfileShema } from "src/schemas/updateProfileShema";
 import { useUpdateUserMutation } from "src/querys/userQuerys";
 import { useGetStates } from "src/querys/offersQuerys";
-import { convertToFile, openCamera } from "src/utils/openCamera";
 
 const {
   updatedUser,
@@ -397,7 +378,7 @@ const {
 } = userAuth();
 
 const showDni = ref(false);
-const showBeneficiaryDni = ref(false);
+const photo = ref(null);
 
 const checkFileType = (files) => {
   return files.filter(
@@ -460,40 +441,42 @@ watch([userData, isFetchedAfterMountUser, isFetchedUser], () => {
       sex: genderCurrent,
       address: userData.value?.address,
       img: null,
-      dni: userData.value?.dni,
-      beneficiario_poliza_cedula: userData.value?.beneficiario_poliza_cedula,
+      dni: null,
+      beneficiario_poliza_cedula:
+        userData.value?.beneficiario_poliza_cedula || "",
       beneficiario_poliza_name: userData.value?.beneficiario_poliza_name || "",
       fecha_nacimiento: userData.value?.fecha_nacimiento || "",
     };
   }
 });
 
-console.log(userData.value?.beneficiario_poliza_cedula, "poliza");
-
 const onPhotoDataSuccess = (imageData) => {
-  const img = "data:image/jpeg;base64," + imageData;
-  useForm.value.dni = convertToFile(img);
-};
+  photo.value = "data:image/jpeg;base64," + imageData;
 
-const onPhotoDataSuccessUserBeneficiary = (imageData) => {
-  const img = "data:image/jpeg;base64," + imageData;
-  useForm.value.beneficiario_poliza_cedula = convertToFile(img);
+  // convert base64 to file
+
+  const byteString = atob(photo.value.split(",")[1]);
+  const mimeString = photo.value.split(",")[0].split(":")[1].split(";")[0];
+  const ab = new ArrayBuffer(byteString.length);
+  const ia = new Uint8Array(ab);
+  for (let i = 0; i < byteString.length; i++) {
+    ia[i] = byteString.charCodeAt(i);
+  }
+  const blob = new Blob([ab], { type: mimeString });
+  const file = new File([blob], "image.jpg", { type: mimeString });
+  useForm.value.dni = file;
 };
 
 const onFail = (message) => {
   alert("Failed because: " + message);
 };
 
-const onFailDniUserBeneficiary = (message) => {
-  alert("Failed because: " + message);
-};
-
-const handledCamera = () => {
-  openCamera(onPhotoDataSuccess, onFail);
-};
-
-const handledCameraBeneficiary = () => {
-  openCamera(onPhotoDataSuccessUserBeneficiary, onFailDniUserBeneficiary);
+const openCamera = () => {
+  navigator.camera.getPicture(onPhotoDataSuccess, onFail, {
+    quality: 20,
+    allowEdit: false,
+    destinationType: navigator.camera.DestinationType.DATA_URL,
+  });
 };
 
 const { isLoading, mutateAsync } = useUpdateUserMutation();
