@@ -146,6 +146,7 @@ onMounted(async () => {
                 </div>
 
                 <button
+                  :disabled="!val"
                   @click="HandlePayment"
                   v-if="!isFree"
                   class="row items-center buttonPay"
@@ -158,6 +159,7 @@ onMounted(async () => {
                   />
                 </button>
                 <button
+                  :disabled="!val"
                   v-if="isFree"
                   @click="handledFreePayment"
                   class="row items-center buttonPay justify-center"
