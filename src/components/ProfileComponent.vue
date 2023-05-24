@@ -241,48 +241,28 @@
                 </div>
 
                 <div class="q-ma-none full-width input" v-if="!isBusiness">
-                  <label class="label-large">
-                    Cédula / pasaporte
+                  Cédula / pasaporte
+                  <div class="label-large full-width row no-wrap q-gutter-md">
                     <q-file
                       outlined
-                      bottom-slots
                       v-model="useForm.dni"
+                      class="full-width"
                       label="archivo.jpg/.png/.pdf"
                       :filter="checkFileType"
                       max-files="1"
                     >
-                      <template v-slot:before>
-                        <q-icon name="cloud_upload" />
-                      </template>
-
-                      <template
-                        v-slot:hint
-                        v-if="
-                          useForm.dni !== null &&
-                          typeof useForm.dni !== 'object'
-                        "
-                        ><p class="dniText">{{ useForm.dni }}</p></template
-                      >
                     </q-file>
-                  </label>
-                  <div class="cordova-only">
-                    <p class="full-width text-center">o tome una foto</p>
-
-                    <div class="row q-gutter-x-md full-width justify-center">
-                      <q-btn
-                        label="Tomar foto"
-                        color="primary"
-                        icon="camera"
-                        @click="openCamera"
-                      />
-                      <q-img
-                        v-if="photo"
-                        :src="photo"
-                        spinner-color="primary"
-                        style="height: 50px; max-width: 50px"
-                      />
-                    </div>
+                    <q-btn
+                      class="cordova-only"
+                      color="primary"
+                      icon="camera"
+                      @click="handledCamera"
+                    />
                   </div>
+                  
+
+                    
+                 
                 </div>
 
                 <div class="q-ma-none full-width input" v-if="!isBusiness">
@@ -361,12 +341,13 @@
 </template>
 
 <script setup>
-import { userAuth } from "src/composables/userAuth";
-import { ref, watch, defineProps, computed, watchEffect } from "vue";
-import { useValidateForm } from "src/composables/useValidateForm";
-import { updateProfileShema } from "src/schemas/updateProfileShema";
-import { useUpdateUserMutation } from "src/querys/userQuerys";
-import { useGetStates } from "src/querys/offersQuerys";
+import { userAuth } from 'src/composables/userAuth'
+import { ref, watch, defineProps, computed, watchEffect } from 'vue'
+import { useValidateForm } from 'src/composables/useValidateForm'
+import { updateProfileShema } from 'src/schemas/updateProfileShema'
+import { useUpdateUserMutation } from 'src/querys/userQuerys'
+import { useGetStates } from 'src/querys/offersQuerys'
+import { convertToFile, openCamera } from 'src/utils/openCamera'
 
 const {
   updatedUser,
@@ -374,62 +355,61 @@ const {
   isLoadingUser,
   isFetchingUser,
   isFetchedAfterMountUser,
-  isFetchedUser,
-} = userAuth();
+  isFetchedUser
+} = userAuth()
 
-const showDni = ref(false);
-const photo = ref(null);
+const showDni = ref(false)
 
 const checkFileType = (files) => {
   return files.filter(
     (file) =>
-      file.type === "image/jpeg" ||
-      file.type === "image/png" ||
-      file.type === "application/pdf"
-  );
-};
+      file.type === 'image/jpeg' ||
+      file.type === 'image/png' ||
+      file.type === 'application/pdf'
+  )
+}
 
 const props = defineProps({
   user: {
     type: String,
-    required: true,
-  },
-});
+    required: true
+  }
+})
 
-const { data } = useGetStates({});
+const { data } = useGetStates({})
 
 const provinceOptions = computed(() =>
   data.value?.data?.map(({ name }) => {
-    return name;
+    return name
   })
-);
+)
 
-const isBusiness = props.user === "business";
+const isBusiness = props.user === 'business'
 
-let genderCurrent = { label: "", value: "" };
+let genderCurrent = { label: '', value: '' }
 
 const GENDER_OPTIONS = [
-  { label: "Mujer", value: 0 },
-  { label: "Hombre", value: 1 },
-];
+  { label: 'Mujer', value: 0 },
+  { label: 'Hombre', value: 1 }
+]
 
-const file = ref(userData.value?.img_url ?? "");
+const file = ref(userData.value?.img_url ?? '')
 
 const { useForm, validatInput, validateMessage, validateForm } =
-  useValidateForm({ initialValue: {}, schema: updateProfileShema });
+  useValidateForm({ initialValue: {}, schema: updateProfileShema })
 
 watchEffect(() => {
   if (useForm.value?.provincia?.length > 2 && userData.value) {
-    useForm.value?.provincia.pop();
+    useForm.value?.provincia.pop()
   }
-});
+})
 
 watch([userData, isFetchedAfterMountUser, isFetchedUser], () => {
   if (userData.value && !isFetchingUser.value) {
     genderCurrent = GENDER_OPTIONS.find((item) => {
-      return item.value === Number(userData.value?.sex);
-    });
-    file.value = userData.value?.img_url;
+      return item.value === Number(userData.value?.sex)
+    })
+    file.value = userData.value?.img_url
     useForm.value = {
       provincia: Array.isArray(userData.value.provincia)
         ? userData.value.provincia
@@ -441,66 +421,51 @@ watch([userData, isFetchedAfterMountUser, isFetchedUser], () => {
       sex: genderCurrent,
       address: userData.value?.address,
       img: null,
-      dni: null,
-      beneficiario_poliza_cedula:
-        userData.value?.beneficiario_poliza_cedula || "",
-      beneficiario_poliza_name: userData.value?.beneficiario_poliza_name || "",
-      fecha_nacimiento: userData.value?.fecha_nacimiento || "",
-    };
+      dni: userData.value?.dni,
+      beneficiario_poliza_cedula: userData.value?.beneficiario_poliza_cedula,
+      beneficiario_poliza_name: userData.value?.beneficiario_poliza_name || '',
+      fecha_nacimiento: userData.value?.fecha_nacimiento || ''
+    }
   }
-});
+})
+
+console.log(userData.value?.beneficiario_poliza_cedula, 'poliza')
 
 const onPhotoDataSuccess = (imageData) => {
-  photo.value = "data:image/jpeg;base64," + imageData;
-
-  // convert base64 to file
-
-  const byteString = atob(photo.value.split(",")[1]);
-  const mimeString = photo.value.split(",")[0].split(":")[1].split(";")[0];
-  const ab = new ArrayBuffer(byteString.length);
-  const ia = new Uint8Array(ab);
-  for (let i = 0; i < byteString.length; i++) {
-    ia[i] = byteString.charCodeAt(i);
-  }
-  const blob = new Blob([ab], { type: mimeString });
-  const file = new File([blob], "image.jpg", { type: mimeString });
-  useForm.value.dni = file;
-};
+  const img = 'data:image/jpeg;base64,' + imageData
+  useForm.value.dni = convertToFile(img)
+}
 
 const onFail = (message) => {
-  alert("Failed because: " + message);
-};
+  alert('Failed because: ' + message)
+}
 
-const openCamera = () => {
-  navigator.camera.getPicture(onPhotoDataSuccess, onFail, {
-    quality: 20,
-    allowEdit: false,
-    destinationType: navigator.camera.DestinationType.DATA_URL,
-  });
-};
+const handledCamera = () => {
+  openCamera(onPhotoDataSuccess, onFail)
+}
 
-const { isLoading, mutateAsync } = useUpdateUserMutation();
+const { isLoading, mutateAsync } = useUpdateUserMutation()
 
 const uploadImg = (event) => {
-  const image = event.target.files[0];
-  useForm.value.img = image;
-  file.value = URL.createObjectURL(image);
-};
+  const image = event.target.files[0]
+  useForm.value.img = image
+  file.value = URL.createObjectURL(image)
+}
 
 const handledUpdateUser = async () => {
-  validateForm();
+  validateForm()
 
   const values = {
     ...useForm.value,
     role_id: userData.value.role_id,
     active: userData.value.active,
     id: userData.value.id,
-    sex: useForm.value.sex?.value,
-  };
-  await mutateAsync({ data: values, id: userData.value.id });
+    sex: useForm.value.sex?.value
+  }
+  await mutateAsync({ data: values, id: userData.value.id })
 
-  updatedUser();
-};
+  updatedUser()
+}
 </script>
 
 <style scoped>

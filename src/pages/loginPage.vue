@@ -1,32 +1,32 @@
 <script setup>
-import { loginSchema } from "src/schemas/loginSchema";
+import { loginSchema } from 'src/schemas/loginSchema'
 
-import { useValidateForm } from "src/composables/useValidateForm";
-import { userAuth } from "src/composables/userAuth";
-import { ref } from "vue";
+import { useValidateForm } from 'src/composables/useValidateForm'
+import { userAuth } from 'src/composables/userAuth'
+import { ref } from 'vue'
 
-const { login, isLoadingLogin } = userAuth();
+const { login, isLoadingLogin } = userAuth()
 
 const INITIAL_VALUES = {
-  email: "",
-  password: "",
-};
+  email: '',
+  password: ''
+}
 
 const { useForm, validatInput, validateMessage, validateForm } =
-  useValidateForm({ initialValue: INITIAL_VALUES, schema: loginSchema });
+  useValidateForm({ initialValue: INITIAL_VALUES, schema: loginSchema })
 
 const onSubmit = async () => {
-  validateForm();
-  login({ ...useForm.value });
-};
-const typePassword = ref("password");
-const iconPassword = ref("visibility_off");
+  validateForm()
+  login({ ...useForm.value })
+}
+const typePassword = ref('password')
+const iconPassword = ref('visibility_off')
 
 const showPassword = () => {
-  typePassword.value = typePassword.value === "password" ? "text" : "password";
+  typePassword.value = typePassword.value === 'password' ? 'text' : 'password'
   iconPassword.value =
-    iconPassword.value === "visibility_off" ? "visibility" : "visibility_off";
-};
+    iconPassword.value === 'visibility_off' ? 'visibility' : 'visibility_off'
+}
 </script>
 
 <template>

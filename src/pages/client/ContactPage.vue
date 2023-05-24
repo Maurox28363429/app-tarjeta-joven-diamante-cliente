@@ -10,13 +10,13 @@
       </li>
       <li class="row items-center">
         <q-icon name="la la-whatsapp" class="q-mr-xs" />
-        <p class="q-ma-none">+507 6578-9280</p>
+        <p class="q-ma-none">+507 6540-9984</p>
       </li>
     </ul>
 
     <div class="row q-gutter-md">
       <a
-        href="https://wa.me/50765789280"
+        href="https://wa.me/50765409984"
         target="_blank"
         rel="noopener noreferrer"
       >

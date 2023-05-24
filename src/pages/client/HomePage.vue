@@ -96,36 +96,36 @@
 </template>
 
 <script setup>
-import HomeCard from "src/components/HomeCard.vue";
-import { HOME_CARD_LIST } from "src/shared/constansts/homeCardList";
-import { ref } from "vue";
+import HomeCard from 'src/components/HomeCard.vue'
+import { HOME_CARD_LIST } from 'src/shared/constansts/homeCardList'
+import { ref } from 'vue'
 
-const showModal = ref(false);
+const showModal = ref(false)
 
 const columns = [
-  { name: "cobertura", align: "left", label: "Cobertura", field: "cobertura" },
+  { name: 'cobertura', align: 'left', label: 'Cobertura', field: 'cobertura' },
   {
-    name: "limite",
-    label: "Límite",
-    align: "left",
-    field: "limite",
-  },
-];
+    name: 'limite',
+    label: 'Límite',
+    align: 'left',
+    field: 'limite'
+  }
+]
 
 const rows = [
   {
-    cobertura: "Gastos Médicos por Accidente",
-    limite: "$150",
+    cobertura: 'Gastos Médicos por Accidente',
+    limite: '$150'
   },
   {
-    cobertura: "Muerte Accidental",
-    limite: "$1,500",
+    cobertura: 'Muerte Accidental',
+    limite: '$1,500'
   },
   {
-    cobertura: "Traslado terrestre o aéreo por accidente",
-    limite: "$150",
-  },
-];
+    cobertura: 'Traslado terrestre o aéreo por accidente',
+    limite: '$150'
+  }
+]
 </script>
 
 <style>

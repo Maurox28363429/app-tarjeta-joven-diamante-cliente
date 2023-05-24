@@ -168,37 +168,55 @@
       </div>
     </q-drawer>
     <q-page-container style="background: #f8fdff">
-      <q-dialog v-model="prompt" persistent>
-        <q-card style="min-width: 350px; width: 70%; height: 530px">
+      <q-dialog v-model="prompt" persistent :maximized="true">
+        <q-card class="full-width full-height">
           <q-card-section>
             <div align="center">
               <img src="favicon.ico" style="width: 100px; height: auto" />
             </div>
             <br />
-            <div class="text-h6">Coloca tu beneficiaro de poliza</div>
+            <div class="text-h6 text-center">Coloca tu beneficiaro de poliza</div>
           </q-card-section>
 
-          <q-card-section class="q-pt-none" style="">
-            <div style="padding: 1em">
-              <q-input
-                placeholder="Cedula o pasaporte del usuario"
-                dense
-                v-model="dni"
-                autofocus
-              />
-            </div>
-            <div style="padding: 1em">
+          <q-card-section class="q-pt-none q-gutter-lg">
+             <div>
+              Cédula / pasaporte
+              <div class="q-ma-none label-large no-wrap full-width row q-gutter-md">
+                    <q-file
+                      outlined
+                      dense
+                      class="full-width"
+                      v-model="dni"
+                      label="archivo.jpg/.png/.pdf"
+                      :filter="checkFileType"
+                      max-files="1"
+                    >
+                  </q-file>
+                 
+                    <q-btn
+                      class="cordova-only"
+                      color="primary"
+                      icon="camera"
+                      @click="openCameraDniUser"
+                    />
+                  
+                  </div>
+             </div>
+              
+            <div>
               <q-input
                 placeholder="Cedula de tu beneficiario"
                 dense
+                outlined
                 v-model="beneficiario_poliza_cedula"
                 autofocus
               />
             </div>
-            <div style="padding: 1em">
+            <div>
               <q-input
                 placeholder="Nombrel del beneficiario"
                 dense
+                outlined
                 v-model="beneficiario_poliza_name"
               />
             </div>
@@ -209,7 +227,8 @@
               color="primary"
               label="Agregar datos"
               v-close-popup
-              @click="actualizar_beneficiario"
+              :loading="isLoading"
+              @click="handledUpdateUser"
               :disable="
                 beneficiario_poliza_cedula != '' &&
                 beneficiario_poliza_name != '' &&
@@ -285,6 +304,18 @@
         />
       </router-link>
       <router-link
+          to="/cliente/news"
+          style="text-decoration: none; color: #ffff; width: 100%; margin: none"
+        >
+          <q-tab
+            name="news"
+            label="Noticias"
+            color="white"
+            class="text-capitalize q-px-none"
+            icon="shopping_basket"
+          />
+        </router-link>
+      <router-link
         to="/cliente/Offers"
         style="text-decoration: none; color: #ffff; width: 100%; margin: none"
       >
@@ -310,8 +341,8 @@
       </router-link>
     </q-tabs>
     <UpdateMembershipModal
-      :showModal="showModalNew && showModalIsExpired"
-      description="Obten 5 días de pueba con el plan free, y recibe ofertas especiales"
+      :showModal="showModalNew"
+      description="Obten 3 días de pueba con el plan free, y recibe ofertas especiales"
     />
     <UpdateMembershipModal
       :showModal="showModalIsExpired"
@@ -397,117 +428,134 @@ aside {
 </style>
 
 <script setup>
-import { ref, onMounted, computed, watch } from "vue";
-import { useRouter } from "vue-router";
-import { userAuth } from "src/composables/userAuth";
-import UpdateMembershipModal from "../components/UpdateMembershipModal.vue";
-import format from "src/utils/date";
-import QrUser from "../components/QrUser.vue";
-import localStorageAuth from "src/utils/localStorageAuth";
-import updateUser from "src/api/updateUser";
-import { useQuasar } from "quasar";
-const $q = useQuasar();
+import { ref, computed, watch } from 'vue'
+import { useRouter } from 'vue-router'
+import { userAuth } from 'src/composables/userAuth'
+import UpdateMembershipModal from '../components/UpdateMembershipModal.vue'
+// import format from 'src/utils/date'
+import QrUser from '../components/QrUser.vue'
+import { useQuasar } from 'quasar'
+import { convertToFile, openCamera } from 'src/utils/openCamera'
+import { useUpdateUserMutation } from 'src/querys/userQuerys'
+const $q = useQuasar()
 
-const { userData } = userAuth();
+const { userData } = userAuth()
 
-const leftDrawerOpen = ref(false);
-const router = useRouter();
-const show = ref(false);
+const leftDrawerOpen = ref(false)
+const router = useRouter()
+const show = ref(false)
+
+const { isLoading, mutateAsync } = useUpdateUserMutation()
 
 watch(show, () => {
   if (window.plugins?.preventscreenshot && window.cordova) {
     if (show.value) {
-      window.plugins.preventscreenshot.disable();
-      console.log("disable screenshot");
+      window.plugins.preventscreenshot.disable()
+      console.log('disable screenshot')
     } else {
-      window.plugins.preventscreenshot.enable();
-      console.log("enable screenshot");
+      window.plugins.preventscreenshot.enable()
+      console.log('enable screenshot')
     }
   }
-});
+})
 
 const showModalIsExpired = computed(
-  () => userData?.value?.membresia?.status === "vencida"
-);
+  () => userData?.value?.membresia?.status === 'vencida' && userData?.value?.membresia?.type === 'Comprada'
+)
 
 const showModalNew = computed(
   () =>
-    format(userData?.value?.membresia?.updated_at) === format(new Date()) &&
-    userData?.value?.membresia?.status === "vencida"
-);
-
+    userData?.value?.membresia?.type === 'permitir_gratuita'
+)
+if (userData?.value?.membresia?.type === 'permitir_gratuita') {
+  router.push('/memberships')
+}
 const handleModal = () => {
-  show.value = true;
-};
+  show.value = true
+}
 
-const miniState = ref(true);
+const miniState = ref(true)
 
 const handledLogout = (e) => {
-  e.preventDefault();
-  localStorage.removeItem("user");
-  router.push("/login");
-};
+  e.preventDefault()
+  localStorage.removeItem('user')
+  router.push('/login')
+}
 
 const toggleLeftDrawer = () => {
-  leftDrawerOpen.value = true;
-  miniState.value = !miniState.value;
-};
+  leftDrawerOpen.value = true
+  miniState.value = !miniState.value
+}
 
 const drawerClick = (e) => {
   if (miniState.value) {
-    miniState.value = false;
+    miniState.value = false
 
-    e.stopPropagation();
+    e.stopPropagation()
   }
-};
+}
 
 // para el inicio comprobar si tiene beneficiario
-const prompt = ref(false);
-const dni = ref("");
-const beneficiario_poliza_cedula = ref("");
-const beneficiario_poliza_name = ref("");
-const actualizar_beneficiario = async () => {
-  const userCurrent = localStorageAuth.getUser();
-  const newUserData = {
-    beneficiario_poliza_cedula: beneficiario_poliza_cedula.value,
-    beneficiario_poliza_name: beneficiario_poliza_name.value,
-    dni: dni.value,
-  };
-  updateUser({
-    id: userData.value.id,
-    data: newUserData,
-  }).then((m) => {
-    localStorageAuth.setUser({
-      user: { ...userCurrent.user, ...newUserData },
-      token: userCurrent.token,
-    });
-    $q.notify({
-      type: "positive",
-      message: "Usuario actualizado",
-    });
-  });
-};
+const prompt = ref(false)
 
-onMounted(() => {
-  if (userData.value?.membresia?.type === "permitir_gratuita") {
-    router.push("/memberships");
-  }
-  if (userData.value?.membresia?.type === "Comprada") {
+const dni = ref('')
+const beneficiario_poliza_cedula = ref('')
+const beneficiario_poliza_name = ref('')
+
+
+watch(userData, () => {
+  if (userData.value?.membresia?.type === 'Comprada') {
+    console.log('membresia comprada')
     if (
       userData.value.beneficiario_poliza_cedula === null ||
       userData.value.beneficiario_poliza_name === null ||
       userData.value.dni === null
     ) {
-      prompt.value = true;
+      console.log('sin poliza')
+      prompt.value = true
     }
   }
-});
+})
+
+const checkFileType = (files) => {
+  return files.filter(
+    (file) =>
+      file.type === 'image/jpeg' ||
+      file.type === 'image/png' ||
+      file.type === 'application/pdf'
+  )
+}
+
+const onPhotoDataSuccessDniUser = (imageData) => {
+  const img = 'data:image/jpeg;base64,' + imageData
+  dni.value = convertToFile(img)
+}
+
+const onFailDniUser = (message) => {
+  alert('Failed because: ' + message)
+}
+
+const openCameraDniUser = () => {
+  openCamera(onPhotoDataSuccessDniUser, onFailDniUser)
+}
+
+
+const handledUpdateUser = async () => {
+  await mutateAsync({
+    id: userData?.value?.id,
+    data: {
+      beneficiario_poliza_cedula: beneficiario_poliza_cedula.value,
+      beneficiario_poliza_name: beneficiario_poliza_name.value,
+      dni: dni.value
+    }
+  })
+}
 
 const goHome = () => {
-  router.push("/cliente/home");
-};
+  router.push('/cliente/home')
+}
 
 const goBack = () => {
-  router.go(-1);
-};
+  router.go(-1)
+}
 </script>
