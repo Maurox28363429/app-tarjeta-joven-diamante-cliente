@@ -48,23 +48,23 @@
 </template>
 
 <script setup>
-import { userAuth } from 'src/composables/userAuth'
-import { computed } from 'vue'
+import { userAuth } from "src/composables/userAuth";
+import { computed } from "vue";
 
-const { userData, isLoadingUser } = userAuth()
+const { userData, isLoadingUser } = userAuth();
 
 const isMembershipsActive = computed(() => {
-  return userData.value?.membresia?.status === 'activa'
-})
+  return userData.value?.membresia?.status === "activa";
+});
 
 const getDate = (fechaString) => {
-  const date = new Date(fechaString)
-  const day = date.getDate()
-  const month = date.getMonth() + 1 // Los meses en JavaScript empiezan desde cero, por lo que debemos sumar 1
-  const year = date.getFullYear()
+  const date = new Date(fechaString);
+  const day = date.getDate();
+  const month = date.getMonth() + 1; // Los meses en JavaScript empiezan desde cero, por lo que debemos sumar 1
+  const year = date.getFullYear();
 
-  return `${day}/${month}/${year}`
-}
+  return `${day}/${month}/${year}`;
+};
 </script>
 
 <style>

@@ -1,37 +1,37 @@
 <script setup>
-import { defineProps, ref } from 'vue'
+import { defineProps, ref } from "vue";
 
 defineProps({
   benefits: {
     type: Array,
-    required: true
+    required: true,
   },
   price: {
     type: Number,
     required: true,
-    default: 0
+    default: 0,
   },
   name: {
     type: String,
     required: true,
-    default: ''
+    default: "",
   },
   image: {
     type: String,
     required: true,
-    default: ''
+    default: "",
   },
   id: {
     type: Number,
-    required: true
-  }
-})
+    required: true,
+  },
+});
 
-const baseurl = '/memberships/'
+const baseurl = "/memberships/";
 const user_validation = ref(
-  JSON.parse(localStorage.getItem('user')).user.membresia.type
-)
-console.log(user_validation.value)
+  JSON.parse(localStorage.getItem("user")).user.membresia.type
+);
+console.log(user_validation.value);
 </script>
 
 <template>

@@ -23,7 +23,7 @@
         <q-btn round color="positive" size="md" icon="la la-whatsapp" />
       </a>
       <a
-        href="mailto:informacion@tarjetajovendiamante.com"
+        href="https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=informacion@tarjetajovendiamante.com"
         target="_blank"
         rel="noopener noreferrer"
       >
