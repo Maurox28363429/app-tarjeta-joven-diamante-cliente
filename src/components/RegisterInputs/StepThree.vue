@@ -1,3 +1,45 @@
+<script setup>
+import { ref } from "vue";
+
+const GENDER_OPTIONS = ["Hombre", "Mujer"];
+
+const typePassword = ref("password");
+const iconPassword = ref("visibility_off");
+
+const showPassword = () => {
+  if (typePassword.value === "password") {
+    typePassword.value = "text";
+    iconPassword.value = "visibility";
+  } else {
+    typePassword.value = "password";
+    iconPassword.value = "visibility_off";
+  }
+};
+const props = defineProps({
+  useForm: {
+    type: Object,
+    required: true,
+  },
+  validatInput: {
+    type: Function,
+    required: true,
+  },
+  validateMessage: {
+    type: Object,
+    required: true,
+  },
+});
+
+const sex = ref(props.useForm.sex);
+const password = ref(props.useForm.password);
+
+const emit = defineEmits(["update:modelValue"]);
+
+const updateValue = (key, value) => {
+  emit("update:modelValue", { key, value });
+};
+</script>
+
 <template>
   <div class="q-ma-none full-width input">
     <label class="label-large">
@@ -43,45 +85,3 @@
     </p>
   </div>
 </template>
-
-<script setup>
-import { ref } from "vue";
-
-const GENDER_OPTIONS = ["Hombre", "Mujer"];
-
-const typePassword = ref("password");
-const iconPassword = ref("visibility_off");
-
-const showPassword = () => {
-  if (typePassword.value === "password") {
-    typePassword.value = "text";
-    iconPassword.value = "visibility";
-  } else {
-    typePassword.value = "password";
-    iconPassword.value = "visibility_off";
-  }
-};
-const props = defineProps({
-  useForm: {
-    type: Object,
-    required: true,
-  },
-  validatInput: {
-    type: Function,
-    required: true,
-  },
-  validateMessage: {
-    type: Object,
-    required: true,
-  },
-});
-
-const sex = ref(props.useForm.sex);
-const password = ref(props.useForm.password);
-
-const emit = defineEmits(["update:modelValue"]);
-
-const updateValue = (key, value) => {
-  emit("update:modelValue", { key, value });
-};
-</script>

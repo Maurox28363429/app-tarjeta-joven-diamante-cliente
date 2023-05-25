@@ -1,3 +1,59 @@
+<script setup>
+import { defineProps, ref } from "vue";
+import wazeIcon from "./../assets/images/wazeIcon.jpg";
+
+const openModal = ref(false);
+
+const openWaze = (link) => {
+  link.forEach((element) => {
+    window.open(element.link, "_blank");
+  });
+};
+
+const handleBuy = () => {
+  console.log("buy");
+};
+
+const showModal = () => {
+  openModal.value = true;
+};
+
+defineProps({
+  mapLink: {
+    type: Object,
+    required: true,
+  },
+  name: {
+    type: String,
+    required: true,
+  },
+  description: {
+    type: String,
+    required: true,
+  },
+  discount: {
+    type: Number,
+    required: false,
+  },
+  commerceName: {
+    type: String,
+    required: false,
+  },
+  totalPrice: {
+    type: Number,
+    required: false,
+  },
+  images: {
+    type: Array,
+    required: true,
+  },
+  withModal: {
+    type: Boolean,
+    default: true,
+  },
+});
+</script>
+
 <template>
   <q-card class="column" style="height: 400px; width: 100%; gap: 0">
     <q-card-section class="q-px-xs q-py-none">
@@ -99,62 +155,6 @@
     </q-card>
   </q-dialog>
 </template>
-
-<script setup>
-import { defineProps, ref } from "vue";
-import wazeIcon from "./../assets/images/wazeIcon.jpg";
-
-const openModal = ref(false);
-
-const openWaze = (link) => {
-  link.forEach((element) => {
-    window.open(element.link, "_blank");
-  });
-};
-
-const handleBuy = () => {
-  console.log("buy");
-};
-
-const showModal = () => {
-  openModal.value = true;
-};
-
-defineProps({
-  mapLink: {
-    type: Object,
-    required: true,
-  },
-  name: {
-    type: String,
-    required: true,
-  },
-  description: {
-    type: String,
-    required: true,
-  },
-  discount: {
-    type: Number,
-    required: false,
-  },
-  commerceName: {
-    type: String,
-    required: false,
-  },
-  totalPrice: {
-    type: Number,
-    required: false,
-  },
-  images: {
-    type: Array,
-    required: true,
-  },
-  withModal: {
-    type: Boolean,
-    default: true,
-  },
-});
-</script>
 
 <style>
 .line-clamp-4 {

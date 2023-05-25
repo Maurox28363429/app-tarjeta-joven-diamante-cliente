@@ -1,44 +1,9 @@
-<template>
-  <q-inner-loading :showing="isLoading">
-    <q-spinner-gears size="50px" color="primary" />
-  </q-inner-loading>
-  <div class="q-px-md" v-if="!isLoading">
-    <div>
-      <p class="title-large q-mt-xl text-center">Selecciona una provincia</p>
-    </div>
-
-    <div class="row wrap q-gutter-md justify-center q-my-lg">
-      <template v-for="state in data" :key="state.id">
-        <q-card
-          class="stateCard column items-center cursor-pointer"
-          @click="
-            openOffers({
-              state: state.name,
-              offers: state.ofertas,
-              universidades: state.universidades,
-            })
-          "
-        >
-          <q-card-section class="full-width column items-center">
-            <q-img
-              :src="icon(state.ofertas, state.universidades)"
-              spinner-color="white"
-              style="height: 80px; max-width: 80px"
-            />
-            <p>{{ state.name }}</p>
-          </q-card-section>
-        </q-card>
-      </template>
-    </div>
-  </div>
-</template>
-
 <script setup>
-import { useGetStates } from "src/querys/offersQuerys";
+import { defineProps, ref } from "vue";
 import { useRouter } from "vue-router";
+import { useGetStates } from "src/querys/offersQuerys";
 import disableIcon from "../../assets/images/bandImage.png";
 import activeIcon from "../../assets/icons/stateIcon.webp";
-import { defineProps, ref } from "vue";
 
 const props = defineProps({
   typeOffers: {
@@ -95,13 +60,46 @@ const openOffers = ({ state, offers, universidades }) => {
   } else {
     if (universidades !== 0) {
       router.push(`/cliente/${props.typeOffers}/${state}`);
-      console.log("hay universidades");
     } else {
       console.log("no hay universidades", universidades);
     }
   }
 };
 </script>
+<template>
+  <q-inner-loading :showing="isLoading">
+    <q-spinner-gears size="50px" color="primary" />
+  </q-inner-loading>
+  <div class="q-px-md" v-if="!isLoading">
+    <div>
+      <p class="title-large q-mt-xl text-center">Selecciona una provincia</p>
+    </div>
+
+    <div class="row wrap q-gutter-md justify-center q-my-lg">
+      <template v-for="state in data" :key="state.id">
+        <q-card
+          class="stateCard column items-center cursor-pointer"
+          @click="
+            openOffers({
+              state: state.name,
+              offers: state.ofertas,
+              universidades: state.universidades,
+            })
+          "
+        >
+          <q-card-section class="full-width column items-center">
+            <q-img
+              :src="icon(state.ofertas, state.universidades)"
+              spinner-color="white"
+              style="height: 80px; max-width: 80px"
+            />
+            <p>{{ state.name }}</p>
+          </q-card-section>
+        </q-card>
+      </template>
+    </div>
+  </div>
+</template>
 
 <style>
 .stateCard {

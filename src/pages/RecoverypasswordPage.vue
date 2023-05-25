@@ -1,6 +1,82 @@
+<script setup>
+import { ref, watchEffect } from "vue";
+import { useRouter } from "vue-router";
+import { useValidateForm } from "src/composables/useValidateForm";
+import { passwordSchema } from "src/schemas/passwordShema";
+import { useRecoveryPasswordStore } from "src/stores/recoveryPasswordStore";
+import {
+  useChangePassword,
+  useValidatePasswordAndCode,
+  useSendEmailAgain,
+} from "src/querys/userQuerys";
+import PinInput from "src/components/PinInput.vue";
+
+const typePassword = ref("password");
+const iconPassword = ref("visibility_off");
+
+const showPassword = () => {
+  typePassword.value = typePassword.value === "password" ? "text" : "password";
+  iconPassword.value =
+    iconPassword.value === "visibility_off" ? "visibility" : "visibility_off";
+};
+
+const recoveryPasswordStore = useRecoveryPasswordStore();
+const recoveryEmail = recoveryPasswordStore.email;
+
+const INITIAL_VALUES = {
+  password: "",
+};
+
+const { useForm, validatInput, validateMessage } = useValidateForm({
+  initialValue: INITIAL_VALUES,
+  schema: passwordSchema,
+});
+
+const codeValue = ref(null);
+const showFormCode = ref(true);
+
+const { go } = useRouter();
+
+const { isLoading: isLoadingSendEmail, mutate: sendEmailMutate } =
+  useSendEmailAgain();
+const {
+  isLoading: isLoadingHandledSencode,
+  mutate: validateMutate,
+  data: validateData,
+} = useValidatePasswordAndCode();
+const { isLoading: isLoadingPassword, mutate: passwordMutate } =
+  useChangePassword();
+
+const sendCode = async () => {
+  sendEmailMutate({ email: recoveryEmail });
+};
+
+const handledSencode = (code) => {
+  codeValue.value = code;
+  validateMutate({
+    email: recoveryEmail,
+    code,
+  });
+};
+
+watchEffect(() => {
+  if (validateData.value) {
+    showFormCode.value = false;
+  }
+});
+
+const sendPassword = () => {
+  passwordMutate({
+    recovery_cod: codeValue.value,
+    password: useForm.value.password,
+    email: recoveryEmail,
+  });
+};
+</script>
+
 <template>
   <div class="full-width">
-    <div @click="goBack" class="full-width q-pl-md q-pt-md">
+    <div @click="go(-1)" class="full-width q-pl-md q-pt-md">
       <q-icon name="arrow_back" size="md" color="dark" class="cursor-pointer" />
     </div>
     <div class="full-width row justify-center">
@@ -78,83 +154,3 @@
     </div>
   </div>
 </template>
-
-<script setup>
-import { useRouter } from "vue-router";
-import PinInput from "src/components/PinInput.vue";
-import { ref, watchEffect } from "vue";
-import { useValidateForm } from "src/composables/useValidateForm";
-import { passwordSchema } from "src/schemas/passwordShema";
-import { useRecoveryPasswordStore } from "src/stores/recoveryPasswordStore";
-import {
-  useChangePassword,
-  useValidatePasswordAndCode,
-  useSendEmailAgain,
-} from "src/querys/userQuerys";
-
-const typePassword = ref("password");
-const iconPassword = ref("visibility_off");
-
-const showPassword = () => {
-  typePassword.value = typePassword.value === "password" ? "text" : "password";
-  iconPassword.value =
-    iconPassword.value === "visibility_off" ? "visibility" : "visibility_off";
-};
-
-const recoveryPasswordStore = useRecoveryPasswordStore();
-const recoveryEmail = recoveryPasswordStore.email;
-
-const INITIAL_VALUES = {
-  password: "",
-};
-
-const { useForm, validatInput, validateMessage } = useValidateForm({
-  initialValue: INITIAL_VALUES,
-  schema: passwordSchema,
-});
-
-const codeValue = ref(null);
-const showFormCode = ref(true);
-
-const router = useRouter();
-
-const goBack = () => {
-  router.go(-1);
-};
-
-const { isLoading: isLoadingSendEmail, mutate: sendEmailMutate } =
-  useSendEmailAgain();
-const {
-  isLoading: isLoadingHandledSencode,
-  mutate: validateMutate,
-  data: validateData,
-} = useValidatePasswordAndCode();
-const { isLoading: isLoadingPassword, mutate: passwordMutate } =
-  useChangePassword();
-
-const sendCode = async () => {
-  sendEmailMutate({ email: recoveryEmail });
-};
-
-const handledSencode = (code) => {
-  codeValue.value = code;
-  validateMutate({
-    email: recoveryEmail,
-    code,
-  });
-};
-
-watchEffect(() => {
-  if (validateData.value) {
-    showFormCode.value = false;
-  }
-});
-
-const sendPassword = () => {
-  passwordMutate({
-    recovery_cod: codeValue.value,
-    password: useForm.value.password,
-    email: recoveryEmail,
-  });
-};
-</script>

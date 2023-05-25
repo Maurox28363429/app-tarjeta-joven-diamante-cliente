@@ -1,6 +1,39 @@
+<script setup>
+import { ref, watchEffect } from "vue";
+import { useGetPachamaNews } from "src/querys/pachamaNewsQuerys.js";
+
+const openModal = ref(false);
+const modalCurrent = ref({});
+const currentPaginate = ref(1);
+
+const pages = ref(1);
+const search = ref("");
+
+const {
+  data: NewsData,
+  isLoading,
+  refetch,
+  isFetching,
+} = useGetPachamaNews({ search, pages });
+
+const showModal = (modalInfo) => {
+  modalCurrent.value = { ...modalInfo };
+  openModal.value = true;
+};
+
+watchEffect(() => {
+  if (NewsData.value) {
+    pages.value = NewsData?.value?.data?.pagination.lastPage;
+  }
+});
+
+const handleSearch = () => {
+  refetch();
+};
+</script>
+
 <template>
   <div class="promotions">
-    <!-- Título y campo de búsqueda -->
     <p style="margin: 20px 0" class="title-large">Noticias de pachamá</p>
     <div class="row q-mt-md q-gutter-x-xs">
       <p class="q-ma-none text-weight-medium">Redes:</p>
@@ -136,39 +169,6 @@
     </q-dialog>
   </div>
 </template>
-<script setup>
-import { ref, watchEffect } from "vue";
-import { useGetPachamaNews } from "src/querys/pachamaNewsQuerys.js";
-
-const openModal = ref(false);
-const modalCurrent = ref({});
-const currentPaginate = ref(1);
-
-const pages = ref(1);
-const search = ref("");
-
-const {
-  data: NewsData,
-  isLoading,
-  refetch,
-  isFetching,
-} = useGetPachamaNews({ search, pages });
-
-const showModal = (modalInfo) => {
-  modalCurrent.value = { ...modalInfo };
-  openModal.value = true;
-};
-
-watchEffect(() => {
-  if (NewsData.value) {
-    pages.value = NewsData?.value?.data?.pagination.lastPage;
-  }
-});
-
-const handleSearch = () => {
-  refetch();
-};
-</script>
 <style>
 .promotions {
   padding: 0 24px;

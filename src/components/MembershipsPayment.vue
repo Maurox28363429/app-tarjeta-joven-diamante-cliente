@@ -3,9 +3,15 @@ import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { userAuth } from "../composables/userAuth.js";
 import { instance } from "src/api/index.js";
-const val = ref(false);
+import logo from "../assets/icons/acronimo.svg";
+import rocketIcon from "../assets/icons/rokectPrimarysvg.svg";
+import yappyIcon from "./../assets/icons/yappyIcon.svg";
+
+const isAcceptedTerms = ref(false);
 const textError = ref(false);
 const { userData, addMembership, isLoadingMembership } = userAuth();
+
+const { push, go } = useRouter();
 
 const props = defineProps({
   price: {
@@ -20,14 +26,8 @@ const props = defineProps({
   },
 });
 
-const router = useRouter();
-
-const goBack = () => {
-  router.go(-1);
-};
-
 const handledFreePayment = () => {
-  if (val.value) {
+  if (isAcceptedTerms.value) {
     addMembership({ user_id: userData.value?.id });
     textError.value = false;
   } else {
@@ -41,7 +41,7 @@ const HandlePayment = () => {
     `/pago/Payment_Controller.php?orderId=${userId}`;
   localStorage.removeItem("user");
   if (typeof cordova !== "undefined") {
-    const target = "_blank"; // Usa '_blank' para abrir en el navegador incorporado
+    const target = "_blank";
     const options = "location=no,zoom=no,toolbar=no,";
 
     const inAppBrowser = window.cordova?.InAppBrowser.open(
@@ -81,7 +81,7 @@ onMounted(async () => {
     prueba.data.membresia.type === "Comprada" ||
     prueba.data.membresia.type === "Prueba"
   ) {
-    router.push("cliente");
+    push("cliente");
   }
 });
 </script>
@@ -97,9 +97,11 @@ onMounted(async () => {
       <q-toolbar>
         <q-toolbar-title>
           <q-img
-            src="../assets/icons/acronimo.svg"
+            :src="logo"
+            alt="logo"
             spinner-color="dark"
-            style="height: 40px; max-width: 98px"
+            height="40px"
+            width="98px"
           />
         </q-toolbar-title>
       </q-toolbar>
@@ -109,7 +111,7 @@ onMounted(async () => {
         <div>
           <div class="row items-center q-py-md">
             <q-icon
-              @click="goBack"
+              @click="go(-1)"
               name="arrow_back"
               size="xl"
               color="primary"
@@ -146,20 +148,22 @@ onMounted(async () => {
                 </div>
 
                 <button
-                  :disabled="!val"
+                  :disabled="!isAcceptedTerms"
                   @click="HandlePayment"
                   v-if="!isFree"
                   class="row items-center buttonPay"
                 >
                   <p class="q-ma-none q-mr-md text-weight-medium">Pagar con</p>
                   <q-img
-                    src="./../assets/icons/yappyIcon.svg"
-                    spinner-color="white"
-                    style="width: 74.75px; height: 17.92px"
+                    :src="yappyIcon"
+                    spinner-color="dark"
+                    height="17.92px"
+                    width="74.75px"
+                    alt="yappy icon"
                   />
                 </button>
                 <button
-                  :disabled="!val"
+                  :disabled="!isAcceptedTerms"
                   v-if="isFree"
                   @click="handledFreePayment"
                   class="row items-center buttonPay justify-center"
@@ -174,7 +178,7 @@ onMounted(async () => {
                 <div>
                   <q-checkbox
                     right-label
-                    v-model="val"
+                    v-model="isAcceptedTerms"
                     label="Acepto expresamente todos los Términos y condiciones"
                   />
                   <p class="text-negative" v-if="textError">
@@ -202,9 +206,11 @@ onMounted(async () => {
                     Plan Membresia 3 Días
                   </p>
                   <q-img
-                    src="../assets/icons/rokectPrimarysvg.svg"
-                    spinner-color="white"
-                    style="width: 32px; height: 32px"
+                    :src="rocketIcon"
+                    spinner-color="dark"
+                    width="32px"
+                    height="32px"
+                    alt="rokect icon"
                   />
                 </div>
                 <div class="row items-center text-grey-9">

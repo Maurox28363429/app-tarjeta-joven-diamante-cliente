@@ -1,22 +1,8 @@
-<template>
-  <q-card class="my-card" @click="handleLink">
-    <q-card-section class="column items-center justify-center full-width">
-      <q-img
-        :src="icon"
-        spinner-color="dark"
-        style="height: 58px; max-width: 62px"
-        fit="contain"
-      />
-      <p class="q-ma-none body-large">{{ title }}</p>
-    </q-card-section>
-  </q-card>
-</template>
-
 <script setup>
 import { defineProps } from "vue";
 import { useRouter } from "vue-router";
 
-const router = useRouter();
+const { push } = useRouter();
 
 const props = defineProps({
   title: {
@@ -39,12 +25,27 @@ const props = defineProps({
 });
 const handleLink = () => {
   if (props.enabled) {
-    router.push(props.link);
+    push(props.link);
   } else {
     console.log("deshabilitado");
   }
 };
 </script>
+
+<template>
+  <q-card class="my-card" @click="handleLink">
+    <q-card-section class="column items-center justify-center full-width">
+      <q-img
+        :src="icon"
+        spinner-color="dark"
+        fit="contain"
+        height="58px"
+        width="62px"
+      />
+      <p class="q-ma-none body-large">{{ title }}</p>
+    </q-card-section>
+  </q-card>
+</template>
 
 <style>
 .my-card {

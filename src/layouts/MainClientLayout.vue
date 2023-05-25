@@ -1,3 +1,124 @@
+<script setup>
+import { useQuasar } from "quasar";
+import { ref, computed, watch } from "vue";
+import { useRouter } from "vue-router";
+import { userAuth } from "src/composables/userAuth";
+import { useUpdateUserMutation } from "src/querys/userQuerys";
+import { convertToFile, openCamera } from "src/utils/openCamera";
+import QrUser from "../components/QrUser.vue";
+import UpdateMembershipModal from "../components/UpdateMembershipModal.vue";
+import triangle from "../assets/images/triangulo.png";
+import qrIcon from "./../assets/images/qr.jpg";
+import logo from "../assets/icons/acronimo.svg";
+
+const $q = useQuasar();
+const { userData } = userAuth();
+
+const dni = ref("");
+const policyRequestForm = ref(false);
+const beneficiario_poliza_cedula = ref("");
+const beneficiario_poliza_name = ref("");
+const leftDrawerOpen = ref(false);
+const showQr = ref(false);
+const miniState = ref(true);
+
+const { push, go } = useRouter();
+
+const { isLoading, mutateAsync } = useUpdateUserMutation();
+
+watch(showQr, () => {
+  if (window.plugins?.preventscreenshot && window.cordova) {
+    if (showQr.value) {
+      window.plugins.preventscreenshot.disable();
+      console.log("disable screenshot");
+    } else {
+      window.plugins.preventscreenshot.enable();
+      console.log("enable screenshot");
+    }
+  }
+});
+
+const showModalIsExpired = computed(
+  () =>
+    userData?.value?.membresia?.status === "vencida" &&
+    userData?.value?.membresia?.type === "Comprada"
+);
+
+const showModalNew = computed(
+  () => userData?.value?.membresia?.type === "permitir_gratuita"
+);
+
+const handleModal = () => {
+  showQr.value = true;
+};
+
+const handledLogout = (e) => {
+  e.preventDefault();
+  localStorage.removeItem("user");
+  push("/login");
+};
+
+const toggleLeftDrawer = () => {
+  leftDrawerOpen.value = true;
+  miniState.value = !miniState.value;
+};
+
+const drawerClick = (e) => {
+  if (miniState.value) {
+    miniState.value = false;
+
+    e.stopPropagation();
+  }
+};
+
+watch(userData, () => {
+  if (userData.value?.membresia?.type === "Comprada") {
+    console.log("membresia comprada");
+    if (
+      userData.value.beneficiario_poliza_cedula === null ||
+      userData.value.beneficiario_poliza_name === null ||
+      userData.value.dni === null
+    ) {
+      console.log("sin poliza");
+      policyRequestForm.value = true;
+    }
+  }
+});
+
+const checkFileType = (files) => {
+  return files.filter(
+    (file) =>
+      file.type === "image/jpeg" ||
+      file.type === "image/png" ||
+      file.type === "application/pdf"
+  );
+};
+
+const onPhotoDataSuccessDniUser = (imageData) => {
+  const img = "data:image/jpeg;base64," + imageData;
+  dni.value = convertToFile(img);
+};
+
+const onFailDniUser = (message) => {
+  console.error("Failed because: " + message);
+};
+
+const openCameraDniUser = () => {
+  openCamera(onPhotoDataSuccessDniUser, onFailDniUser);
+};
+
+const handledUpdateUser = async () => {
+  await mutateAsync({
+    id: userData?.value?.id,
+    data: {
+      beneficiario_poliza_cedula: beneficiario_poliza_cedula.value,
+      beneficiario_poliza_name: beneficiario_poliza_name.value,
+      dni: dni.value,
+    },
+  });
+};
+</script>
+
 <template>
   <q-layout view="hHh lpR fFf">
     <q-header
@@ -19,7 +140,7 @@
           color="dark"
           @click="toggleLeftDrawer"
         />
-        <div @click="goBack">
+        <div @click="go(-1)">
           <q-icon
             name="arrow_back"
             size="md"
@@ -29,9 +150,9 @@
         </div>
         <q-toolbar-title class="row items-center">
           <q-img
-            src="../assets/icons/acronimo.svg"
+            :src="logo"
             spinner-color="dark"
-            @click="goHome"
+            @click="push('/cliente/home')"
             style="height: 32px; max-width: 74px; cursor: pointer"
           />
         </q-toolbar-title>
@@ -168,11 +289,11 @@
       </div>
     </q-drawer>
     <q-page-container style="background: #f8fdff">
-      <q-dialog v-model="prompt" persistent :maximized="true">
+      <q-dialog v-model="policyRequestForm" persistent :maximized="true">
         <q-card class="full-width full-height">
           <q-card-section>
             <div align="center">
-              <img src="favicon.ico" style="width: 100px; height: auto" />
+              <q-img src="favicon.ico" width="100px" height="auto" />
             </div>
             <br />
             <div class="text-h6 text-center">
@@ -247,7 +368,7 @@
       <router-view />
     </q-page-container>
     <q-dialog
-      v-model="show"
+      v-model="showQr"
       persistent
       transition-show="scale"
       transition-hide="scale"
@@ -268,80 +389,51 @@
           color="primary"
           :disable="userData?.membresia?.status == 'vencida' ? true : false"
         >
-          <img
-            src="./../assets/images/qr.jpg"
-            style="width: 24px; height: 24px"
-          />
+          <q-img :src="qrIcon" width="24px" height="24px" />
         </q-btn>
       </div>
     </div>
     <q-tabs
-      style="position: fixed; z-index: 100; bottom: 0; width: 100%"
       dense
-      class="menuMobile bg-primary text-white justify-center"
+      style="z-index: 100"
+      class="menuMobile bg-primary text-white justify-center full-width fixed-bottom"
       align="center"
       narrow-indicator
     >
-      <router-link
+      <q-route-tab
+        name="home"
+        label="Home"
+        color="white"
+        class="text-capitalize q-px-none"
+        icon="home"
         to="/cliente/home"
-        style="text-decoration: none; color: #ffff; width: 100%; margin: none"
-      >
-        <q-tab
-          name="home"
-          label="Home"
-          color="white"
-          class="text-capitalize q-px-none"
-          icon="home"
-        />
-      </router-link>
-      <router-link
+        exact
+      />
+      <q-route-tab
+        name="misCompras"
+        label="Mis compras"
+        color="white"
+        class="text-capitalize q-px-none"
+        icon="shopping_basket"
         to="/cliente/transactionsTable"
-        style="text-decoration: none; color: #ffff; width: 100%; margin: none"
-      >
-        <q-tab
-          name="misCompras"
-          label="Mis compras"
-          color="white"
-          class="text-capitalize q-px-none"
-          icon="shopping_basket"
-        />
-      </router-link>
-      <router-link
-        to="/cliente/news"
-        style="text-decoration: none; color: #ffff; width: 100%; margin: none"
-      >
-        <q-tab
-          name="news"
-          label="Noticias"
-          color="white"
-          class="text-capitalize q-px-none"
-          icon="shopping_basket"
-        />
-      </router-link>
-      <router-link
+        exact
+      />
+      <q-route-tab
+        name="Ofertas"
+        label="Ofertas"
+        color="white"
+        class="text-capitalize q-px-none"
+        icon="sell"
         to="/cliente/Offers"
-        style="text-decoration: none; color: #ffff; width: 100%; margin: none"
-      >
-        <q-tab
-          name="Ofertas"
-          label="Ofertas"
-          color="white"
-          class="text-capitalize q-px-none"
-          icon="sell"
-        />
-      </router-link>
-      <router-link
-        to="/cliente/promotions"
-        style="text-decoration: none; color: #ffff; width: 100%; margin: none"
-      >
-        <q-tab
-          name="Promociones"
-          label="Promociones"
-          color="white"
-          class="text-capitalize q-px-none"
-          icon="newspaper"
-        />
-      </router-link>
+      />
+      <q-route-tab
+        name="news"
+        label="Noticias"
+        color="white"
+        class="text-capitalize q-px-none"
+        icon="newspaper"
+        to="/cliente/news"
+      />
     </q-tabs>
     <UpdateMembershipModal
       :showModal="showModalNew"
@@ -351,16 +443,8 @@
       :showModal="showModalIsExpired"
       description="Renueva el plan, y recibe ofertas especiales"
     />
-    <q-img
-      src="../assets/images/triangulo.png"
-      spinner-color="dark"
-      class="trianguloTop"
-    />
-    <q-img
-      src="../assets/images/triangulo.png"
-      class="trianguloBottom"
-      spinner-color="dark"
-    />
+    <q-img :src="triangle" class="trianguloTop" spinner-color="dark" />
+    <q-img :src="triangle" class="trianguloBottom" spinner-color="dark" />
   </q-layout>
 </template>
 
@@ -429,132 +513,3 @@ aside {
   }
 }
 </style>
-
-<script setup>
-import { ref, computed, watch } from "vue";
-import { useRouter } from "vue-router";
-import { userAuth } from "src/composables/userAuth";
-import UpdateMembershipModal from "../components/UpdateMembershipModal.vue";
-import QrUser from "../components/QrUser.vue";
-import { useQuasar } from "quasar";
-import { convertToFile, openCamera } from "src/utils/openCamera";
-import { useUpdateUserMutation } from "src/querys/userQuerys";
-const $q = useQuasar();
-
-const { userData } = userAuth();
-
-const leftDrawerOpen = ref(false);
-const router = useRouter();
-const show = ref(false);
-
-const { isLoading, mutateAsync } = useUpdateUserMutation();
-
-watch(show, () => {
-  if (window.plugins?.preventscreenshot && window.cordova) {
-    if (show.value) {
-      window.plugins.preventscreenshot.disable();
-      console.log("disable screenshot");
-    } else {
-      window.plugins.preventscreenshot.enable();
-      console.log("enable screenshot");
-    }
-  }
-});
-
-const showModalIsExpired = computed(
-  () =>
-    userData?.value?.membresia?.status === "vencida" &&
-    userData?.value?.membresia?.type === "Comprada"
-);
-
-const showModalNew = computed(
-  () => userData?.value?.membresia?.type === "permitir_gratuita"
-);
-
-const handleModal = () => {
-  show.value = true;
-};
-
-const miniState = ref(true);
-
-const handledLogout = (e) => {
-  e.preventDefault();
-  localStorage.removeItem("user");
-  router.push("/login");
-};
-
-const toggleLeftDrawer = () => {
-  leftDrawerOpen.value = true;
-  miniState.value = !miniState.value;
-};
-
-const drawerClick = (e) => {
-  if (miniState.value) {
-    miniState.value = false;
-
-    e.stopPropagation();
-  }
-};
-
-// para el inicio comprobar si tiene beneficiario
-const prompt = ref(false);
-
-const dni = ref("");
-const beneficiario_poliza_cedula = ref("");
-const beneficiario_poliza_name = ref("");
-
-watch(userData, () => {
-  if (userData.value?.membresia?.type === "Comprada") {
-    console.log("membresia comprada");
-    if (
-      userData.value.beneficiario_poliza_cedula === null ||
-      userData.value.beneficiario_poliza_name === null ||
-      userData.value.dni === null
-    ) {
-      console.log("sin poliza");
-      prompt.value = true;
-    }
-  }
-});
-
-const checkFileType = (files) => {
-  return files.filter(
-    (file) =>
-      file.type === "image/jpeg" ||
-      file.type === "image/png" ||
-      file.type === "application/pdf"
-  );
-};
-
-const onPhotoDataSuccessDniUser = (imageData) => {
-  const img = "data:image/jpeg;base64," + imageData;
-  dni.value = convertToFile(img);
-};
-
-const onFailDniUser = (message) => {
-  alert("Failed because: " + message);
-};
-
-const openCameraDniUser = () => {
-  openCamera(onPhotoDataSuccessDniUser, onFailDniUser);
-};
-
-const handledUpdateUser = async () => {
-  await mutateAsync({
-    id: userData?.value?.id,
-    data: {
-      beneficiario_poliza_cedula: beneficiario_poliza_cedula.value,
-      beneficiario_poliza_name: beneficiario_poliza_name.value,
-      dni: dni.value,
-    },
-  });
-};
-
-const goHome = () => {
-  router.push("/cliente/home");
-};
-
-const goBack = () => {
-  router.go(-1);
-};
-</script>

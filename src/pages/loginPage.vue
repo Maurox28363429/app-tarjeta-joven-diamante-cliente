@@ -1,9 +1,9 @@
 <script setup>
+import { ref } from "vue";
 import { loginSchema } from "src/schemas/loginSchema";
-
 import { useValidateForm } from "src/composables/useValidateForm";
 import { userAuth } from "src/composables/userAuth";
-import { ref } from "vue";
+import logo from "./../assets/icons/logo.svg";
 
 const { login, isLoadingLogin } = userAuth();
 
@@ -19,6 +19,7 @@ const onSubmit = async () => {
   validateForm();
   login({ ...useForm.value });
 };
+
 const typePassword = ref("password");
 const iconPassword = ref("visibility_off");
 
@@ -33,14 +34,7 @@ const showPassword = () => {
   <div class="full-width window-height row flex-center loginContainer">
     <div class="full-width q-mx-none column items-center login">
       <div class="column full-width items-center">
-        <q-img
-          src="./../assets/icons/logo.svg"
-          width="200px"
-          height="auto"
-          img-class="my-custom-image"
-          class="q-mb-xs"
-        >
-        </q-img>
+        <q-img :src="logo" width="200px" height="auto" class="q-mb-xs" />
         <p class="title-large q-mb-xl text-center">¡Bienvenido de vuelta! :)</p>
       </div>
 

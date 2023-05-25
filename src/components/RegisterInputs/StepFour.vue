@@ -1,37 +1,3 @@
-<template>
-  <div class="q-ma-none full-width input">
-    <label class="label-large">
-      Promotor que lo atendio
-      <q-select
-        outlined
-        use-input
-        input-debounce="0"
-        label="promotores"
-        v-model="vendedor"
-        :options="stringOptions"
-        @update:modelValue="updateValue('vendedor', $event)"
-        @filter="filterFn"
-        behavior="menu"
-      ></q-select>
-    </label>
-  </div>
-  <div class="q-ma-none full-width input">
-    <label class="label-large">
-      Provincia que suele visitar
-      <q-select
-        outlined
-        v-model="provincia"
-        multiple
-        :options="provinceOptions"
-        @update:modelValue="updateValue('provincia', $event)"
-        use-chips
-        stack-label
-        label="Provincias"
-      />
-    </label>
-  </div>
-</template>
-
 <script setup>
 import { computed, ref, watchEffect } from "vue";
 import { useGetStates } from "src/querys/offersQuerys";
@@ -98,3 +64,37 @@ const filterFn = (val, update) => {
   }
 };
 </script>
+
+<template>
+  <div class="q-ma-none full-width input">
+    <label class="label-large">
+      Promotor que lo atendio
+      <q-select
+        outlined
+        use-input
+        input-debounce="0"
+        label="promotores"
+        v-model="vendedor"
+        :options="stringOptions"
+        @update:modelValue="updateValue('vendedor', $event)"
+        @filter="filterFn"
+        behavior="menu"
+      ></q-select>
+    </label>
+  </div>
+  <div class="q-ma-none full-width input">
+    <label class="label-large">
+      Provincia que suele visitar
+      <q-select
+        outlined
+        v-model="provincia"
+        multiple
+        :options="provinceOptions"
+        @update:modelValue="updateValue('provincia', $event)"
+        use-chips
+        stack-label
+        label="Provincias"
+      />
+    </label>
+  </div>
+</template>

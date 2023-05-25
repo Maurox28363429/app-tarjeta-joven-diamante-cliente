@@ -1,10 +1,11 @@
 <script setup>
-import { registerSchema } from "src/schemas/registerSchema";
 import { ref, computed } from "vue";
+import { registerSchema } from "src/schemas/registerSchema";
 import StepOne from "../components/RegisterInputs/StepOne.vue";
 import StepTwo from "../components/RegisterInputs/StepTwo.vue";
 import StepThree from "../components/RegisterInputs/StepThree.vue";
 import StepFour from "../components/RegisterInputs/StepFour.vue";
+import logo from "./../assets/icons/logo.svg";
 
 import { userAuth } from "src/composables/userAuth";
 import { useValidateForm } from "src/composables/useValidateForm";
@@ -33,8 +34,6 @@ const prevStep = () => currentForm.value--;
 const disableLastButton = computed(() => currentForm.value === 1);
 const isLastStep = computed(() => currentForm.value === lastStep);
 
-// const { useForm, validatInput, validateMessage, validateForm } =
-
 const { useForm, validatInput, validateMessage, validateForm } =
   useValidateForm({ initialValue: INITIAL_VALUES, schema: registerSchema });
 
@@ -54,13 +53,12 @@ const updateForm = ({ key, value }) => {
     <div class="column items-center q-mx-none register">
       <div class="column items-center justify-center">
         <q-img
-          src="./../assets/icons/logo.svg"
+          :src="logo"
           width="100px"
+          alt="logo"
           height="80px"
-          img-class="my-custom-image"
           class="rounded-borders q-mb-md"
-        >
-        </q-img>
+        />
         <p class="q-mb-xl title-large text-center">
           Bienvenido a Tarjeta Joven Diamante
         </p>
@@ -109,15 +107,12 @@ const updateForm = ({ key, value }) => {
           </div>
         </div>
 
-        <div
-          class="q-py-none full-width row"
-          style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px"
-        >
+        <div class="q-py-none full-width row q-gutter-md justify-center">
           <q-btn
             :disable="disableLastButton"
             @click="prevStep"
             label="Anterior"
-            class=""
+            class="col-5"
             height="48px"
             color="secondary"
             size="14px"
@@ -127,8 +122,8 @@ const updateForm = ({ key, value }) => {
             v-if="!isLastStep"
             @click="nextStep"
             label="Siguiente"
-            class=""
             height="48px"
+            class="col-5"
             color="secondary"
             size="14px"
             fill
@@ -138,8 +133,8 @@ const updateForm = ({ key, value }) => {
             :disable="!validateMessage.isvalid"
             type="submit"
             label="Registrar"
-            class=""
             height="48px"
+            class="col-5"
             color="primary"
             :loading="isLoadingRegister"
             size="14px"

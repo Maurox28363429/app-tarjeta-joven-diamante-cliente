@@ -1,6 +1,35 @@
+<script setup>
+import { ref, watchEffect } from "vue";
+import { useGetPromotions } from "src/querys/promotionsQuerys";
+
+const openModal = ref(false);
+const modalCurrent = ref({});
+const currentPaginate = ref(1);
+
+const pages = ref(1);
+const search = ref("");
+
+const {
+  data: promotionsData,
+  isLoading,
+  refetch,
+  isFetching,
+} = useGetPromotions({ search, pages });
+
+const showModal = (modalInfo) => {
+  modalCurrent.value = { ...modalInfo };
+  openModal.value = true;
+};
+
+watchEffect(() => {
+  if (promotionsData.value) {
+    pages.value = promotionsData?.value?.data?.pagination.lastPage;
+  }
+});
+</script>
+
 <template>
   <div class="promotions">
-    <!-- Título y campo de búsqueda -->
     <p style="margin: 20px 0" class="title-large">Promociones</p>
     <div class="search-box">
       <q-form class="full-width row justify-center" @submit="refetch">
@@ -26,10 +55,7 @@
       </q-form>
     </div>
 
-    <!-- Cuadrícula de noticias -->
     <div class="news-grid">
-      <!-- Si se están cargando las noticias, muestra los esqueletos -->
-
       <q-inner-loading :showing="isFetching && !isLoading" class="innerLoading">
         <q-spinner-gears size="50px" color="primary" class="loading" />
       </q-inner-loading>
@@ -167,35 +193,6 @@
     </q-dialog>
   </div>
 </template>
-<script setup>
-import { ref, watchEffect } from "vue";
-import { useGetPromotions } from "src/querys/promotionsQuerys";
-
-const openModal = ref(false);
-const modalCurrent = ref({});
-const currentPaginate = ref(1);
-
-const pages = ref(1);
-const search = ref("");
-
-const {
-  data: promotionsData,
-  isLoading,
-  refetch,
-  isFetching,
-} = useGetPromotions({ search, pages });
-
-const showModal = (modalInfo) => {
-  modalCurrent.value = { ...modalInfo };
-  openModal.value = true;
-};
-
-watchEffect(() => {
-  if (promotionsData.value) {
-    pages.value = promotionsData?.value?.data?.pagination.lastPage;
-  }
-});
-</script>
 <style>
 .promotions {
   padding: 0 24px;

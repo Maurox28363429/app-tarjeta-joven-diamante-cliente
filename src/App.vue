@@ -1,14 +1,11 @@
-<template>
-  <router-view />
-</template>
-
 <script setup>
-import { useGetAppVersion } from "src/querys/versionAppQuerys";
-import { watchEffect, onMounted } from "vue";
 import { useQuasar } from "quasar";
+import { watchEffect, onMounted } from "vue";
+import { useGetAppVersion } from "src/querys/versionAppQuerys";
+
+const $q = useQuasar();
 
 const { data: versionApp, isLoading } = useGetAppVersion();
-const $q = useQuasar();
 
 function alertMessage() {
   $q.dialog({
@@ -56,3 +53,7 @@ watchEffect(() => {
   }
 });
 </script>
+
+<template>
+  <router-view />
+</template>

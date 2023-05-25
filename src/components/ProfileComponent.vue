@@ -1,3 +1,130 @@
+<script setup>
+import { ref, watch, defineProps, computed, watchEffect } from "vue";
+import { userAuth } from "src/composables/userAuth";
+import { useValidateForm } from "src/composables/useValidateForm";
+import { updateProfileShema } from "src/schemas/updateProfileShema";
+import { useUpdateUserMutation } from "src/querys/userQuerys";
+import { useGetStates } from "src/querys/offersQuerys";
+import { convertToFile, openCamera } from "src/utils/openCamera";
+
+const {
+  updatedUser,
+  userData,
+  isLoadingUser,
+  isFetchingUser,
+  isFetchedAfterMountUser,
+  isFetchedUser,
+} = userAuth();
+
+const showDni = ref(false);
+
+const checkFileType = (files) => {
+  return files.filter(
+    (file) =>
+      file.type === "image/jpeg" ||
+      file.type === "image/png" ||
+      file.type === "application/pdf"
+  );
+};
+
+const props = defineProps({
+  user: {
+    type: String,
+    required: true,
+  },
+});
+
+const { data } = useGetStates({});
+
+const provinceOptions = computed(() =>
+  data.value?.data?.map(({ name }) => {
+    return name;
+  })
+);
+
+const isBusiness = props.user === "business";
+
+let genderCurrent = { label: "", value: "" };
+
+const GENDER_OPTIONS = [
+  { label: "Mujer", value: 0 },
+  { label: "Hombre", value: 1 },
+];
+
+const file = ref(userData.value?.img_url ?? "");
+
+const { useForm, validatInput, validateMessage, validateForm } =
+  useValidateForm({ initialValue: {}, schema: updateProfileShema });
+
+watchEffect(() => {
+  if (useForm.value?.provincia?.length > 2 && userData.value) {
+    useForm.value?.provincia.pop();
+  }
+});
+
+watch([userData, isFetchedAfterMountUser, isFetchedUser], () => {
+  if (userData.value && !isFetchingUser.value) {
+    genderCurrent = GENDER_OPTIONS.find((item) => {
+      return item.value === Number(userData.value?.sex);
+    });
+    file.value = userData.value?.img_url;
+    useForm.value = {
+      provincia: Array.isArray(userData.value.provincia)
+        ? userData.value.provincia
+        : JSON.parse(userData.value.provincia),
+      name: userData.value?.name,
+      email: userData.value?.email,
+      last_name: userData.value?.last_name,
+      phone: userData.value?.phone,
+      sex: genderCurrent,
+      address: userData.value?.address,
+      img: null,
+      dni: userData.value?.dni,
+      beneficiario_poliza_cedula: userData.value?.beneficiario_poliza_cedula,
+      beneficiario_poliza_name: userData.value?.beneficiario_poliza_name || "",
+      fecha_nacimiento: userData.value?.fecha_nacimiento || "",
+    };
+  }
+});
+
+console.log(userData.value?.beneficiario_poliza_cedula, "poliza");
+
+const onPhotoDataSuccess = (imageData) => {
+  const img = "data:image/jpeg;base64," + imageData;
+  useForm.value.dni = convertToFile(img);
+};
+
+const onFail = (message) => {
+  alert("Failed because: " + message);
+};
+
+const handledCamera = () => {
+  openCamera(onPhotoDataSuccess, onFail);
+};
+
+const { isLoading, mutateAsync } = useUpdateUserMutation();
+
+const uploadImg = (event) => {
+  const image = event.target.files[0];
+  useForm.value.img = image;
+  file.value = URL.createObjectURL(image);
+};
+
+const handledUpdateUser = async () => {
+  validateForm();
+
+  const values = {
+    ...useForm.value,
+    role_id: userData.value.role_id,
+    active: userData.value.active,
+    id: userData.value.id,
+    sex: useForm.value.sex?.value,
+  };
+  await mutateAsync({ data: values, id: userData.value.id });
+
+  updatedUser();
+};
+</script>
 <template>
   <q-inner-loading :showing="isLoadingUser">
     <q-spinner-gears size="50px" color="primary" />
@@ -335,134 +462,6 @@
     </q-card>
   </q-dialog>
 </template>
-
-<script setup>
-import { userAuth } from "src/composables/userAuth";
-import { ref, watch, defineProps, computed, watchEffect } from "vue";
-import { useValidateForm } from "src/composables/useValidateForm";
-import { updateProfileShema } from "src/schemas/updateProfileShema";
-import { useUpdateUserMutation } from "src/querys/userQuerys";
-import { useGetStates } from "src/querys/offersQuerys";
-import { convertToFile, openCamera } from "src/utils/openCamera";
-
-const {
-  updatedUser,
-  userData,
-  isLoadingUser,
-  isFetchingUser,
-  isFetchedAfterMountUser,
-  isFetchedUser,
-} = userAuth();
-
-const showDni = ref(false);
-
-const checkFileType = (files) => {
-  return files.filter(
-    (file) =>
-      file.type === "image/jpeg" ||
-      file.type === "image/png" ||
-      file.type === "application/pdf"
-  );
-};
-
-const props = defineProps({
-  user: {
-    type: String,
-    required: true,
-  },
-});
-
-const { data } = useGetStates({});
-
-const provinceOptions = computed(() =>
-  data.value?.data?.map(({ name }) => {
-    return name;
-  })
-);
-
-const isBusiness = props.user === "business";
-
-let genderCurrent = { label: "", value: "" };
-
-const GENDER_OPTIONS = [
-  { label: "Mujer", value: 0 },
-  { label: "Hombre", value: 1 },
-];
-
-const file = ref(userData.value?.img_url ?? "");
-
-const { useForm, validatInput, validateMessage, validateForm } =
-  useValidateForm({ initialValue: {}, schema: updateProfileShema });
-
-watchEffect(() => {
-  if (useForm.value?.provincia?.length > 2 && userData.value) {
-    useForm.value?.provincia.pop();
-  }
-});
-
-watch([userData, isFetchedAfterMountUser, isFetchedUser], () => {
-  if (userData.value && !isFetchingUser.value) {
-    genderCurrent = GENDER_OPTIONS.find((item) => {
-      return item.value === Number(userData.value?.sex);
-    });
-    file.value = userData.value?.img_url;
-    useForm.value = {
-      provincia: Array.isArray(userData.value.provincia)
-        ? userData.value.provincia
-        : JSON.parse(userData.value.provincia),
-      name: userData.value?.name,
-      email: userData.value?.email,
-      last_name: userData.value?.last_name,
-      phone: userData.value?.phone,
-      sex: genderCurrent,
-      address: userData.value?.address,
-      img: null,
-      dni: userData.value?.dni,
-      beneficiario_poliza_cedula: userData.value?.beneficiario_poliza_cedula,
-      beneficiario_poliza_name: userData.value?.beneficiario_poliza_name || "",
-      fecha_nacimiento: userData.value?.fecha_nacimiento || "",
-    };
-  }
-});
-
-console.log(userData.value?.beneficiario_poliza_cedula, "poliza");
-
-const onPhotoDataSuccess = (imageData) => {
-  const img = "data:image/jpeg;base64," + imageData;
-  useForm.value.dni = convertToFile(img);
-};
-
-const onFail = (message) => {
-  alert("Failed because: " + message);
-};
-
-const handledCamera = () => {
-  openCamera(onPhotoDataSuccess, onFail);
-};
-
-const { isLoading, mutateAsync } = useUpdateUserMutation();
-
-const uploadImg = (event) => {
-  const image = event.target.files[0];
-  useForm.value.img = image;
-  file.value = URL.createObjectURL(image);
-};
-
-const handledUpdateUser = async () => {
-  validateForm();
-
-  const values = {
-    ...useForm.value,
-    role_id: userData.value.role_id,
-    active: userData.value.active,
-    id: userData.value.id,
-    sex: useForm.value.sex?.value,
-  };
-  await mutateAsync({ data: values, id: userData.value.id });
-
-  updatedUser();
-};
-</script>
 
 <style scoped>
 .editContainer {

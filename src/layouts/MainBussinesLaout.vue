@@ -1,3 +1,41 @@
+<script setup>
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import { userAuth } from "src/composables/userAuth";
+import QRScanner from "src/components/QRScanner.vue";
+import qrIcon from "./../assets/images/qr.jpg";
+import logo from "../assets/icons/acronimo.svg";
+
+const { userData } = userAuth();
+const { push, go } = useRouter();
+
+const leftDrawerOpen = ref(false);
+const show = ref(false);
+const miniState = ref(true);
+
+const handledReadQr = () => {
+  show.value = !show.value;
+};
+
+const handledLogout = (e) => {
+  e.preventDefault();
+  localStorage.removeItem("user");
+  push("/login");
+};
+
+const toggleLeftDrawer = () => {
+  leftDrawerOpen.value = true;
+  miniState.value = !miniState.value;
+};
+
+const drawerClick = (e) => {
+  if (miniState.value) {
+    miniState.value = false;
+    e.stopPropagation();
+  }
+};
+</script>
+
 <template>
   <q-layout view="hHh lpR fFf">
     <q-header
@@ -19,7 +57,7 @@
           color="dark"
           @click="toggleLeftDrawer"
         />
-        <div @click="goBack">
+        <div @click="go(-1)">
           <q-icon
             name="arrow_back"
             size="md"
@@ -29,10 +67,13 @@
         </div>
         <q-toolbar-title class="row items-center">
           <q-img
-            src="../assets/icons/acronimo.svg"
+            :src="logo"
             spinner-color="dark"
-            @click="goHome"
-            style="height: 32px; max-width: 74px; cursor: pointer"
+            @click="push('/empresa')"
+            class="cursor-pointer"
+            height="32px"
+            width="74px"
+            alt="Logo"
           />
         </q-toolbar-title>
         <q-btn
@@ -157,56 +198,44 @@
     <div class="q-px-sm q-py-lg">
       <div class="qrButton">
         <q-btn round size="md" color="primary" @click="handledReadQr">
-          <img
-            src="./../assets/images/qr.jpg"
-            style="width: 24px; height: 24px"
-          />
+          <q-img :src="qrIcon" width="24px" height="24px" alt="QR" />
         </q-btn>
       </div>
     </div>
     <q-tabs
-      style="position: fixed; z-index: 100; bottom: 0; width: 100%"
+      style="z-index: 100"
       dense
-      class="menuMobile bg-primary text-white justify-center"
+      class="menuMobile bg-primary text-white justify-center full-width fixed-bottom"
       align="center"
       narrow-indicator
     >
-      <router-link
+      <q-route-tab
+        name="cuenta"
+        label="Cuenta"
+        color="white"
+        class="text-capitalize q-px-none"
+        icon="person"
         to="/empresa/account"
-        style="text-decoration: none; color: #ffff; width: 100%; margin: none"
-      >
-        <q-tab
-          name="cuenta"
-          label="Cuenta"
-          color="white"
-          class="text-capitalize q-px-none"
-          icon="person"
-        />
-      </router-link>
-      <router-link
+        exact
+      />
+      <q-route-tab
+        name="Ordenes"
+        label="Ordenes"
+        color="white"
+        class="text-capitalize q-px-none"
+        icon="receipt_long"
         to="/empresa/orders"
-        style="text-decoration: none; color: #ffff; width: 100%; margin: none"
-      >
-        <q-tab
-          name="Ordenes"
-          label="Ordenes"
-          color="white"
-          class="text-capitalize q-px-none"
-          icon="receipt_long"
-        />
-      </router-link>
-      <router-link
+        exact
+      />
+      <q-route-tab
+        name="crear order"
         to="/empresa/create-order"
-        style="text-decoration: none; color: #ffff; width: 100%; margin: none"
-      >
-        <q-tab
-          name="crear order"
-          label="Crear orden"
-          color="white"
-          class="text-capitalize q-px-none"
-          icon="border_color"
-        />
-      </router-link>
+        label="Crear orden"
+        color="white"
+        class="text-capitalize q-px-none"
+        icon="border_color"
+        exact
+      />
     </q-tabs>
   </q-layout>
 </template>
@@ -256,47 +285,3 @@ aside {
   }
 }
 </style>
-
-<script setup>
-import { ref } from "vue";
-import { useRouter } from "vue-router";
-import QRScanner from "src/components/QRScanner.vue";
-import { userAuth } from "src/composables/userAuth";
-
-const { userData } = userAuth();
-const router = useRouter();
-
-const leftDrawerOpen = ref(false);
-const show = ref(false);
-const miniState = ref(true);
-
-const goHome = () => {
-  router.push("/empresa");
-};
-
-const handledReadQr = () => {
-  show.value = !show.value;
-};
-
-const handledLogout = (e) => {
-  e.preventDefault();
-  localStorage.removeItem("user");
-  router.push("/login");
-};
-
-const toggleLeftDrawer = () => {
-  leftDrawerOpen.value = true;
-  miniState.value = !miniState.value;
-};
-
-const drawerClick = (e) => {
-  if (miniState.value) {
-    miniState.value = false;
-    e.stopPropagation();
-  }
-};
-
-const goBack = () => {
-  router.go(-1);
-};
-</script>

@@ -1,6 +1,34 @@
+<script setup>
+import { useRouter } from "vue-router";
+import { emailSchema } from "src/schemas/emailShema";
+import { useRecoveryPasswordStore } from "src/stores/recoveryPasswordStore";
+import { useValidateForm } from "src/composables/useValidateForm";
+import { useSendEmail } from "src/querys/userQuerys";
+
+const { go } = useRouter();
+
+const INITIAL_VALUES = {
+  email: "",
+};
+
+const { useForm, validatInput, validateMessage } = useValidateForm({
+  initialValue: INITIAL_VALUES,
+  schema: emailSchema,
+});
+
+const recoveryPasswordStore = useRecoveryPasswordStore();
+
+const { mutate, isLoading } = useSendEmail();
+
+const sendEmail = async () => {
+  mutate({ email: useForm.value.email });
+  recoveryPasswordStore.setEmail(useForm.value.email);
+};
+</script>
+
 <template>
   <div class="full-width">
-    <div @click="goBack" class="full-width q-pl-md q-pt-md">
+    <div @click="go(-1)" class="full-width q-pl-md q-pt-md">
       <q-icon name="arrow_back" size="md" color="dark" class="cursor-pointer" />
     </div>
     <div class="full-width row justify-center">
@@ -47,35 +75,3 @@
     </div>
   </div>
 </template>
-
-<script setup>
-import { useRouter } from "vue-router";
-import { emailSchema } from "src/schemas/emailShema";
-import { useRecoveryPasswordStore } from "src/stores/recoveryPasswordStore";
-import { useValidateForm } from "src/composables/useValidateForm";
-import { useSendEmail } from "src/querys/userQuerys";
-
-const router = useRouter();
-
-const goBack = () => {
-  router.go(-1);
-};
-
-const INITIAL_VALUES = {
-  email: "",
-};
-
-const { useForm, validatInput, validateMessage } = useValidateForm({
-  initialValue: INITIAL_VALUES,
-  schema: emailSchema,
-});
-
-const recoveryPasswordStore = useRecoveryPasswordStore();
-
-const { mutate, isLoading } = useSendEmail();
-
-const sendEmail = async () => {
-  mutate({ email: useForm.value.email });
-  recoveryPasswordStore.setEmail(useForm.value.email);
-};
-</script>

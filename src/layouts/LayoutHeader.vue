@@ -1,12 +1,18 @@
+<script setup>
+import logo from "../assets/icons/acronimo.svg";
+</script>
+
 <template>
   <q-layout view="hHh lpR fFf">
     <q-header elevated class="q-py-sm" style="background: #e9e9e9">
       <q-toolbar>
         <q-toolbar-title>
           <q-img
-            src="../assets/icons/acronimo.svg"
+            :src="logo"
             spinner-color="white"
-            style="height: 40px; max-width: 98px"
+            height="40px"
+            width="98px"
+            alt="Logo"
           />
         </q-toolbar-title>
       </q-toolbar>

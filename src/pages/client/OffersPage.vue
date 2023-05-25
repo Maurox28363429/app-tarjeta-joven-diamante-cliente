@@ -1,3 +1,30 @@
+<script setup>
+import { ref, watchEffect } from "vue";
+import { useRoute } from "vue-router";
+import { useGetOffersFromBusiness } from "src/querys/offersQuerys";
+import CardOffers from "src/components/CardOffers.vue";
+
+const currentPaginate = ref(1);
+const pages = ref(0);
+const search = ref("");
+
+const { params } = useRoute();
+const state = ref(params.countryName);
+
+const { data, isLoading, refetch, isFetching } = useGetOffersFromBusiness({
+  search,
+  page: currentPaginate,
+  dir: state,
+});
+
+watchEffect(() => {
+  if (data.value) {
+    currentPaginate.value = data.value?.pagination.currentPage;
+    pages.value = data.value?.pagination.lastPage;
+  }
+});
+</script>
+
 <template>
   <div class="q-px-md">
     <div>
@@ -55,15 +82,27 @@
           <p class="title-medium">No hay ofertas</p>
         </div>
         <template v-if="!isLoading">
-          <div v-for="items in data?.data" :key="items.id">
+          <div
+            v-for="{
+              id,
+              comercio,
+              description,
+              img_array_url,
+              nombre,
+              price_total,
+              link_map,
+              descuento,
+            } in data?.data"
+            :key="id"
+          >
             <CardOffers
-              :commerceName="items.comercio.name"
-              :description="items.description"
-              :images="items.img_array_url"
-              :name="items.nombre"
-              :totalPrice="items.price_total"
-              :discount="items.descuento"
-              :mapLink="items.link_map"
+              :commerceName="comercio.name"
+              :description="description"
+              :images="img_array_url"
+              :name="nombre"
+              :totalPrice="price_total"
+              :discount="descuento"
+              :mapLink="link_map"
             />
           </div>
         </template>
@@ -73,42 +112,15 @@
       >
         <q-pagination
           v-if="!isLoading"
-          style="margin-top: 1em"
+          class="q-mt-lg"
           v-model="currentPaginate"
-          :max="paginas"
+          :max="pages"
           boundary-numbers
         />
       </div>
     </div>
   </div>
 </template>
-
-<script setup>
-import { ref, watchEffect } from "vue";
-import { useGetOffersFromBusiness } from "src/querys/offersQuerys";
-import { useRoute } from "vue-router";
-import CardOffers from "src/components/CardOffers.vue";
-
-const currentPaginate = ref(1);
-const paginas = ref(0);
-const search = ref("");
-
-const route = useRoute();
-const state = ref(route.params.countryName);
-
-const { data, isLoading, refetch, isFetching } = useGetOffersFromBusiness({
-  search,
-  page: currentPaginate,
-  dir: state,
-});
-
-watchEffect(() => {
-  if (data.value) {
-    currentPaginate.value = data.value?.pagination.currentPage;
-    paginas.value = data.value?.pagination.lastPage;
-  }
-});
-</script>
 
 <style>
 .innerLoading {

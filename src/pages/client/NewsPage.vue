@@ -1,3 +1,38 @@
+<script setup>
+import { ref, watchEffect } from "vue";
+import { useGetNewsInformative } from "src/querys/newsQuerys";
+
+const openModal = ref(false);
+const modalCurrent = ref({});
+const currentPaginate = ref(1);
+
+const pages = ref(1);
+const search = ref("");
+
+const {
+  data: NewsData,
+  isLoading,
+  refetch,
+  isFetching,
+} = useGetNewsInformative({ search, pages });
+
+const showModal = (modalInfo) => {
+  modalCurrent.value = { ...modalInfo };
+  openModal.value = true;
+  console.log(modalInfo, "informacion de modal");
+};
+
+watchEffect(() => {
+  if (NewsData.value) {
+    pages.value = NewsData?.value?.data?.pagination.lastPage;
+  }
+});
+
+const handleSearch = () => {
+  refetch();
+};
+</script>
+
 <template>
   <div class="promotions">
     <!-- Título y campo de búsqueda -->
@@ -59,17 +94,21 @@
         </template>
 
         <template v-else>
-          <template v-for="item in NewsData?.data?.data" :key="item.id">
+          <template
+            v-for="{ descripcion, img_url, titulo, id, ...item } in NewsData
+              ?.data?.data"
+            :key="id"
+          >
             <q-card class="news-card">
               <q-img
-                :src="item.img_url"
+                :src="img_url"
                 spinner-color="dark"
                 class="news-image"
                 fit="contain"
               />
 
               <q-card-section>
-                <div class="news-title line-clamp-2">{{ item.titulo }}</div>
+                <div class="news-title line-clamp-2">{{ titulo }}</div>
               </q-card-section>
 
               <q-card-section
@@ -77,7 +116,7 @@
                 style="min-height: 100px; justify-content: end"
               >
                 <p class="news-description line-clamp-3">
-                  {{ item.descripcion }}
+                  {{ descripcion }}
                 </p>
               </q-card-section>
 
@@ -125,39 +164,6 @@
     </q-dialog>
   </div>
 </template>
-<script setup>
-import { ref, watchEffect } from "vue";
-import { useGetNewsInformative } from "src/querys/newsQuerys";
-
-const openModal = ref(false);
-const modalCurrent = ref({});
-const currentPaginate = ref(1);
-
-const pages = ref(1);
-const search = ref("");
-
-const {
-  data: NewsData,
-  isLoading,
-  refetch,
-  isFetching,
-} = useGetNewsInformative({ search, pages });
-
-const showModal = (modalInfo) => {
-  modalCurrent.value = { ...modalInfo };
-  openModal.value = true;
-};
-
-watchEffect(() => {
-  if (NewsData.value) {
-    pages.value = NewsData?.value?.data?.pagination.lastPage;
-  }
-});
-
-const handleSearch = () => {
-  refetch();
-};
-</script>
 <style>
 .promotions {
   padding: 0 24px;

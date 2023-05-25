@@ -1,54 +1,8 @@
-<template>
-  <div v-if="!loading">
-    <div
-      class="column items-center justify-center items-center"
-      style="min-height: 327px; width: 100%"
-    >
-      <video
-        id="video"
-        v-if="staredScan"
-        style="width: 100%; height: 327px; object-fit: cover"
-        autoplay
-      ></video>
-      <p v-if="!staredScan" class="q-ma-none q-pa-none">Haz click a scanear</p>
-      <q-select
-        class="q-my-md q-px-md"
-        outlined
-        v-model="selectedDeviceId"
-        :options="videoInputDevices"
-        label="camaras"
-      />
-    </div>
-    <q-card-actions align="center">
-      <q-btn
-        size="md"
-        class="button"
-        @click="startDecode"
-        label="scanear"
-        color="primary"
-      />
-      <q-btn
-        size="md"
-        class="button"
-        @click="reset"
-        label="reset"
-        color="secondary"
-      />
-    </q-card-actions>
-  </div>
-  <q-spinner color="white" size="xs" />
-  <q-inner-loading
-    :showing="loading"
-    label-class="text-teal"
-    label-style="font-size: 1.1em"
-  />
-</template>
-
 <script setup>
-import { BrowserMultiFormatReader, NotFoundException } from "@zxing/library";
 import { ref, onMounted, defineEmits, defineProps } from "vue";
-import { useToast } from "src/composables/useToast";
 import { useRouter } from "vue-router";
+import { BrowserMultiFormatReader, NotFoundException } from "@zxing/library";
+import { useToast } from "src/composables/useToast";
 import { userCart } from "src/stores/userCart";
 
 defineProps({
@@ -146,7 +100,7 @@ function addPermision() {
   ) {
     // Solicitar permiso de cámara
     const permissions = window.cordova.plugins.permissions;
-    console.log("estoy en cordova", permissions);
+
     permissions.requestPermission(
       permissions.CAMERA,
       function (status) {
@@ -173,3 +127,48 @@ function addPermision() {
   }
 }
 </script>
+<template>
+  <div v-if="!loading">
+    <div
+      class="column items-center justify-center items-center"
+      style="min-height: 327px; width: 100%"
+    >
+      <video
+        id="video"
+        v-if="staredScan"
+        style="width: 100%; height: 327px; object-fit: cover"
+        autoplay
+      ></video>
+      <p v-if="!staredScan" class="q-ma-none q-pa-none">Haz click a scanear</p>
+      <q-select
+        class="q-my-md q-px-md"
+        outlined
+        v-model="selectedDeviceId"
+        :options="videoInputDevices"
+        label="camaras"
+      />
+    </div>
+    <q-card-actions align="center">
+      <q-btn
+        size="md"
+        class="button"
+        @click="startDecode"
+        label="scanear"
+        color="primary"
+      />
+      <q-btn
+        size="md"
+        class="button"
+        @click="reset"
+        label="reset"
+        color="secondary"
+      />
+    </q-card-actions>
+  </div>
+  <q-spinner color="white" size="xs" />
+  <q-inner-loading
+    :showing="loading"
+    label-class="text-teal"
+    label-style="font-size: 1.1em"
+  />
+</template>

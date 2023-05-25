@@ -1,3 +1,31 @@
+<script setup>
+import { ref, watchEffect } from "vue";
+import { useRoute } from "vue-router";
+import CardOffers from "src/components/CardOffers.vue";
+
+import { useGetUniversities } from "src/querys/offersQuerys";
+
+const currentPaginate = ref(1);
+const pages = ref(0);
+const search = ref("");
+
+const route = useRoute();
+const state = ref(route.params.countryName);
+
+const { data, isLoading, refetch, isFetching } = useGetUniversities({
+  search,
+  page: currentPaginate,
+  dir: state,
+});
+
+watchEffect(() => {
+  if (data.value) {
+    currentPaginate.value = data.value?.pagination.currentPage;
+    pages.value = data.value?.pagination.lastPage;
+  }
+});
+</script>
+
 <template>
   <div class="q-px-md">
     <div>
@@ -55,12 +83,21 @@
           <p class="title-medium">No hay ofertas</p>
         </div>
         <template v-if="!isLoading">
-          <template v-for="items in data?.data" :key="items.id">
+          <template
+            v-for="{
+              description,
+              img_array_url,
+              nombre,
+              link_map,
+              id,
+            } in data?.data"
+            :key="id"
+          >
             <CardOffers
-              :description="items.description"
-              :images="items.img_array_url"
-              :name="items.nombre"
-              :mapLink="items.link_map"
+              :description="description"
+              :images="img_array_url"
+              :name="nombre"
+              :mapLink="link_map"
               :withModal="true"
             />
           </template>
@@ -73,41 +110,13 @@
           v-if="!isLoading"
           style="margin-top: 1em"
           v-model="currentPaginate"
-          :max="paginas"
+          :max="pages"
           boundary-numbers
         />
       </div>
     </div>
   </div>
 </template>
-
-<script setup>
-import { ref, watchEffect } from "vue";
-import { useRoute } from "vue-router";
-import CardOffers from "src/components/CardOffers.vue";
-
-import { useGetUniversities } from "src/querys/offersQuerys";
-
-const currentPaginate = ref(1);
-const paginas = ref(0);
-const search = ref("");
-
-const route = useRoute();
-const state = ref(route.params.countryName);
-
-const { data, isLoading, refetch, isFetching } = useGetUniversities({
-  search,
-  page: currentPaginate,
-  dir: state,
-});
-
-watchEffect(() => {
-  if (data.value) {
-    currentPaginate.value = data.value?.pagination.currentPage;
-    paginas.value = data.value?.pagination.lastPage;
-  }
-});
-</script>
 
 <style>
 .innerLoading {

@@ -1,34 +1,3 @@
-<template>
-  <div class="pin-input">
-    <div class="pin-input-container">
-      <input
-        v-for="(item, index) in values"
-        :key="index"
-        class="pin-input-box"
-        type="text"
-        :value="item"
-        maxlength="1"
-        @keydown="handleKeyDown($event, index)"
-        @input="handleInput($event, index)"
-        @paste="handlePaste($event)"
-        :ref="'input-' + index"
-        :data-index="index"
-      />
-    </div>
-    <q-btn
-      @click="() => submit(values.join(''))"
-      label="Enviar código"
-      :loading="loading"
-      size="14px"
-      fill
-      height="48px"
-      color="primary"
-      class="full-width q-mb-md"
-      type="submit"
-    />
-  </div>
-</template>
-
 <script setup>
 import { ref } from "vue";
 import { useToast } from "src/composables/useToast";
@@ -101,6 +70,37 @@ function handlePaste(event) {
   }
 }
 </script>
+
+<template>
+  <div class="pin-input">
+    <div class="pin-input-container">
+      <input
+        v-for="(item, index) in values"
+        :key="index"
+        class="pin-input-box"
+        type="text"
+        :value="item"
+        maxlength="1"
+        @keydown="handleKeyDown($event, index)"
+        @input="handleInput($event, index)"
+        @paste="handlePaste($event)"
+        :ref="'input-' + index"
+        :data-index="index"
+      />
+    </div>
+    <q-btn
+      @click="() => submit(values.join(''))"
+      label="Enviar código"
+      :loading="loading"
+      size="14px"
+      fill
+      height="48px"
+      color="primary"
+      class="full-width q-mb-md"
+      type="submit"
+    />
+  </div>
+</template>
 
 <style scoped>
 .pin-input {

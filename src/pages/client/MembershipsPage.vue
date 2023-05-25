@@ -1,23 +1,18 @@
 <script setup>
-import MembershipsCard from "src/components/MembershipsCard.vue";
 import { useRouter } from "vue-router";
+import MembershipsCard from "src/components/MembershipsCard.vue";
 import { useMemberships } from "src/composables/useMemberships";
 
-const router = useRouter();
-const arr = new Array(2).fill(0);
+const { go } = useRouter();
 
 const { loading, memberships } = useMemberships();
-
-const goBack = () => {
-  router.go(-1);
-};
 </script>
 
 <template>
   <div class="memberships">
     <div class="background_blue"></div>
 
-    <div @click="goBack" class="back-button">
+    <div @click="go(-1)" class="back-button">
       <q-icon
         name="arrow_back"
         size="md"
@@ -38,18 +33,21 @@ const goBack = () => {
         </p>
       </div>
       <div class="memberships_plans width-full q-pb-xl" v-if="!loading">
-        <template v-for="membership in memberships" :key="membership.id">
+        <template
+          v-for="{ id, image, name, price, benefits } in memberships"
+          :key="id"
+        >
           <MembershipsCard
-            :image="membership.image"
-            :name="membership.name"
-            :price="membership.price"
-            :benefits="membership.benefits"
-            :id="membership.id"
+            :image="image"
+            :name="name"
+            :price="price"
+            :benefits="benefits"
+            :id="id"
           />
         </template>
       </div>
       <div class="memberships_plans width-full q-pb-xl" v-if="loading">
-        <template v-for="(items, index) in arr" :key="index">
+        <template v-for="(items, index) in 2" :key="index">
           <q-card class="membership-card-skeleton">
             <q-item class="row justify-center full-width">
               <q-item-section avatar>

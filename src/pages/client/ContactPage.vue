@@ -1,8 +1,17 @@
+<script setup>
+import contactImg from "../../assets/images/contact.png";
+
+const INSTAGRAM_URL = "https://www.instagram.com/tarjetajovendiamante/";
+const EMAIL_URL =
+  "https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=informacion@tarjetajovendiamante.com";
+const WEB_URL = "https://www.tarjetajovendiamante.com/";
+</script>
+
 <template>
   <div
     class="full-width q-py-xl column justify-center items-center q-gutter-y-md"
   >
-    <q-img src="../../assets/images/contact.png" width="360px" height="240px" />
+    <q-img :src="contactImg" width="360px" height="240px" alt="contact image" />
     <ul class="d style">
       <li class="row items-center">
         <q-icon name="email" class="q-mr-xs" />
@@ -22,32 +31,18 @@
       >
         <q-btn round color="positive" size="md" icon="la la-whatsapp" />
       </a>
-      <a
-        href="https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=informacion@tarjetajovendiamante.com"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
+      <a :href="EMAIL_URL" target="_blank" rel="noopener noreferrer">
         <q-btn round color="primary" size="md" icon="email" />
       </a>
-      <a
-        href="https://www.instagram.com/tarjetajovendiamante/"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
+      <a :href="INSTAGRAM_URL" target="_blank" rel="noopener noreferrer">
         <q-btn round icon="la la-instagram" color="purple-4" size="md"
       /></a>
-      <a
-        href="https://www.tarjetajovendiamante.com/"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
+      <a :href="WEB_URL" target="_blank" rel="noopener noreferrer">
         <q-btn round icon="language" color="primary" size="md"
       /></a>
     </div>
   </div>
 </template>
-
-<script setup></script>
 
 <style scoped>
 .my-card {

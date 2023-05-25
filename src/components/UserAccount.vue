@@ -1,3 +1,28 @@
+<script setup>
+import { defineProps } from "vue";
+import { useRouter } from "vue-router";
+import { userAuth } from "src/composables/userAuth";
+
+const { userData, isLoadingUser } = userAuth();
+
+const props = defineProps({
+  user: {
+    type: String,
+    required: true,
+  },
+});
+
+const isBusiness = props.user === "business";
+
+const router = useRouter();
+
+const handledLogout = (e) => {
+  e.preventDefault();
+  localStorage.removeItem("user");
+  router.push("/login");
+};
+</script>
+
 <template>
   <q-inner-loading :showing="isLoadingUser">
     <q-spinner-gears size="50px" color="primary" />
@@ -68,28 +93,3 @@
     </div>
   </div>
 </template>
-
-<script setup>
-import { defineProps } from "vue";
-import { useRouter } from "vue-router";
-import { userAuth } from "src/composables/userAuth";
-
-const { userData, isLoadingUser } = userAuth();
-
-const props = defineProps({
-  user: {
-    type: String,
-    required: true,
-  },
-});
-
-const isBusiness = props.user === "business";
-
-const router = useRouter();
-
-const handledLogout = (e) => {
-  e.preventDefault();
-  localStorage.removeItem("user");
-  router.push("/login");
-};
-</script>

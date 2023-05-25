@@ -1,3 +1,24 @@
+<script setup>
+import { computed } from "vue";
+import { userAuth } from "src/composables/userAuth";
+import logo from "../../assets/images/t.webp";
+
+const { userData, isLoadingUser } = userAuth();
+
+const isMembershipsActive = computed(() => {
+  return userData.value?.membresia?.status === "activa";
+});
+
+const getDate = (fechaString) => {
+  const date = new Date(fechaString);
+  const day = date.getDate();
+  const month = date.getMonth() + 1;
+  const year = date.getFullYear();
+
+  return `${day}/${month}/${year}`;
+};
+</script>
+
 <template>
   <q-inner-loading :showing="isLoadingUser">
     <q-spinner-gears size="50px" color="primary" />
@@ -8,9 +29,11 @@
       v-if="!isLoadingUser"
     >
       <q-img
-        src="../../assets/images/t.webp"
-        spinner-color="white"
-        style="height: 200px; max-width: 200px"
+        :src="logo"
+        spinner-color="dark"
+        height="200px"
+        width="200px"
+        alt="logo"
       />
 
       <p
@@ -46,26 +69,6 @@
     </div>
   </div>
 </template>
-
-<script setup>
-import { userAuth } from "src/composables/userAuth";
-import { computed } from "vue";
-
-const { userData, isLoadingUser } = userAuth();
-
-const isMembershipsActive = computed(() => {
-  return userData.value?.membresia?.status === "activa";
-});
-
-const getDate = (fechaString) => {
-  const date = new Date(fechaString);
-  const day = date.getDate();
-  const month = date.getMonth() + 1; // Los meses en JavaScript empiezan desde cero, por lo que debemos sumar 1
-  const year = date.getFullYear();
-
-  return `${day}/${month}/${year}`;
-};
-</script>
 
 <style>
 .maxText {

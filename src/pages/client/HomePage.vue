@@ -1,39 +1,71 @@
+<script setup>
+import { ref } from "vue";
+import homeIcon from "../../assets/images/homeIcon.webp";
+import HomeCard from "src/components/HomeCard.vue";
+import { HOME_CARD_LIST } from "src/shared/constansts/homeCardList";
+
+const showModal = ref(false);
+
+const POLICY_COLUMNS = [
+  { name: "cobertura", align: "left", label: "Cobertura", field: "cobertura" },
+  {
+    name: "limite",
+    label: "Límite",
+    align: "left",
+    field: "limite",
+  },
+];
+
+const POLICY_ROWS = [
+  {
+    cobertura: "Gastos Médicos por Accidente",
+    limite: "$150",
+  },
+  {
+    cobertura: "Muerte Accidental",
+    limite: "$1,500",
+  },
+  {
+    cobertura: "Traslado terrestre o aéreo por accidente",
+    limite: "$150",
+  },
+];
+</script>
+
 <template>
   <div class="q-pa-md">
     <div class="full-width column items-center">
       <q-img
-        src="../../assets/images/homeIcon.webp"
+        :src="homeIcon"
         spinner-color="dark"
-        style="height: 40px; max-width: 40px"
+        height="40px"
+        width="40px"
+        alt="home icon"
       />
       <p class="q-ma-none text-center title-large">Home Page</p>
     </div>
     <div class="cardList">
-      <div v-for="card in HOME_CARD_LIST" :key="card.id">
+      <div
+        v-for="{ id, title, icon, link, enabled, evento } in HOME_CARD_LIST"
+        :key="id"
+      >
         <HomeCard
-          :title="card.title"
-          :icon="card.icon"
-          :link="card.link"
-          :enabled="card.enabled"
-          v-if="!card.evento"
+          :title="title"
+          :icon="icon"
+          :link="link"
+          :enabled="enabled"
+          v-if="!evento"
         />
         <HomeCard
-          :title="card.title"
-          :icon="card.icon"
-          :enabled="card.enabled"
-          :link="card.link"
-          v-if="card.evento"
+          :title="title"
+          :icon="icon"
+          :enabled="enabled"
+          :link="link"
+          v-if="evento"
           @click="showModal = true"
         />
       </div>
     </div>
-    <!--     <div class="full-width row justify-center q-my-xl">
-      <q-btn
-        @click="showModal = true"
-        color="primary"
-        label="Seguro de accidentes personales 24/7"
-      />
-    </div> -->
   </div>
 
   <q-dialog v-model="showModal">
@@ -49,8 +81,8 @@
               :dense="$q.screen.lt.md"
               flat
               bordered
-              :rows="rows"
-              :columns="columns"
+              :rows="POLICY_ROWS"
+              :columns="POLICY_COLUMNS"
               row-key="name"
               separator="cell"
               hide-bottom
@@ -94,39 +126,6 @@
     </q-card>
   </q-dialog>
 </template>
-
-<script setup>
-import HomeCard from "src/components/HomeCard.vue";
-import { HOME_CARD_LIST } from "src/shared/constansts/homeCardList";
-import { ref } from "vue";
-
-const showModal = ref(false);
-
-const columns = [
-  { name: "cobertura", align: "left", label: "Cobertura", field: "cobertura" },
-  {
-    name: "limite",
-    label: "Límite",
-    align: "left",
-    field: "limite",
-  },
-];
-
-const rows = [
-  {
-    cobertura: "Gastos Médicos por Accidente",
-    limite: "$150",
-  },
-  {
-    cobertura: "Muerte Accidental",
-    limite: "$1,500",
-  },
-  {
-    cobertura: "Traslado terrestre o aéreo por accidente",
-    limite: "$150",
-  },
-];
-</script>
 
 <style>
 .cardList {
