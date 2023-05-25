@@ -1,12 +1,11 @@
 <script setup>
 import { useQuasar } from "quasar";
-import { ref, computed, watch } from "vue";
+import { ref, computed, watch, watchEffect } from "vue";
 import { useRouter } from "vue-router";
 import { userAuth } from "src/composables/userAuth";
 import { useUpdateUserMutation } from "src/querys/userQuerys";
 import { convertToFile, openCamera } from "src/utils/openCamera";
 import QrUser from "../components/QrUser.vue";
-import UpdateMembershipModal from "../components/UpdateMembershipModal.vue";
 import triangle from "../assets/images/triangulo.png";
 import qrIcon from "./../assets/images/qr.jpg";
 import logo from "../assets/icons/acronimo.svg";
@@ -19,16 +18,34 @@ const policyRequestForm = ref(false);
 const beneficiario_poliza_cedula = ref("");
 const beneficiario_poliza_name = ref("");
 const leftDrawerOpen = ref(false);
-const showQr = ref(false);
+const show = ref(false);
 const miniState = ref(true);
+const isNoMembership = ref(false);
+const isSoonExpires = ref(false);
 
 const { push, go } = useRouter();
 
+const messageToGetMembership = computed(() => {
+  if (
+    userData.value?.membresia?.type === "permitir_gratuita" &&
+    userData.value?.membresia?.status === "vencida"
+  ) {
+    return "Hola! Bienvenido a Tarjeta Joven Diamante, debes seleccionar un plan para poder disfrutar de los beneficios";
+  } else if (
+    userData.value?.membresia?.type === "Prueba" &&
+    userData.value?.membresia?.status === "vencida"
+  ) {
+    return "Hola, gracias por formar parte de Tarjeta Joven Diamante, te informamos que debes renovar tu membresía para seguir disfrutando de los beneficios.";
+  } else {
+    return "";
+  }
+});
+
 const { isLoading, mutateAsync } = useUpdateUserMutation();
 
-watch(showQr, () => {
+watch(show, () => {
   if (window.plugins?.preventscreenshot && window.cordova) {
-    if (showQr.value) {
+    if (show.value) {
       window.plugins.preventscreenshot.disable();
       console.log("disable screenshot");
     } else {
@@ -38,19 +55,36 @@ watch(showQr, () => {
   }
 });
 
-const showModalIsExpired = computed(
-  () =>
-    userData?.value?.membresia?.status === "vencida" &&
-    userData?.value?.membresia?.type === "Comprada"
-);
+watchEffect(() => {
+  if (
+    userData.value?.membresia?.type === "permitir_gratuita" ||
+    userData.value?.membresia?.status === "vencida"
+  ) {
+    isNoMembership.value = true;
+  } else if (
+    userData.value?.membresia?.days <= 15 &&
+    userData.value?.membresia?.status === "activa"
+  ) {
+    isSoonExpires.value = true;
+  } else {
+    isNoMembership.value = false;
+    isSoonExpires.value = false;
+  }
+});
 
-const showModalNew = computed(
-  () => userData?.value?.membresia?.type === "permitir_gratuita"
-);
-
-const handleModal = () => {
-  showQr.value = true;
-};
+watchEffect(() => {
+  if (userData.value?.membresia?.type === "Comprada") {
+    console.log("membresia comprada");
+    if (
+      userData.value.beneficiario_poliza_cedula === null ||
+      userData.value.beneficiario_poliza_name === null ||
+      userData.value.dni === null
+    ) {
+      console.log("sin poliza");
+      policyRequestForm.value = true;
+    }
+  }
+});
 
 const handledLogout = (e) => {
   e.preventDefault();
@@ -70,20 +104,6 @@ const drawerClick = (e) => {
     e.stopPropagation();
   }
 };
-
-watch(userData, () => {
-  if (userData.value?.membresia?.type === "Comprada") {
-    console.log("membresia comprada");
-    if (
-      userData.value.beneficiario_poliza_cedula === null ||
-      userData.value.beneficiario_poliza_name === null ||
-      userData.value.dni === null
-    ) {
-      console.log("sin poliza");
-      policyRequestForm.value = true;
-    }
-  }
-});
 
 const checkFileType = (files) => {
   return files.filter(
@@ -365,31 +385,83 @@ const handledUpdateUser = async () => {
         </q-card>
       </q-dialog>
 
+      <q-dialog v-model="isNoMembership" persistent>
+        <q-card
+          class="column justify-center"
+          style="width: 90vw; height: 400px"
+        >
+          <q-card-section align="center">
+            <div align="center">
+              <q-img src="favicon.ico" width="100px" height="auto" />
+            </div>
+            <br />
+            <p class="text-h6 text-center">{{ messageToGetMembership }}</p>
+          </q-card-section>
+
+          <q-card-actions align="center" class="text-primary">
+            <q-btn
+              color="primary"
+              label="ir a membresias"
+              @click="push('/memberships')"
+            />
+          </q-card-actions>
+        </q-card>
+      </q-dialog>
+
+      <q-dialog v-model="isSoonExpires">
+        <q-card
+          class="column justify-center"
+          style="width: 90vw; min-height: 400px"
+        >
+          <q-card-section align="center">
+            <div align="center">
+              <q-img src="favicon.ico" width="100px" height="auto" />
+            </div>
+            <br />
+            <p class="text-h6 text-center">
+              {{
+                `Hola! Gracias por formar parte de Tarjeta Joven Diamante, te informamos que debes renovar tu membresía para seguir disfrutando de los beneficios, te quedan ${userData.membresia.days} días para renovar`
+              }}
+            </p>
+          </q-card-section>
+
+          <q-card-actions align="center" class="text-primary">
+            <q-btn
+              color="primary"
+              label="ir a membresias"
+              @click="push('/memberships')"
+            />
+            <q-btn color="primary" v-close-popup label="Cerrar" />
+          </q-card-actions>
+        </q-card>
+      </q-dialog>
+
+      <q-dialog
+        v-model="show"
+        persistent
+        transition-show="scale"
+        transition-hide="scale"
+      >
+        <q-card>
+          <QrUser />
+          <q-card-actions align="right" class="text-primary">
+            <q-btn flat label="Close" v-close-popup />
+          </q-card-actions>
+        </q-card>
+      </q-dialog>
+
       <router-view />
     </q-page-container>
-    <q-dialog
-      v-model="showQr"
-      persistent
-      transition-show="scale"
-      transition-hide="scale"
-    >
-      <q-card>
-        <QrUser />
-        <q-card-actions align="right" class="text-primary">
-          <q-btn flat label="Close" v-close-popup />
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
 
     <div class="q-px-sm q-py-lg">
       <div class="qrButton">
         <q-btn
           round
-          @click="handleModal"
+          @click="show = true"
           color="primary"
-          :disable="userData?.membresia?.status == 'vencida' ? true : false"
+          :disable="userData?.membresia?.status === 'vencida'"
         >
-          <q-img :src="qrIcon" width="24px" height="24px" />
+          <q-img :src="qrIcon" width="24px" height="24px" alt="qr icon" />
         </q-btn>
       </div>
     </div>
@@ -404,7 +476,7 @@ const handledUpdateUser = async () => {
         name="home"
         label="Home"
         color="white"
-        class="text-capitalize q-px-none"
+        class="text-capitalize q-px-none full-width"
         icon="home"
         to="/cliente/home"
         exact
@@ -413,7 +485,7 @@ const handledUpdateUser = async () => {
         name="misCompras"
         label="Mis compras"
         color="white"
-        class="text-capitalize q-px-none"
+        class="text-capitalize q-px-none full-width"
         icon="shopping_basket"
         to="/cliente/transactionsTable"
         exact
@@ -422,7 +494,7 @@ const handledUpdateUser = async () => {
         name="Ofertas"
         label="Ofertas"
         color="white"
-        class="text-capitalize q-px-none"
+        class="text-capitalize q-px-none full-width"
         icon="sell"
         to="/cliente/Offers"
       />
@@ -430,19 +502,11 @@ const handledUpdateUser = async () => {
         name="news"
         label="Noticias"
         color="white"
-        class="text-capitalize q-px-none"
+        class="text-capitalize q-px-none full-width"
         icon="newspaper"
         to="/cliente/news"
       />
     </q-tabs>
-    <UpdateMembershipModal
-      :showModal="showModalNew"
-      description="Obten 3 días de pueba con el plan free, y recibe ofertas especiales"
-    />
-    <UpdateMembershipModal
-      :showModal="showModalIsExpired"
-      description="Renueva el plan, y recibe ofertas especiales"
-    />
     <q-img :src="triangle" class="trianguloTop" spinner-color="dark" />
     <q-img :src="triangle" class="trianguloBottom" spinner-color="dark" />
   </q-layout>

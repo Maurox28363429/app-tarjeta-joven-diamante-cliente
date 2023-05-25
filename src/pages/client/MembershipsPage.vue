@@ -2,23 +2,40 @@
 import { useRouter } from "vue-router";
 import MembershipsCard from "src/components/MembershipsCard.vue";
 import { useMemberships } from "src/composables/useMemberships";
+import { useAuthStore } from "src/stores/useAuthStore";
 
-const { go } = useRouter();
+const { go, push } = useRouter();
+const auth = useAuthStore();
 
 const { loading, memberships } = useMemberships();
+
+const logOut = () => {
+  auth.logout();
+  push("/login");
+};
 </script>
 
 <template>
   <div class="memberships">
     <div class="background_blue"></div>
 
-    <div @click="go(-1)" class="back-button">
-      <q-icon
-        name="arrow_back"
-        size="md"
-        color="white"
-        class="cursor-pointer"
-      />
+    <div class="full-width row justify-between q-px-md q-pt-md">
+      <div @click="go(-1)">
+        <q-icon
+          name="arrow_back"
+          size="md"
+          color="white"
+          class="cursor-pointer"
+        />
+      </div>
+      <div @click="logOut">
+        <q-icon
+          name="power_settings_new"
+          size="md"
+          color="white"
+          class="cursor-pointer"
+        />
+      </div>
     </div>
     <div class="width-full column justify-center membershipsContainer">
       <div
