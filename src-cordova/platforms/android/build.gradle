@@ -27,18 +27,10 @@ buildscript {
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
-
-    cdvHelpers.verifyCordovaConfigForBuild()
 }
 
 allprojects {
-    def hasRepositoriesGradle = file('repositories.gradle').exists()
-    if (hasRepositoriesGradle) {
-        apply from: 'repositories.gradle'
-    } else {
-        apply from: "${project.rootDir}/repositories.gradle"
-    }
-
+    apply from: 'repositories.gradle'
     repositories repos
 }
 

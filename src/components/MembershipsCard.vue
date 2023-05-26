@@ -1,5 +1,8 @@
 <script setup>
-import { defineProps, ref } from "vue";
+import { defineProps } from "vue";
+import { userAuth } from "src/composables/userAuth";
+
+const { userData } = userAuth();
 
 defineProps({
   benefits: {
@@ -28,10 +31,6 @@ defineProps({
 });
 
 const baseurl = "/memberships/";
-const user_validation = ref(
-  JSON.parse(localStorage.getItem("user")).user.membresia.type
-);
-console.log(user_validation.value);
 </script>
 
 <template>
@@ -83,7 +82,10 @@ console.log(user_validation.value);
     </p>
     <div class="full-width button">
       <q-btn
-        :disable="user_validation == 'Prueba' || user_validation == 'Comprada'"
+        :disable="
+          userData?.membresia?.status === 'activa' ||
+          (price <= 0 && userData?.membresia?.type !== 'permitir_gratuita')
+        "
         outline
         color="secondary"
         :label="price > 0 ? 'Comprar' : 'Obtener'"

@@ -19,6 +19,9 @@
     },
     "cordova-plugin-prevent-screenshot": {
       "PACKAGE_NAME": "com.phoenixtechsa.app"
+    },
+    "cordova-plugin-splashscreen": {
+      "PACKAGE_NAME": "com.phoenixtechsa.app"
     }
   },
   "dependent_plugins": {}

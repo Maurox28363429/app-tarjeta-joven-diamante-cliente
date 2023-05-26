@@ -46,9 +46,6 @@ watchEffect(() => {
       } else {
         // console.log("no hay una nueva version");
       }
-    } else {
-      // console.log("hay una nueva version");
-      alertMessage();
     }
   }
 });

@@ -1,6 +1,6 @@
 <script setup>
 import { useQuasar } from "quasar";
-import { ref, computed, watch, watchEffect } from "vue";
+import { ref, watch, watchEffect } from "vue";
 import { useRouter } from "vue-router";
 import { userAuth } from "src/composables/userAuth";
 import { useUpdateUserMutation } from "src/querys/userQuerys";
@@ -11,7 +11,7 @@ import qrIcon from "./../assets/images/qr.jpg";
 import logo from "../assets/icons/acronimo.svg";
 
 const $q = useQuasar();
-const { userData } = userAuth();
+const { userData, isLoadingMembership } = userAuth();
 
 const dni = ref("");
 const policyRequestForm = ref(false);
@@ -22,22 +22,27 @@ const show = ref(false);
 const miniState = ref(true);
 const isNoMembership = ref(false);
 const isSoonExpires = ref(false);
+const messageToGetMembership = ref("");
 
 const { push, go } = useRouter();
 
-const messageToGetMembership = computed(() => {
+watch([isNoMembership, isLoadingMembership, userData], () => {
   if (
     userData.value?.membresia?.type === "permitir_gratuita" &&
-    userData.value?.membresia?.status === "vencida"
+    userData.value?.membresia?.status === "vencida" &&
+    !isLoadingMembership.value
   ) {
-    return "Hola! Bienvenido a Tarjeta Joven Diamante, debes seleccionar un plan para poder disfrutar de los beneficios";
+    messageToGetMembership.value =
+      "Hola! Bienvenido a Tarjeta Joven Diamante, debes seleccionar un plan para poder disfrutar de los beneficios";
   } else if (
     userData.value?.membresia?.type === "Prueba" &&
-    userData.value?.membresia?.status === "vencida"
+    userData.value?.membresia?.status === "vencida" &&
+    !isLoadingMembership.value
   ) {
-    return "Hola, gracias por formar parte de Tarjeta Joven Diamante, te informamos que debes renovar tu membresía para seguir disfrutando de los beneficios.";
+    messageToGetMembership.value =
+      "Hola, gracias por formar parte de Tarjeta Joven Diamante, te informamos que debes renovar tu membresía para seguir disfrutando de los beneficios.";
   } else {
-    return "";
+    isNoMembership.value = false;
   }
 });
 
@@ -57,9 +62,10 @@ watch(show, () => {
 
 watchEffect(() => {
   if (
-    userData.value?.membresia?.type === "permitir_gratuita" ||
-    userData.value?.membresia?.status === "vencida"
+    userData.value?.membresia?.status === "vencida" &&
+    !isLoadingMembership.value
   ) {
+    console.log("loading", isLoadingMembership.value);
     isNoMembership.value = true;
   } else if (
     userData.value?.membresia?.days <= 15 &&

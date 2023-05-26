@@ -95,7 +95,7 @@ const onPhotoDataSuccess = (imageData) => {
 };
 
 const onFail = (message) => {
-  alert("Failed because: " + message);
+  console.log("Failed because: " + message);
 };
 
 const handledCamera = () => {

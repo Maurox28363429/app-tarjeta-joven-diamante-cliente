@@ -74,6 +74,7 @@ export const userAuth = () => {
 
   const addMembership = async ({ user_id }) => {
     try {
+      refetchUser();
       isLoadingMembership.value = true;
       await authStore.addMembership({ user_id });
       triggerPositive("Ha obtenido la membresía con éxito");

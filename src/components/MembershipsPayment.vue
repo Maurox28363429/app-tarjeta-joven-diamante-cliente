@@ -1,8 +1,7 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { userAuth } from "../composables/userAuth.js";
-import { instance } from "src/api/index.js";
 import logo from "../assets/icons/acronimo.svg";
 import rocketIcon from "../assets/icons/rokectPrimarysvg.svg";
 import yappyIcon from "./../assets/icons/yappyIcon.svg";
@@ -11,7 +10,7 @@ const isAcceptedTerms = ref(false);
 const textError = ref(false);
 const { userData, addMembership, isLoadingMembership } = userAuth();
 
-const { push, go } = useRouter();
+const { go } = useRouter();
 
 const props = defineProps({
   price: {
@@ -72,18 +71,6 @@ const HandlePayment = () => {
   }
 };
 const isFree = Boolean(props.name === "free") || props.price <= 0;
-
-onMounted(async () => {
-  const prueba = await instance.get(
-    "user/" + userData.value?.id + "?includes[]=membresia"
-  );
-  if (
-    prueba.data.membresia.type === "Comprada" ||
-    prueba.data.membresia.type === "Prueba"
-  ) {
-    push("cliente");
-  }
-});
 </script>
 
 <template>

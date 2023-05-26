@@ -13,6 +13,10 @@
         <param name="android-package" value="com.sandata.BlockScreenShot" />
         <param name="onload" value="true" />
     </feature>
+    <feature name="SplashScreen">
+        <param name="android-package" value="org.apache.cordova.splashscreen.SplashScreen" />
+        <param name="onload" value="true" />
+    </feature>
     <name>Tarjeta joven diamante</name>
     <description>A Quasar Project</description>
     <author email="dev@cordova.apache.org" href="https://cordova.apache.org">
