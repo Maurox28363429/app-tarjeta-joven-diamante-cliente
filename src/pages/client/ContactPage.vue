@@ -1,6 +1,4 @@
 <script setup>
-import contactImg from "../../assets/images/contact.png";
-
 const INSTAGRAM_URL = "https://www.instagram.com/tarjetajovendiamante/";
 const EMAIL_URL =
   "https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=informacion@tarjetajovendiamante.com";
@@ -9,10 +7,19 @@ const WEB_URL = "https://www.tarjetajovendiamante.com/";
 
 <template>
   <div
-    class="full-width q-py-xl column justify-center items-center q-gutter-y-md"
+    class="full-width q-py-xl column justify-center items-center q-gutter-y-md q-px-md"
   >
-    <q-img :src="contactImg" width="360px" height="240px" alt="contact image" />
-    <ul class="d style">
+    <div style="max-width: 400px">
+      <p>
+        Ing. Jean Carlos Tuñón Pretelt Director 6578-9280 Lic Lourdes Klumpp
+        Secretaria ejecutiva 6578-9280 Xiomara Durango Social y Pachamá
+        Ecológico 6540-9984 Lic Alicia Saldaña Publicidad y comunicación
+        62308757 Patricia Bárcenas Ventas y Atención al cliente 6540-9984 Elvia
+        Abrego Administración y contabilidad 6540-9984 Charlott Pinzón Call
+        Center 6540-9984.
+      </p>
+    </div>
+    <ul style="max-width: 500px">
       <li class="row items-center">
         <q-icon name="email" class="q-mr-xs" />
         <p class="q-ma-none">informacion@tarjetajovendiamante.com</p>
