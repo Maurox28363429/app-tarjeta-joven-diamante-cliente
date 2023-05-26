@@ -16,9 +16,10 @@ const WEB_URL = "https://www.tarjetajovendiamante.com/";
         Ecológico 6540-9984 Lic Alicia Saldaña Publicidad y comunicación
         62308757 Patricia Bárcenas Ventas y Atención al cliente 6540-9984 Elvia
         Abrego Administración y contabilidad 6540-9984 Charlott Pinzón Call
-        Center 6540-9984.
+        Center 6540-9984
       </p>
     </div>
+
     <ul style="max-width: 500px">
       <li class="row items-center">
         <q-icon name="email" class="q-mr-xs" />
