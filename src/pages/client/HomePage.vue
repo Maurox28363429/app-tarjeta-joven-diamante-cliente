@@ -44,7 +44,7 @@ const POLICY_ROWS = [
       />
       <p class="q-ma-none text-center title-large">Home Page</p>
     </div>
-    <div class="cardList">
+    <div class="row wrap q-mt-md justify-center q-gutter-lg">
       <div
         v-for="{ id, title, icon, link, enabled, evento } in HOME_CARD_LIST"
         :key="id"
@@ -76,7 +76,7 @@ const POLICY_ROWS = [
 
       <q-card-section style="max-height: 50vh" class="scroll">
         <div class="full-width row justify-center">
-          <div class="table">
+          <div style="width: 400px">
             <q-table
               :dense="$q.screen.lt.md"
               flat
@@ -126,17 +126,3 @@ const POLICY_ROWS = [
     </q-card>
   </q-dialog>
 </template>
-
-<style>
-.cardList {
-  display: flex;
-  margin-top: 20px;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 35px;
-}
-
-.table {
-  width: 400px;
-}
-</style>

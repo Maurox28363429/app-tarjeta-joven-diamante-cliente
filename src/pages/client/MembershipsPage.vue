@@ -17,7 +17,7 @@ const logOut = () => {
 
 <template>
   <div class="memberships">
-    <div class="background_blue"></div>
+    <div class="background_blue absolute bg-primary"></div>
 
     <div class="full-width row justify-between q-px-md q-pt-md">
       <div @click="go(-1)">
@@ -37,9 +37,11 @@ const logOut = () => {
         />
       </div>
     </div>
-    <div class="width-full column justify-center membershipsContainer">
+    <div
+      class="width-full column justify-center membershipsContainer column items-center relative-position"
+    >
       <div
-        class="memberships_description column justify-center q-px-md q-mt-xl"
+        class="memberships_description text-white column justify-center q-px-md q-mt-xl"
       >
         <p class="title-large text-center">Planes flexibles & precios</p>
         <p class="body-medium text-center">
@@ -49,7 +51,10 @@ const logOut = () => {
           tus necesidades y presupuesto.
         </p>
       </div>
-      <div class="memberships_plans width-full q-pb-xl" v-if="!loading">
+      <div
+        class="memberships_plans full-width row justify-center q-pb-xl"
+        v-if="!loading"
+      >
         <template
           v-for="{ id, image, name, price, benefits } in memberships"
           :key="id"
@@ -63,7 +68,10 @@ const logOut = () => {
           />
         </template>
       </div>
-      <div class="memberships_plans width-full q-pb-xl" v-if="loading">
+      <div
+        class="memberships_plans full-width justify-center row q-pb-xl"
+        v-if="loading"
+      >
         <template v-for="(items, index) in 2" :key="index">
           <q-card class="membership-card-skeleton">
             <q-item class="row justify-center full-width">
@@ -145,30 +153,19 @@ const logOut = () => {
 
 .membershipsContainer {
   z-index: 10;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: relative;
 }
 
 .memberships_plans {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
   gap: 100px;
   padding: 0 32px 80px;
 }
 
 .background_blue {
-  background: #4d57a9;
   width: 100%;
-  position: absolute;
   height: 416px;
 }
 
 .memberships_description {
-  color: #ffffff;
   height: 326px;
   max-width: 736px;
 }
@@ -178,13 +175,6 @@ const logOut = () => {
   height: 100%;
   min-height: 100vh;
   background: #e9e9e9;
-}
-
-.back-button {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  z-index: 20;
 }
 
 .membership-card-skeleton {

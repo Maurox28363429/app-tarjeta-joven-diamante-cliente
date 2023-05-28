@@ -51,15 +51,3 @@ const WEB_URL = "https://www.tarjetajovendiamante.com/";
     </div>
   </div>
 </template>
-
-<style scoped>
-.my-card {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 270px;
-  min-height: 170px;
-  cursor: pointer;
-}
-</style>
