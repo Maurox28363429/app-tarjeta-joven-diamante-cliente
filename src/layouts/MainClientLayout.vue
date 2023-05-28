@@ -5,6 +5,7 @@ import { useRouter } from "vue-router";
 import { userAuth } from "src/composables/userAuth";
 import { useUpdateUserMutation } from "src/querys/userQuerys";
 import { convertToFile, openCamera } from "src/utils/openCamera";
+import { checkFileType } from "src/utils/checkFileType";
 import QrUser from "../components/QrUser.vue";
 import triangle from "../assets/images/triangulo.png";
 import qrIcon from "./../assets/images/qr.jpg";
@@ -26,21 +27,28 @@ const messageToGetMembership = ref("");
 
 const { push, go } = useRouter();
 
+const MESSAGES_TO_GET_MEMBERSHIP = {
+  messageToNewUsers:
+    "Hola! Bienvenido a Tarjeta Joven Diamante, debes seleccionar un plan para poder disfrutar de los beneficios",
+  messageToRenew:
+    "Hola, gracias por formar parte de Tarjeta Joven Diamante, te informamos que debes renovar tu membresía para seguir disfrutando de los beneficios.",
+};
+
 watch([isNoMembership, isLoadingMembership, userData], () => {
+  const { type, status } = userData.value?.membresia || {};
+
   if (
-    userData.value?.membresia?.type === "permitir_gratuita" &&
-    userData.value?.membresia?.status === "vencida" &&
+    type === "permitir_gratuita" &&
+    status === "vencida" &&
     !isLoadingMembership.value
   ) {
-    messageToGetMembership.value =
-      "Hola! Bienvenido a Tarjeta Joven Diamante, debes seleccionar un plan para poder disfrutar de los beneficios";
+    messageToGetMembership.value = MESSAGES_TO_GET_MEMBERSHIP.messageToNewUsers;
   } else if (
-    userData.value?.membresia?.type === "Prueba" &&
-    userData.value?.membresia?.status === "vencida" &&
+    type === "Prueba" &&
+    status === "vencida" &&
     !isLoadingMembership.value
   ) {
-    messageToGetMembership.value =
-      "Hola, gracias por formar parte de Tarjeta Joven Diamante, te informamos que debes renovar tu membresía para seguir disfrutando de los beneficios.";
+    messageToGetMembership.value = MESSAGES_TO_GET_MEMBERSHIP.messageToRenew;
   } else {
     isNoMembership.value = false;
   }
@@ -49,28 +57,22 @@ watch([isNoMembership, isLoadingMembership, userData], () => {
 const { isLoading, mutateAsync } = useUpdateUserMutation();
 
 watch(show, () => {
-  if (window.plugins?.preventscreenshot && window.cordova) {
+  const preventscreenshot = window.plugins?.preventscreenshot;
+  if (preventscreenshot && window.cordova) {
     if (show.value) {
-      window.plugins.preventscreenshot.disable();
-      console.log("disable screenshot");
+      preventscreenshot.disable(); // disable screenshot
     } else {
-      window.plugins.preventscreenshot.enable();
-      console.log("enable screenshot");
+      preventscreenshot.enable(); // enable screenshot
     }
   }
 });
 
 watchEffect(() => {
-  if (
-    userData.value?.membresia?.status === "vencida" &&
-    !isLoadingMembership.value
-  ) {
-    console.log("loading", isLoadingMembership.value);
+  const { days, status } = userData.value?.membresia || {};
+
+  if (status === "vencida" && !isLoadingMembership.value) {
     isNoMembership.value = true;
-  } else if (
-    userData.value?.membresia?.days <= 15 &&
-    userData.value?.membresia?.status === "activa"
-  ) {
+  } else if (days <= 15 && status === "activa") {
     isSoonExpires.value = true;
   } else {
     isNoMembership.value = false;
@@ -80,7 +82,6 @@ watchEffect(() => {
 
 watchEffect(() => {
   if (userData.value?.membresia?.type === "Comprada") {
-    console.log("membresia comprada");
     if (
       userData.value.beneficiario_poliza_cedula === null ||
       userData.value.beneficiario_poliza_name === null ||
@@ -92,8 +93,7 @@ watchEffect(() => {
   }
 });
 
-const handledLogout = (e) => {
-  e.preventDefault();
+const handledLogout = () => {
   localStorage.removeItem("user");
   push("/login");
 };
@@ -103,22 +103,13 @@ const toggleLeftDrawer = () => {
   miniState.value = !miniState.value;
 };
 
-const drawerClick = (e) => {
+const drawerClick = () => {
   if (miniState.value) {
     miniState.value = false;
-
-    e.stopPropagation();
   }
 };
 
-const checkFileType = (files) => {
-  return files.filter(
-    (file) =>
-      file.type === "image/jpeg" ||
-      file.type === "image/png" ||
-      file.type === "application/pdf"
-  );
-};
+const ACCEPTED_TYPES_FOR_DNI = ["image/jpeg", "image/png", "application/pdf"];
 
 const onPhotoDataSuccessDniUser = (imageData) => {
   const img = "data:image/jpeg;base64," + imageData;
@@ -233,9 +224,16 @@ const handledUpdateUser = async () => {
                 Plan {{ userData?.membresia?.type }}
               </p>
               <p
+                v-if="userData?.membresia?.status === 'activa'"
                 class="text-weight-medium text-subtitle2 text-grey-6 q-ma-none"
               >
                 Quendan: {{ userData?.membresia?.days }} días
+              </p>
+              <p
+                v-if="userData?.membresia?.status === 'vencida'"
+                class="text-weight-medium text-subtitle2 text-grey-6 q-ma-none"
+              >
+                Membresia vencida
               </p>
             </q-item-section>
           </q-item>
@@ -282,7 +280,7 @@ const handledUpdateUser = async () => {
           </q-item>
         </q-list>
         <div
-          @click="handledLogout"
+          @click.prevent="handledLogout"
           class="row justify-center full-width full-height body-small"
         >
           <q-btn
@@ -339,7 +337,7 @@ const handledUpdateUser = async () => {
                   class="full-width"
                   v-model="dni"
                   label="archivo.jpg/.png/.pdf"
-                  :filter="checkFileType"
+                  :filter="checkFileType(ACCEPTED_TYPES_FOR_DNI)"
                   max-files="1"
                 >
                 </q-file>

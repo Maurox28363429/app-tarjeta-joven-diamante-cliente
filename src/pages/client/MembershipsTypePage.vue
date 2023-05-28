@@ -5,9 +5,9 @@ import logo from "../../assets/images/t.webp";
 
 const { userData, isLoadingUser } = userAuth();
 
-const isMembershipsActive = computed(() => {
-  return userData.value?.membresia?.status === "activa";
-});
+const isMembershipsActive = computed(
+  () => userData.value?.membresia?.status === "activa"
+);
 
 const getDate = (fechaString) => {
   const date = new Date(fechaString);
@@ -17,6 +17,9 @@ const getDate = (fechaString) => {
 
   return `${day}/${month}/${year}`;
 };
+
+const activationDate = getDate(userData.value?.membresia?.updated_at);
+const expirationDate = getDate(userData.value?.membresia?.fecha_cobro);
 </script>
 
 <template>
@@ -37,6 +40,7 @@ const getDate = (fechaString) => {
       />
 
       <p
+        style="max-width: 300px"
         class="q-ma-none title-large text-center maxText"
         v-if="isMembershipsActive"
       >
@@ -44,18 +48,15 @@ const getDate = (fechaString) => {
       </p>
 
       <p
+        style="max-width: 300px"
         class="q-ma-none title-large text-center maxText"
         v-else-if="!isMembershipsActive"
       >
         La membresía esta vencida haz click en el botón de abajo para renovar
       </p>
       <div class="text-grey-7 q-mt-md">
-        <p>
-          Fecha de activación: {{ getDate(userData?.membresia?.created_at) }}
-        </p>
-        <p>
-          Fecha de vencimiento: {{ getDate(userData?.membresia?.fecha_cobro) }}
-        </p>
+        <p>Fecha de activación: {{ activationDate }}</p>
+        <p>Fecha de vencimiento: {{ expirationDate }}</p>
       </div>
       <section>
         <br />
@@ -69,9 +70,3 @@ const getDate = (fechaString) => {
     </div>
   </div>
 </template>
-
-<style>
-.maxText {
-  max-width: 300px;
-}
-</style>

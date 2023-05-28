@@ -6,6 +6,7 @@ import { updateProfileShema } from "src/schemas/updateProfileShema";
 import { useUpdateUserMutation } from "src/querys/userQuerys";
 import { useGetStates } from "src/querys/offersQuerys";
 import { convertToFile, openCamera } from "src/utils/openCamera";
+import { checkFileType } from "src/utils/checkFileType";
 
 const {
   updatedUser,
@@ -18,14 +19,7 @@ const {
 
 const showDni = ref(false);
 
-const checkFileType = (files) => {
-  return files.filter(
-    (file) =>
-      file.type === "image/jpeg" ||
-      file.type === "image/png" ||
-      file.type === "application/pdf"
-  );
-};
+const ACCEPTED_TYPES_FOR_DNI = ["image/jpeg", "image/png", "application/pdf"];
 
 const props = defineProps({
   user: {
@@ -37,9 +31,7 @@ const props = defineProps({
 const { data } = useGetStates({});
 
 const provinceOptions = computed(() =>
-  data.value?.data?.map(({ name }) => {
-    return name;
-  })
+  data.value?.data?.map(({ name }) => name)
 );
 
 const isBusiness = props.user === "business";
@@ -51,7 +43,7 @@ const GENDER_OPTIONS = [
   { label: "Hombre", value: 1 },
 ];
 
-const file = ref(userData.value?.img_url ?? "");
+const fileInput = ref(userData.value?.img_url ?? "");
 
 const { useForm, validatInput, validateMessage, validateForm } =
   useValidateForm({ initialValue: {}, schema: updateProfileShema });
@@ -64,10 +56,10 @@ watchEffect(() => {
 
 watch([userData, isFetchedAfterMountUser, isFetchedUser], () => {
   if (userData.value && !isFetchingUser.value) {
-    genderCurrent = GENDER_OPTIONS.find((item) => {
-      return item.value === Number(userData.value?.sex);
-    });
-    file.value = userData.value?.img_url;
+    genderCurrent = GENDER_OPTIONS.find(
+      (item) => item.value === Number(userData.value?.sex)
+    );
+    fileInput.value = userData.value?.img_url;
     useForm.value = {
       provincia: Array.isArray(userData.value.provincia)
         ? userData.value.provincia
@@ -87,8 +79,6 @@ watch([userData, isFetchedAfterMountUser, isFetchedUser], () => {
   }
 });
 
-console.log(userData.value?.beneficiario_poliza_cedula, "poliza");
-
 const onPhotoDataSuccess = (imageData) => {
   const img = "data:image/jpeg;base64," + imageData;
   useForm.value.dni = convertToFile(img);
@@ -104,27 +94,28 @@ const handledCamera = () => {
 
 const { isLoading, mutateAsync } = useUpdateUserMutation();
 
-const uploadImg = (event) => {
-  const image = event.target.files[0];
-  useForm.value.img = image;
-  file.value = URL.createObjectURL(image);
+const uploadImage = (event) => {
+  const selectedImage = event.target.files[0];
+  useForm.value.img = selectedImage;
+  fileInput.value = URL.createObjectURL(selectedImage);
 };
 
-const handledUpdateUser = async () => {
+const updateUser = async () => {
   validateForm();
 
-  const values = {
+  const updatedValues = {
     ...useForm.value,
     role_id: userData.value.role_id,
     active: userData.value.active,
     id: userData.value.id,
     sex: useForm.value.sex?.value,
   };
-  await mutateAsync({ data: values, id: userData.value.id });
+  await mutateAsync(updatedValues);
 
   updatedUser();
 };
 </script>
+
 <template>
   <q-inner-loading :showing="isLoadingUser">
     <q-spinner-gears size="50px" color="primary" />
@@ -216,7 +207,7 @@ const handledUpdateUser = async () => {
           separator
           class="editContainer rounded-borders"
         >
-          <form @submit.prevent="handledUpdateUser">
+          <form @submit.prevent="updateUser">
             <q-item>
               <q-item-section>
                 <q-item-label class="title-medium">Editar</q-item-label>
@@ -229,7 +220,7 @@ const handledUpdateUser = async () => {
                     <q-avatar size="80px" class="q-mr-md">
                       <q-img
                         class="full-height"
-                        :src="file"
+                        :src="fileInput"
                         spinner-color="dark"
                       >
                         <div
@@ -241,7 +232,7 @@ const handledUpdateUser = async () => {
                       </q-img>
                     </q-avatar>
                     <input
-                      @change="uploadImg"
+                      @change="uploadImage"
                       hidden
                       type="file"
                       accept="image/png, image/jpeg"
@@ -375,7 +366,7 @@ const handledUpdateUser = async () => {
                       v-model="useForm.dni"
                       class="full-width"
                       label="archivo.jpg/.png/.pdf"
-                      :filter="checkFileType"
+                      :filter="checkFileType(ACCEPTED_TYPES_FOR_DNI)"
                       max-files="1"
                     >
                     </q-file>

@@ -19,7 +19,6 @@ const {
 const showModal = (modalInfo) => {
   modalCurrent.value = { ...modalInfo };
   openModal.value = true;
-  console.log(modalInfo, "informacion de modal");
 };
 
 watchEffect(() => {
