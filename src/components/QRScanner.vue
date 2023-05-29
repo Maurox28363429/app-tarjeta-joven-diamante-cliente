@@ -117,9 +117,8 @@ function addPermision() {
         }
       },
       function (error) {
-        console.log("error", error);
+        console.error("error", error);
         // Error al solicitar el permiso
-        console.error("Error al solicitar el permiso de cámara");
         triggerWarning("Los permisos para la camara estan desactivados");
         permision.value = false;
       }
