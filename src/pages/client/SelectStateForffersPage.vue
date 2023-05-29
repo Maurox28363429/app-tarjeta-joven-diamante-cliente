@@ -1,70 +1,70 @@
 <script setup>
-import { defineProps, ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { useGetStates } from 'src/querys/offersQuerys'
-import disableIcon from '../../assets/images/bandImage.png'
-import activeIcon from '../../assets/icons/stateIcon.webp'
+import { defineProps, ref } from "vue";
+import { useRouter } from "vue-router";
+import { useGetStates } from "src/querys/offersQuerys";
+import disableIcon from "../../assets/images/bandImage.png";
+import activeIcon from "../../assets/icons/stateIcon.webp";
 
 const props = defineProps({
   typeOffers: {
     type: String,
-    required: true
-  }
-})
+    required: true,
+  },
+});
 
-const router = useRouter()
+const router = useRouter();
 
-const sort = ref({})
+const sort = ref({});
 
 const icon = (ofertas, universidades) => {
-  if (props.typeOffers === 'Offers') {
+  if (props.typeOffers === "Offers") {
     if (ofertas === 0) {
-      return disableIcon
+      return disableIcon;
     } else {
-      return activeIcon
+      return activeIcon;
     }
   } else {
     if (universidades === 0) {
-      return disableIcon
+      return disableIcon;
     } else {
-      return activeIcon
+      return activeIcon;
     }
   }
-}
+};
 
 switch (props.typeOffers) {
-  case 'Offers':
-    sort.value = { sort_ofertas: 1 }
+  case "Offers":
+    sort.value = { sort_ofertas: 1 };
 
-    break
-  case 'OffersForUniversitys':
-    sort.value = { sort_uni: 1 }
+    break;
+  case "OffersForUniversitys":
+    sort.value = { sort_uni: 1 };
 
-    break
+    break;
 
   default:
-    sort.value = { sort_ofertas: 1 }
-    break
+    sort.value = { sort_ofertas: 1 };
+    break;
 }
 
-const { data, isLoading } = useGetStates(sort.value)
+const { data, isLoading } = useGetStates(sort.value);
 
 const openOffers = ({ state, offers, universidades }) => {
-  if (props.typeOffers === 'Offers') {
+  if (props.typeOffers === "Offers") {
     if (offers !== 0) {
-      router.push(`/cliente/${props.typeOffers}/${state}`)
-      console.log('hay ofertas')
+      router.push(`/cliente/${props.typeOffers}/${state}`);
+      console.log("hay ofertas");
     } else {
-      console.log('no hay ofertas', offers)
+      console.log("no hay ofertas", offers);
     }
   } else {
     if (universidades !== 0) {
-      router.push(`/cliente/${props.typeOffers}/${state}`)
+      router.push(`/cliente/${props.typeOffers}/${state}`);
     } else {
-      console.log('no hay universidades', universidades)
+      console.log("no hay universidades", universidades);
     }
   }
-}
+};
 </script>
 <template>
   <q-inner-loading :showing="isLoading">

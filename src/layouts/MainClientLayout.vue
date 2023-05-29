@@ -11,21 +11,21 @@ import triangle from "../assets/images/triangulo.png";
 import qrIcon from "./../assets/images/qr.jpg";
 import logo from "../assets/icons/acronimo.svg";
 
-const $q = useQuasar()
-const { userData, isLoadingMembership } = userAuth()
+const $q = useQuasar();
+const { userData, isLoadingMembership } = userAuth();
 
-const dni = ref('')
-const policyRequestForm = ref(false)
-const beneficiario_poliza_cedula = ref('')
-const beneficiario_poliza_name = ref('')
-const leftDrawerOpen = ref(false)
-const show = ref(false)
-const miniState = ref(true)
-const isNoMembership = ref(false)
-const isSoonExpires = ref(false)
-const messageToGetMembership = ref('')
+const dni = ref("");
+const policyRequestForm = ref(false);
+const beneficiario_poliza_cedula = ref("");
+const beneficiario_poliza_name = ref("");
+const leftDrawerOpen = ref(false);
+const show = ref(false);
+const miniState = ref(true);
+const isNoMembership = ref(false);
+const isSoonExpires = ref(false);
+const messageToGetMembership = ref("");
 
-const { push, go } = useRouter()
+const { push, go } = useRouter();
 
 const MESSAGES_TO_GET_MEMBERSHIP = {
   messageToNewUsers:
@@ -50,11 +50,11 @@ watch([isNoMembership, isLoadingMembership, userData], () => {
   ) {
     messageToGetMembership.value = MESSAGES_TO_GET_MEMBERSHIP.messageToRenew;
   } else {
-    isNoMembership.value = false
+    isNoMembership.value = false;
   }
-})
+});
 
-const { isLoading, mutateAsync } = useUpdateUserMutation()
+const { isLoading, mutateAsync } = useUpdateUserMutation();
 
 watch(show, () => {
   const preventscreenshot = window.plugins?.preventscreenshot;
@@ -65,7 +65,7 @@ watch(show, () => {
       preventscreenshot.enable(); // enable screenshot
     }
   }
-})
+});
 
 watchEffect(() => {
   const { days, status } = userData.value?.membresia || {};
@@ -75,10 +75,10 @@ watchEffect(() => {
   } else if (days <= 15 && status === "activa") {
     isSoonExpires.value = true;
   } else {
-    isNoMembership.value = false
-    isSoonExpires.value = false
+    isNoMembership.value = false;
+    isSoonExpires.value = false;
   }
-})
+});
 
 watchEffect(() => {
   if (userData.value?.membresia?.type === "Comprada") {
@@ -87,11 +87,11 @@ watchEffect(() => {
       userData.value.beneficiario_poliza_name === null ||
       userData.value.dni === null
     ) {
-      console.log('sin poliza')
-      policyRequestForm.value = true
+      console.log("sin poliza");
+      policyRequestForm.value = true;
     }
   }
-})
+});
 
 const handledLogout = () => {
   localStorage.removeItem("user");
@@ -99,30 +99,30 @@ const handledLogout = () => {
 };
 
 const toggleLeftDrawer = () => {
-  leftDrawerOpen.value = true
-  miniState.value = !miniState.value
-}
+  leftDrawerOpen.value = true;
+  miniState.value = !miniState.value;
+};
 
 const drawerClick = () => {
   if (miniState.value) {
     miniState.value = false;
   }
-}
+};
 
 const ACCEPTED_TYPES_FOR_DNI = ["image/jpeg", "image/png", "application/pdf"];
 
 const onPhotoDataSuccessDniUser = (imageData) => {
-  const img = 'data:image/jpeg;base64,' + imageData
-  dni.value = convertToFile(img)
-}
+  const img = "data:image/jpeg;base64," + imageData;
+  dni.value = convertToFile(img);
+};
 
 const onFailDniUser = (message) => {
-  console.error('Failed because: ' + message)
-}
+  console.error("Failed because: " + message);
+};
 
 const openCameraDniUser = () => {
-  openCamera(onPhotoDataSuccessDniUser, onFailDniUser)
-}
+  openCamera(onPhotoDataSuccessDniUser, onFailDniUser);
+};
 
 const handledUpdateUser = async () => {
   await mutateAsync({
@@ -130,10 +130,10 @@ const handledUpdateUser = async () => {
     data: {
       beneficiario_poliza_cedula: beneficiario_poliza_cedula.value,
       beneficiario_poliza_name: beneficiario_poliza_name.value,
-      dni: dni.value
-    }
-  })
-}
+      dni: dni.value,
+    },
+  });
+};
 </script>
 
 <template>
