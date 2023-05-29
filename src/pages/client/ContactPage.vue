@@ -1,16 +1,18 @@
 <script setup>
-const INSTAGRAM_URL = "https://www.instagram.com/tarjetajovendiamante/";
+import iconoTarjeta from '../../assets/images/t.webp'
+const INSTAGRAM_URL = 'https://www.instagram.com/tarjetajovendiamante/'
 const EMAIL_URL =
-  "https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=informacion@tarjetajovendiamante.com";
-const WEB_URL = "https://www.tarjetajovendiamante.com/";
+  'https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=informacion@tarjetajovendiamante.com'
+const WEB_URL = 'https://www.tarjetajovendiamante.com/'
 </script>
 
 <template>
   <div
     class="full-width q-py-xl column justify-center items-center q-gutter-y-md q-px-md"
   >
-    <div style="max-width: 400px">
-      <p>
+    <div style="max-width: 400px;text-align: center;">
+      <img :src="iconoTarjeta" alt="">
+      <p style="text-align: justify">
         Ing. Jean Carlos Tuñón Pretelt Director 6578-9280 Lic Lourdes Klumpp
         Secretaria ejecutiva 6578-9280 Xiomara Durango Social y Pachamá
         Ecológico 6540-9984 Lic Alicia Saldaña Publicidad y comunicación

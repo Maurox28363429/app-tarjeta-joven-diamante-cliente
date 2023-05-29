@@ -1,19 +1,19 @@
 <script setup>
-import { computed } from "vue";
-import { userAuth } from "src/composables/userAuth";
-import logo from "../../assets/images/t.webp";
+import { computed } from 'vue'
+import { userAuth } from 'src/composables/userAuth'
+import logo from '../../assets/images/t.webp'
 
-const { userData, isLoadingUser } = userAuth();
+const { userData, isLoadingUser } = userAuth()
 
 const isMembershipsActive = computed(
   () => userData.value?.membresia?.status === "activa"
 );
 
 const getDate = (fechaString) => {
-  const date = new Date(fechaString);
-  const day = date.getDate();
-  const month = date.getMonth() + 1;
-  const year = date.getFullYear();
+  const date = new Date(fechaString)
+  const day = date.getDate()
+  const month = date.getMonth() + 1
+  const year = date.getFullYear()
 
   return `${day}/${month}/${year}`;
 };

@@ -14,45 +14,45 @@ const {
   isLoadingUser,
   isFetchingUser,
   isFetchedAfterMountUser,
-  isFetchedUser,
-} = userAuth();
+  isFetchedUser
+} = userAuth()
 
-const showDni = ref(false);
+const showDni = ref(false)
 
 const ACCEPTED_TYPES_FOR_DNI = ["image/jpeg", "image/png", "application/pdf"];
 
 const props = defineProps({
   user: {
     type: String,
-    required: true,
-  },
-});
+    required: true
+  }
+})
 
-const { data } = useGetStates({});
+const { data } = useGetStates({})
 
 const provinceOptions = computed(() =>
   data.value?.data?.map(({ name }) => name)
 );
 
-const isBusiness = props.user === "business";
+const isBusiness = props.user === 'business'
 
-let genderCurrent = { label: "", value: "" };
+let genderCurrent = { label: '', value: '' }
 
 const GENDER_OPTIONS = [
-  { label: "Mujer", value: 0 },
-  { label: "Hombre", value: 1 },
-];
+  { label: 'Mujer', value: 0 },
+  { label: 'Hombre', value: 1 }
+]
 
 const fileInput = ref(userData.value?.img_url ?? "");
 
 const { useForm, validatInput, validateMessage, validateForm } =
-  useValidateForm({ initialValue: {}, schema: updateProfileShema });
+  useValidateForm({ initialValue: {}, schema: updateProfileShema })
 
 watchEffect(() => {
   if (useForm.value?.provincia?.length > 2 && userData.value) {
-    useForm.value?.provincia.pop();
+    useForm.value?.provincia.pop()
   }
-});
+})
 
 watch([userData, isFetchedAfterMountUser, isFetchedUser], () => {
   if (userData.value && !isFetchingUser.value) {
@@ -73,26 +73,26 @@ watch([userData, isFetchedAfterMountUser, isFetchedUser], () => {
       img: null,
       dni: userData.value?.dni,
       beneficiario_poliza_cedula: userData.value?.beneficiario_poliza_cedula,
-      beneficiario_poliza_name: userData.value?.beneficiario_poliza_name || "",
-      fecha_nacimiento: userData.value?.fecha_nacimiento || "",
-    };
+      beneficiario_poliza_name: userData.value?.beneficiario_poliza_name || '',
+      fecha_nacimiento: userData.value?.fecha_nacimiento || ''
+    }
   }
-});
+})
 
 const onPhotoDataSuccess = (imageData) => {
-  const img = "data:image/jpeg;base64," + imageData;
-  useForm.value.dni = convertToFile(img);
-};
+  const img = 'data:image/jpeg;base64,' + imageData
+  useForm.value.dni = convertToFile(img)
+}
 
 const onFail = (message) => {
-  console.log("Failed because: " + message);
-};
+  console.log('Failed because: ' + message)
+}
 
 const handledCamera = () => {
-  openCamera(onPhotoDataSuccess, onFail);
-};
+  openCamera(onPhotoDataSuccess, onFail)
+}
 
-const { isLoading, mutateAsync } = useUpdateUserMutation();
+const { isLoading, mutateAsync } = useUpdateUserMutation()
 
 const uploadImage = (event) => {
   const selectedImage = event.target.files[0];
@@ -112,8 +112,8 @@ const updateUser = async () => {
   };
   await mutateAsync(updatedValues);
 
-  updatedUser();
-};
+  updatedUser()
+}
 </script>
 
 <template>
