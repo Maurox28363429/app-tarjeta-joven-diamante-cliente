@@ -1,56 +1,56 @@
 <script setup>
-import { ref, watchEffect } from "vue";
-import { userAuth } from "src/composables/userAuth";
-import { TRANSACTION_COLUMNS } from "src/shared/constansts/transanctionColumns";
+import { ref, watchEffect } from 'vue'
+import { userAuth } from 'src/composables/userAuth'
+import { TRANSACTION_COLUMNS } from 'src/shared/constansts/transanctionColumns'
 import {
   useGetTransactionsClient,
-  useGetTransactionsBusiness,
-} from "src/querys/transactionsQuerys";
+  useGetTransactionsBusiness
+} from 'src/querys/transactionsQuerys'
 
-const currentPage = ref(1);
-const products = ref([]);
-const dialog = ref(false);
-const maximizedToggle = ref(true);
-const { userData } = userAuth();
+const currentPage = ref(1)
+const products = ref([])
+const dialog = ref(false)
+const maximizedToggle = ref(true)
+const { userData } = userAuth()
 
-let transactions;
+let transactions
 
 if (userData?.value?.role_id === 3) {
   transactions = useGetTransactionsClient({
     page: currentPage.value,
-    id: userData.value.id,
-  });
+    id: userData.value.id
+  })
   TRANSACTION_COLUMNS[1] = {
-    name: "client",
-    label: "Cliente",
+    name: 'client',
+    label: 'Cliente',
     field: (row) => row.client.name,
-    align: "left",
-  };
+    align: 'left'
+  }
 } else {
   transactions = useGetTransactionsBusiness({
     page: currentPage.value,
-    id: userData?.value?.id,
-  });
+    id: userData?.value?.id
+  })
 }
 
-const { data: transactionsData, isLoading, refetch } = transactions;
+const { data: transactionsData, isLoading, refetch } = transactions
 
-const pages = ref(1);
+const pages = ref(1)
 
 watchEffect(() => {
-  currentPage.value && refetch();
-});
+  currentPage.value && refetch()
+})
 
 watchEffect(() => {
   if (transactionsData.value) {
-    pages.value = transactionsData.value.data.pagination.lastPage;
+    pages.value = transactionsData.value.data.pagination.lastPage
   }
-});
+})
 
 const onButtonClick = (evt, row, index) => {
-  dialog.value = true;
-  products.value = row.ofertas;
-};
+  dialog.value = true
+  products.value = row.ofertas
+}
 </script>
 
 <template>

@@ -1,137 +1,137 @@
 <script setup>
-import { useQuasar } from "quasar";
-import { ref, watch, watchEffect } from "vue";
-import { useRouter } from "vue-router";
-import { userAuth } from "src/composables/userAuth";
-import { useUpdateUserMutation } from "src/querys/userQuerys";
-import { convertToFile, openCamera } from "src/utils/openCamera";
-import QrUser from "../components/QrUser.vue";
-import triangle from "../assets/images/triangulo.png";
-import qrIcon from "./../assets/images/qr.jpg";
-import logo from "../assets/icons/acronimo.svg";
+import { useQuasar } from 'quasar'
+import { ref, watch, watchEffect } from 'vue'
+import { useRouter } from 'vue-router'
+import { userAuth } from 'src/composables/userAuth'
+import { useUpdateUserMutation } from 'src/querys/userQuerys'
+import { convertToFile, openCamera } from 'src/utils/openCamera'
+import QrUser from '../components/QrUser.vue'
+import triangle from '../assets/images/triangulo.png'
+import qrIcon from './../assets/images/qr.jpg'
+import logo from '../assets/icons/acronimo.svg'
 
-const $q = useQuasar();
-const { userData, isLoadingMembership } = userAuth();
+const $q = useQuasar()
+const { userData, isLoadingMembership } = userAuth()
 
-const dni = ref("");
-const policyRequestForm = ref(false);
-const beneficiario_poliza_cedula = ref("");
-const beneficiario_poliza_name = ref("");
-const leftDrawerOpen = ref(false);
-const show = ref(false);
-const miniState = ref(true);
-const isNoMembership = ref(false);
-const isSoonExpires = ref(false);
-const messageToGetMembership = ref("");
+const dni = ref('')
+const policyRequestForm = ref(false)
+const beneficiario_poliza_cedula = ref('')
+const beneficiario_poliza_name = ref('')
+const leftDrawerOpen = ref(false)
+const show = ref(false)
+const miniState = ref(true)
+const isNoMembership = ref(false)
+const isSoonExpires = ref(false)
+const messageToGetMembership = ref('')
 
-const { push, go } = useRouter();
+const { push, go } = useRouter()
 
 watch([isNoMembership, isLoadingMembership, userData], () => {
   if (
-    userData.value?.membresia?.type === "permitir_gratuita" &&
-    userData.value?.membresia?.status === "vencida" &&
+    userData.value?.membresia?.type === 'permitir_gratuita' &&
+    userData.value?.membresia?.status === 'vencida' &&
     !isLoadingMembership.value
   ) {
     messageToGetMembership.value =
-      "Hola! Bienvenido a Tarjeta Joven Diamante, debes seleccionar un plan para poder disfrutar de los beneficios";
+      'Hola! Bienvenido a Tarjeta Joven Diamante, debes seleccionar un plan para poder disfrutar de los beneficios'
   } else if (
-    userData.value?.membresia?.type === "Prueba" &&
-    userData.value?.membresia?.status === "vencida" &&
+    userData.value?.membresia?.type === 'Prueba' &&
+    userData.value?.membresia?.status === 'vencida' &&
     !isLoadingMembership.value
   ) {
     messageToGetMembership.value =
-      "Hola, gracias por formar parte de Tarjeta Joven Diamante, te informamos que debes renovar tu membresía para seguir disfrutando de los beneficios.";
+      'Hola, gracias por formar parte de Tarjeta Joven Diamante, te informamos que debes renovar tu membresía para seguir disfrutando de los beneficios.'
   } else {
-    isNoMembership.value = false;
+    isNoMembership.value = false
   }
-});
+})
 
-const { isLoading, mutateAsync } = useUpdateUserMutation();
+const { isLoading, mutateAsync } = useUpdateUserMutation()
 
 watch(show, () => {
   if (window.plugins?.preventscreenshot && window.cordova) {
     if (show.value) {
-      window.plugins.preventscreenshot.disable();
-      console.log("disable screenshot");
+      window.plugins.preventscreenshot.disable()
+      console.log('disable screenshot')
     } else {
-      window.plugins.preventscreenshot.enable();
-      console.log("enable screenshot");
+      window.plugins.preventscreenshot.enable()
+      console.log('enable screenshot')
     }
   }
-});
+})
 
 watchEffect(() => {
   if (
-    userData.value?.membresia?.status === "vencida" &&
+    userData.value?.membresia?.status === 'vencida' &&
     !isLoadingMembership.value
   ) {
-    console.log("loading", isLoadingMembership.value);
-    isNoMembership.value = true;
+    console.log('loading', isLoadingMembership.value)
+    isNoMembership.value = true
   } else if (
     userData.value?.membresia?.days <= 15 &&
-    userData.value?.membresia?.status === "activa"
+    userData.value?.membresia?.status === 'activa'
   ) {
-    isSoonExpires.value = true;
+    isSoonExpires.value = true
   } else {
-    isNoMembership.value = false;
-    isSoonExpires.value = false;
+    isNoMembership.value = false
+    isSoonExpires.value = false
   }
-});
+})
 
 watchEffect(() => {
-  if (userData.value?.membresia?.type === "Comprada") {
-    console.log("membresia comprada");
+  if (userData.value?.membresia?.type === 'Comprada') {
+    console.log('membresia comprada')
     if (
       userData.value.beneficiario_poliza_cedula === null ||
       userData.value.beneficiario_poliza_name === null ||
       userData.value.dni === null
     ) {
-      console.log("sin poliza");
-      policyRequestForm.value = true;
+      console.log('sin poliza')
+      policyRequestForm.value = true
     }
   }
-});
+})
 
 const handledLogout = (e) => {
-  e.preventDefault();
-  localStorage.removeItem("user");
-  push("/login");
-};
+  e.preventDefault()
+  localStorage.removeItem('user')
+  push('/login')
+}
 
 const toggleLeftDrawer = () => {
-  leftDrawerOpen.value = true;
-  miniState.value = !miniState.value;
-};
+  leftDrawerOpen.value = true
+  miniState.value = !miniState.value
+}
 
 const drawerClick = (e) => {
   if (miniState.value) {
-    miniState.value = false;
+    miniState.value = false
 
-    e.stopPropagation();
+    e.stopPropagation()
   }
-};
+}
 
 const checkFileType = (files) => {
   return files.filter(
     (file) =>
-      file.type === "image/jpeg" ||
-      file.type === "image/png" ||
-      file.type === "application/pdf"
-  );
-};
+      file.type === 'image/jpeg' ||
+      file.type === 'image/png' ||
+      file.type === 'application/pdf'
+  )
+}
 
 const onPhotoDataSuccessDniUser = (imageData) => {
-  const img = "data:image/jpeg;base64," + imageData;
-  dni.value = convertToFile(img);
-};
+  const img = 'data:image/jpeg;base64,' + imageData
+  dni.value = convertToFile(img)
+}
 
 const onFailDniUser = (message) => {
-  console.error("Failed because: " + message);
-};
+  console.error('Failed because: ' + message)
+}
 
 const openCameraDniUser = () => {
-  openCamera(onPhotoDataSuccessDniUser, onFailDniUser);
-};
+  openCamera(onPhotoDataSuccessDniUser, onFailDniUser)
+}
 
 const handledUpdateUser = async () => {
   await mutateAsync({
@@ -139,10 +139,10 @@ const handledUpdateUser = async () => {
     data: {
       beneficiario_poliza_cedula: beneficiario_poliza_cedula.value,
       beneficiario_poliza_name: beneficiario_poliza_name.value,
-      dni: dni.value,
-    },
-  });
-};
+      dni: dni.value
+    }
+  })
+}
 </script>
 
 <template>
