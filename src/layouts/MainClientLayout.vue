@@ -8,17 +8,34 @@ import { convertToFile, openCamera } from "src/utils/openCamera";
 import { checkFileType } from "src/utils/checkFileType";
 import QrUser from "../components/QrUser.vue";
 import triangle from "../assets/images/triangulo.png";
-import qrIcon from "./../assets/images/qr.jpg";
 import logo from "../assets/icons/acronimo.svg";
+import { useValidateForm } from "src/composables/useValidateForm";
+import { policySchema } from "src/schemas/policySchema";
 
 const $q = useQuasar();
-const { userData, isLoadingMembership } = userAuth();
+const {
+  userData,
+  isFetchingUser,
+  isFetchedAfterMountUser,
+  isLoadingMembership,
+  isFetchedUser,
+} = userAuth();
 
-const dni = ref("");
+const { useForm, validatInput, validateMessage, validateForm } =
+  useValidateForm({ initialValue: {}, schema: policySchema });
+
+watch([userData, isFetchedAfterMountUser, isFetchedUser], () => {
+  if (userData.value && !isFetchingUser.value) {
+    useForm.value = {
+      dni: userData.value?.dni,
+      dni_text: userData.value?.dni_text || "",
+      beneficiario_poliza_cedula: userData.value?.beneficiario_poliza_cedula,
+      beneficiario_poliza_name: userData.value?.beneficiario_poliza_name || "",
+    };
+  }
+});
+
 const policyRequestForm = ref(false);
-const beneficiario_poliza_cedula = ref("");
-const beneficiario_poliza_name = ref("");
-const dni_text = ref("");
 const leftDrawerOpen = ref(false);
 const show = ref(false);
 const miniState = ref(true);
@@ -87,6 +104,7 @@ watchEffect(() => {
       userData.value.beneficiario_poliza_cedula === null ||
       userData.value.beneficiario_poliza_name === null ||
       userData.value.dni === null ||
+      userData.value.dni_text === "" ||
       userData.value.dni_text === null
     ) {
       console.log("sin poliza");
@@ -115,7 +133,7 @@ const ACCEPTED_TYPES_FOR_DNI = ["image/jpeg", "image/png", "application/pdf"];
 
 const onPhotoDataSuccessDniUser = (imageData) => {
   const img = "data:image/jpeg;base64," + imageData;
-  dni.value = convertToFile(img);
+  useForm.value.dni = convertToFile(img);
 };
 
 const onFailDniUser = (message) => {
@@ -127,13 +145,10 @@ const openCameraDniUser = () => {
 };
 
 const handledUpdateUser = async () => {
+  validateForm();
   await mutateAsync({
+    ...useForm.value,
     id: userData?.value?.id,
-    data: {
-      beneficiario_poliza_cedula: beneficiario_poliza_cedula.value,
-      beneficiario_poliza_name: beneficiario_poliza_name.value,
-      dni: dni.value,
-    },
   });
 };
 </script>
@@ -322,91 +337,125 @@ const handledUpdateUser = async () => {
               <q-img src="favicon.ico" width="100px" height="auto" />
             </div>
             <br />
+
             <div class="text-h6 text-center">
-              Coloca tu beneficiaro de poliza
+              Coloca tu beneficiario de poliza
             </div>
           </q-card-section>
 
-          <q-card-section class="q-pt-none q-gutter-lg">
-            <div>
-              Foto de tu cédula o pasaporte
-              <div
-                class="q-ma-none label-large no-wrap full-width row q-gutter-md"
-              >
-                <q-file
-                  outlined
-                  class="full-width"
-                  v-model="dni"
-                  label="Subir archivo.jpg/.png/.pdf"
-                  :filter="checkFileType(ACCEPTED_TYPES_FOR_DNI)"
-                  max-files="1"
+          <q-card-section class="q-pt-none">
+            <q-form
+              @submit.prevent="handledUpdateUser"
+              class="q-pt-none q-gutter-lg"
+            >
+              <div>
+                Foto de tu cédula o pasaporte
+                <div
+                  class="q-ma-none label-large no-wrap full-width row q-gutter-md"
                 >
-                  <template v-slot:prepend>
-                    <q-icon name="cloud_upload" @click.stop.prevent />
-                  </template>
-                </q-file>
+                  <q-file
+                    outlined
+                    class="full-width"
+                    v-model="useForm.dni"
+                    name="dni"
+                    @blur="validatInput('dni')"
+                    @keypress="validatInput('dni')"
+                    label="Subir archivo.jpg/.png/.pdf"
+                    :filter="checkFileType(ACCEPTED_TYPES_FOR_DNI)"
+                    max-files="1"
+                  >
+                    <template v-slot:prepend>
+                      <q-icon name="cloud_upload" @click.stop.prevent />
+                    </template>
+                  </q-file>
 
+                  <q-btn
+                    class="cordova-only"
+                    color="primary"
+                    icon="camera_alt"
+                    @click="openCameraDniUser"
+                  />
+                </div>
+                <p class="text-error" v-if="!!validateMessage.errors.dni">
+                  {{ validateMessage.errors.dni }}
+                </p>
+              </div>
+
+              <div>
+                <label>
+                  Introduce tu cédula o pasaporte
+                  <q-input
+                    placeholder="76757667"
+                    outlined
+                    autocomplete="nope"
+                    name="dni_text"
+                    v-model="useForm.dni_text"
+                    autofocus
+                    @blur="validatInput('dni_text')"
+                    @keypress="validatInput('dni_text')"
+                  />
+                  <p
+                    class="text-error"
+                    v-if="!!validateMessage.errors.dni_text"
+                  >
+                    {{ validateMessage.errors.dni_text }}
+                  </p>
+                </label>
+              </div>
+
+              <div>
+                <label>
+                  Cedula de tu beneficiario
+                  <q-input
+                    placeholder="76757667"
+                    outlined
+                    autocomplete="nope"
+                    name="beneficiario_poliza_cedula"
+                    v-model="useForm.beneficiario_poliza_cedula"
+                    @blur="validatInput('beneficiario_poliza_cedula')"
+                    @keypress="validatInput('beneficiario_poliza_cedula')"
+                    autofocus
+                  />
+                  <p
+                    class="text-error"
+                    v-if="!!validateMessage.errors.beneficiario_poliza_cedula"
+                  >
+                    {{ validateMessage.errors.beneficiario_poliza_cedula }}
+                  </p>
+                </label>
+              </div>
+              <div>
+                <label>
+                  Nombrel del beneficiario
+                  <q-input
+                    placeholder="Juan Perez"
+                    outlined
+                    autocomplete="nope"
+                    name="beneficiario_poliza_name"
+                    v-model="useForm.beneficiario_poliza_name"
+                    @blur="validatInput('beneficiario_poliza_name')"
+                    @keypress="validatInput('beneficiario_poliza_name')"
+                  />
+                  <p
+                    class="text-error"
+                    v-if="!!validateMessage.errors.beneficiario_poliza_name"
+                  >
+                    {{ validateMessage.errors.beneficiario_poliza_name }}
+                  </p>
+                </label>
+              </div>
+              <div class="full-width row justify-center">
                 <q-btn
-                  class="cordova-only"
                   color="primary"
-                  icon="camera_alt"
-                  @click="openCameraDniUser"
+                  label="Agregar datos"
+                  v-close-popup
+                  :loading="isLoading"
+                  type="submit"
+                  :disable="!validateMessage.isvalid"
                 />
               </div>
-            </div>
-
-            <div>
-              <label>
-                Introduce tu cédula o pasaporte
-                <q-input
-                  placeholder="76757667"
-                  outlined
-                  v-model="dni_text"
-                  autofocus
-                />
-              </label>
-            </div>
-
-            <div>
-              <label>
-                Cedula de tu beneficiario
-                <q-input
-                  placeholder="76757667"
-                  outlined
-                  v-model="beneficiario_poliza_cedula"
-                  autofocus
-                />
-              </label>
-            </div>
-            <div>
-              <label>
-                Nombrel del beneficiario
-                <q-input
-                  placeholder="Juan Perez"
-                  outlined
-                  v-model="beneficiario_poliza_name"
-                />
-              </label>
-            </div>
+            </q-form>
           </q-card-section>
-
-          <q-card-actions align="center" class="text-primary">
-            <q-btn
-              color="primary"
-              label="Agregar datos"
-              v-close-popup
-              :loading="isLoading"
-              @click="handledUpdateUser"
-              :disable="
-                beneficiario_poliza_cedula != '' &&
-                dni_text != '' &&
-                beneficiario_poliza_name != '' &&
-                dni != ''
-                  ? false
-                  : true
-              "
-            />
-          </q-card-actions>
         </q-card>
       </q-dialog>
 
@@ -484,10 +533,9 @@ const handledUpdateUser = async () => {
           round
           @click="show = true"
           color="primary"
+          icon="qr_code"
           :disable="userData?.membresia?.status === 'vencida'"
-        >
-          <q-img :src="qrIcon" width="24px" height="24px" alt="qr icon" />
-        </q-btn>
+        />
       </div>
     </div>
     <q-tabs

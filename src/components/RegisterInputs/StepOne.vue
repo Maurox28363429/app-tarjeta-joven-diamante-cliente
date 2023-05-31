@@ -34,6 +34,8 @@ const updateValue = (key, value) => {
         lazy-rules
         outlined
         v-model="name"
+        autocomplete="nope"
+        name="name"
         placeholder="Luis"
         @blur="validatInput('name')"
         @keypress="validatInput('name')"
@@ -41,7 +43,7 @@ const updateValue = (key, value) => {
       />
     </label>
     <p class="error" v-if="!!validateMessage.errors.name">
-      {{ validateMessage.errors.last_name }}
+      {{ validateMessage.errors.name }}
     </p>
   </div>
   <div class="q-ma-none full-width input">
@@ -51,6 +53,8 @@ const updateValue = (key, value) => {
         lazy-rules
         outlined
         v-model="lastName"
+        autocomplete="nope"
+        name="last_name"
         placeholder="Perez"
         @blur="validatInput('last_name')"
         @keypress="validatInput('last_name')"

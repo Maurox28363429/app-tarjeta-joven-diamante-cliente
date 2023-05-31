@@ -64,9 +64,10 @@ const updateForm = ({ key, value }) => {
         </p>
       </div>
 
-      <q-form
+      <form
         @submit.prevent="onSubmit"
         class="q-gutter-md full-width column items-center loginForm"
+        autocomplete="nope"
       >
         <div class="full-width row justify-between">
           <p class="title-medium">Crear cuenta</p>
@@ -145,7 +146,7 @@ const updateForm = ({ key, value }) => {
           >¿Ya tienes cuenta?
           <span class="text-weight-bold">Login</span></router-link
         >
-      </q-form>
+      </form>
     </div>
   </div>
 </template>

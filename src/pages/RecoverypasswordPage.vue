@@ -115,6 +115,7 @@ const sendPassword = () => {
                   :type="isVisible ? 'text' : 'password'"
                   outlined
                   lazy-rules
+                  autocomplete="nope"
                   v-model="useForm.password"
                   placeholder="********"
                   @blur="validatInput('password')"

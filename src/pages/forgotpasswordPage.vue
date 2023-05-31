@@ -48,6 +48,7 @@ const sendEmail = async () => {
               <q-input
                 lazy-rules
                 type="email"
+                autocomplete="nope"
                 outlined
                 v-model="useForm.email"
                 placeholder="Example@gmail.com"

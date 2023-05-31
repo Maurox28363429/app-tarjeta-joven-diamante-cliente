@@ -248,6 +248,7 @@ const updateUser = async () => {
                       lazy-rules
                       type="text"
                       outlined
+                      autocomplete="nope"
                       placeholder="Pepito"
                       v-model="useForm.name"
                       @blur="validatInput('name')"
@@ -267,6 +268,7 @@ const updateUser = async () => {
                       type="text"
                       v-model="useForm.last_name"
                       outlined
+                      autocomplete="nope"
                       placeholder="Apellido"
                       @blur="validatInput('last_name')"
                       @keypress="validatInput('last_name')"
@@ -285,6 +287,7 @@ const updateUser = async () => {
                       type="date"
                       v-model="useForm.fecha_nacimiento"
                       outlined
+                      autocomplete="nope"
                       placeholder="Fecha de nacimiento"
                       name="fecha_nacimiento"
                     />
@@ -301,6 +304,7 @@ const updateUser = async () => {
                       type="email"
                       v-model="useForm.email"
                       outlined
+                      autocomplete="nope"
                       placeholder="example@gmail.com"
                       @blur="validatInput('email')"
                       @keypress="validatInput('email')"
@@ -319,6 +323,7 @@ const updateUser = async () => {
                       type="tel"
                       v-model="useForm.phone"
                       outlined
+                      autocomplete="nope"
                       placeholder="0414767997"
                       @blur="validatInput('phone')"
                       @keypress="validatInput('phone')"
@@ -336,6 +341,7 @@ const updateUser = async () => {
                       v-model="useForm.address"
                       lazy-rules
                       type="text"
+                      autocomplete="nope"
                       outlined
                       placeholder=""
                       name="address"
@@ -391,6 +397,7 @@ const updateUser = async () => {
                       lazy-rules
                       type="text"
                       outlined
+                      autocomplete="nope"
                       placeholder="23746766"
                       name="beneficiario_poliza_cedula"
                     />
@@ -404,6 +411,7 @@ const updateUser = async () => {
                       v-model="useForm.beneficiario_poliza_cedula"
                       lazy-rules
                       type="text"
+                      autocomplete="nope"
                       outlined
                       placeholder="23746766"
                       name="beneficiario_poliza_cedula"
@@ -417,6 +425,7 @@ const updateUser = async () => {
                       v-model="useForm.beneficiario_poliza_name"
                       lazy-rules
                       type="text"
+                      autocomplete="nope"
                       outlined
                       placeholder="Juan Perez"
                       name="beneficiario_poliza_name"
@@ -462,7 +471,9 @@ const updateUser = async () => {
         <q-img
           :src="userData?.dni"
           spinner-color="primary"
-          style="height: 320px; max-width: 320px"
+          fit="contain"
+          height="320px"
+          width="320px"
         />
       </q-card-section>
       <q-card-actions align="right" class="text-primary">

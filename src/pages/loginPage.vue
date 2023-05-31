@@ -50,6 +50,7 @@ const showPassword = () => {
                 lazy-rules
                 type="email"
                 outlined
+                autocomplete="nope"
                 v-model="useForm.email"
                 placeholder="Example@gmail.com"
                 @blur="validatInput('email')"
@@ -68,6 +69,7 @@ const showPassword = () => {
                 :type="isVisible ? 'text' : 'password'"
                 outlined
                 lazy-rules
+                autocomplete="nope"
                 v-model="useForm.password"
                 placeholder="********"
                 @blur="validatInput('password')"

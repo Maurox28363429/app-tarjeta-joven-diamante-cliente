@@ -75,11 +75,18 @@ const filterFn = (val, update) => {
         input-debounce="0"
         label="promotores"
         v-model="vendedor"
+        autocomplete="nope"
         :options="stringOptions"
+        @blur="validatInput('vendedor')"
+        @keypress="validatInput('vendedor')"
+        name="vendedor"
         @update:modelValue="updateValue('vendedor', $event)"
         @filter="filterFn"
         behavior="menu"
       ></q-select>
+      <p class="error" v-if="!!validateMessage.errors.vendedor">
+        {{ validateMessage.errors.vendedor }}
+      </p>
     </label>
   </div>
   <div class="q-ma-none full-width input">
@@ -89,12 +96,19 @@ const filterFn = (val, update) => {
         outlined
         v-model="provincia"
         multiple
+        autocomplete="nope"
         :options="provinceOptions"
         @update:modelValue="updateValue('provincia', $event)"
+        @blur="validatInput('provincia')"
+        @keypress="validatInput('provincia')"
         use-chips
+        name="provincia"
         stack-label
         label="Provincias"
       />
+      <p class="error" v-if="!!validateMessage.errors.provincia">
+        {{ validateMessage.errors.provincia }}
+      </p>
     </label>
   </div>
 </template>

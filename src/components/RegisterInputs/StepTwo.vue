@@ -34,6 +34,8 @@ const updateValue = (key, value) => {
         lazy-rules
         outlined
         v-model="email"
+        name="email"
+        autocomplete="nope"
         placeholder="example@gmail.com"
         @blur="validatInput('email')"
         @keypress="validatInput('email')"
@@ -53,6 +55,8 @@ const updateValue = (key, value) => {
         outlined
         v-model="phone"
         placeholder="041459789"
+        name="phone"
+        autocomplete="nope"
         @blur="validatInput('phone')"
         @keypress="validatInput('phone')"
         @update:modelValue="updateValue('phone', $event)"

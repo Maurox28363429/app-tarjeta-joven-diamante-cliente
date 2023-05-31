@@ -3,7 +3,6 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { userAuth } from "src/composables/userAuth";
 import QRScanner from "src/components/QRScanner.vue";
-import qrIcon from "./../assets/images/qr.jpg";
 import logo from "../assets/icons/acronimo.svg";
 
 const { userData } = userAuth();
@@ -197,9 +196,13 @@ const drawerClick = (e) => {
 
     <div class="q-px-sm q-py-lg">
       <div class="qrButton">
-        <q-btn round size="md" color="primary" @click="handledReadQr">
-          <q-img :src="qrIcon" width="24px" height="24px" alt="QR" />
-        </q-btn>
+        <q-btn
+          round
+          size="md"
+          color="primary"
+          @click="handledReadQr"
+          icon="qr_code_scanner"
+        />
       </div>
     </div>
     <q-tabs

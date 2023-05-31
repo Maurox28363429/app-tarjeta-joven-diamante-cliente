@@ -42,6 +42,10 @@ const updateValue = (key, value) => {
         lazy-rules
         class="full-width q-ma-none"
         v-model="sex"
+        name="sex"
+        @blur="validatInput('sex')"
+        @keypress="validatInput('sex')"
+        autocomplete="nope"
         :options="GENDER_OPTIONS"
         @update:modelValue="updateValue('sex', $event)"
       />
@@ -57,6 +61,8 @@ const updateValue = (key, value) => {
         lazy-rules
         :type="isVisible ? 'text' : 'password'"
         outlined
+        name="password"
+        autocomplete="nope"
         v-model="password"
         placeholder="********"
         @blur="validatInput('password')"
