@@ -11,13 +11,10 @@ import {
 } from "src/querys/userQuerys";
 import PinInput from "src/components/PinInput.vue";
 
-const typePassword = ref("password");
-const iconPassword = ref("visibility_off");
+const isVisible = ref(false);
 
 const showPassword = () => {
-  typePassword.value = typePassword.value === "password" ? "text" : "password";
-  iconPassword.value =
-    iconPassword.value === "visibility_off" ? "visibility" : "visibility_off";
+  isVisible.value = !isVisible.value;
 };
 
 const recoveryPasswordStore = useRecoveryPasswordStore();
@@ -115,7 +112,7 @@ const sendPassword = () => {
               <label class="label-large">
                 Contraseña
                 <q-input
-                  :type="typePassword"
+                  :type="isVisible ? 'text' : 'password'"
                   outlined
                   lazy-rules
                   v-model="useForm.password"
@@ -125,9 +122,9 @@ const sendPassword = () => {
                 >
                   <template v-slot:append>
                     <q-icon
-                      @click="showPassword()"
+                      @click="showPassword"
                       class="cursor-pointer"
-                      :name="iconPassword"
+                      :name="isVisible ? 'visibility_off' : 'visibility'"
                       color="primary"
                     />
                   </template>

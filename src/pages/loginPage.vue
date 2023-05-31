@@ -20,13 +20,10 @@ const onSubmit = async () => {
   login({ ...useForm.value });
 };
 
-const typePassword = ref("password");
-const iconPassword = ref("visibility_off");
+const isVisible = ref(false);
 
 const showPassword = () => {
-  typePassword.value = typePassword.value === "password" ? "text" : "password";
-  iconPassword.value =
-    iconPassword.value === "visibility_off" ? "visibility" : "visibility_off";
+  isVisible.value = !isVisible.value;
 };
 </script>
 
@@ -68,7 +65,7 @@ const showPassword = () => {
             <label class="label-large">
               Contraseña
               <q-input
-                :type="typePassword"
+                :type="isVisible ? 'text' : 'password'"
                 outlined
                 lazy-rules
                 v-model="useForm.password"
@@ -78,9 +75,9 @@ const showPassword = () => {
               >
                 <template v-slot:append>
                   <q-icon
-                    @click="showPassword()"
+                    @click="showPassword"
                     class="cursor-pointer"
-                    :name="iconPassword"
+                    :name="isVisible ? 'visibility' : 'visibility_off'"
                     color="primary"
                   />
                 </template>

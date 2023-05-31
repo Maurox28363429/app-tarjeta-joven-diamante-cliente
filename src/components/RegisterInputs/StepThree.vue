@@ -3,18 +3,6 @@ import { ref } from "vue";
 
 const GENDER_OPTIONS = ["Hombre", "Mujer"];
 
-const typePassword = ref("password");
-const iconPassword = ref("visibility_off");
-
-const showPassword = () => {
-  if (typePassword.value === "password") {
-    typePassword.value = "text";
-    iconPassword.value = "visibility";
-  } else {
-    typePassword.value = "password";
-    iconPassword.value = "visibility_off";
-  }
-};
 const props = defineProps({
   useForm: {
     type: Object,
@@ -32,6 +20,11 @@ const props = defineProps({
 
 const sex = ref(props.useForm.sex);
 const password = ref(props.useForm.password);
+const isVisible = ref(false);
+
+const showPassword = () => {
+  isVisible.value = !isVisible.value;
+};
 
 const emit = defineEmits(["update:modelValue"]);
 
@@ -62,7 +55,7 @@ const updateValue = (key, value) => {
       Contraseña
       <q-input
         lazy-rules
-        :type="typePassword"
+        :type="isVisible ? 'text' : 'password'"
         outlined
         v-model="password"
         placeholder="********"
@@ -72,9 +65,9 @@ const updateValue = (key, value) => {
       >
         <template v-slot:append>
           <q-icon
-            @click="showPassword()"
+            @click="showPassword"
             class="cursor-pointer"
-            :name="iconPassword"
+            :name="isVisible ? 'visibility' : 'visibility_off'"
             color="primary"
           />
         </template>

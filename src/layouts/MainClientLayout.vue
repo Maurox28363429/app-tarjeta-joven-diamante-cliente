@@ -18,6 +18,7 @@ const dni = ref("");
 const policyRequestForm = ref(false);
 const beneficiario_poliza_cedula = ref("");
 const beneficiario_poliza_name = ref("");
+const dni_text = ref("");
 const leftDrawerOpen = ref(false);
 const show = ref(false);
 const miniState = ref(true);
@@ -85,7 +86,8 @@ watchEffect(() => {
     if (
       userData.value.beneficiario_poliza_cedula === null ||
       userData.value.beneficiario_poliza_name === null ||
-      userData.value.dni === null
+      userData.value.dni === null ||
+      userData.value.dni_text === null
     ) {
       console.log("sin poliza");
       policyRequestForm.value = true;
@@ -327,46 +329,64 @@ const handledUpdateUser = async () => {
 
           <q-card-section class="q-pt-none q-gutter-lg">
             <div>
-              Cédula / pasaporte
+              Foto de tu cédula o pasaporte
               <div
                 class="q-ma-none label-large no-wrap full-width row q-gutter-md"
               >
                 <q-file
                   outlined
-                  dense
                   class="full-width"
                   v-model="dni"
-                  label="archivo.jpg/.png/.pdf"
+                  label="Subir archivo.jpg/.png/.pdf"
                   :filter="checkFileType(ACCEPTED_TYPES_FOR_DNI)"
                   max-files="1"
                 >
+                  <template v-slot:prepend>
+                    <q-icon name="cloud_upload" @click.stop.prevent />
+                  </template>
                 </q-file>
 
                 <q-btn
                   class="cordova-only"
                   color="primary"
-                  icon="camera"
+                  icon="camera_alt"
                   @click="openCameraDniUser"
                 />
               </div>
             </div>
 
             <div>
-              <q-input
-                placeholder="Cedula de tu beneficiario"
-                dense
-                outlined
-                v-model="beneficiario_poliza_cedula"
-                autofocus
-              />
+              <label>
+                Introduce tu cédula o pasaporte
+                <q-input
+                  placeholder="76757667"
+                  outlined
+                  v-model="dni_text"
+                  autofocus
+                />
+              </label>
+            </div>
+
+            <div>
+              <label>
+                Cedula de tu beneficiario
+                <q-input
+                  placeholder="76757667"
+                  outlined
+                  v-model="beneficiario_poliza_cedula"
+                  autofocus
+                />
+              </label>
             </div>
             <div>
-              <q-input
-                placeholder="Nombrel del beneficiario"
-                dense
-                outlined
-                v-model="beneficiario_poliza_name"
-              />
+              <label>
+                Nombrel del beneficiario
+                <q-input
+                  placeholder="Juan Perez"
+                  outlined
+                  v-model="beneficiario_poliza_name"
+                />
+              </label>
             </div>
           </q-card-section>
 
@@ -379,6 +399,7 @@ const handledUpdateUser = async () => {
               @click="handledUpdateUser"
               :disable="
                 beneficiario_poliza_cedula != '' &&
+                dni_text != '' &&
                 beneficiario_poliza_name != '' &&
                 dni != ''
                   ? false
