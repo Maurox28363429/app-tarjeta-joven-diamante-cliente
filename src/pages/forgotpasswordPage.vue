@@ -1,29 +1,29 @@
 <script setup>
-import { useRouter } from "vue-router";
-import { emailSchema } from "src/schemas/emailShema";
-import { useRecoveryPasswordStore } from "src/stores/recoveryPasswordStore";
-import { useValidateForm } from "src/composables/useValidateForm";
-import { useSendEmail } from "src/querys/userQuerys";
+import { useRouter } from 'vue-router'
+import { emailSchema } from 'src/schemas/emailShema'
+import { useRecoveryPasswordStore } from 'src/stores/recoveryPasswordStore'
+import { useValidateForm } from 'src/composables/useValidateForm'
+import { useSendEmail } from 'src/querys/userQuerys'
 
-const { go } = useRouter();
+const { go } = useRouter()
 
 const INITIAL_VALUES = {
-  email: "",
-};
+  email: ''
+}
 
 const { useForm, validatInput, validateMessage } = useValidateForm({
   initialValue: INITIAL_VALUES,
-  schema: emailSchema,
-});
+  schema: emailSchema
+})
 
-const recoveryPasswordStore = useRecoveryPasswordStore();
+const recoveryPasswordStore = useRecoveryPasswordStore()
 
-const { mutate, isLoading } = useSendEmail();
+const { mutate, isLoading } = useSendEmail()
 
 const sendEmail = async () => {
-  mutate({ email: useForm.value.email });
-  recoveryPasswordStore.setEmail(useForm.value.email);
-};
+  mutate({ email: useForm.value.email })
+  recoveryPasswordStore.setEmail(useForm.value.email)
+}
 </script>
 
 <template>

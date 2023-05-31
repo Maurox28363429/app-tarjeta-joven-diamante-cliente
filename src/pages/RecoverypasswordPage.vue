@@ -1,77 +1,74 @@
 <script setup>
-import { ref, watchEffect } from "vue";
-import { useRouter } from "vue-router";
-import { useValidateForm } from "src/composables/useValidateForm";
-import { passwordSchema } from "src/schemas/passwordShema";
-import { useRecoveryPasswordStore } from "src/stores/recoveryPasswordStore";
+import { ref, watchEffect } from 'vue'
+import { useRouter } from 'vue-router'
+import { useValidateForm } from 'src/composables/useValidateForm'
+import { passwordSchema } from 'src/schemas/passwordShema'
+import { useRecoveryPasswordStore } from 'src/stores/recoveryPasswordStore'
 import {
   useChangePassword,
   useValidatePasswordAndCode,
-  useSendEmailAgain,
-} from "src/querys/userQuerys";
-import PinInput from "src/components/PinInput.vue";
+  useSendEmailAgain
+} from 'src/querys/userQuerys'
+import PinInput from 'src/components/PinInput.vue'
 
-const typePassword = ref("password");
-const iconPassword = ref("visibility_off");
+const isVisible = ref(false)
 
 const showPassword = () => {
-  typePassword.value = typePassword.value === "password" ? "text" : "password";
-  iconPassword.value =
-    iconPassword.value === "visibility_off" ? "visibility" : "visibility_off";
-};
+  isVisible.value = !isVisible.value
+}
 
-const recoveryPasswordStore = useRecoveryPasswordStore();
-const recoveryEmail = recoveryPasswordStore.email;
+const recoveryPasswordStore = useRecoveryPasswordStore()
+const recoveryEmail = recoveryPasswordStore.email
 
 const INITIAL_VALUES = {
-  password: "",
-};
+  password: ''
+}
 
 const { useForm, validatInput, validateMessage } = useValidateForm({
   initialValue: INITIAL_VALUES,
-  schema: passwordSchema,
-});
+  schema: passwordSchema
+})
 
-const codeValue = ref(null);
-const showFormCode = ref(true);
+const codeValue = ref(null)
+const showFormCode = ref(true)
 
-const { go } = useRouter();
+const { go } = useRouter()
 
 const { isLoading: isLoadingSendEmail, mutate: sendEmailMutate } =
-  useSendEmailAgain();
+  useSendEmailAgain()
 const {
   isLoading: isLoadingHandledSencode,
   mutate: validateMutate,
-  data: validateData,
-} = useValidatePasswordAndCode();
+  data: validateData
+} = useValidatePasswordAndCode()
 const { isLoading: isLoadingPassword, mutate: passwordMutate } =
-  useChangePassword();
+  useChangePassword()
 
 const sendCode = async () => {
-  sendEmailMutate({ email: recoveryEmail });
-};
+  sendEmailMutate({ email: recoveryEmail })
+}
 
 const handledSencode = (code) => {
-  codeValue.value = code;
+  codeValue.value = code
   validateMutate({
     email: recoveryEmail,
-    code,
-  });
-};
+    code
+  })
+}
 
 watchEffect(() => {
   if (validateData.value) {
-    showFormCode.value = false;
+    showFormCode.value = false
   }
-});
+})
 
 const sendPassword = () => {
   passwordMutate({
     recovery_cod: codeValue.value,
     password: useForm.value.password,
-    email: recoveryEmail,
-  });
-};
+    email: recoveryEmail
+  })
+}
 </script>
 
 <template>
@@ -115,7 +112,7 @@ const sendPassword = () => {
               <label class="label-large">
                 Contraseña
                 <q-input
-                  :type="typePassword"
+                  :type="isVisible ? 'text' : 'password'"
                   outlined
                   lazy-rules
                   v-model="useForm.password"
@@ -125,9 +122,9 @@ const sendPassword = () => {
                 >
                   <template v-slot:append>
                     <q-icon
-                      @click="showPassword()"
+                      @click="showPassword"
                       class="cursor-pointer"
-                      :name="iconPassword"
+                      :name="isVisible ? 'visibility_off' : 'visibility'"
                       color="primary"
                     />
                   </template>

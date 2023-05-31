@@ -1,33 +1,31 @@
 <script setup>
-import { ref } from "vue";
-import { loginSchema } from "src/schemas/loginSchema";
-import { useValidateForm } from "src/composables/useValidateForm";
-import { userAuth } from "src/composables/userAuth";
-import logo from "./../assets/icons/logo.svg";
+import { ref } from 'vue'
+import { loginSchema } from 'src/schemas/loginSchema'
+import { useValidateForm } from 'src/composables/useValidateForm'
+import { userAuth } from 'src/composables/userAuth'
+import logo from './../assets/icons/logo.svg'
 
-const { login, isLoadingLogin } = userAuth();
+const { login, isLoadingLogin } = userAuth()
 
 const INITIAL_VALUES = {
-  email: "",
-  password: "",
-};
+  email: '',
+  password: ''
+}
 
 const { useForm, validatInput, validateMessage, validateForm } =
-  useValidateForm({ initialValue: INITIAL_VALUES, schema: loginSchema });
+  useValidateForm({ initialValue: INITIAL_VALUES, schema: loginSchema })
 
 const onSubmit = async () => {
-  validateForm();
-  login({ ...useForm.value });
-};
+  validateForm()
+  login({ ...useForm.value })
+}
 
-const typePassword = ref("password");
-const iconPassword = ref("visibility_off");
+const isVisible = ref(false)
 
 const showPassword = () => {
-  typePassword.value = typePassword.value === "password" ? "text" : "password";
-  iconPassword.value =
-    iconPassword.value === "visibility_off" ? "visibility" : "visibility_off";
-};
+  isVisible.value = !isVisible.value
+}
+
 </script>
 
 <template>
@@ -68,7 +66,7 @@ const showPassword = () => {
             <label class="label-large">
               Contraseña
               <q-input
-                :type="typePassword"
+                :type="isVisible ? 'text' : 'password'"
                 outlined
                 lazy-rules
                 v-model="useForm.password"
@@ -78,9 +76,9 @@ const showPassword = () => {
               >
                 <template v-slot:append>
                   <q-icon
-                    @click="showPassword()"
+                    @click="showPassword"
                     class="cursor-pointer"
-                    :name="iconPassword"
+                    :name="isVisible ? 'visibility' : 'visibility_off'"
                     color="primary"
                   />
                 </template>

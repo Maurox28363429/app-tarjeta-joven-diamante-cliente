@@ -1,46 +1,46 @@
 <script setup>
-const INSTAGRAM_URL = "https://www.instagram.com/tarjetajovendiamante/";
+const INSTAGRAM_URL = 'https://www.instagram.com/tarjetajovendiamante/'
 const EMAIL_URL =
-  "https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=informacion@tarjetajovendiamante.com";
-const WEB_URL = "https://www.tarjetajovendiamante.com/";
+  'https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=informacion@tarjetajovendiamante.com'
+const WEB_URL = 'https://www.tarjetajovendiamante.com/'
 
 const DIRETORY = [
   {
-    name: "Ing. Jean Carlos Tuñón Pretelt",
-    charge: "Director",
-    phoneNumber: "6578-9280",
+    name: 'Ing. Jean Carlos Tuñón Pretelt',
+    charge: 'Director',
+    phoneNumber: '6578-9280'
   },
   {
-    name: "Lic. Lourdes Klumpp",
-    charge: "Secretaria ejecutiva",
-    phoneNumber: "6578-9280",
+    name: 'Lic. Lourdes Klumpp',
+    charge: 'Secretaria ejecutiva',
+    phoneNumber: '6578-9280'
   },
   {
-    name: "Xiomara Durango",
-    charge: "Social y Pachamá Ecológico",
-    phoneNumber: "6540-9984",
+    name: 'Xiomara Durango',
+    charge: 'Social y Pachamá Ecológico',
+    phoneNumber: '6540-9984'
   },
   {
-    name: "Lic. Alicia Saldaña",
-    charge: "Publicidad y comunicación",
-    phoneNumber: "62308757",
+    name: 'Lic. Alicia Saldaña',
+    charge: 'Publicidad y comunicación',
+    phoneNumber: '62308757'
   },
   {
-    name: "Patricia Bárcenas",
-    charge: "Ventas y Atención al cliente",
-    phoneNumber: "6540-9984",
+    name: 'Patricia Bárcenas',
+    charge: 'Ventas y Atención al cliente',
+    phoneNumber: '6540-9984'
   },
   {
-    name: "Elvia Abrego",
-    charge: "Administración y contabilidad",
-    phoneNumber: "6540-9984",
+    name: 'Elvia Abrego',
+    charge: 'Administración y contabilidad',
+    phoneNumber: '6540-9984'
   },
   {
-    name: "Charlott Pinzón",
-    charge: "Call Center",
-    phoneNumber: "6540-9984",
-  },
-];
+    name: 'Charlott Pinzón',
+    charge: 'Call Center',
+    phoneNumber: '6540-9984'
+  }
+]
 </script>
 
 <template>

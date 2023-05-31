@@ -63,7 +63,7 @@ watch([userData, isFetchedAfterMountUser, isFetchedUser], () => {
     useForm.value = {
       provincia: Array.isArray(userData.value.provincia)
         ? userData.value.provincia
-        : JSON.parse(userData.value.provincia),
+        : JSON.parse(userData?.value?.provincia),
       name: userData.value?.name,
       email: userData.value?.email,
       last_name: userData.value?.last_name,
@@ -72,6 +72,7 @@ watch([userData, isFetchedAfterMountUser, isFetchedUser], () => {
       address: userData.value?.address,
       img: null,
       dni: userData.value?.dni,
+      dni_text: userData.value?.dni_text || "",
       beneficiario_poliza_cedula: userData.value?.beneficiario_poliza_cedula,
       beneficiario_poliza_name: userData.value?.beneficiario_poliza_name || "",
       fecha_nacimiento: userData.value?.fecha_nacimiento || "",
@@ -365,18 +366,35 @@ const updateUser = async () => {
                       outlined
                       v-model="useForm.dni"
                       class="full-width"
-                      label="archivo.jpg/.png/.pdf"
+                      label="Subir archivo.jpg/.png/.pdf"
                       :filter="checkFileType(ACCEPTED_TYPES_FOR_DNI)"
                       max-files="1"
                     >
+                      <template v-slot:prepend>
+                        <q-icon name="cloud_upload" @click.stop.prevent />
+                      </template>
                     </q-file>
                     <q-btn
                       class="cordova-only"
                       color="primary"
-                      icon="camera"
+                      icon="camera_alt"
                       @click="handledCamera"
                     />
                   </div>
+                </div>
+
+                <div class="q-ma-none full-width input" v-if="!isBusiness">
+                  <label class="label-large">
+                    Introduce tu cédula o pasaporte
+                    <q-input
+                      v-model="useForm.dni_text"
+                      lazy-rules
+                      type="text"
+                      outlined
+                      placeholder="23746766"
+                      name="beneficiario_poliza_cedula"
+                    />
+                  </label>
                 </div>
 
                 <div class="q-ma-none full-width input" v-if="!isBusiness">
@@ -387,7 +405,7 @@ const updateUser = async () => {
                       lazy-rules
                       type="text"
                       outlined
-                      placeholder=""
+                      placeholder="23746766"
                       name="beneficiario_poliza_cedula"
                     />
                   </label>
@@ -400,7 +418,7 @@ const updateUser = async () => {
                       lazy-rules
                       type="text"
                       outlined
-                      placeholder=""
+                      placeholder="Juan Perez"
                       name="beneficiario_poliza_name"
                     />
                   </label>
