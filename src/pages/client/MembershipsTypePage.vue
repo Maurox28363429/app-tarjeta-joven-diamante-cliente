@@ -1,25 +1,25 @@
 <script setup>
-import { computed } from 'vue'
-import { userAuth } from 'src/composables/userAuth'
-import logo from '../../assets/images/t.webp'
+import { computed } from "vue";
+import { userAuth } from "src/composables/userAuth";
+import logo from "../../assets/images/t.webp";
 
-const { userData, isLoadingUser } = userAuth()
+const { userData, isLoadingUser } = userAuth();
 
 const isMembershipsActive = computed(
-  () => userData.value?.membresia?.status === 'activa'
-)
+  () => userData.value?.membresia?.status === "activa"
+);
 
 const getDate = (fechaString) => {
-  const date = new Date(fechaString)
-  const day = date.getDate()
-  const month = date.getMonth() + 1
-  const year = date.getFullYear()
+  const date = new Date(fechaString);
+  const day = date.getDate();
+  const month = date.getMonth() + 1;
+  const year = date.getFullYear();
 
-  return `${day}/${month}/${year}`
-}
+  return `${day}/${month}/${year}`;
+};
 
-const activationDate = getDate(userData.value?.membresia?.updated_at)
-const expirationDate = getDate(userData.value?.membresia?.fecha_cobro)
+const activationDate = getDate(userData.value?.membresia?.updated_at);
+const expirationDate = getDate(userData.value?.membresia?.fecha_cobro);
 </script>
 
 <template>

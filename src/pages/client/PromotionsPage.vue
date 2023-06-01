@@ -1,31 +1,31 @@
 <script setup>
-import { ref, watchEffect } from 'vue'
-import { useGetPromotions } from 'src/querys/promotionsQuerys'
+import { ref, watchEffect } from "vue";
+import { useGetPromotions } from "src/querys/promotionsQuerys";
 
-const openModal = ref(false)
-const modalCurrent = ref({})
-const currentPaginate = ref(1)
+const openModal = ref(false);
+const modalCurrent = ref({});
+const currentPaginate = ref(1);
 
-const pages = ref(1)
-const search = ref('')
+const pages = ref(1);
+const search = ref("");
 
 const {
   data: promotionsData,
   isLoading,
   refetch,
-  isFetching
-} = useGetPromotions({ search, pages })
+  isFetching,
+} = useGetPromotions({ search, pages });
 
 const showModal = (modalInfo) => {
-  modalCurrent.value = { ...modalInfo }
-  openModal.value = true
-}
+  modalCurrent.value = { ...modalInfo };
+  openModal.value = true;
+};
 
 watchEffect(() => {
   if (promotionsData.value) {
-    pages.value = promotionsData?.value?.data?.pagination.lastPage
+    pages.value = promotionsData?.value?.data?.pagination.lastPage;
   }
-})
+});
 </script>
 
 <template>

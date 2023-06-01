@@ -1,26 +1,26 @@
 <script setup>
-import { defineProps } from 'vue'
-import { useRouter } from 'vue-router'
-import { userAuth } from 'src/composables/userAuth'
+import { defineProps } from "vue";
+import { useRouter } from "vue-router";
+import { userAuth } from "src/composables/userAuth";
 
-const { userData, isLoadingUser } = userAuth()
+const { userData, isLoadingUser } = userAuth();
 
 const props = defineProps({
   user: {
     type: String,
-    required: true
-  }
-})
+    required: true,
+  },
+});
 
-const isBusiness = props.user === 'business'
+const isBusiness = props.user === "business";
 
-const router = useRouter()
+const router = useRouter();
 
 const handledLogout = (e) => {
-  e.preventDefault()
-  localStorage.removeItem('user')
-  router.push('/login')
-}
+  e.preventDefault();
+  localStorage.removeItem("user");
+  router.push("/login");
+};
 </script>
 
 <template>

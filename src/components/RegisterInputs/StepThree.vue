@@ -1,36 +1,36 @@
 <script setup>
-import { ref } from 'vue'
+import { ref } from "vue";
 
-const GENDER_OPTIONS = ['Hombre', 'Mujer']
+const GENDER_OPTIONS = ["Hombre", "Mujer"];
 
 const props = defineProps({
   useForm: {
     type: Object,
-    required: true
+    required: true,
   },
   validatInput: {
     type: Function,
-    required: true
+    required: true,
   },
   validateMessage: {
     type: Object,
-    required: true
-  }
-})
+    required: true,
+  },
+});
 
-const sex = ref(props.useForm.sex)
-const password = ref(props.useForm.password)
-const isVisible = ref(false)
+const sex = ref(props.useForm.sex);
+const password = ref(props.useForm.password);
+const isVisible = ref(false);
 
 const showPassword = () => {
-  isVisible.value = !isVisible.value
-}
+  isVisible.value = !isVisible.value;
+};
 
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(["update:modelValue"]);
 
 const updateValue = (key, value) => {
-  emit('update:modelValue', { key, value })
-}
+  emit("update:modelValue", { key, value });
+};
 </script>
 
 <template>

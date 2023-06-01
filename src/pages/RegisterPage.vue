@@ -1,51 +1,51 @@
 <script setup>
-import { ref, computed } from 'vue'
-import { registerSchema } from 'src/schemas/registerSchema'
-import StepOne from '../components/RegisterInputs/StepOne.vue'
-import StepTwo from '../components/RegisterInputs/StepTwo.vue'
-import StepThree from '../components/RegisterInputs/StepThree.vue'
-import StepFour from '../components/RegisterInputs/StepFour.vue'
-import logo from './../assets/icons/logo.svg'
+import { ref, computed } from "vue";
+import { registerSchema } from "src/schemas/registerSchema";
+import StepOne from "../components/RegisterInputs/StepOne.vue";
+import StepTwo from "../components/RegisterInputs/StepTwo.vue";
+import StepThree from "../components/RegisterInputs/StepThree.vue";
+import StepFour from "../components/RegisterInputs/StepFour.vue";
+import logo from "./../assets/icons/logo.svg";
 
-import { userAuth } from 'src/composables/userAuth'
-import { useValidateForm } from 'src/composables/useValidateForm'
+import { userAuth } from "src/composables/userAuth";
+import { useValidateForm } from "src/composables/useValidateForm";
 
-const { register, isLoadingRegister } = userAuth()
+const { register, isLoadingRegister } = userAuth();
 
-const GENDER_OPTIONS = ['Hombre', 'Mujer']
+const GENDER_OPTIONS = ["Hombre", "Mujer"];
 
 const INITIAL_VALUES = {
-  name: '',
-  email: '',
-  last_name: '',
-  phone: '',
+  name: "",
+  email: "",
+  last_name: "",
+  phone: "",
   sex: GENDER_OPTIONS[0],
-  password: '',
-  vendedor: '',
-  provincia: []
-}
+  password: "",
+  vendedor: "",
+  provincia: [],
+};
 
-const lastStep = 4
-const currentForm = ref(1)
+const lastStep = 4;
+const currentForm = ref(1);
 
-const nextStep = () => currentForm.value++
-const prevStep = () => currentForm.value--
+const nextStep = () => currentForm.value++;
+const prevStep = () => currentForm.value--;
 
-const disableLastButton = computed(() => currentForm.value === 1)
-const isLastStep = computed(() => currentForm.value === lastStep)
+const disableLastButton = computed(() => currentForm.value === 1);
+const isLastStep = computed(() => currentForm.value === lastStep);
 
 const { useForm, validatInput, validateMessage, validateForm } =
-  useValidateForm({ initialValue: INITIAL_VALUES, schema: registerSchema })
+  useValidateForm({ initialValue: INITIAL_VALUES, schema: registerSchema });
 
 const onSubmit = () => {
-  validateForm()
-  const roleIdClient = 3
-  register({ ...useForm.value, role_id: roleIdClient })
-}
+  validateForm();
+  const roleIdClient = 3;
+  register({ ...useForm.value, role_id: roleIdClient });
+};
 
 const updateForm = ({ key, value }) => {
-  useForm.value[key] = value
-}
+  useForm.value[key] = value;
+};
 </script>
 
 <template>

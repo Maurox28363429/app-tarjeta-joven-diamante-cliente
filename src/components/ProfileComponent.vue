@@ -1,12 +1,12 @@
 <script setup>
-import { ref, watch, defineProps, computed, watchEffect } from 'vue'
-import { userAuth } from 'src/composables/userAuth'
-import { useValidateForm } from 'src/composables/useValidateForm'
-import { updateProfileShema } from 'src/schemas/updateProfileShema'
-import { useUpdateUserMutation } from 'src/querys/userQuerys'
-import { useGetStates } from 'src/querys/offersQuerys'
-import { convertToFile, openCamera } from 'src/utils/openCamera'
-import { checkFileType } from 'src/utils/checkFileType'
+import { ref, watch, defineProps, computed, watchEffect } from "vue";
+import { userAuth } from "src/composables/userAuth";
+import { useValidateForm } from "src/composables/useValidateForm";
+import { updateProfileShema } from "src/schemas/updateProfileShema";
+import { useUpdateUserMutation } from "src/querys/userQuerys";
+import { useGetStates } from "src/querys/offersQuerys";
+import { convertToFile, openCamera } from "src/utils/openCamera";
+import { checkFileType } from "src/utils/checkFileType";
 
 const {
   updatedUser,
@@ -14,52 +14,52 @@ const {
   isLoadingUser,
   isFetchingUser,
   isFetchedAfterMountUser,
-  isFetchedUser
-} = userAuth()
+  isFetchedUser,
+} = userAuth();
 
-const showDni = ref(false)
+const showDni = ref(false);
 
-const ACCEPTED_TYPES_FOR_DNI = ['image/jpeg', 'image/png', 'application/pdf']
+const ACCEPTED_TYPES_FOR_DNI = ["image/jpeg", "image/png", "application/pdf"];
 
 const props = defineProps({
   user: {
     type: String,
-    required: true
-  }
-})
+    required: true,
+  },
+});
 
-const { data } = useGetStates({})
+const { data } = useGetStates({});
 
 const provinceOptions = computed(() =>
   data.value?.data?.map(({ name }) => name)
-)
+);
 
-const isBusiness = props.user === 'business'
+const isBusiness = props.user === "business";
 
-let genderCurrent = { label: '', value: '' }
+let genderCurrent = { label: "", value: "" };
 
 const GENDER_OPTIONS = [
-  { label: 'Mujer', value: 0 },
-  { label: 'Hombre', value: 1 }
-]
+  { label: "Mujer", value: 0 },
+  { label: "Hombre", value: 1 },
+];
 
-const fileInput = ref(userData.value?.img_url ?? '')
+const fileInput = ref(userData.value?.img_url ?? "");
 
 const { useForm, validatInput, validateMessage, validateForm } =
-  useValidateForm({ initialValue: {}, schema: updateProfileShema })
+  useValidateForm({ initialValue: {}, schema: updateProfileShema });
 
 watchEffect(() => {
   if (useForm.value?.provincia?.length > 2 && userData.value) {
-    useForm.value?.provincia.pop()
+    useForm.value?.provincia.pop();
   }
-})
+});
 
 watch([userData, isFetchedAfterMountUser, isFetchedUser], () => {
   if (userData.value && !isFetchingUser.value) {
     genderCurrent = GENDER_OPTIONS.find(
       (item) => item.value === Number(userData.value?.sex)
-    )
-    fileInput.value = userData.value?.img_url
+    );
+    fileInput.value = userData.value?.img_url;
     useForm.value = {
       provincia: Array.isArray(userData.value.provincia)
         ? userData.value.provincia
@@ -72,49 +72,49 @@ watch([userData, isFetchedAfterMountUser, isFetchedUser], () => {
       address: userData.value?.address,
       img: null,
       dni: userData.value?.dni,
-      dni_text: userData.value?.dni_text || '',
+      dni_text: userData.value?.dni_text || "",
       beneficiario_poliza_cedula: userData.value?.beneficiario_poliza_cedula,
-      beneficiario_poliza_name: userData.value?.beneficiario_poliza_name || '',
-      fecha_nacimiento: userData.value?.fecha_nacimiento || ''
-    }
+      beneficiario_poliza_name: userData.value?.beneficiario_poliza_name || "",
+      fecha_nacimiento: userData.value?.fecha_nacimiento || "",
+    };
   }
-})
+});
 
 const onPhotoDataSuccess = (imageData) => {
-  const img = 'data:image/jpeg;base64,' + imageData
-  useForm.value.dni = convertToFile(img)
-}
+  const img = "data:image/jpeg;base64," + imageData;
+  useForm.value.dni = convertToFile(img);
+};
 
 const onFail = (message) => {
-  console.log('Failed because: ' + message)
-}
+  console.log("Failed because: " + message);
+};
 
 const handledCamera = () => {
-  openCamera(onPhotoDataSuccess, onFail)
-}
+  openCamera(onPhotoDataSuccess, onFail);
+};
 
-const { isLoading, mutateAsync } = useUpdateUserMutation()
+const { isLoading, mutateAsync } = useUpdateUserMutation();
 
 const uploadImage = (event) => {
-  const selectedImage = event.target.files[0]
-  useForm.value.img = selectedImage
-  fileInput.value = URL.createObjectURL(selectedImage)
-}
+  const selectedImage = event.target.files[0];
+  useForm.value.img = selectedImage;
+  fileInput.value = URL.createObjectURL(selectedImage);
+};
 
 const updateUser = async () => {
-  validateForm()
+  validateForm();
 
   const updatedValues = {
     ...useForm.value,
     role_id: userData.value.role_id,
     active: userData.value.active,
     id: userData.value.id,
-    sex: useForm.value.sex?.value
-  }
-  await mutateAsync(updatedValues)
+    sex: useForm.value.sex?.value,
+  };
+  await mutateAsync(updatedValues);
 
-  updatedUser()
-}
+  updatedUser();
+};
 </script>
 
 <template>
