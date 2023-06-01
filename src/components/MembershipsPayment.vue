@@ -1,76 +1,76 @@
 <script setup>
-import { ref } from "vue";
-import { useRouter } from "vue-router";
-import { userAuth } from "../composables/userAuth.js";
-import logo from "../assets/icons/acronimo.svg";
-import rocketIcon from "../assets/icons/rokectPrimarysvg.svg";
-import yappyIcon from "./../assets/icons/yappyIcon.svg";
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { userAuth } from '../composables/userAuth.js'
+import logo from '../assets/icons/acronimo.svg'
+import rocketIcon from '../assets/icons/rokectPrimarysvg.svg'
+import yappyIcon from './../assets/icons/yappyIcon.svg'
 
-const isAcceptedTerms = ref(false);
-const textError = ref(false);
-const { userData, addMembership, isLoadingMembership } = userAuth();
+const isAcceptedTerms = ref(false)
+const textError = ref(false)
+const { userData, addMembership, isLoadingMembership } = userAuth()
 
-const { go } = useRouter();
+const { go } = useRouter()
 
 const props = defineProps({
   price: {
     type: Number,
     required: true,
-    default: 0,
+    default: 0
   },
   name: {
     type: String,
     required: true,
-    default: "",
-  },
-});
+    default: ''
+  }
+})
 
 const handledFreePayment = () => {
   if (isAcceptedTerms.value) {
-    addMembership({ user_id: userData.value?.id });
-    textError.value = false;
+    addMembership({ user_id: userData.value?.id })
+    textError.value = false
   } else {
-    textError.value = true;
+    textError.value = true
   }
-};
+}
 const HandlePayment = () => {
-  const userId = userData.value?.id || "";
+  const userId = userData.value?.id || ''
   const url =
-    "https://api.tarjetajovendiamante.com" +
-    `/pago/Payment_Controller.php?orderId=${userId}`;
-  localStorage.removeItem("user");
-  if (typeof cordova !== "undefined") {
-    const target = "_blank";
-    const options = "location=no,zoom=no,toolbar=no,";
+    'https://api.tarjetajovendiamante.com' +
+    `/pago/Payment_Controller.php?orderId=${userId}`
+  localStorage.removeItem('user')
+  if (typeof cordova !== 'undefined') {
+    const target = '_blank'
+    const options = 'location=no,zoom=no,toolbar=no,'
 
     const inAppBrowser = window.cordova?.InAppBrowser.open(
       url,
       target,
       options
-    );
+    )
 
     // Puedes manejar eventos del navegador incorporado, si lo deseas
-    inAppBrowser.addEventListener("loadstart", (event) => {
-      console.log("InAppBrowser: loadstart", event);
-    });
+    inAppBrowser.addEventListener('loadstart', (event) => {
+      console.log('InAppBrowser: loadstart', event)
+    })
 
-    inAppBrowser.addEventListener("loadstop", (event) => {
-      console.log("InAppBrowser: loadstop", event);
-    });
+    inAppBrowser.addEventListener('loadstop', (event) => {
+      console.log('InAppBrowser: loadstop', event)
+    })
 
-    inAppBrowser.addEventListener("loaderror", (event) => {
-      console.log("InAppBrowser: loaderror", event);
-    });
+    inAppBrowser.addEventListener('loaderror', (event) => {
+      console.log('InAppBrowser: loaderror', event)
+    })
 
-    inAppBrowser.addEventListener("exit", (event) => {
-      console.log("InAppBrowser: exit", event);
-    });
+    inAppBrowser.addEventListener('exit', (event) => {
+      console.log('InAppBrowser: exit', event)
+    })
   } else {
-    console.warn("Cordova no está disponible");
-    window.open(url);
+    console.warn('Cordova no está disponible')
+    window.open(url)
   }
-};
-const isFree = Boolean(props.name === "free") || props.price <= 0;
+}
+const isFree = Boolean(props.name === 'free') || props.price <= 0
 </script>
 
 <template>

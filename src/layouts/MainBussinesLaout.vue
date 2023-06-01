@@ -1,38 +1,38 @@
 <script setup>
-import { ref } from "vue";
-import { useRouter } from "vue-router";
-import { userAuth } from "src/composables/userAuth";
-import QRScanner from "src/components/QRScanner.vue";
-import logo from "../assets/icons/acronimo.svg";
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { userAuth } from 'src/composables/userAuth'
+import QRScanner from 'src/components/QRScanner.vue'
+import logo from '../assets/icons/acronimo.svg'
 
-const { userData } = userAuth();
-const { push, go } = useRouter();
+const { userData } = userAuth()
+const { push, go } = useRouter()
 
-const leftDrawerOpen = ref(false);
-const show = ref(false);
-const miniState = ref(true);
+const leftDrawerOpen = ref(false)
+const show = ref(false)
+const miniState = ref(true)
 
 const handledReadQr = () => {
-  show.value = !show.value;
-};
+  show.value = !show.value
+}
 
 const handledLogout = (e) => {
-  e.preventDefault();
-  localStorage.removeItem("user");
-  push("/login");
-};
+  e.preventDefault()
+  localStorage.removeItem('user')
+  push('/login')
+}
 
 const toggleLeftDrawer = () => {
-  leftDrawerOpen.value = true;
-  miniState.value = !miniState.value;
-};
+  leftDrawerOpen.value = true
+  miniState.value = !miniState.value
+}
 
 const drawerClick = (e) => {
   if (miniState.value) {
-    miniState.value = false;
-    e.stopPropagation();
+    miniState.value = false
+    e.stopPropagation()
   }
-};
+}
 </script>
 
 <template>

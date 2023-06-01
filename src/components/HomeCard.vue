@@ -1,35 +1,35 @@
 <script setup>
-import { defineProps } from "vue";
-import { useRouter } from "vue-router";
+import { defineProps } from 'vue'
+import { useRouter } from 'vue-router'
 
-const { push } = useRouter();
+const { push } = useRouter()
 
 const props = defineProps({
   title: {
     type: String,
-    required: true,
+    required: true
   },
   link: {
     type: String,
-    default: "#",
+    default: '#'
   },
   enabled: {
     type: Boolean,
     default: true,
-    required: true,
+    required: true
   },
   icon: {
     type: String,
-    default: "",
-  },
-});
+    default: ''
+  }
+})
 const handleLink = () => {
   if (props.enabled) {
-    push(props.link);
+    push(props.link)
   } else {
-    console.log("deshabilitado");
+    console.log('deshabilitado')
   }
-};
+}
 </script>
 
 <template>

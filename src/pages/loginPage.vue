@@ -1,30 +1,30 @@
 <script setup>
-import { ref } from "vue";
-import { loginSchema } from "src/schemas/loginSchema";
-import { useValidateForm } from "src/composables/useValidateForm";
-import { userAuth } from "src/composables/userAuth";
-import logo from "./../assets/icons/logo.svg";
+import { ref } from 'vue'
+import { loginSchema } from 'src/schemas/loginSchema'
+import { useValidateForm } from 'src/composables/useValidateForm'
+import { userAuth } from 'src/composables/userAuth'
+import logo from './../assets/icons/logo.svg'
 
-const { login, isLoadingLogin } = userAuth();
+const { login, isLoadingLogin } = userAuth()
 
 const INITIAL_VALUES = {
-  email: "",
-  password: "",
-};
+  email: '',
+  password: ''
+}
 
 const { useForm, validatInput, validateMessage, validateForm } =
-  useValidateForm({ initialValue: INITIAL_VALUES, schema: loginSchema });
+  useValidateForm({ initialValue: INITIAL_VALUES, schema: loginSchema })
 
 const onSubmit = async () => {
-  validateForm();
-  login({ ...useForm.value });
-};
+  validateForm()
+  login({ ...useForm.value })
+}
 
-const isVisible = ref(false);
+const isVisible = ref(false)
 
 const showPassword = () => {
-  isVisible.value = !isVisible.value;
-};
+  isVisible.value = !isVisible.value
+}
 </script>
 
 <template>

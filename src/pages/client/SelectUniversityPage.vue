@@ -1,29 +1,29 @@
 <script setup>
-import { ref, watchEffect } from "vue";
-import { useRoute } from "vue-router";
-import CardOffers from "src/components/CardOffers.vue";
+import { ref, watchEffect } from 'vue'
+import { useRoute } from 'vue-router'
+import CardOffers from 'src/components/CardOffers.vue'
 
-import { useGetUniversities } from "src/querys/offersQuerys";
+import { useGetUniversities } from 'src/querys/offersQuerys'
 
-const currentPaginate = ref(1);
-const pages = ref(0);
-const search = ref("");
+const currentPaginate = ref(1)
+const pages = ref(0)
+const search = ref('')
 
-const route = useRoute();
-const state = ref(route.params.countryName);
+const route = useRoute()
+const state = ref(route.params.countryName)
 
 const { data, isLoading, refetch, isFetching } = useGetUniversities({
   search,
   page: currentPaginate,
-  dir: state,
-});
+  dir: state
+})
 
 watchEffect(() => {
   if (data.value) {
-    currentPaginate.value = data.value?.pagination.currentPage;
-    pages.value = data.value?.pagination.lastPage;
+    currentPaginate.value = data.value?.pagination.currentPage
+    pages.value = data.value?.pagination.lastPage
   }
-});
+})
 </script>
 
 <template>
