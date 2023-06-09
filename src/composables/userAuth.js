@@ -1,8 +1,8 @@
-import { ref, computed } from "vue";
-import { useRouter } from "vue-router";
-import { useAuthStore } from "src/stores/useAuthStore";
-import { useToast } from "./useToast";
-import { useGetUserQuery } from "src/querys/userQuerys";
+import { ref, computed } from 'vue';
+import { useRouter } from 'vue-router';
+import { useAuthStore } from 'src/stores/useAuthStore';
+import { useToast } from './useToast';
+import { useGetUserQuery } from 'src/querys/userQuerys';
 
 export const userAuth = () => {
   const authStore = useAuthStore();
@@ -25,29 +25,21 @@ export const userAuth = () => {
     refetch: refetchUser,
   } = useGetUserQuery({ id: user.value?.id });
 
-  const ERR_NETWORK_MESSAGE =
-    "Verifique su conexión a internet e intente nuevamente";
-  const ERROR_MESSAGE = "Error desconocido";
-
   const membershipsIsActive = () =>
-    userAuth?.user.membresia?.status === "activa" ||
+    userAuth?.user.membresia?.status === 'activa' ||
     userAuth?.user.membresia?.days > 0;
 
   const login = async ({ password, email }) => {
     try {
       isLoadingLogin.value = true;
       await authStore.login({ password, email });
-      triggerPositive("Usuario iniciado con éxito");
+      triggerPositive('Usuario iniciado con éxito');
     } catch (err) {
-      const errorMessage =
-        err.response?.status === 400
-          ? "Usuario no encontrado, por favor verifique sus datos e intente nuevamente"
-          : err.code === "ERR_NETWORK"
-          ? ERR_NETWORK_MESSAGE
-          : ERROR_MESSAGE;
-      triggerWarning(errorMessage);
-
-      console.error(err);
+      if (err.response?.status === 400) {
+        triggerWarning(
+          'Usuario no encontrado, por favor verifique sus datos e intente nuevamente'
+        );
+      }
     } finally {
       isLoadingLogin.value = false;
     }
@@ -57,16 +49,11 @@ export const userAuth = () => {
     try {
       isLoadingRegister.value = true;
       await authStore.register(data);
-      triggerPositive("Usuario registrado con éxito");
+      triggerPositive('Usuario registrado con éxito');
     } catch (err) {
-      const errorMessage =
-        err.response?.status === 400
-          ? "Ese usuario ya exite, por favor ingrese otro correo o número de teléfono"
-          : err.code === "ERR_NETWORK"
-          ? ERR_NETWORK_MESSAGE
-          : ERROR_MESSAGE;
-      triggerWarning(errorMessage);
-      console.error(err);
+      if (err.response?.status === 400) {
+        triggerWarning('Ese usuario ya exite, por favor ingrese otro correo');
+      }
     } finally {
       isLoadingRegister.value = false;
     }
@@ -77,17 +64,12 @@ export const userAuth = () => {
       refetchUser();
       isLoadingMembership.value = true;
       await authStore.addMembership({ user_id });
-      triggerPositive("Ha obtenido la membresía con éxito");
-      router.push("/cliente");
+      triggerPositive('Ha obtenido la membresía con éxito');
+      router.push('/cliente');
     } catch (error) {
       if (error.response.status === 404) {
         triggerWarning(error.response.data.message);
-      } else {
-        const errorMessage =
-          error.code === "ERR_NETWORK" ? ERR_NETWORK_MESSAGE : ERROR_MESSAGE;
-        triggerWarning(errorMessage);
       }
-      console.error(error);
     } finally {
       isLoadingMembership.value = false;
     }

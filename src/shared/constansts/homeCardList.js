@@ -1,45 +1,45 @@
-import offersIcon from "../../assets/images/offersIcon.png";
-import messageIcon from "../../assets/images/messageIcon.png";
-import VIPIcon from "../../assets/images/VIPIcon.png";
-import speakerIcon from "../../assets/images/speakerIcon.png";
-import bagIcon from "../../assets/images/bagIcon.png";
+import offersIcon from '../../assets/images/offersIcon.png';
+import messageIcon from '../../assets/images/messageIcon.png';
+import VIPIcon from '../../assets/images/VIPIcon.png';
+import speakerIcon from '../../assets/images/speakerIcon.png';
+import bagIcon from '../../assets/images/bagIcon.png';
 // import giftIcon from "../../assets/images/giftIcon.png";
-import pachama from "../../assets/images/GifPachama.gif";
-import universityIcon from "../../assets/images/universityIcon.png";
+import pachama from '../../assets/images/GifPachama.gif';
+import universityIcon from '../../assets/images/universityIcon.png';
 // import helpIcon from "../../assets/images/heartIcon.png";
-import newsIcon from "../../assets/images/newsIcon.png";
-import iconoTarjeta from "../../assets/images/t.webp";
-import profileIcon from "../../assets/images/profileIcon.png";
-import disableIcon from "../../assets/images/bandImage.png";
+import newsIcon from '../../assets/images/newsIcon.png';
+import iconoTarjeta from '../../assets/images/t.webp';
+import profileIcon from '../../assets/images/profileIcon.png';
+import disableIcon from '../../assets/images/bandImage.png';
 
 export const HOME_CARD_LIST = [
   {
     id: 1,
-    title: "Seguro",
+    title: 'Seguro',
     icon: iconoTarjeta,
-    link: "#",
+    link: '#',
     evento: true,
     enabled: true,
   },
   {
     id: 2,
-    title: "Contactanos",
+    title: 'Contactanos',
     icon: messageIcon,
-    link: "/cliente/contact",
+    link: '/cliente/contact',
     enabled: true,
   },
   {
     id: 3,
-    title: "Membrersias",
+    title: 'Membrersias',
     icon: VIPIcon,
-    link: "/cliente/memberships-type",
+    link: '/cliente/memberships-type',
     enabled: true,
   },
   {
     id: 4,
-    title: "Ofertas",
+    title: 'Ofertas',
     icon: offersIcon,
-    link: "/cliente/Offers",
+    link: '/cliente/Offers',
     enabled: true,
   },
   /*   {
@@ -51,58 +51,58 @@ export const HOME_CARD_LIST = [
   }, */
   {
     id: 6,
-    title: "Premios",
+    title: 'Premios',
     icon: disableIcon,
-    link: "",
+    link: '',
     enabled: false,
   },
   {
     id: 7,
-    title: "Promociones",
+    title: 'Promociones',
     icon: speakerIcon,
-    link: "/cliente/promotions",
+    link: '/cliente/promotions',
     enabled: true,
   },
   {
     id: 8,
-    title: "Compras",
+    title: 'Compras',
     icon: bagIcon,
-    link: "/cliente/transactionsTable",
+    link: '/cliente/transactionsTable',
     enabled: true,
   },
   {
     id: 9,
-    title: "Pachamá",
+    title: 'Pachamá',
     icon: pachama,
-    link: "/cliente/pachama",
+    link: '/cliente/pachama',
     enabled: true,
   },
   {
     id: 10,
-    title: "Universidades y otros",
+    title: 'Universidades y otros',
     icon: universityIcon,
-    link: "/cliente/OffersForUniversitys/Panamá",
+    link: '/cliente/OffersForUniversitys/Panamá',
     enabled: true,
   },
   {
     id: 11,
-    title: "SOS",
+    title: 'SOS',
     icon: disableIcon,
-    link: "",
+    link: '',
     enabled: false,
   },
   {
     id: 12,
-    title: "Noticias",
+    title: 'Noticias',
     icon: newsIcon,
-    link: "/cliente/news",
+    link: '/cliente/news',
     enabled: true,
   },
   {
     id: 13,
-    title: "Perfil",
+    title: 'Perfil',
     icon: profileIcon,
-    link: "/cliente/account/profile",
+    link: '/cliente/account/profile',
     enabled: true,
   },
 ];

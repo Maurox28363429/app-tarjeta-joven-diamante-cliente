@@ -1,13 +1,13 @@
 <script setup>
-import { ref, watchEffect } from "vue";
-import { useGetPromotions } from "src/querys/promotionsQuerys";
+import { ref, watchEffect } from 'vue';
+import { useGetPromotions } from 'src/querys/promotionsQuerys';
 
 const openModal = ref(false);
 const modalCurrent = ref({});
 const currentPaginate = ref(1);
 
 const pages = ref(1);
-const search = ref("");
+const search = ref('');
 
 const {
   data: promotionsData,

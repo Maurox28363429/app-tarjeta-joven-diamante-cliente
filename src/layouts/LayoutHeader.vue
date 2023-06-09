@@ -1,5 +1,5 @@
 <script setup>
-import logo from "../assets/icons/acronimo.svg";
+import logo from '../assets/icons/acronimo.svg';
 </script>
 
 <template>

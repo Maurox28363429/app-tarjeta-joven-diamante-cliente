@@ -1,13 +1,13 @@
 <script setup>
-import { ref, watchEffect } from "vue";
-import { useGetPachamaNews } from "src/querys/pachamaNewsQuerys.js";
+import { ref, watchEffect } from 'vue';
+import { useGetPachamaNews } from 'src/querys/pachamaNewsQuerys.js';
 
 const openModal = ref(false);
 const modalCurrent = ref({});
 const currentPaginate = ref(1);
 
 const pages = ref(1);
-const search = ref("");
+const search = ref('');
 
 const {
   data: NewsData,

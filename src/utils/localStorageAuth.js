@@ -1,12 +1,12 @@
 const localStorageAuth = {
   getUser() {
-    return JSON.parse(localStorage.getItem("user"));
+    return JSON.parse(localStorage.getItem('user'));
   },
   setUser(token) {
-    localStorage.setItem("user", JSON.stringify(token));
+    localStorage.setItem('user', JSON.stringify(token));
   },
   removeUser() {
-    localStorage.removeItem("user");
+    localStorage.removeItem('user');
   },
   isAuthenticated() {
     return !!localStorageAuth.getUser();

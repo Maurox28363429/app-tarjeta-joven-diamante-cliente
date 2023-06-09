@@ -1,4 +1,4 @@
-import { instance } from ".";
+import { instance } from '.';
 
 export default async function registerUser({
   name,
@@ -14,7 +14,7 @@ export default async function registerUser({
   provincia,
   dni,
 }) {
-  return await instance.post("/register", {
+  return await instance.post('/register', {
     name,
     email,
     password,

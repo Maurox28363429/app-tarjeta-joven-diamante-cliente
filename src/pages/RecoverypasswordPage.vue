@@ -1,15 +1,15 @@
 <script setup>
-import { ref, watchEffect } from "vue";
-import { useRouter } from "vue-router";
-import { useValidateForm } from "src/composables/useValidateForm";
-import { passwordSchema } from "src/schemas/passwordShema";
-import { useRecoveryPasswordStore } from "src/stores/recoveryPasswordStore";
+import { ref, watchEffect } from 'vue';
+import { useRouter } from 'vue-router';
+import { useValidateForm } from 'src/composables/useValidateForm';
+import { passwordSchema } from 'src/schemas/passwordShema';
+import { useRecoveryPasswordStore } from 'src/stores/recoveryPasswordStore';
 import {
   useChangePassword,
   useValidatePasswordAndCode,
   useSendEmailAgain,
-} from "src/querys/userQuerys";
-import PinInput from "src/components/PinInput.vue";
+} from 'src/querys/userQuerys';
+import PinInput from 'src/components/PinInput.vue';
 
 const isVisible = ref(false);
 
@@ -21,7 +21,7 @@ const recoveryPasswordStore = useRecoveryPasswordStore();
 const recoveryEmail = recoveryPasswordStore.email;
 
 const INITIAL_VALUES = {
-  password: "",
+  password: '',
 };
 
 const { useForm, validatInput, validateMessage } = useValidateForm({

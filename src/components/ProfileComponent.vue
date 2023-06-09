@@ -1,12 +1,12 @@
 <script setup>
-import { ref, watch, defineProps, computed, watchEffect } from "vue";
-import { userAuth } from "src/composables/userAuth";
-import { useValidateForm } from "src/composables/useValidateForm";
-import { updateProfileShema } from "src/schemas/updateProfileShema";
-import { useUpdateUserMutation } from "src/querys/userQuerys";
-import { useGetStates } from "src/querys/offersQuerys";
-import { convertToFile, openCamera } from "src/utils/openCamera";
-import { checkFileType } from "src/utils/checkFileType";
+import { ref, watch, defineProps, computed, watchEffect } from 'vue';
+import { userAuth } from 'src/composables/userAuth';
+import { useValidateForm } from 'src/composables/useValidateForm';
+import { updateProfileShema } from 'src/schemas/updateProfileShema';
+import { useUpdateUserMutation } from 'src/querys/userQuerys';
+import { useGetStates } from 'src/querys/offersQuerys';
+import { convertToFile, openCamera } from 'src/utils/openCamera';
+import { checkFileType } from 'src/utils/checkFileType';
 
 const {
   updatedUser,
@@ -19,7 +19,7 @@ const {
 
 const showDni = ref(false);
 
-const ACCEPTED_TYPES_FOR_DNI = ["image/jpeg", "image/png", "application/pdf"];
+const ACCEPTED_TYPES_FOR_DNI = ['image/jpeg', 'image/png', 'application/pdf'];
 
 const props = defineProps({
   user: {
@@ -34,16 +34,16 @@ const provinceOptions = computed(() =>
   data.value?.data?.map(({ name }) => name)
 );
 
-const isBusiness = props.user === "business";
+const isBusiness = props.user === 'business';
 
-let genderCurrent = { label: "", value: "" };
+let genderCurrent = { label: '', value: '' };
 
 const GENDER_OPTIONS = [
-  { label: "Mujer", value: 0 },
-  { label: "Hombre", value: 1 },
+  { label: 'Mujer', value: 0 },
+  { label: 'Hombre', value: 1 },
 ];
 
-const fileInput = ref(userData.value?.img_url ?? "");
+const fileInput = ref(userData.value?.img_url ?? '');
 
 const { useForm, validatInput, validateMessage, validateForm } =
   useValidateForm({ initialValue: {}, schema: updateProfileShema });
@@ -72,21 +72,21 @@ watch([userData, isFetchedAfterMountUser, isFetchedUser], () => {
       address: userData.value?.address,
       img: null,
       dni: userData.value?.dni,
-      dni_text: userData.value?.dni_text || "",
+      dni_text: userData.value?.dni_text || '',
       beneficiario_poliza_cedula: userData.value?.beneficiario_poliza_cedula,
-      beneficiario_poliza_name: userData.value?.beneficiario_poliza_name || "",
-      fecha_nacimiento: userData.value?.fecha_nacimiento || "",
+      beneficiario_poliza_name: userData.value?.beneficiario_poliza_name || '',
+      fecha_nacimiento: userData.value?.fecha_nacimiento || '',
     };
   }
 });
 
 const onPhotoDataSuccess = (imageData) => {
-  const img = "data:image/jpeg;base64," + imageData;
+  const img = 'data:image/jpeg;base64,' + imageData;
   useForm.value.dni = convertToFile(img);
 };
 
 const onFail = (message) => {
-  console.log("Failed because: " + message);
+  console.log('Failed because: ' + message);
 };
 
 const handledCamera = () => {

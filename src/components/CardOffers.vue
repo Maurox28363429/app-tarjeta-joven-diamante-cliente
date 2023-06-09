@@ -1,17 +1,17 @@
 <script setup>
-import { defineProps, ref } from "vue";
-import wazeIcon from "./../assets/images/wazeIcon.jpg";
+import { defineProps, ref } from 'vue';
+import wazeIcon from './../assets/images/wazeIcon.jpg';
 
 const openModal = ref(false);
 
 const openWaze = (link) => {
   link.forEach((element) => {
-    window.open(element.link, "_blank");
+    window.open(element.link, '_blank');
   });
 };
 
 const handleBuy = () => {
-  console.log("buy");
+  console.log('buy');
 };
 
 const showModal = () => {

@@ -1,24 +1,24 @@
 <script setup>
-import { useQuasar } from "quasar";
-import { ref, watch, watchEffect } from "vue";
-import { useRouter } from "vue-router";
-import { userAuth } from "src/composables/userAuth";
-import { useUpdateUserMutation } from "src/querys/userQuerys";
-import { convertToFile, openCamera } from "src/utils/openCamera";
-import { checkFileType } from "src/utils/checkFileType";
-import QrUser from "../components/QrUser.vue";
-import triangle from "../assets/images/triangulo.png";
-import logo from "../assets/icons/acronimo.svg";
-import { useValidateForm } from "src/composables/useValidateForm";
-import { policySchema } from "src/schemas/policySchema";
-import PocketBase from "pocketbase";
+import { useQuasar } from 'quasar';
+import { ref, watch, watchEffect } from 'vue';
+import { useRouter } from 'vue-router';
+import { userAuth } from 'src/composables/userAuth';
+import { useUpdateUserMutation } from 'src/querys/userQuerys';
+import { convertToFile, openCamera } from 'src/utils/openCamera';
+import { checkFileType } from 'src/utils/checkFileType';
+import QrUser from '../components/QrUser.vue';
+import triangle from '../assets/images/triangulo.png';
+import logo from '../assets/icons/acronimo.svg';
+import { useValidateForm } from 'src/composables/useValidateForm';
+import { policySchema } from 'src/schemas/policySchema';
+import PocketBase from 'pocketbase';
 
-import offersIcon from "../assets/images/offersIcon.png";
-import universityIcon from "../assets/images/universityIcon.png";
-import newsIcon from "../assets/images/newsIcon.png";
-import pachama from "../assets/images/GifPachama.gif";
+import offersIcon from '../assets/images/offersIcon.png';
+import universityIcon from '../assets/images/universityIcon.png';
+import newsIcon from '../assets/images/newsIcon.png';
+import pachama from '../assets/images/GifPachama.gif';
 
-alert(process.env.VUE_APP_API_URL, "API URL");
+alert(process.env.VUE_APP_API_URL, 'API URL');
 
 const $q = useQuasar();
 const {
@@ -36,9 +36,9 @@ watch([userData, isFetchedAfterMountUser, isFetchedUser], () => {
   if (userData.value && !isFetchingUser.value) {
     useForm.value = {
       dni: userData.value?.dni,
-      dni_text: userData.value?.dni_text || "",
+      dni_text: userData.value?.dni_text || '',
       beneficiario_poliza_cedula: userData.value?.beneficiario_poliza_cedula,
-      beneficiario_poliza_name: userData.value?.beneficiario_poliza_name || "",
+      beneficiario_poliza_name: userData.value?.beneficiario_poliza_name || '',
     };
   }
 });
@@ -49,29 +49,29 @@ const show = ref(false);
 const miniState = ref(true);
 const isNoMembership = ref(false);
 const isSoonExpires = ref(false);
-const messageToGetMembership = ref("");
+const messageToGetMembership = ref('');
 
 const { push, go } = useRouter();
 
 const MESSAGES_TO_GET_MEMBERSHIP = {
   messageToNewUsers:
-    "Hola! Bienvenido a Tarjeta Joven Diamante, debes seleccionar un plan para poder disfrutar de los beneficios",
+    'Hola! Bienvenido a Tarjeta Joven Diamante, debes seleccionar un plan para poder disfrutar de los beneficios',
   messageToRenew:
-    "Hola, gracias por formar parte de Tarjeta Joven Diamante, te informamos que debes renovar tu membresía para seguir disfrutando de los beneficios.",
+    'Hola, gracias por formar parte de Tarjeta Joven Diamante, te informamos que debes renovar tu membresía para seguir disfrutando de los beneficios.',
 };
 
 watch([isNoMembership, isLoadingMembership, userData], () => {
   const { type, status } = userData.value?.membresia || {};
 
   if (
-    type === "permitir_gratuita" &&
-    status === "vencida" &&
+    type === 'permitir_gratuita' &&
+    status === 'vencida' &&
     !isLoadingMembership.value
   ) {
     messageToGetMembership.value = MESSAGES_TO_GET_MEMBERSHIP.messageToNewUsers;
   } else if (
-    type === "Prueba" &&
-    status === "vencida" &&
+    type === 'Prueba' &&
+    status === 'vencida' &&
     !isLoadingMembership.value
   ) {
     messageToGetMembership.value = MESSAGES_TO_GET_MEMBERSHIP.messageToRenew;
@@ -96,9 +96,9 @@ watch(show, () => {
 watchEffect(() => {
   const { days, status } = userData.value?.membresia || {};
 
-  if (status === "vencida" && !isLoadingMembership.value) {
+  if (status === 'vencida' && !isLoadingMembership.value) {
     isNoMembership.value = true;
-  } else if (days <= 15 && status === "activa") {
+  } else if (days <= 15 && status === 'activa') {
     isSoonExpires.value = true;
   } else {
     isNoMembership.value = false;
@@ -107,23 +107,23 @@ watchEffect(() => {
 });
 
 watchEffect(() => {
-  if (userData.value?.membresia?.type === "Comprada") {
+  if (userData.value?.membresia?.type === 'Comprada') {
     if (
       userData.value.beneficiario_poliza_cedula === null ||
       userData.value.beneficiario_poliza_name === null ||
       userData.value.dni === null ||
-      userData.value.dni_text === "" ||
+      userData.value.dni_text === '' ||
       userData.value.dni_text === null
     ) {
-      console.log("sin poliza");
+      console.log('sin poliza');
       policyRequestForm.value = true;
     }
   }
 });
 
 const handledLogout = () => {
-  localStorage.removeItem("user");
-  push("/login");
+  localStorage.removeItem('user');
+  push('/login');
 };
 
 const toggleLeftDrawer = () => {
@@ -137,15 +137,15 @@ const drawerClick = () => {
   }
 };
 
-const ACCEPTED_TYPES_FOR_DNI = ["image/jpeg", "image/png", "application/pdf"];
+const ACCEPTED_TYPES_FOR_DNI = ['image/jpeg', 'image/png', 'application/pdf'];
 
 const onPhotoDataSuccessDniUser = (imageData) => {
-  const img = "data:image/jpeg;base64," + imageData;
+  const img = 'data:image/jpeg;base64,' + imageData;
   useForm.value.dni = convertToFile(img);
 };
 
 const onFailDniUser = (message) => {
-  console.error("Failed because: " + message);
+  console.error('Failed because: ' + message);
 };
 
 const openCameraDniUser = () => {
@@ -159,44 +159,44 @@ const handledUpdateUser = async () => {
     id: userData?.value?.id,
   });
 };
-const pb = new PocketBase("https://pocketbase.real.phoenixtechsa.com");
-pb.collection("tarjetajoven_mensajes").subscribe("*", function (e) {
-  let avatar_img = "https://cdn.quasar.dev/img/avatar.png";
-  if (e.record.type === "ofertas") {
+const pb = new PocketBase('https://pocketbase.real.phoenixtechsa.com');
+pb.collection('tarjetajoven_mensajes').subscribe('*', function (e) {
+  let avatar_img = 'https://cdn.quasar.dev/img/avatar.png';
+  if (e.record.type === 'ofertas') {
     avatar_img = offersIcon;
   }
-  if (e.record.type === "universidad") {
+  if (e.record.type === 'universidad') {
     avatar_img = universityIcon;
   }
-  if (e.record.type === "noticias") {
+  if (e.record.type === 'noticias') {
     avatar_img = newsIcon;
   }
-  if (e.record.type === "pachama") {
+  if (e.record.type === 'pachama') {
     avatar_img = pachama;
   }
   $q.notify({
     message: e.record.titulo,
-    color: "white",
-    textColor: "black",
+    color: 'white',
+    textColor: 'black',
     avatar: avatar_img,
     actions: [
       {
-        label: "Ver",
-        color: "black",
+        label: 'Ver',
+        color: 'black',
         handler: () => {
           const id = e.record.id_post;
           console.log(id);
-          if (e.record.type === "universidad") {
-            push("cliente/OffersForUniversitys/Panamá");
+          if (e.record.type === 'universidad') {
+            push('cliente/OffersForUniversitys/Panamá');
           }
-          if (e.record.type === "noticias") {
-            push("cliente/OffersForUniversitys/Panamá");
+          if (e.record.type === 'noticias') {
+            push('cliente/OffersForUniversitys/Panamá');
           }
-          if (e.record.type === "ofertas") {
-            push("cliente/OffersForUniversitys/Panamá");
+          if (e.record.type === 'ofertas') {
+            push('cliente/OffersForUniversitys/Panamá');
           }
-          if (e.record.type === "pachama") {
-            push("cliente/OffersForUniversitys/Panamá");
+          if (e.record.type === 'pachama') {
+            push('cliente/OffersForUniversitys/Panamá');
           }
         },
       },
@@ -368,7 +368,7 @@ pb.collection("tarjetajoven_mensajes").subscribe("*", function (e) {
             <img :src="userData?.img_url" />
           </q-avatar>
           <div class="text-weight-bold">
-            ¡Hola, {{ userData?.name + " " + userData?.last_name }}!
+            ¡Hola, {{ userData?.name + ' ' + userData?.last_name }}!
           </div>
           <div>
             <p

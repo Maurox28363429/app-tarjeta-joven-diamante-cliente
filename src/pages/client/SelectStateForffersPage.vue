@@ -1,9 +1,9 @@
 <script setup>
-import { defineProps, ref } from "vue";
-import { useRouter } from "vue-router";
-import { useGetStates } from "src/querys/offersQuerys";
-import disableIcon from "../../assets/images/bandImage.png";
-import activeIcon from "../../assets/icons/stateIcon.webp";
+import { defineProps, ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { useGetStates } from 'src/querys/offersQuerys';
+import disableIcon from '../../assets/images/bandImage.png';
+import activeIcon from '../../assets/icons/stateIcon.webp';
 
 const props = defineProps({
   typeOffers: {
@@ -17,7 +17,7 @@ const router = useRouter();
 const sort = ref({});
 
 const icon = (ofertas, universidades) => {
-  if (props.typeOffers === "Offers") {
+  if (props.typeOffers === 'Offers') {
     if (ofertas === 0) {
       return disableIcon;
     } else {
@@ -33,11 +33,11 @@ const icon = (ofertas, universidades) => {
 };
 
 switch (props.typeOffers) {
-  case "Offers":
+  case 'Offers':
     sort.value = { sort_ofertas: 1 };
 
     break;
-  case "OffersForUniversitys":
+  case 'OffersForUniversitys':
     sort.value = { sort_uni: 1 };
 
     break;
@@ -50,18 +50,18 @@ switch (props.typeOffers) {
 const { data, isLoading } = useGetStates(sort.value);
 
 const openOffers = ({ state, offers, universidades }) => {
-  if (props.typeOffers === "Offers") {
+  if (props.typeOffers === 'Offers') {
     if (offers !== 0) {
       router.push(`/cliente/${props.typeOffers}/${state}`);
-      console.log("hay ofertas");
+      console.log('hay ofertas');
     } else {
-      console.log("no hay ofertas", offers);
+      console.log('no hay ofertas', offers);
     }
   } else {
     if (universidades !== 0) {
       router.push(`/cliente/${props.typeOffers}/${state}`);
     } else {
-      console.log("no hay universidades", universidades);
+      console.log('no hay universidades', universidades);
     }
   }
 };

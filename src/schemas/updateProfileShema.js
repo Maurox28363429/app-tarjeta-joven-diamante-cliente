@@ -1,7 +1,7 @@
-import { object, string } from "yup";
+import { object, string } from 'yup';
 
-const REQUIRED_MESSAGE = "Este campo es requerido";
-const EMAIL_MESSAGE = "Ingrese un email valido";
+const REQUIRED_MESSAGE = 'Este campo es requerido';
+const EMAIL_MESSAGE = 'Ingrese un email valido';
 
 export const updateProfileShema = object({
   name: string().required(REQUIRED_MESSAGE),

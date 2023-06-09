@@ -1,7 +1,7 @@
 <script setup>
-import { defineProps } from "vue";
-import { useRouter } from "vue-router";
-import { userAuth } from "src/composables/userAuth";
+import { defineProps } from 'vue';
+import { useRouter } from 'vue-router';
+import { userAuth } from 'src/composables/userAuth';
 
 const { userData, isLoadingUser } = userAuth();
 
@@ -12,14 +12,14 @@ const props = defineProps({
   },
 });
 
-const isBusiness = props.user === "business";
+const isBusiness = props.user === 'business';
 
 const router = useRouter();
 
 const handledLogout = (e) => {
   e.preventDefault();
-  localStorage.removeItem("user");
-  router.push("/login");
+  localStorage.removeItem('user');
+  router.push('/login');
 };
 </script>
 
@@ -36,7 +36,7 @@ const handledLogout = (e) => {
           </q-avatar>
           <div>
             <p class="q-ma-none">
-              {{ userData.name + " " + userData.last_name }}
+              {{ userData.name + ' ' + userData.last_name }}
             </p>
             <p class="q-ma-none">{{ userData.email }}</p>
           </div>
