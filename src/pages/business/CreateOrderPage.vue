@@ -1,11 +1,11 @@
 <script setup>
-import { ref, onMounted, watch, computed } from "vue";
-import { userAuth } from "src/composables/userAuth";
-import { userCart } from "src/stores/userCart";
-import { useToast } from "src/composables/useToast";
-import { useGetOffers } from "src/querys/offersQuerys";
-import { useInvoiceOfferMutation } from "src/querys/invoiceQuerys";
-import { ORDER_CREATION_COLUMNS } from "src/shared/constansts/orderCreationColumns";
+import { ref, onMounted, watch, computed } from 'vue';
+import { userAuth } from 'src/composables/userAuth';
+import { userCart } from 'src/stores/userCart';
+import { useToast } from 'src/composables/useToast';
+import { useGetOffers } from 'src/querys/offersQuerys';
+import { useInvoiceOfferMutation } from 'src/querys/invoiceQuerys';
+import { ORDER_CREATION_COLUMNS } from 'src/shared/constansts/orderCreationColumns';
 
 const { triggerPositive } = useToast();
 
@@ -16,7 +16,7 @@ const { user } = userAuth();
 const { mutate, isLoading: loadingInvoice } = useInvoiceOfferMutation();
 const client = computed(() => storeClient.client);
 
-const search = ref("");
+const search = ref('');
 const pages = ref(1);
 const currentPaginate = ref(1);
 const selected = ref([]);
@@ -33,8 +33,8 @@ const {
 });
 
 const userScaneo = computed(() => {
-  if (client.value.membresia?.status === "vencida" || !client.value.membresia) {
-    return "Usuario sin membresía ";
+  if (client.value.membresia?.status === 'vencida' || !client.value.membresia) {
+    return 'Usuario sin membresía ';
   } else {
     return client.value.name;
   }
@@ -46,9 +46,9 @@ const getTotal = (property) => {
   );
 };
 
-const total = computed(() => Math.round(100 * getTotal("priceTotal")) / 100);
+const total = computed(() => Math.round(100 * getTotal('priceTotal')) / 100);
 
-const totalSaving = computed(() => Math.round(100 * getTotal("savings")) / 100);
+const totalSaving = computed(() => Math.round(100 * getTotal('savings')) / 100);
 
 function invoice() {
   const products = rows.value.map((item) => {
@@ -72,7 +72,7 @@ function deleteProduct() {
       !selected.value.some((selectedItem) => selectedItem.id === item.id)
   );
   if (selected.value.length > 0) {
-    triggerPositive("Producto eliminado");
+    triggerPositive('Producto eliminado');
   }
 }
 
@@ -111,7 +111,7 @@ function addProduct(product) {
       priceTotal: product.priceWidthDiscount * product.cantidad,
     });
   }
-  triggerPositive("Producto agregado");
+  triggerPositive('Producto agregado');
 }
 
 watch(search, () => {
@@ -129,10 +129,10 @@ onMounted(async () => {
 
 <template>
   <p class="q-ma-md body-large">
-    Cliente: {{ client ? userScaneo : "cliente no ingresado" }}
+    Cliente: {{ client ? userScaneo : 'cliente no ingresado' }}
   </p>
   <p class="q-ma-md body-small" style="color: #363636">
-    {{ !client ? "Por favor ingrese el cliente a través del QR" : "" }}
+    {{ !client ? 'Por favor ingrese el cliente a través del QR' : '' }}
   </p>
   <div class="orderContainer">
     <div class="full-height q-mx-md">

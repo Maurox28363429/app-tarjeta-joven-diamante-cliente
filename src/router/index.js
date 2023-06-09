@@ -1,13 +1,13 @@
-import { route } from "quasar/wrappers";
-import localStorageAuth from "src/utils/localStorageAuth";
+import { route } from 'quasar/wrappers';
+import localStorageAuth from 'src/utils/localStorageAuth';
 import {
   createRouter,
   createMemoryHistory,
   createWebHistory,
   createWebHashHistory,
-} from "vue-router";
-import routes from "./routes";
-import ROLE_ID from "src/shared/constansts/roleId";
+} from 'vue-router';
+import routes from './routes';
+import ROLE_ID from 'src/shared/constansts/roleId';
 
 /*
  * If not building with SSR mode, you can
@@ -21,7 +21,7 @@ import ROLE_ID from "src/shared/constansts/roleId";
 export default route(function (/* { store, ssrContext } */) {
   const createHistory = process.env.SERVER
     ? createMemoryHistory
-    : process.env.VUE_ROUTER_MODE === "history"
+    : process.env.VUE_ROUTER_MODE === 'history'
     ? createWebHistory
     : createWebHashHistory;
 
@@ -38,15 +38,15 @@ export default route(function (/* { store, ssrContext } */) {
   const roles = [
     {
       id: 1,
-      name: "admin",
+      name: 'admin',
     },
     {
       id: 3,
-      name: "cliente",
+      name: 'cliente',
     },
     {
       id: 2,
-      name: "empresa",
+      name: 'empresa',
     },
   ];
 
@@ -55,11 +55,11 @@ export default route(function (/* { store, ssrContext } */) {
 
     if (
       user &&
-      (to.path === "/" ||
-        to.path === "/login" ||
-        to.path === "/register" ||
-        to.path === "/forgotpassword" ||
-        to.path === "/recoveryPassword")
+      (to.path === '/' ||
+        to.path === '/login' ||
+        to.path === '/register' ||
+        to.path === '/forgotpassword' ||
+        to.path === '/recoveryPassword')
     ) {
       // Si el usuario está autenticado y trata de acceder a una página pública, redirigirlo a la página correspondiente a su rol
       next({ path: `/${ROLE_ID[user?.user?.role_id]}` });
@@ -69,7 +69,7 @@ export default route(function (/* { store, ssrContext } */) {
     if (to.matched.some((record) => record.meta.requiresAuth)) {
       if (user === null) {
         // Si el usuario no está autenticado, redirigir a la página de inicio de sesión
-        next({ path: "/login" });
+        next({ path: '/login' });
       } else {
         // Verificar si la ruta tiene un rol asignado
         const routeRoleName = to.matched.find((record) => record.meta.role)
@@ -78,7 +78,7 @@ export default route(function (/* { store, ssrContext } */) {
 
         if (routeRole && Number(user.user?.role_id) !== Number(routeRole.id)) {
           // Si el rol del usuario no coincide con el rol de la ruta, redirigir a una página de error o de acceso denegado
-          next({ name: "error", params: { errorCode: 403 } });
+          next({ name: 'error', params: { errorCode: 403 } });
         } else {
           // Si el usuario está autenticado y su rol coincide con el rol de la ruta, permitir el acceso a la ruta
           next();

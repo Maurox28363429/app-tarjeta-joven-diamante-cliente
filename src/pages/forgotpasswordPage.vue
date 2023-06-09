@@ -1,14 +1,14 @@
 <script setup>
-import { useRouter } from "vue-router";
-import { emailSchema } from "src/schemas/emailShema";
-import { useRecoveryPasswordStore } from "src/stores/recoveryPasswordStore";
-import { useValidateForm } from "src/composables/useValidateForm";
-import { useSendEmail } from "src/querys/userQuerys";
+import { useRouter } from 'vue-router';
+import { emailSchema } from 'src/schemas/emailShema';
+import { useRecoveryPasswordStore } from 'src/stores/recoveryPasswordStore';
+import { useValidateForm } from 'src/composables/useValidateForm';
+import { useSendEmail } from 'src/querys/userQuerys';
 
 const { go } = useRouter();
 
 const INITIAL_VALUES = {
-  email: "",
+  email: '',
 };
 
 const { useForm, validatInput, validateMessage } = useValidateForm({

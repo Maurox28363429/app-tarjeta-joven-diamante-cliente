@@ -1,6 +1,6 @@
 <script setup>
-import { defineProps } from "vue";
-import { userAuth } from "src/composables/userAuth";
+import { defineProps } from 'vue';
+import { userAuth } from 'src/composables/userAuth';
 
 const { userData } = userAuth();
 
@@ -17,12 +17,12 @@ defineProps({
   name: {
     type: String,
     required: true,
-    default: "",
+    default: '',
   },
   image: {
     type: String,
     required: true,
-    default: "",
+    default: '',
   },
   id: {
     type: Number,
@@ -30,7 +30,7 @@ defineProps({
   },
 });
 
-const baseurl = "/memberships/";
+const baseurl = '/memberships/';
 </script>
 
 <template>

@@ -1,27 +1,27 @@
 <script setup>
-import { ref, computed } from "vue";
-import { registerSchema } from "src/schemas/registerSchema";
-import StepOne from "../components/RegisterInputs/StepOne.vue";
-import StepTwo from "../components/RegisterInputs/StepTwo.vue";
-import StepThree from "../components/RegisterInputs/StepThree.vue";
-import StepFour from "../components/RegisterInputs/StepFour.vue";
-import logo from "./../assets/icons/logo.svg";
+import { ref, computed } from 'vue';
+import { registerSchema } from 'src/schemas/registerSchema';
+import StepOne from '../components/RegisterInputs/StepOne.vue';
+import StepTwo from '../components/RegisterInputs/StepTwo.vue';
+import StepThree from '../components/RegisterInputs/StepThree.vue';
+import StepFour from '../components/RegisterInputs/StepFour.vue';
+import logo from './../assets/icons/logo.svg';
 
-import { userAuth } from "src/composables/userAuth";
-import { useValidateForm } from "src/composables/useValidateForm";
+import { userAuth } from 'src/composables/userAuth';
+import { useValidateForm } from 'src/composables/useValidateForm';
 
 const { register, isLoadingRegister } = userAuth();
 
-const GENDER_OPTIONS = ["Hombre", "Mujer"];
+const GENDER_OPTIONS = ['Hombre', 'Mujer'];
 
 const INITIAL_VALUES = {
-  name: "",
-  email: "",
-  last_name: "",
-  phone: "",
+  name: '',
+  email: '',
+  last_name: '',
+  phone: '',
   sex: GENDER_OPTIONS[0],
-  password: "",
-  vendedor: "",
+  password: '',
+  vendedor: '',
   provincia: [],
 };
 

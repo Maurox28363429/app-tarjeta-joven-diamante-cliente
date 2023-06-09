@@ -1,9 +1,9 @@
 <script setup>
-import { ref, onMounted, defineEmits, defineProps } from "vue";
-import { useRouter } from "vue-router";
-import { BrowserMultiFormatReader, NotFoundException } from "@zxing/library";
-import { useToast } from "src/composables/useToast";
-import { userCart } from "src/stores/userCart";
+import { ref, onMounted, defineEmits, defineProps } from 'vue';
+import { useRouter } from 'vue-router';
+import { BrowserMultiFormatReader, NotFoundException } from '@zxing/library';
+import { useToast } from 'src/composables/useToast';
+import { userCart } from 'src/stores/userCart';
 
 defineProps({
   closeModal: {
@@ -11,7 +11,7 @@ defineProps({
   },
 });
 
-const emits = defineEmits(["close-modal"]);
+const emits = defineEmits(['close-modal']);
 const router = useRouter();
 
 const client = userCart();
@@ -19,10 +19,10 @@ const loading = ref(false);
 
 const { triggerWarning } = useToast();
 
-const selectedDeviceId = ref("");
+const selectedDeviceId = ref('');
 const codeReader = ref(null);
 const videoInputDevices = ref([]);
-const resultText = ref("");
+const resultText = ref('');
 const permision = ref(false);
 const staredScan = ref(false);
 
@@ -50,25 +50,25 @@ async function startDecode() {
 
     codeReader.value.decodeFromVideoDevice(
       selectedDeviceId.value.value,
-      "video",
+      'video',
       async (result, err) => {
         if (result) {
           resultText.value = result.text;
           loading.value = true;
 
-          if (Number(result.text) === "NaN") {
-            triggerWarning("El qr no corresponde a un cliente");
+          if (Number(result.text) === 'NaN') {
+            triggerWarning('El qr no corresponde a un cliente');
           }
 
           try {
             const getClient = await client.setClient(Number(result.text));
-            router.push("/empresa/create-order");
-            emits("close-modal");
-            if (getClient.membresia?.status !== "activa") {
-              triggerWarning("Usuario no tiene una membresia activa");
+            router.push('/empresa/create-order');
+            emits('close-modal');
+            if (getClient.membresia?.status !== 'activa') {
+              triggerWarning('Usuario no tiene una membresia activa');
             }
           } catch (error) {
-            console.error("Error al asignar el cliente:", error);
+            console.error('Error al asignar el cliente:', error);
 
             triggerWarning(client.client.message);
           } finally {
@@ -89,7 +89,7 @@ async function startDecode() {
 
 function reset() {
   codeReader.value.reset();
-  resultText.value = "";
+  resultText.value = '';
 }
 
 function addPermision() {
@@ -107,19 +107,19 @@ function addPermision() {
         if (status.hasPermission) {
           // El permiso ha sido concedido
           permision.value = true;
-          console.log("tiene permiso");
+          console.log('tiene permiso');
         } else {
           // El permiso ha sido denegado
           triggerWarning(
-            "El permiso de la cámara fue denegado. Por favor, permite el acceso desde la configuración del dispositivo."
+            'El permiso de la cámara fue denegado. Por favor, permite el acceso desde la configuración del dispositivo.'
           );
           permision.value = false;
         }
       },
       function (error) {
-        console.error("error", error);
+        console.error('error', error);
         // Error al solicitar el permiso
-        triggerWarning("Los permisos para la camara estan desactivados");
+        triggerWarning('Los permisos para la camara estan desactivados');
         permision.value = false;
       }
     );

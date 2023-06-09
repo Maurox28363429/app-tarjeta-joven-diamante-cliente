@@ -1,8 +1,8 @@
 <script setup>
-import { useRouter } from "vue-router";
-import MembershipsCard from "src/components/MembershipsCard.vue";
-import { useMemberships } from "src/composables/useMemberships";
-import { useAuthStore } from "src/stores/useAuthStore";
+import { useRouter } from 'vue-router';
+import MembershipsCard from 'src/components/MembershipsCard.vue';
+import { useMemberships } from 'src/composables/useMemberships';
+import { useAuthStore } from 'src/stores/useAuthStore';
 
 const { go, push } = useRouter();
 const auth = useAuthStore();
@@ -11,7 +11,7 @@ const { loading, memberships } = useMemberships();
 
 const logOut = () => {
   auth.logout();
-  push("/login");
+  push('/login');
 };
 </script>
 

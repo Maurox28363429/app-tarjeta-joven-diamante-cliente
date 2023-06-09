@@ -1,9 +1,9 @@
 <script setup>
-import { useRouter } from "vue-router";
-import { ref, onMounted } from "vue";
-import MembershipsPayment from "src/components/MembershipsPayment.vue";
-import getSingleMemberships from "src/api/getSingleMemberships";
-import { useToast } from "src/composables/useToast";
+import { useRouter } from 'vue-router';
+import { ref, onMounted } from 'vue';
+import MembershipsPayment from 'src/components/MembershipsPayment.vue';
+import getSingleMemberships from 'src/api/getSingleMemberships';
+import { useToast } from 'src/composables/useToast';
 
 const router = useRouter();
 
@@ -23,10 +23,10 @@ onMounted(() => {
       console.error(err);
       const errorMessage =
         err.response?.status === 400
-          ? "Ese usuario ya exite, por favor ingrese otro correo o número de teléfono"
-          : err.code === "ERR_NETWORK"
-          ? "Verifique su conexión a internet e intente nuevamente"
-          : "Error desconocido";
+          ? 'Ese usuario ya exite, por favor ingrese otro correo o número de teléfono'
+          : err.code === 'ERR_NETWORK'
+          ? 'Verifique su conexión a internet e intente nuevamente'
+          : 'Error desconocido';
       triggerWarning(errorMessage);
     } finally {
       loading.value = false;

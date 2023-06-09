@@ -1,12 +1,12 @@
 <script setup>
-import { ref, watchEffect } from "vue";
-import { useRoute } from "vue-router";
-import { useGetOffersFromBusiness } from "src/querys/offersQuerys";
-import CardOffers from "src/components/CardOffers.vue";
+import { ref, watchEffect } from 'vue';
+import { useRoute } from 'vue-router';
+import { useGetOffersFromBusiness } from 'src/querys/offersQuerys';
+import CardOffers from 'src/components/CardOffers.vue';
 
 const currentPaginate = ref(1);
 const paginas = ref(0);
-const search = ref("");
+const search = ref('');
 
 const route = useRoute();
 const state = ref(route.params.countryName);

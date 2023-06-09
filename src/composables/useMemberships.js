@@ -1,7 +1,7 @@
-import { ref, onMounted } from "vue";
-import getMemberships from "src/api/getMemberships";
-import proImage from "../assets/icons/rocket.svg";
-import freeImage from "../assets/icons/plane.svg";
+import { ref, onMounted } from 'vue';
+import getMemberships from 'src/api/getMemberships';
+import proImage from '../assets/icons/rocket.svg';
+import freeImage from '../assets/icons/plane.svg';
 
 export const useMemberships = () => {
   const loading = ref(false);
@@ -9,18 +9,18 @@ export const useMemberships = () => {
 
   const PRO_IMAGE = proImage;
   const FREE_IMAGE = freeImage;
-  const FREE = "Membresia 5 Días";
-  const PRO = "Membresia anual";
+  const FREE = 'Membresia 5 Días';
+  const PRO = 'Membresia anual';
 
   const benefits = {
     [PRO]: [
-      "Obten descuentos en tus compras",
-      "Participa en sorteos y obten premios",
-      "Tendras acceso a la compra de productos y servicios premium",
+      'Obten descuentos en tus compras',
+      'Participa en sorteos y obten premios',
+      'Tendras acceso a la compra de productos y servicios premium',
     ],
     [FREE]: [
-      "Obten descuentos en tu periodo de prueba",
-      "Tendras acceso a productos y servicios premium",
+      'Obten descuentos en tu periodo de prueba',
+      'Tendras acceso a productos y servicios premium',
     ],
   };
 

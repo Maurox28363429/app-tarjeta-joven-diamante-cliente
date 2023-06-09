@@ -1,8 +1,8 @@
-import { instance } from ".";
+import { instance } from '.';
 
 export default async function getOffersForUniversitys({
   page = 1,
-  search = "",
+  search = '',
   dir,
   id,
 } = {}) {

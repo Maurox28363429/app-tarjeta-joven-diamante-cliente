@@ -1,6 +1,6 @@
 <script setup>
-import { ref } from "vue";
-import { useToast } from "src/composables/useToast";
+import { ref } from 'vue';
+import { useToast } from 'src/composables/useToast';
 
 const { triggerWarning } = useToast();
 
@@ -15,24 +15,24 @@ defineProps({
   },
 });
 
-const values = ref(["", "", "", "", "", "", ""]);
+const values = ref(['', '', '', '', '', '', '']);
 
 function handleKeyDown(event, index) {
   const key = event.key;
   const input = document.querySelector(`[data-index="${index}"]`);
 
   if (input) {
-    if (key === "Backspace") {
-      values.value.splice(index, 1, "");
+    if (key === 'Backspace') {
+      values.value.splice(index, 1, '');
 
       if (index > 0) {
         const prevInput = document.querySelector(`[data-index="${index - 1}"]`);
         prevInput.focus();
       }
-    } else if (key === "ArrowRight" && index < values.value.length - 1) {
+    } else if (key === 'ArrowRight' && index < values.value.length - 1) {
       const nextInput = document.querySelector(`[data-index="${index + 1}"]`);
       nextInput.focus();
-    } else if (key === "ArrowLeft" && index > 0) {
+    } else if (key === 'ArrowLeft' && index > 0) {
       const prevInput = document.querySelector(`[data-index="${index - 1}"]`);
       prevInput.focus();
     }
@@ -49,13 +49,13 @@ function handleInput(event, index) {
       nextInput.focus();
     }
   } else {
-    values.value.splice(index, 1, "");
+    values.value.splice(index, 1, '');
   }
 }
 
 function handlePaste(event) {
   event.preventDefault();
-  const pasteData = event.clipboardData.getData("text/plain");
+  const pasteData = event.clipboardData.getData('text/plain');
   if (
     pasteData &&
     pasteData.match(/^[0-9a-zA-Z]+$/) &&
@@ -66,7 +66,7 @@ function handlePaste(event) {
     }
   }
   if (pasteData.length > values.value.length) {
-    triggerWarning("El código debe ser de 7 dígitos.");
+    triggerWarning('El código debe ser de 7 dígitos.');
   }
 }
 </script>

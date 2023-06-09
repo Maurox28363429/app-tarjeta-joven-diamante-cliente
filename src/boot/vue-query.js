@@ -1,4 +1,4 @@
-import { VueQueryPlugin } from "@tanstack/vue-query";
+import { VueQueryPlugin } from '@tanstack/vue-query';
 
 export default async ({ app }) => {
   // Configura e inicializa el plugin VueQueryPlugin

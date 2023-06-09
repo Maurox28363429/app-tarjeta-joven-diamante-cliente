@@ -1,4 +1,4 @@
-import { instance } from ".";
+import { instance } from '.';
 
 export default async function getStates({
   sort_ofertas = 0,

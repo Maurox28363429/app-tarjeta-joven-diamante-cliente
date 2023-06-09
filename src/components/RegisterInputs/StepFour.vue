@@ -1,6 +1,6 @@
 <script setup>
-import { computed, ref, watchEffect } from "vue";
-import { useGetStates } from "src/querys/offersQuerys";
+import { computed, ref, watchEffect } from 'vue';
+import { useGetStates } from 'src/querys/offersQuerys';
 
 const OPTIONS = [];
 for (let i = 0; i < 50; i++) {
@@ -39,18 +39,18 @@ watchEffect(() => {
   }
 });
 
-const emit = defineEmits(["update:modelValue"]);
+const emit = defineEmits(['update:modelValue']);
 const stringOptions = ref(OPTIONS);
 
 const updateValue = (key, value) => {
-  emit("update:modelValue", { key, value });
+  emit('update:modelValue', { key, value });
 };
 
 const filterFn = (val, update) => {
   if (val.length < 1) {
     return;
   }
-  if (val !== "") {
+  if (val !== '') {
     const needle = val.toLowerCase();
     update(() => {
       stringOptions.value = OPTIONS.filter(

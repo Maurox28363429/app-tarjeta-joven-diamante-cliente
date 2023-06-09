@@ -1,11 +1,11 @@
-import { defineStore } from "pinia";
-import loginUser from "src/api/loginUser";
-import registerUser from "src/api/registerUser";
-import localStorageAuth from "src/utils/localStorageAuth";
-import membershipsTest from "src/api/membershipsTest";
-import ROLE_ID from "src/shared/constansts/roleId";
+import { defineStore } from 'pinia';
+import loginUser from 'src/api/loginUser';
+import registerUser from 'src/api/registerUser';
+import localStorageAuth from 'src/utils/localStorageAuth';
+import membershipsTest from 'src/api/membershipsTest';
+import ROLE_ID from 'src/shared/constansts/roleId';
 
-export const useAuthStore = defineStore("userAuth", {
+export const useAuthStore = defineStore('userAuth', {
   state: () => ({
     user: localStorageAuth.getUser()?.user || null,
     token: localStorageAuth.getUser()?.token || null,
@@ -32,7 +32,7 @@ export const useAuthStore = defineStore("userAuth", {
       this.user = data.user;
       this.token = data.token;
       localStorageAuth.setUser(data);
-      this.router.push({ path: "/memberships" });
+      this.router.push({ path: '/memberships' });
     },
     async addMembership({ user_id }) {
       const { data } = await membershipsTest({ user_id });
