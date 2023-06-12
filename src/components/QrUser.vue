@@ -1,7 +1,7 @@
 <script setup>
-import { userAuth } from "src/composables/userAuth";
-import QrcodeVue from "qrcode.vue";
-import { ref } from "vue";
+import { userAuth } from 'src/composables/userAuth';
+import QrcodeVue from 'qrcode.vue';
+import { ref } from 'vue';
 
 const { user } = userAuth();
 const sizeQr = ref(284);

@@ -1,6 +1,6 @@
 <script setup>
-import { defineProps } from "vue";
-import { useRouter } from "vue-router";
+import { defineProps } from 'vue';
+import { useRouter } from 'vue-router';
 
 const { push } = useRouter();
 
@@ -11,7 +11,7 @@ const props = defineProps({
   },
   link: {
     type: String,
-    default: "#",
+    default: '#',
   },
   enabled: {
     type: Boolean,
@@ -20,14 +20,14 @@ const props = defineProps({
   },
   icon: {
     type: String,
-    default: "",
+    default: '',
   },
 });
 const handleLink = () => {
   if (props.enabled) {
     push(props.link);
   } else {
-    console.log("deshabilitado");
+    console.log('deshabilitado');
   }
 };
 </script>

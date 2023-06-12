@@ -1,13 +1,13 @@
 <script setup>
-import { ref, watchEffect } from "vue";
-import { useGetNewsInformative } from "src/querys/newsQuerys";
+import { ref, watchEffect } from 'vue';
+import { useGetNewsInformative } from 'src/querys/newsQuerys';
 
 const openModal = ref(false);
 const modalCurrent = ref({});
 const currentPaginate = ref(1);
 
 const pages = ref(1);
-const search = ref("");
+const search = ref('');
 
 const {
   data: NewsData,

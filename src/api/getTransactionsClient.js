@@ -1,4 +1,4 @@
-import { instance } from ".";
+import { instance } from '.';
 
 export default async function getTransactionsClient({ page, id }) {
   return await instance.get(

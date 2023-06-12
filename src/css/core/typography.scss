@@ -1,5 +1,5 @@
-@use "./../quasar.variables.scss";
-@use "./_colors.scss" as *;
+@use './../quasar.variables.scss';
+@use './_colors.scss' as *;
 
 .text-link {
   color: #414bb2;
@@ -11,7 +11,7 @@
 }
 
 // Fonts
-$font-family-nunito: "Nunito", sans-serif;
+$font-family-nunito: 'Nunito', sans-serif;
 
 // Display
 $display-large: (57px, $font-family-nunito, 400, 64px, -0.25px);

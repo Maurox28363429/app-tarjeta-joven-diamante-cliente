@@ -1,4 +1,4 @@
-import { instance } from ".";
+import { instance } from '.';
 
 export default async function invoiceOffer({
   comercio_id,
@@ -7,7 +7,7 @@ export default async function invoiceOffer({
   total,
   client_id,
 }) {
-  const { data } = await instance.post("/cliente-comercio-ofertas", {
+  const { data } = await instance.post('/cliente-comercio-ofertas', {
     comercio_id,
     total_descuento,
     ofertas,

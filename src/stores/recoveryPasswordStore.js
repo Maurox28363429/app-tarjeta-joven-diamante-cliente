@@ -1,8 +1,8 @@
-import { defineStore } from "pinia";
+import { defineStore } from 'pinia';
 
-export const useRecoveryPasswordStore = defineStore("recoveryPassword", {
+export const useRecoveryPasswordStore = defineStore('recoveryPassword', {
   state: () => ({
-    email: "",
+    email: '',
   }),
   actions: {
     setEmail(newEmail) {

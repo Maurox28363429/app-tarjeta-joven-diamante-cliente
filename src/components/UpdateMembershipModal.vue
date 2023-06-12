@@ -1,5 +1,5 @@
 <script setup props="props">
-import { ref, defineEmits } from "vue";
+import { ref, defineEmits } from 'vue';
 
 const props = defineProps({
   showModal: {
@@ -10,16 +10,16 @@ const props = defineProps({
   description: {
     type: String,
     required: true,
-    default: "",
+    default: '',
   },
 });
 
 const value = ref(props.showModal);
 
-const emit = defineEmits(["update:showModal"]);
+const emit = defineEmits(['update:showModal']);
 
 const updateValue = (key, value) => {
-  emit("update:showModal", key, value);
+  emit('update:showModal', key, value);
 };
 </script>
 

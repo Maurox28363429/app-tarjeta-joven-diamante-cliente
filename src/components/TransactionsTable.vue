@@ -1,11 +1,11 @@
 <script setup>
-import { ref, watchEffect } from "vue";
-import { userAuth } from "src/composables/userAuth";
-import { TRANSACTION_COLUMNS } from "src/shared/constansts/transanctionColumns";
+import { ref, watchEffect } from 'vue';
+import { userAuth } from 'src/composables/userAuth';
+import { TRANSACTION_COLUMNS } from 'src/shared/constansts/transanctionColumns';
 import {
   useGetTransactionsClient,
   useGetTransactionsBusiness,
-} from "src/querys/transactionsQuerys";
+} from 'src/querys/transactionsQuerys';
 
 const currentPage = ref(1);
 const products = ref([]);
@@ -21,10 +21,10 @@ if (userData?.value?.role_id === 3) {
     id: userData.value.id,
   });
   TRANSACTION_COLUMNS[1] = {
-    name: "client",
-    label: "Cliente",
+    name: 'client',
+    label: 'Cliente',
     field: (row) => row.client.name,
-    align: "left",
+    align: 'left',
   };
 } else {
   transactions = useGetTransactionsBusiness({

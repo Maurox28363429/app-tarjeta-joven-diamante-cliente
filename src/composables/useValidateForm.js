@@ -1,4 +1,4 @@
-import { ref } from "vue";
+import { ref } from 'vue';
 
 export const useValidateForm = ({ schema, initialValue = {} }) => {
   const useForm = ref(initialValue.value || initialValue);
@@ -27,7 +27,7 @@ export const useValidateForm = ({ schema, initialValue = {} }) => {
   const validatInput = (field) => {
     schema
       .validateAt(field, useForm.value)
-      .then(() => (validateMessage.value.errors[field] = ""))
+      .then(() => (validateMessage.value.errors[field] = ''))
       .catch((err) => {
         validateMessage.value.errors[err.path] = err.message;
       });

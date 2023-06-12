@@ -1,9 +1,9 @@
 <script setup>
-import { ref } from "vue";
-import { useRouter } from "vue-router";
-import { userAuth } from "src/composables/userAuth";
-import QRScanner from "src/components/QRScanner.vue";
-import logo from "../assets/icons/acronimo.svg";
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { userAuth } from 'src/composables/userAuth';
+import QRScanner from 'src/components/QRScanner.vue';
+import logo from '../assets/icons/acronimo.svg';
 
 const { userData } = userAuth();
 const { push, go } = useRouter();
@@ -18,8 +18,8 @@ const handledReadQr = () => {
 
 const handledLogout = (e) => {
   e.preventDefault();
-  localStorage.removeItem("user");
-  push("/login");
+  localStorage.removeItem('user');
+  push('/login');
 };
 
 const toggleLeftDrawer = () => {
@@ -163,7 +163,7 @@ const drawerClick = (e) => {
             <img :src="userData?.img_url" />
           </q-avatar>
           <div class="text-weight-bold">
-            ¡Hola, {{ userData?.name + " " + userData?.last_name }}!
+            ¡Hola, {{ userData?.name + ' ' + userData?.last_name }}!
           </div>
           <div>
             <p

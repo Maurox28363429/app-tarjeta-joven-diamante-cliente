@@ -1,15 +1,15 @@
 <script setup>
-import { ref } from "vue";
-import { loginSchema } from "src/schemas/loginSchema";
-import { useValidateForm } from "src/composables/useValidateForm";
-import { userAuth } from "src/composables/userAuth";
-import logo from "./../assets/icons/logo.svg";
+import { ref } from 'vue';
+import { loginSchema } from 'src/schemas/loginSchema';
+import { useValidateForm } from 'src/composables/useValidateForm';
+import { userAuth } from 'src/composables/userAuth';
+import logo from './../assets/icons/logo.svg';
 
 const { login, isLoadingLogin } = userAuth();
 
 const INITIAL_VALUES = {
-  email: "",
-  password: "",
+  email: '',
+  password: '',
 };
 
 const { useForm, validatInput, validateMessage, validateForm } =

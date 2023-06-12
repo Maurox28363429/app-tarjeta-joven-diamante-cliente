@@ -1,7 +1,7 @@
 <script setup>
-import { useQuasar } from "quasar";
-import { watchEffect, onMounted } from "vue";
-import { useGetAppVersion } from "src/querys/versionAppQuerys";
+import { useQuasar } from 'quasar';
+import { watchEffect, onMounted } from 'vue';
+import { useGetAppVersion } from 'src/querys/versionAppQuerys';
 
 const $q = useQuasar();
 
@@ -10,15 +10,15 @@ const { data: versionApp, isLoading } = useGetAppVersion();
 function alertMessage() {
   $q.dialog({
     title: `Actualización disponible: ${versionApp.value?.version}`,
-    message: "hay una nueva version, por favor actualiza la app",
+    message: 'hay una nueva version, por favor actualiza la app',
     persistent: true,
     cancel: true,
   })
     .onOk(() => {
       // console.log('OK')
       window.open(
-        "https://play.google.com/store/apps/details?id=com.phoenixtechsa.app",
-        "_system"
+        'https://play.google.com/store/apps/details?id=com.phoenixtechsa.app',
+        '_system'
       );
     })
     .onCancel(() => {
