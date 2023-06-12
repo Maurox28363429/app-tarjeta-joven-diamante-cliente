@@ -63,6 +63,7 @@ const filterFn = (val, update) => {
     });
   }
 };
+
 </script>
 
 <template>
@@ -105,7 +106,11 @@ const filterFn = (val, update) => {
         name="provincia"
         stack-label
         label="Provincias"
-      />
+      >
+      <template v-if="provincia.length >= 1" v-slot:append>
+        <q-icon name="check_circle" v-close-popup  class="cursor-pointer" />
+      </template>
+    </q-select>
       <p class="error" v-if="!!validateMessage.errors.provincia">
         {{ validateMessage.errors.provincia }}
       </p>
