@@ -23,7 +23,7 @@ export const HOME_CARD_LIST = [
   },
   {
     id: 2,
-    title: "Contáctanos",
+    title: 'Contáctanos',
     icon: messageIcon,
     link: '/cliente/contact',
     enabled: true,
@@ -72,7 +72,7 @@ export const HOME_CARD_LIST = [
   },
   {
     id: 9,
-    title: "",
+    title: '',
     icon: pachama,
     link: '/cliente/pachama',
     enabled: true,
