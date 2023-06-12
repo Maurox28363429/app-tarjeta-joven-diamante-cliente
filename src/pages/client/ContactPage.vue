@@ -50,7 +50,7 @@ const DIRETORY = [
     <div style="max-width: 500px" class="text-center full-width">
       <q-toolbar class="text-justify">
         <q-toolbar-title
-          >Diretorios
+          >Directivos
           <q-icon name="la la-address-book" size="md" />
         </q-toolbar-title>
       </q-toolbar>

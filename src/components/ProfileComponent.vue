@@ -366,7 +366,7 @@ const updateUser = async () => {
                 </div>
 
                 <div class="q-ma-none full-width input" v-if="!isBusiness">
-                  Cédula / pasaporte
+                  Cédula / pasaporte de usuario
                   <div class="label-large full-width row no-wrap q-gutter-md">
                     <q-file
                       outlined

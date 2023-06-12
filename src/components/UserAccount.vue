@@ -58,7 +58,7 @@ const handledLogout = (e) => {
             </q-item>
             <q-item clickable v-ripple to="/memberships" v-if="!isBusiness">
               <q-item-section>
-                <q-item-label>Subir membresías</q-item-label>
+                <q-item-label>Subir membresía</q-item-label>
                 <q-item-label caption>
                   Subir de plan es muy facil, solo debe seleccionar el plan que
                   desea y subir la información requerida.
