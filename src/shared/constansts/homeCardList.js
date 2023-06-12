@@ -30,7 +30,7 @@ export const HOME_CARD_LIST = [
   },
   {
     id: 3,
-    title: 'Membrersias',
+    title: 'Membresías',
     icon: VIPIcon,
     link: '/cliente/memberships-type',
     enabled: true,

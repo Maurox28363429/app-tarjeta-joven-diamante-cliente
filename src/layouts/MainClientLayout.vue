@@ -18,7 +18,7 @@ import universityIcon from '../assets/images/universityIcon.png';
 import newsIcon from '../assets/images/newsIcon.png';
 import pachama from '../assets/images/GifPachama.gif';
 
-alert(process.env.VUE_APP_API_URL, 'API URL');
+// alert(process.env.VUE_APP_API_URL, 'API URL');
 
 const $q = useQuasar();
 const {
