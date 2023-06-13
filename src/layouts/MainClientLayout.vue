@@ -11,7 +11,10 @@ import triangle from '../assets/images/triangulo.png';
 import logo from '../assets/icons/acronimo.svg';
 import { useValidateForm } from 'src/composables/useValidateForm';
 import { policySchema } from 'src/schemas/policySchema';
+
 import PocketBase from 'pocketbase';
+
+import { PARENTAGE } from 'src/shared/constansts/parentage';
 
 import offersIcon from '../assets/images/offersIcon.png';
 import universityIcon from '../assets/images/universityIcon.png';
@@ -34,6 +37,7 @@ watch([userData, isFetchedAfterMountUser, isFetchedUser], () => {
   if (userData.value && !isFetchingUser.value) {
     useForm.value = {
       dni: userData.value?.dni,
+      parentesco: userData.value?.parentesco || PARENTAGE[0],
       dni_text: userData.value?.dni_text || '',
       beneficiario_poliza_cedula: userData.value?.beneficiario_poliza_cedula,
       beneficiario_poliza_name: userData.value?.beneficiario_poliza_name || '',
@@ -111,7 +115,8 @@ watchEffect(() => {
       userData.value.beneficiario_poliza_name === null ||
       userData.value.dni === null ||
       userData.value.dni_text === '' ||
-      userData.value.dni_text === null
+      userData.value.dni_text === null ||
+      userData.value.parentesco === ''
     ) {
       console.log('sin poliza');
       policyRequestForm.value = true;
@@ -155,6 +160,7 @@ const handledUpdateUser = async () => {
   await mutateAsync({
     ...useForm.value,
     id: userData?.value?.id,
+    parentesco: useForm.value.parentesco.value,
   });
 };
 const pb = new PocketBase('https://pocketbase.real.phoenixtechsa.com');
@@ -393,10 +399,11 @@ pb.collection('tarjetajoven_mensajes').subscribe('*', function (e) {
             </div>
           </q-card-section>
 
-          <q-card-section class="q-pt-none">
+          <q-card-section class="q-pt-nonec full-width row justify-center">
             <q-form
               @submit.prevent="handledUpdateUser"
-              class="q-pt-none q-gutter-lg"
+              class="q-pt-none q-gutter-y-lg full-width"
+              style="max-width: 400px"
             >
               <div>
                 Foto de tu cédula o pasaporte
@@ -433,7 +440,7 @@ pb.collection('tarjetajoven_mensajes').subscribe('*', function (e) {
 
               <div>
                 <label>
-                  Introduce tu cédula o pasaporte
+                  Cédula / pasaporte de usuario
                   <q-input
                     placeholder="76757667"
                     outlined
@@ -491,6 +498,26 @@ pb.collection('tarjetajoven_mensajes').subscribe('*', function (e) {
                     v-if="!!validateMessage.errors.beneficiario_poliza_name"
                   >
                     {{ validateMessage.errors.beneficiario_poliza_name }}
+                  </p>
+                </label>
+              </div>
+              <div>
+                <label>
+                  Parentesco del beneficiario
+                  <q-select
+                    outlined
+                    autocomplete="nope"
+                    name="parentesco"
+                    :options="PARENTAGE"
+                    v-model="useForm.parentesco"
+                    @blur="validatInput('parentesco')"
+                    @keypress="validatInput('parentesco')"
+                  />
+                  <p
+                    class="text-error"
+                    v-if="!!validateMessage.errors.parentesco"
+                  >
+                    {{ validateMessage.errors.parentesco }}
                   </p>
                 </label>
               </div>

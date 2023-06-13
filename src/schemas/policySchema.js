@@ -7,4 +7,5 @@ export const policySchema = object({
   beneficiario_poliza_cedula: string().required(REQUIRED_MESSAGE),
   beneficiario_poliza_name: string().required(REQUIRED_MESSAGE),
   dni_text: string().required(REQUIRED_MESSAGE),
+  parentesco: object().required(REQUIRED_MESSAGE),
 });

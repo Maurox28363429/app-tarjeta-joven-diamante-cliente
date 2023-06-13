@@ -71,6 +71,18 @@ const routes = [
             component: () => import('pages/client/PachamaPage.vue'),
           },
           {
+            path: 'gifts',
+            component: () => import('pages/client/GiftsPage.vue'),
+          },
+          {
+            path: 'gifts/:id',
+            component: () => import('pages/client/GiftDetailPage.vue'),
+          },
+          {
+            path: 'sos',
+            component: () => import('pages/client/SosPage.vue'),
+          },
+          {
             path: 'contact',
             component: () => import('pages/client/ContactPage.vue'),
           },

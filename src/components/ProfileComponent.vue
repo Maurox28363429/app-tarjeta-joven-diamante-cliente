@@ -7,6 +7,7 @@ import { useUpdateUserMutation } from 'src/querys/userQuerys';
 import { useGetStates } from 'src/querys/offersQuerys';
 import { convertToFile, openCamera } from 'src/utils/openCamera';
 import { checkFileType } from 'src/utils/checkFileType';
+import { PARENTAGE } from 'src/shared/constansts/parentage';
 
 const {
   updatedUser,
@@ -76,6 +77,7 @@ watch([userData, isFetchedAfterMountUser, isFetchedUser], () => {
       beneficiario_poliza_cedula: userData.value?.beneficiario_poliza_cedula,
       beneficiario_poliza_name: userData.value?.beneficiario_poliza_name || '',
       fecha_nacimiento: userData.value?.fecha_nacimiento || '',
+      parentesco: userData.value?.parentesco || PARENTAGE[0],
     };
   }
 });
@@ -110,6 +112,7 @@ const updateUser = async () => {
     active: userData.value.active,
     id: userData.value.id,
     sex: useForm.value.sex?.value,
+    parentesco: useForm.value.parentesco.value,
   };
   await mutateAsync(updatedValues);
 
@@ -186,6 +189,14 @@ const updateUser = async () => {
               <q-item-label>Estado de Membresía</q-item-label>
               <q-item-label caption>{{
                 userData?.membresia?.status
+              }}</q-item-label>
+            </q-item-section>
+          </q-item>
+          <q-item v-if="!isBusiness">
+            <q-item-section>
+              <q-item-label>Poliza</q-item-label>
+              <q-item-label caption>{{
+                userData?.seguro_active === '0' ? 'No activa' : 'Activa'
               }}</q-item-label>
             </q-item-section>
           </q-item>
@@ -391,7 +402,7 @@ const updateUser = async () => {
 
                 <div class="q-ma-none full-width input" v-if="!isBusiness">
                   <label class="label-large">
-                    Introduce tu cédula o pasaporte
+                    Introduce Cédula / pasaporte de usuario
                     <q-input
                       v-model="useForm.dni_text"
                       lazy-rules
@@ -430,6 +441,26 @@ const updateUser = async () => {
                       placeholder="Juan Perez"
                       name="beneficiario_poliza_name"
                     />
+                  </label>
+                </div>
+                <div class="q-ma-none full-width input" v-if="!isBusiness">
+                  <label class="label-large">
+                    Parentesco del beneficiario
+                    <q-select
+                      outlined
+                      autocomplete="nope"
+                      name="parentesco"
+                      :options="PARENTAGE"
+                      v-model="useForm.parentesco"
+                      @blur="validatInput('parentesco')"
+                      @keypress="validatInput('parentesco')"
+                    />
+                    <p
+                      class="text-error"
+                      v-if="!!validateMessage.errors.parentesco"
+                    >
+                      {{ validateMessage.errors.parentesco }}
+                    </p>
                   </label>
                 </div>
                 <div class="q-ma-none full-width input">
