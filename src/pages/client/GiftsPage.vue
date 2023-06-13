@@ -23,7 +23,7 @@ const handleDetail = (id) => {
             <p class="text-center">Quedan 21 días: 20h: 30min : 00s</p>
             <p class="text-uppercase text-h6">Mes de junio</p>
             <q-img
-              src="src/assets/images/trophy.png"
+              src="../../assets/images/trophy.png"
               alt="Trophy"
               width="75px"
               height="70px"
@@ -32,7 +32,7 @@ const handleDetail = (id) => {
               <a href="#" style="text-decoration: underline">ver sorteo</a>
             </p>
             <q-img
-              src="src/assets/images/party.png"
+              src="../../assets/images/party.png"
               alt="Party"
               width="86px"
               height="74px"
@@ -40,7 +40,7 @@ const handleDetail = (id) => {
               style="top: 70px; left: 32px"
             />
             <q-img
-              src="src/assets/images/party.png"
+              src="../../assets/images/party.png"
               alt="Party"
               width="86px"
               height="74px"
@@ -67,7 +67,7 @@ const handleDetail = (id) => {
                   class="row justify-center items-center"
                 >
                   <q-img
-                    src="src/assets/icons/gift.png"
+                    src="../../assets/icons/gift.png"
                     alt="Trophy"
                     width="24px"
                     height="24px"
@@ -94,7 +94,7 @@ const handleDetail = (id) => {
                   class="row justify-center items-center"
                 >
                   <q-img
-                    src="src/assets/icons/gift.png"
+                    src="../../assets/icons/gift.png"
                     alt="Trophy"
                     width="24px"
                     height="24px"
@@ -121,7 +121,7 @@ const handleDetail = (id) => {
                   class="row justify-center items-center"
                 >
                   <q-img
-                    src="src/assets/icons/gift.png"
+                    src="../../assets/icons/gift.png"
                     alt="Trophy"
                     width="24px"
                     height="24px"
@@ -148,7 +148,7 @@ const handleDetail = (id) => {
                   class="row justify-center items-center"
                 >
                   <q-img
-                    src="src/assets/images/lockIcon.png"
+                    src="../../assets/images/lockIcon.png"
                     alt="Trophy"
                     width="20px"
                     height="20px"
@@ -172,7 +172,7 @@ const handleDetail = (id) => {
             <p class="text-uppercase text-h6">Ultimo ganador</p>
             <q-avatar size="80px">
               <img
-                src="src/assets/images/avatar.jpg"
+                src="../../assets/images/avatar.jpg"
                 alt="avatar"
                 width="75px"
                 height="70px"
@@ -184,7 +184,7 @@ const handleDetail = (id) => {
               <a href="#" style="text-decoration: underline">ver ganador</a>
             </p>
             <q-img
-              src="src/assets/images/party.png"
+              src="../../assets/images/party.png"
               alt="Party"
               width="86px"
               height="74px"
@@ -192,7 +192,7 @@ const handleDetail = (id) => {
               style="top: 70px; left: 32px"
             />
             <q-img
-              src="src/assets/images/party.png"
+              src="../../assets/images/party.png"
               alt="Party"
               width="86px"
               height="74px"
@@ -211,7 +211,7 @@ const handleDetail = (id) => {
                 <p class="text-caption q-ma-none">Julio</p>
                 <q-avatar size="50px">
                   <img
-                    src="src/assets/images/avatar.jpg"
+                    src="../../assets/images/avatar.jpg"
                     alt="Trophy"
                     fit="contain"
                     style="object-fit: cover"
@@ -228,7 +228,7 @@ const handleDetail = (id) => {
                 <p class="text-caption q-ma-none">Julio</p>
                 <q-avatar size="50px">
                   <img
-                    src="src/assets/images/avatar.jpg"
+                    src="../../assets/images/avatar.jpg"
                     alt="Trophy"
                     fit="contain"
                     style="object-fit: cover"
@@ -245,7 +245,7 @@ const handleDetail = (id) => {
                 <p class="text-caption q-ma-none">Julio</p>
                 <q-avatar size="50px">
                   <img
-                    src="src/assets/images/avatar.jpg"
+                    src="../../assets/images/avatar.jpg"
                     alt="Trophy"
                     fit="contain"
                     style="object-fit: cover"
@@ -262,7 +262,7 @@ const handleDetail = (id) => {
                 <p class="text-caption q-ma-none">Julio</p>
                 <q-avatar size="50px">
                   <img
-                    src="src/assets/images/avatar.jpg"
+                    src="../../assets/images/avatar.jpg"
                     alt="Trophy"
                     fit="contain"
                     style="object-fit: cover"

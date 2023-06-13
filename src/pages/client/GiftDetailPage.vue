@@ -8,7 +8,7 @@
         <p class="q-ma-none text-gray">Paso para el sorteo</p>
       </div>
       <q-img
-        src="src/assets/images/trophy.png"
+        src="../../assets/images/trophy.png"
         alt="trophy"
         width="46px"
         height="43px"
@@ -49,7 +49,7 @@
           </p>
         </div>
         <q-img
-          src="src/assets/images/gift.png"
+          src="../../assets/images/gift.png"
           alt="gift"
           width="91px"
           height="86px"

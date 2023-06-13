@@ -7,7 +7,7 @@
       <p class="q-ma-none text-subtitle2 full-width">Centro de ayuda</p>
 
       <q-img
-        src="src/assets/images/helpCenter.png"
+        src="../../assets/images/helpCenter.png"
         alt="Help Center"
         width="207px"
         height="167px"
@@ -21,7 +21,7 @@
           >
             <q-avatar>
               <img
-                src="src/assets/images/avatar.jpg"
+                src="../../assets/images/avatar.jpg"
                 alt="Help Center"
                 style="object-fit: cover"
               />
@@ -40,7 +40,7 @@
           >
             <q-avatar>
               <img
-                src="src/assets/images/avatar.jpg"
+                src="../../assets/images/avatar.jpg"
                 alt="Help Center"
                 style="object-fit: cover"
               />
@@ -59,7 +59,7 @@
           >
             <q-avatar>
               <img
-                src="src/assets/images/avatar.jpg"
+                src="../../assets/images/avatar.jpg"
                 alt="Help Center"
                 style="object-fit: cover"
               />
@@ -78,7 +78,7 @@
           >
             <q-avatar>
               <img
-                src="src/assets/images/avatar.jpg"
+                src="../../assets/images/avatar.jpg"
                 alt="Help Center"
                 style="object-fit: cover"
               />
