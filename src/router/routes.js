@@ -79,6 +79,10 @@ const routes = [
             component: () => import('pages/client/GiftDetailPage.vue'),
           },
           {
+            path: 'ecommerce',
+            component: () => import('pages/client/EcommercePage.vue'),
+          },
+          {
             path: 'sos',
             component: () => import('pages/client/SosPage.vue'),
           },

@@ -41,11 +41,17 @@ watchEffect(() => {
           type="search"
           label="Buscar promociones"
           color="primary"
+          rounded
         >
           <q-btn
             type="submit"
             size="md"
-            style="right: -12px; bottom: 0; top: 0"
+            style="
+              right: -12px;
+              bottom: 0;
+              top: 0;
+              border-radius: 0 26px 26px 0;
+            "
             color="primary"
             label="Buscar"
             icon="search"

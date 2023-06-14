@@ -41,13 +41,13 @@ export const HOME_CARD_LIST = [
     link: '/cliente/Offers',
     enabled: true,
   },
-  /*   {
+  {
     id: 5,
-    title: "Servicios",
+    title: 'Ecommerce',
     icon: bagIcon,
-    link: "/cliente/services",
+    link: '/cliente/ecommerce',
     enabled: true,
-  }, */
+  },
   {
     id: 6,
     title: 'Premios',
