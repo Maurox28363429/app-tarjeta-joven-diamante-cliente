@@ -39,10 +39,10 @@ const handleLink = () => {
         :src="icon"
         spinner-color="dark"
         fit="contain"
-        height="72px"
-        width="72px"
+        :height="title === '' ? '114px' : '72px'"
+        :width="title === '' ? '114px' : '72px'"
       />
-      <p class="q-ma-none body-large">{{ title }}</p>
+      <p class="q-ma-none body-large text-center">{{ title }}</p>
     </q-card-section>
   </q-card>
 </template>

@@ -17,7 +17,8 @@ const {
 } = useGetNewsInformative({ search, pages });
 
 const showModal = (modalInfo) => {
-  modalCurrent.value = { ...modalInfo };
+  modalCurrent.value = modalInfo;
+  console.log(modalCurrent.value, 'modal');
   openModal.value = true;
 };
 
@@ -104,13 +105,13 @@ const handleSearch = () => {
               ?.data?.data"
             :key="id"
           >
-            <q-card class="news-card">
-              <q-img
+            <q-card>
+              <img
                 :src="img_url"
-                spinner-color="dark"
                 class="news-image"
-                fit="contain"
+                style="object-fit: contain"
               />
+              <q-separator />
 
               <q-card-section>
                 <div class="news-title line-clamp-2">{{ titulo }}</div>
@@ -130,7 +131,12 @@ const handleSearch = () => {
                 class="q-pt-none"
                 style="flex: 1; align-items: end"
               >
-                <q-btn color="primary" @click="showModal({ ...item })" flat
+                <q-btn
+                  color="primary"
+                  @click="
+                    showModal({ descripcion, img_url, titulo, id, ...item })
+                  "
+                  flat
                   >Ver más</q-btn
                 >
               </q-card-actions>
@@ -150,17 +156,16 @@ const handleSearch = () => {
           <div class="news-title">{{ modalCurrent.titulo }}</div>
         </q-card-section>
         <q-separator />
+        <img
+          :src="modalCurrent.img_url"
+          class="body-medium"
+          style="object-fit: contain"
+        />
+        <q-separator />
 
         <q-card-section class="q-pt-none scroll" style="max-height: 50vh">
-          <q-img
-            :src="modalCurrent.img_url"
-            spinner-color="dark"
-            class="body-medium"
-          />
           <div class="news-description">{{ modalCurrent.descripcion }}</div>
         </q-card-section>
-
-        <q-separator />
 
         <q-card-actions align="right">
           <q-btn v-close-popup flat color="primary" label="Cerrar" />
@@ -204,16 +209,6 @@ const handleSearch = () => {
   gap: 20px 7px;
   justify-content: center;
   padding: 20px 0;
-}
-
-.news-card {
-  border-radius: 8px;
-
-  display: flex;
-  flex-direction: column;
-  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px 0px,
-    rgba(0, 0, 0, 0.24) 0px 1px 1px 0px;
-  overflow: hidden;
 }
 
 .skeleton-card {

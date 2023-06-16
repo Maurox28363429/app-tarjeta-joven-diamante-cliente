@@ -110,13 +110,13 @@ const handleSearch = () => {
 
         <template v-else>
           <template v-for="item in NewsData?.data?.data" :key="item.id">
-            <q-card class="news-card">
-              <q-img
+            <q-card>
+              <img
                 :src="item.img_url"
-                spinner-color="dark"
                 class="news-image"
-                fit="contain"
+                style="object-fit: contain"
               />
+              <q-separator />
 
               <q-card-section>
                 <div class="news-title line-clamp-2">{{ item.titulo }}</div>
@@ -157,12 +157,16 @@ const handleSearch = () => {
         </q-card-section>
         <q-separator />
 
-        <q-card-section class="q-pt-none scroll" style="max-height: 50vh">
-          <q-img
-            :src="modalCurrent.img_url"
-            spinner-color="dark"
-            class="body-medium"
-          />
+        <img
+          :src="modalCurrent.img_url"
+          class="body-medium"
+          alt=""
+          style="object-fit: contain; width: 100%; height: 200px"
+        />
+
+        <q-separator />
+
+        <q-card-section class="q-pt-none scroll">
           <div class="news-description">{{ modalCurrent.descripcion }}</div>
         </q-card-section>
 

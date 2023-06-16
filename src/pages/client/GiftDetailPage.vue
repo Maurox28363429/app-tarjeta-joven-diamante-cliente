@@ -1,11 +1,28 @@
-<script setup></script>
+<script setup>
+import { useGetRaffles } from 'src/querys/rafflesQuerys';
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
+
+const { params } = useRoute();
+console.log(params.id);
+const { data: raffles, isLoading } = useGetRaffles();
+
+const detail = computed(() =>
+  raffles.value?.data?.find((item) => item.id === Number(params.id))
+);
+
+console.log(detail?.value);
+</script>
 
 <template>
-  <div class="q-pa-md">
+  <div class="q-pa-md" v-if="!isLoading">
     <div class="row q-gutter-x-md">
       <div>
-        <p class="q-ma-none text-h6">Sorteo mes de Junio</p>
-        <p class="q-ma-none text-gray">Paso para el sorteo</p>
+        <p class="q-ma-none text-h6">{{ detail?.titulo }}</p>
+        <p class="q-ma-none grey">
+          {{ detail?.init_date }} a {{ detail?.end_date }}
+        </p>
+        <p class="q-ma-none text-subtitle1">Pasos para el sorteo</p>
       </div>
       <q-img
         src="../../assets/images/trophy.png"
@@ -15,27 +32,9 @@
       />
     </div>
     <q-timeline color="secondary" class="q-mt-md">
-      <q-timeline-entry icon="check">
+      <q-timeline-entry icon="check" v-for="item in detail?.steps" :key="item">
         <div>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat. Duis aute irure dolor in
-          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-          culpa qui officia deserunt mollit anim id est laborum.
-        </div>
-      </q-timeline-entry>
-
-      <q-timeline-entry icon="check">
-        <div>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat. Duis aute irure dolor in
-          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-          culpa qui officia deserunt mollit anim id est laborum.
+          {{ item }}
         </div>
       </q-timeline-entry>
     </q-timeline>

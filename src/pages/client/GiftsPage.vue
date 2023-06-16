@@ -1,21 +1,33 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
+import { useGetRaffles } from 'src/querys/rafflesQuerys';
+
+const { data: raffles, isLoading } = useGetRaffles();
 
 const tab = ref('premios');
 const router = useRouter();
+
+const winners = computed(() =>
+  raffles.value?.data?.filter((item) => item.user !== null)
+);
 
 const handleDetail = (id) => {
   console.log(id);
   router.push('/cliente/gifts/' + id);
 };
+
+console.log(winners.value);
 </script>
 
 <template>
   <div class="full-width bg-white window-height">
     <q-tab-panels v-model="tab" animated>
       <q-tab-panel name="premios">
-        <section class="full-width column items-center q-pa-md">
+        <section
+          class="full-width column items-center q-pa-md"
+          v-if="!isLoading"
+        >
           <div
             class="full-width column items-center relative"
             style="height: 270px"
@@ -51,112 +63,28 @@ const handleDetail = (id) => {
           <div
             class="full-width full-height row items-center relative wrap q-gutter-sm"
           >
-            <q-card class="cursor-pointer" @click="handleDetail(23)">
+            <q-card
+              v-for="item in raffles.data"
+              :key="item.id"
+              class="cursor-pointer"
+              @click="handleDetail(item.id)"
+            >
               <q-card-section
                 class="text-center column items-center justify-center"
                 style="min-height: 142px; width: 138px"
               >
-                <p class="text-caption q-ma-none">Julio</p>
-                <div
-                  style="
-                    height: 45px;
-                    width: 45px;
-                    border-radius: 50%;
-                    background: rgba(77, 87, 169, 0.52);
-                  "
-                  class="row justify-center items-center"
-                >
-                  <q-img
-                    src="../../assets/icons/gift.png"
+                <p class="text-caption q-ma-none">{{ item.titulo }}</p>
+                <q-avatar size="60px">
+                  <img
+                    :src="item.img"
                     alt="Trophy"
-                    width="24px"
-                    height="24px"
+                    style="object-fit: cover"
+                    width="34px"
+                    height="34px"
                   />
-                </div>
-                <p class="text-caption q-ma-none text-gray">
-                  Aproecha la mayor candidad de ofertas
-                </p>
-              </q-card-section>
-            </q-card>
-            <q-card class="cursor-pointer" @click="handleDetail(23)">
-              <q-card-section
-                class="text-center column items-center justify-center"
-                style="min-height: 142px; width: 138px"
-              >
-                <p class="text-caption q-ma-none">Julio</p>
-                <div
-                  style="
-                    height: 45px;
-                    width: 45px;
-                    border-radius: 50%;
-                    background: rgba(77, 87, 169, 0.52);
-                  "
-                  class="row justify-center items-center"
-                >
-                  <q-img
-                    src="../../assets/icons/gift.png"
-                    alt="Trophy"
-                    width="24px"
-                    height="24px"
-                  />
-                </div>
-                <p class="text-caption q-ma-none text-gray">
-                  Aproecha la mayor candidad de ofertas
-                </p>
-              </q-card-section>
-            </q-card>
-            <q-card class="cursor-pointer" @click="handleDetail(23)">
-              <q-card-section
-                class="text-center column items-center justify-center"
-                style="min-height: 142px; width: 138px"
-              >
-                <p class="text-caption q-ma-none">Julio</p>
-                <div
-                  style="
-                    height: 45px;
-                    width: 45px;
-                    border-radius: 50%;
-                    background: rgba(77, 87, 169, 0.52);
-                  "
-                  class="row justify-center items-center"
-                >
-                  <q-img
-                    src="../../assets/icons/gift.png"
-                    alt="Trophy"
-                    width="24px"
-                    height="24px"
-                  />
-                </div>
-                <p class="text-caption q-ma-none text-gray">
-                  Aproecha la mayor candidad de ofertas
-                </p>
-              </q-card-section>
-            </q-card>
-            <q-card class="cursor-pointer" @click="handleDetail(23)">
-              <q-card-section
-                class="text-center column items-center justify-center"
-                style="min-height: 142px; width: 138px"
-              >
-                <p class="text-caption q-ma-none">Julio</p>
-                <div
-                  style="
-                    height: 45px;
-                    width: 45px;
-                    border-radius: 50%;
-                    background: rgba(77, 87, 169, 0.52);
-                  "
-                  class="row justify-center items-center"
-                >
-                  <q-img
-                    src="../../assets/images/lockIcon.png"
-                    alt="Trophy"
-                    width="20px"
-                    height="20px"
-                    fit="contain"
-                  />
-                </div>
-                <p class="text-caption q-ma-none text-gray">
-                  Aproecha la mayor candidad de ofertas
+                </q-avatar>
+                <p class="text-caption q-ma-none text-grey">
+                  {{ item.descripcion }}
                 </p>
               </q-card-section>
             </q-card>
@@ -203,72 +131,27 @@ const handleDetail = (id) => {
           <div
             class="full-width full-height row items-center relative wrap q-gutter-sm"
           >
-            <q-card>
+            <q-card
+              v-for="item in winners"
+              :key="item.id"
+              class="cursor-pointer"
+            >
               <q-card-section
                 class="text-center column items-center justify-center"
                 style="min-height: 142px; width: 138px"
               >
-                <p class="text-caption q-ma-none">Julio</p>
+                <p class="text-caption q-ma-none">{{ item.titulo }}</p>
                 <q-avatar size="50px">
                   <img
-                    src="../../assets/images/avatar.jpg"
+                    :src="item.user.img_url"
                     alt="Trophy"
                     fit="contain"
                     style="object-fit: cover"
                   />
                 </q-avatar>
-                <p class="text-caption q-ma-none text-gray">Ana Luisa</p>
-              </q-card-section>
-            </q-card>
-            <q-card>
-              <q-card-section
-                class="text-center column items-center justify-center"
-                style="min-height: 142px; width: 138px"
-              >
-                <p class="text-caption q-ma-none">Julio</p>
-                <q-avatar size="50px">
-                  <img
-                    src="../../assets/images/avatar.jpg"
-                    alt="Trophy"
-                    fit="contain"
-                    style="object-fit: cover"
-                  />
-                </q-avatar>
-                <p class="text-caption q-ma-none text-gray">Ana Luisa</p>
-              </q-card-section>
-            </q-card>
-            <q-card>
-              <q-card-section
-                class="text-center column items-center justify-center"
-                style="min-height: 142px; width: 138px"
-              >
-                <p class="text-caption q-ma-none">Julio</p>
-                <q-avatar size="50px">
-                  <img
-                    src="../../assets/images/avatar.jpg"
-                    alt="Trophy"
-                    fit="contain"
-                    style="object-fit: cover"
-                  />
-                </q-avatar>
-                <p class="text-caption q-ma-none text-gray">Ana Luisa</p>
-              </q-card-section>
-            </q-card>
-            <q-card>
-              <q-card-section
-                class="text-center column items-center justify-center"
-                style="min-height: 142px; width: 138px"
-              >
-                <p class="text-caption q-ma-none">Julio</p>
-                <q-avatar size="50px">
-                  <img
-                    src="../../assets/images/avatar.jpg"
-                    alt="Trophy"
-                    fit="contain"
-                    style="object-fit: cover"
-                  />
-                </q-avatar>
-                <p class="text-caption q-ma-none text-gray">Ana Luisa</p>
+                <p class="text-caption q-ma-none text-gray">
+                  {{ item.user.name }}
+                </p>
               </q-card-section>
             </q-card>
           </div>

@@ -99,6 +99,7 @@ watchEffect(() => {
                 class="news-image"
                 fit="contain"
               />
+              <q-separator />
 
               <q-card-section>
                 <div class="news-title line-clamp-2">{{ item.titulo }}</div>
@@ -163,6 +164,7 @@ watchEffect(() => {
             spinner-color="dark"
             class="body-medium"
           />
+          <q-separator />
           <div class="news-description">{{ modalCurrent.descripcion }}</div>
           <div>
             <p>Redes:</p>

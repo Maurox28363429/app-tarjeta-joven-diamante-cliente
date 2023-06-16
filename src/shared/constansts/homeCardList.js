@@ -6,7 +6,7 @@ import bagIcon from '../../assets/images/bagIcon.png';
 import giftIcon from '../../assets/images/giftIcon.png';
 import pachama from '../../assets/images/GifPachama.gif';
 import universityIcon from '../../assets/images/universityIcon.png';
-import helpIcon from '../../assets/images/heartIcon.png';
+import helpIcon from '../../assets/icons/sosIcon.png';
 import newsIcon from '../../assets/images/newsIcon.png';
 import iconoTarjeta from '../../assets/images/t.webp';
 import profileIcon from '../../assets/images/profileIcon.png';

@@ -42,7 +42,7 @@ const POLICY_ROWS = [
         width="40px"
         alt="home icon"
       />
-      <p class="q-ma-none text-center title-large">Home Page</p>
+      <p class="q-ma-none text-center text-h5">Home Page</p>
     </div>
     <div class="row wrap q-mt-md justify-center q-gutter-lg">
       <div

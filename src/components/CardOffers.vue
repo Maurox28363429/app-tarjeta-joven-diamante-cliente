@@ -55,7 +55,7 @@ defineProps({
 </script>
 
 <template>
-  <q-card class="column" style="height: 400px; width: 100%; gap: 0">
+  <q-card class="column" style="height: 370px; width: 100%; gap: 0">
     <q-card-section class="q-px-xs q-py-none">
       <q-img
         style="height: 120px; width: 100%; max-height: 200px"
@@ -64,6 +64,7 @@ defineProps({
           images[0] ? images[0] : 'https://cdn.quasar.dev/img/mountains.jpg'
         "
       />
+      <q-separator />
       <q-list>
         <q-item clickable class="q-ma-none q-pa-none" style="padding: 1em">
           <q-item-section class="q-ma-none q-pa-none">
@@ -131,6 +132,7 @@ defineProps({
 
       <q-card-section class="q-pt-none scroll" style="max-height: 50vh">
         <img :src="images[0]" class="news-image" />
+        <q-separator />
         <div class="body-medium">{{ description }}</div>
         <div>
           <p>Dirección:</p>
