@@ -63,6 +63,14 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
       "clobbers": [
         "navigator.splashscreen"
       ]
+    },
+    {
+      "id": "@havesource/cordova-plugin-push.PushNotification",
+      "file": "plugins/@havesource/cordova-plugin-push/www/push.js",
+      "pluginId": "@havesource/cordova-plugin-push",
+      "clobbers": [
+        "PushNotification"
+      ]
     }
   ];
   module.exports.metadata = {
@@ -70,6 +78,7 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
     "cordova-plugin-camera": "6.0.1-dev",
     "cordova-plugin-inappbrowser": "5.0.0",
     "cordova-plugin-prevent-screenshot": "1.0.0",
-    "cordova-plugin-splashscreen": "6.0.2"
+    "cordova-plugin-splashscreen": "6.0.2",
+    "@havesource/cordova-plugin-push": "3.0.1"
   };
 });
