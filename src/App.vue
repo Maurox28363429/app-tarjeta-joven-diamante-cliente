@@ -37,7 +37,11 @@ onMounted(() => {
 
 watchEffect(() => {
   if (!isLoading.value) {
-    if (process.env.VUE_APP_VERSION && versionApp.value) {
+    if (
+      process.env.VUE_APP_VERSION &&
+      versionApp.value &&
+      typeof cordova !== 'undefined'
+    ) {
       if (
         Number(process.env.VUE_APP_VERSION) < Number(versionApp.value?.version)
       ) {
