@@ -13,8 +13,7 @@
   "author": "Apache Cordova Team",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@havesource/cordova-plugin-push": "^3.0.1",
-    "cordova-android": "^10.0.0",
+    "cordova-android": "^10.1.2",
     "cordova-ios": "^6.3.0",
     "cordova-plugin-camera": "github:apache/cordova-plugin-camera",
     "cordova-plugin-prevent-screenshot": "^1.0.3",
@@ -30,11 +29,7 @@
       "cordova-plugin-camera": {},
       "cordova-plugin-android-permissions": {},
       "cordova-plugin-inappbrowser": {},
-      "cordova-plugin-prevent-screenshot": {},
-      "@havesource/cordova-plugin-push": {
-        "ANDROIDX_CORE_VERSION": "1.6.+",
-        "FCM_VERSION": "18.+"
-      }
+      "cordova-plugin-prevent-screenshot": {}
     }
   },
   "dependencies": {

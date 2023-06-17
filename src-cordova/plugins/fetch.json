@@ -13,7 +13,9 @@
       "id": "github:apache/cordova-plugin-camera"
     },
     "is_top_level": true,
-    "variables": {}
+    "variables": {
+      "ANDROIDX_CORE_VERSION": "1.6.+"
+    }
   },
   "cordova-plugin-android-permissions": {
     "source": {
@@ -64,14 +66,6 @@
     "source": {
       "type": "registry",
       "id": "cordova-plugin-prevent-screenshot@^1.0.3"
-    },
-    "is_top_level": true,
-    "variables": {}
-  },
-  "@havesource/cordova-plugin-push": {
-    "source": {
-      "type": "registry",
-      "id": "@havesource/cordova-plugin-push@3.0.1"
     },
     "is_top_level": true,
     "variables": {}

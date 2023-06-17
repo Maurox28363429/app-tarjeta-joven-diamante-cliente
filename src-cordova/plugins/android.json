@@ -22,11 +22,6 @@
     },
     "cordova-plugin-splashscreen": {
       "PACKAGE_NAME": "com.phoenixtechsa.app"
-    },
-    "@havesource/cordova-plugin-push": {
-      "ANDROIDX_CORE_VERSION": "1.6.+",
-      "FCM_VERSION": "18.+",
-      "PACKAGE_NAME": "com.phoenixtechsa.app"
     }
   },
   "dependent_plugins": {}
