@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Notify } from 'quasar';
 
 export const instance = axios.create({
-  baseURL: process.env.VUE_APP_API_URL,
+  baseURL: "https://api.tarjetajovendiamante.com/api/",
   headers: { 'X-Custom-Header': 'foobar' },
 });
 
