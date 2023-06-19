@@ -14,6 +14,11 @@ export const ADMIN_MENU_DESKTOP = [
     icon: 'person',
     label: 'Perfil',
   },
+  {
+    path: '/admin/noticias',
+    icon: 'newspaper',
+    label: 'Noticias',
+  }
 ];
 
 export const ADMIN_MENU_MOBILE = [

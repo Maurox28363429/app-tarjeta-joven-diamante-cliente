@@ -180,6 +180,14 @@ const routes = [
             path: '',
             component: () => import('pages/admin/AdminHomePage.vue'),
           },
+          {
+            path: 'noticias',
+            component: () => import('pages/admin/NewsPage.vue'),
+          },
+          {
+            path: 'noticias_pachama',
+            component: () => import('pages/admin/NewsPachamaPage.vue'),
+          }
         ],
       },
       {
