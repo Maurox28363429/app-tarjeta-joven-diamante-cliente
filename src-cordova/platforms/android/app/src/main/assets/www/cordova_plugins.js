@@ -55,21 +55,12 @@ cordova.define('cordova/plugin_list', function(require, exports, module) {
       "clobbers": [
         "window.plugins.preventscreenshot"
       ]
-    },
-    {
-      "id": "cordova-plugin-splashscreen.SplashScreen",
-      "file": "plugins/cordova-plugin-splashscreen/www/splashscreen.js",
-      "pluginId": "cordova-plugin-splashscreen",
-      "clobbers": [
-        "navigator.splashscreen"
-      ]
     }
   ];
   module.exports.metadata = {
     "cordova-plugin-android-permissions": "1.1.5",
     "cordova-plugin-camera": "6.0.1-dev",
     "cordova-plugin-inappbrowser": "5.0.0",
-    "cordova-plugin-prevent-screenshot": "1.0.0",
-    "cordova-plugin-splashscreen": "6.0.2"
+    "cordova-plugin-prevent-screenshot": "1.0.0"
   };
 });
