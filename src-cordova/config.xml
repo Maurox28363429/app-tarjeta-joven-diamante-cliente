@@ -8,10 +8,10 @@
     <content src="index.html" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
-    <preference name="SplashMaintainAspectRatio" value="true" />
     <preference name="android-targetSdkVersion" value="33" />
     <platform name="android">
-        <preference name="AndroidWindowSplashScreenAnimatedIcon" value="res/screen/android/splashscreen.xml" />
+        <preference name="AndroidWindowSplashScreenAnimatedIcon" value="res/android/xxhdpi.png" />
+        <preference name="AndroidWindowSplashScreenBackground" value="#FFFFFF" />
         <feature name="Camera">
             <param name="android-package" value="org.apache.cordova.camera.CameraLauncher" />
         </feature>
