@@ -62,7 +62,7 @@ export default route(function (/* { store, ssrContext } */) {
         to.path === '/recoveryPassword')
     ) {
       // Si el usuario está autenticado y trata de acceder a una página pública, redirigirlo a la página correspondiente a su rol
-      next({ path: `/${ROLE_ID[user?.user?.role_id]}` });
+      next({ path: `/${ROLE_ID[Number(user?.user?.role_id)]}` });
       return;
     }
 
