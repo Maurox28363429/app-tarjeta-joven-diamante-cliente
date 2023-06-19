@@ -2,7 +2,6 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { userAuth } from 'src/composables/userAuth';
-import QRScanner from 'src/components/QRScanner.vue';
 import logo from '../assets/icons/acronimo.svg';
 import {
   ADMIN_MENU_DESKTOP,
@@ -13,12 +12,7 @@ const { userData } = userAuth();
 const { push, go } = useRouter();
 
 const leftDrawerOpen = ref(false);
-const show = ref(false);
 const miniState = ref(true);
-
-const handledReadQr = () => {
-  show.value = !show.value;
-};
 
 const handledLogout = (e) => {
   e.preventDefault();
@@ -175,32 +169,6 @@ const drawerClick = (e) => {
     <q-page-container style="background: #f8fdff">
       <router-view />
     </q-page-container>
-
-    <q-dialog
-      v-model="show"
-      persistent
-      transition-show="scale"
-      transition-hide="scale"
-    >
-      <q-card class="qrModal">
-        <QRScanner :close-modal="show" @close-modal="show = false" />
-        <q-card-actions align="right" class="text-primary">
-          <q-btn flat label="Close" v-close-popup />
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
-
-    <div class="q-px-sm q-py-lg">
-      <div class="qrButton">
-        <q-btn
-          round
-          size="md"
-          color="primary"
-          @click="handledReadQr"
-          icon="qr_code_scanner"
-        />
-      </div>
-    </div>
     <q-tabs
       style="z-index: 100"
       dense
