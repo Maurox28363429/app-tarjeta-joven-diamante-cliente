@@ -1,4 +1,8 @@
-import { useQuery } from '@tanstack/vue-query';
+import { useQuery, useQueryClient, useMutation } from '@tanstack/vue-query';
+import deleteOffer from 'src/api/deleteOffer';
+import { useToast } from 'src/composables/useToast';
+import editOffer from 'src/api/editOffer';
+import createOffer from 'src/api/createOffer';
 
 import getOffersFromStore from 'src/api/getOffersFromStore';
 import getOffers from 'src/api/getOffers';
@@ -14,7 +18,7 @@ export const useGetOffers = ({ name, page, id }) => {
 
 export const useGetOffersFromBusiness = ({ search, page, dir }) => {
   return useQuery(['offersFromBusiness', page, dir], () =>
-    getOffers({ search: search.value, page: page.value, dir: dir.value })
+    getOffers({ search: search.value, page: page.value, dir: dir?.value })
   );
 };
 
@@ -40,4 +44,40 @@ export const useGetOffersForUniversity = ({ search, page, dir }) => {
       dir: dir.value,
     })
   );
+};
+
+export const useDeleteOfferMutation = () => {
+  const { triggerPositive } = useToast();
+  const queryClient = useQueryClient();
+
+  return useMutation(deleteOffer, {
+    onSuccess: () => {
+      triggerPositive('Oferta eliminada con éxito');
+      queryClient.invalidateQueries({ queryKey: ['offersFromBusiness'] });
+    },
+  });
+};
+
+export const useEditOfferMutation = () => {
+  const { triggerPositive } = useToast();
+  const queryClient = useQueryClient();
+
+  return useMutation(editOffer, {
+    onSuccess: () => {
+      triggerPositive('Oferta actualizada con éxito');
+      queryClient.invalidateQueries({ queryKey: ['offersFromBusiness'] });
+    },
+  });
+};
+
+export const useCreateOfferMutation = () => {
+  const { triggerPositive } = useToast();
+  const queryClient = useQueryClient();
+
+  return useMutation(createOffer, {
+    onSuccess: () => {
+      triggerPositive('Oferta creada con éxito');
+      queryClient.invalidateQueries({ queryKey: ['offersFromBusiness'] });
+    },
+  });
 };
