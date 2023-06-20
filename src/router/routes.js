@@ -192,6 +192,14 @@ const routes = [
             path: 'offers',
             component: () => import('pages/admin/OffersPage.vue'),
           },
+          {
+            path: 'membresias',
+            component: () => import('pages/admin/MembresiasPage.vue'),
+          },
+          {
+            path: 'users',
+            component: () => import('pages/admin/AdminUsers.vue'),
+          }
         ],
       },
       {

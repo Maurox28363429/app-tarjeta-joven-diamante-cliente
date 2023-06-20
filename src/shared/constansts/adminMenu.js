@@ -1,8 +1,8 @@
 export const ADMIN_MENU_DESKTOP = [
   {
-    path: '/',
-    icon: 'person',
-    label: 'Perfil',
+    path: '/admin/membresias',
+    icon: 'credit_card',
+    label: 'Membresias',
   },
   {
     path: '/',

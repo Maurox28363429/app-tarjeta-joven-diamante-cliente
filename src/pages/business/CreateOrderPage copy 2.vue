@@ -121,6 +121,7 @@ watch(currentPaginate, () => {
 onMounted(async () => {
   refetch();
 });
+const tab = ref('productos');
 </script>
 
 <template>
@@ -138,7 +139,98 @@ onMounted(async () => {
         </h5>
       </section>
       <section class="col-12" style="text-align: center" v-if="client">
-        {{ client }}
+        <article style="height: 100vh">
+          <q-tabs
+            v-model="tab"
+            dense
+            class="bg-primary text-white"
+            align="justify"
+            narrow-indicator
+          >
+            <q-tab name="productos" label="Productos" />
+            <q-tab name="carrito" label="Carrito" />
+          </q-tabs>
+
+          <q-tab-panels v-model="tab" animated>
+            <q-tab-panel name="productos">
+              <q-input
+                color="blue"
+                v-model="text"
+                label="Buscar producto"
+                filled
+              >
+                <template v-slot:prepend>
+                  <q-icon name="search" />
+                </template>
+              </q-input>
+              <table>
+                <thead>
+                  <tr>
+                    <th>IMG</th>
+                    <th>Producto</th>
+                    <th>Precio</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="items in offersData" :key="items.id">
+                    <td>
+                      <q-img
+                        style="width: 80px; height: auto; border-radius: 15px"
+                        :src="
+                          items.img_array_url[0] ??
+                          'https://placehold.co/600x400/png'
+                        "
+                        loading="lazy"
+                        spinner-color="black"
+                      />
+                    </td>
+                    <td>
+                      <b>
+                        {{ items.nombre }}
+                      </b>
+                      <div>{{ items.stock }} <q-icon name="inventory" /></div>
+                    </td>
+                    <td class="row">
+                      <div class="col-8">
+                        <b> {{ items.price_total }} $ </b>
+                        <br />
+                        <span
+                          style="color: rgb(255, 91, 91); font-weight: bold"
+                        >
+                          {{ items.descuento }} <q-icon name="percent" />
+                        </span>
+                      </div>
+                      <span class="col-4">
+                        <q-btn
+                          round
+                          size="sm"
+                          color="primary"
+                          @click="addProduct(items)"
+                          icon="add"
+                        />
+                      </span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <div style="padding: 2em" class="flex flex-center">
+                <q-pagination
+                  v-model="currentPaginate"
+                  :max="pages"
+                  direction-links
+                  flat
+                  color="grey"
+                  active-color="primary"
+                />
+              </div>
+            </q-tab-panel>
+
+            <q-tab-panel name="carrito">
+              <div class="text-h6">Alarms</div>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit.
+            </q-tab-panel>
+          </q-tab-panels>
+        </article>
       </section>
     </section>
   </q-page>
