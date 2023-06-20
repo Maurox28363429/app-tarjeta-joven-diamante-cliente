@@ -3,13 +3,15 @@ import messageIcon from '../../assets/images/messageIcon.png';
 import VIPIcon from '../../assets/images/VIPIcon.png';
 import speakerIcon from '../../assets/images/speakerIcon.png';
 import bagIcon from '../../assets/images/bagIcon.png';
-import giftIcon from '../../assets/images/giftIcon.png';
+// import giftIcon from '../../assets/images/giftIcon.png';
 import pachama from '../../assets/images/GifPachama.gif';
 import universityIcon from '../../assets/images/universityIcon.png';
 import helpIcon from '../../assets/icons/sosIcon.png';
 import newsIcon from '../../assets/images/newsIcon.png';
 import iconoTarjeta from '../../assets/images/t.webp';
 import profileIcon from '../../assets/images/profileIcon.png';
+import ecommerceIcon from '../../assets/images/ecommerce.png';
+import campeonIcon from '../../assets/images/campeon.png';
 
 export const HOME_CARD_LIST = [
   {
@@ -44,16 +46,16 @@ export const HOME_CARD_LIST = [
   {
     id: 5,
     title: 'Ecommerce',
-    icon: bagIcon,
+    icon: ecommerceIcon,
     link: '/cliente/ecommerce',
-    enabled: true,
+    enabled: false,
   },
   {
     id: 6,
     title: 'Premios',
-    icon: giftIcon,
+    icon: campeonIcon,
     link: '/cliente/gifts',
-    enabled: true,
+    enabled: false,
   },
   {
     id: 7,
@@ -88,7 +90,7 @@ export const HOME_CARD_LIST = [
     title: 'SOS',
     icon: helpIcon,
     link: '/cliente/sos',
-    enabled: true,
+    enabled: false,
   },
   {
     id: 12,

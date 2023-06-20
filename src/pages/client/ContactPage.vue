@@ -35,11 +35,6 @@ const DIRETORY = [
     charge: 'Administración y contabilidad',
     phoneNumber: '6540-9984',
   },
-  {
-    name: 'Charlott Pinzón',
-    charge: 'Call Center',
-    phoneNumber: '6540-9984',
-  },
 ];
 </script>
 

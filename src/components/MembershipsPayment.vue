@@ -37,10 +37,11 @@ const handledFreePayment = () => {
   }
 };
 const HandlePayment = () => {
-
-const userId = userData.value?.id || ''
-const url = 'https://api.tarjetajovendiamante.com/pago/Payment_Controller.php?user_id=' + `${userId}`
-localStorage.removeItem('user')
+  const userId = userData.value?.id || '';
+  const url =
+    'https://api.tarjetajovendiamante.com/pago/Payment_Controller.php?user_id=' +
+    `${userId}`;
+  localStorage.removeItem('user');
 
   // const url = `https://tarjetajovendiamante.com/index.php/checkout/?billing_email=${userData.value?.email}&add-to-cart=871&quantity=1`;
 
