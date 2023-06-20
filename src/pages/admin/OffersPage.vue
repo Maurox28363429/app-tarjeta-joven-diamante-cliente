@@ -20,6 +20,7 @@ const pages = ref(1);
 const lastPage = ref(1);
 
 const state = ref('todos');
+const editorRef = ref(null);
 
 const {
   data: offers,
@@ -57,7 +58,6 @@ const currentNews = computed(() => {
 watch([offers, isFetchedOffers, currentNews], () => {
   if (offers.value && edit_id.value) {
     useForm.value = { ...currentNews.value };
-    console.log(currentNews.value);
   }
 });
 
@@ -66,6 +66,7 @@ const ACCEPTED_TYPES_FOR_DNI = ['image/jpeg', 'image/png', 'image/jpg', 'jpg'];
 watchEffect(() => {
   pages.value = offers?.value?.pagination?.currentPage;
   lastPage.value = offers?.value?.pagination?.lastPage;
+  console.log(editorRef.value);
 });
 
 const buscar = () => {
@@ -94,8 +95,6 @@ const deleteNew = (id) => {
 };
 
 const options = ref(provinceOptions.value);
-
-const editorRef = ref(null);
 
 const filterFn = (val, update) => {
   if (val === '') {
@@ -237,9 +236,10 @@ const onPaste = (evt) => {
               </q-td>
               <q-td key="description" :props="props">
                 <div style="max-width: 100px; text-overflow: ellipsis">
-                  <p class="line-clamp-2 q-ma-none">
-                    {{ props.row?.description }}...
-                  </p>
+                  <p
+                    class="line-clamp-2 q-ma-none"
+                    v-html="props.row?.description"
+                  />
                 </div>
               </q-td>
               <q-td key="descuento" :props="props">

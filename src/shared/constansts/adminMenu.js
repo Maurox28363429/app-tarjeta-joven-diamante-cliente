@@ -5,9 +5,9 @@ export const ADMIN_MENU_DESKTOP = [
     label: 'Perfil',
   },
   {
-    path: '/',
-    icon: 'person',
-    label: 'Perfil',
+    path: '/admin/offers',
+    icon: 'newspaper',
+    label: 'ofertas',
   },
   {
     path: '/admin/noticias',
@@ -18,7 +18,7 @@ export const ADMIN_MENU_DESKTOP = [
     path: '/admin/noticias_pachama',
     icon: 'newspaper',
     label: 'Noticias Pachama',
-  }
+  },
 ];
 
 export const ADMIN_MENU_MOBILE = [
@@ -36,5 +36,5 @@ export const ADMIN_MENU_MOBILE = [
     path: '/admin/noticias_pachama',
     icon: 'newspaper',
     label: 'Pachama',
-  }
+  },
 ];
