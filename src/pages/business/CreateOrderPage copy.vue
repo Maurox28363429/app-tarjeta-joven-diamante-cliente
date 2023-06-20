@@ -125,130 +125,138 @@ watch(currentPaginate, () => {
 onMounted(async () => {
   refetch();
 });
-const tab = ref('productos');
 </script>
 
 <template>
-  <q-page class="flex flex-center">
-    <section class="row" style="width:100%">
-      <section class="col-12" style="text-align:center;" v-if="!client">
-        <q-img
-        style="width:200px;"
-        src="~assets/images/scanme.png"
-        loading="lazy"
-        spinner-color="black"
-      />
-      <h5>
-        Escanea el código QR de tu cliente para comenzar a crear la orden
-      </h5>
-      </section>
-       <section class="col-12" style="text-align:center;" v-if="client">
-          <article style="height:100vh">
-             <q-tabs
-                v-model="tab"
-                dense
-                class="bg-primary text-white"
-                align="justify"
-                narrow-indicator
-              >
-                <q-tab name="productos" label="Productos"/>
-                <q-tab name="carrito" label="Carrito" />
-              </q-tabs>
-
-              <q-tab-panels v-model="tab" animated>
-                <q-tab-panel name="productos">
-                  <q-input color="blue" v-model="text" label="Buscar producto" filled>
-                    <template v-slot:prepend>
-                      <q-icon name="search" />
-                    </template>
-                  </q-input>
-                    <table>
-                      <thead>
-                        <tr>
-                          <th>IMG</th>
-                          <th>Producto</th>
-                          <th>Precio</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr v-for="items in offersData" :key="items.id">
-                          <td>
-                              <q-img
-                              style="width:80px;height:auto;border-radius:15px;"
-                              :src="items.img_array_url[0] ?? 'https://placehold.co/600x400/png'"
-                              loading="lazy"
-                              spinner-color="black"
-                              />
-                          </td>
-                          <td>
-                              <b>
-                                {{ items.nombre }}
-                              </b>
-                              <div>
-                                {{ items.stock }} <q-icon name="inventory" />
-                              </div>
-                          </td>
-                          <td class="row">
-                            <div class="col-8">
-                                 <b>
-                                  {{ items.price_total }} $
-                                 </b>
-                                 <br>
-                                  <span style="color:rgb(255, 91, 91);font-weight:bold;">
-                                    {{ items.descuento }} <q-icon name="percent" />
-                                  </span>
-                            </div>
-                            <span class="col-4">
-                              <q-btn
-                                round
-                                size="sm"
-                                color="primary"
-                                @click="addProduct(items)"
-                                icon="add"
-                              />
-                            </span>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                    <div style="padding:2em;" class="flex flex-center">
-                      <q-pagination
-                        v-model="currentPaginate" :max="pages"
-                        direction-links
-                        flat
-                        color="grey"
-                        active-color="primary"
-                      />
-                    </div>
-                </q-tab-panel>
-
-                <q-tab-panel name="carrito">
-                  <div class="text-h6">Alarms</div>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                </q-tab-panel>
-
-              </q-tab-panels>
-
-
-          </article>
-       </section>
-    </section>
-  </q-page>
+  <p class="q-ma-md body-large">
+    Cliente: {{ client ? userScaneo : 'cliente no ingresado' }}
+  </p>
+  <p class="q-ma-md body-small" style="color: #363636">
+    {{ !client ? 'Por favor ingrese el cliente a través del QR' : '' }}
+  </p>
+  <div class="orderContainer">
+    <div class="full-height q-mx-md">
+      <div class="full-width q-mb-lg row justify-center q-mt-lg">
+        <q-input
+          v-model="search"
+          outlined
+          type="search"
+          label="Buscar ofertas"
+          color="primary"
+          class="full-width"
+        >
+          <template v-slot:append>
+            <q-icon name="search" v-model="search" />
+          </template>
+        </q-input>
+      </div>
+      <div class="containerCard">
+        <q-inner-loading
+          :showing="isLoadingOffers"
+          label="Por favor espera..."
+          label-class="text-teal"
+          label-style="font-size: 1.1em"
+        />
+        <div class="card" v-for="items in offersData" :key="items.id">
+          <div class="">
+            <q-img
+              class="rounded-borders"
+              :src="items.img_array_url[0]"
+              spinner-color="dark"
+              style="height: 80px; max-width: 150px"
+            />
+          </div>
+          <div>
+            <div class="text-center column">
+              <p class="q-ma-none text-weight-medium">{{ items.nombre }}</p>
+              <p class="q-ma-none text-weight-medium">
+                ${{ items.price_total }}
+              </p>
+            </div>
+          </div>
+          <div>
+            <p class="q-ma-none">Inventario: {{ items.stock }}</p>
+            <p class="q-ma-none text-weight-medium">
+              Precio ${{ items.price_total }}
+            </p>
+            <p class="q-ma-none">Desct: {{ items.descuento }}%</p>
+            <p class="q-ma-none" style="display: none">F/l:</p>
+            <p class="q-ma-none" style="display: none">
+              {{ items.fecha_tope_descuento }}
+            </p>
+          </div>
+          <div class="row items-center">
+            <q-btn
+              color="primary"
+              icon="add"
+              size="xs"
+              round
+              :disable="items.stock === 0"
+              @click="addMount(items.id)"
+            />
+            <p class="q-ma-none text-weight-medium" style="padding: 0 7px">
+              {{ items.cantidad }}
+            </p>
+            <q-btn
+              color="primary"
+              icon="remove"
+              size="xs"
+              round
+              @click="subtractMount(items.id)"
+            />
+          </div>
+          <div class="buttonAdd">
+            <q-btn
+              @click="addProduct(items)"
+              color="positive"
+              :disable="items.stock === 0"
+              icon="add"
+              round
+            />
+          </div>
+        </div>
+      </div>
+      <div class="q-pa-lg flex flex-center">
+        <q-pagination v-model="currentPaginate" :max="pages" />
+      </div>
+    </div>
+    <div class="full-width">
+      <div class="q-pa-md">
+        <p class="q-ma-none body-large">Total: ${{ total }}</p>
+        <p class="q-ma-none body-large">Ahorro: ${{ totalSaving }}</p>
+        <q-table
+          class="my-sticky-virtscroll-table"
+          flat
+          bordered
+          virtual-scroll
+          :virtual-scroll-sticky-size-start="48"
+          title="Carrito"
+          :rows="rows"
+          :columns="ORDER_CREATION_COLUMNS"
+          row-key="id"
+          selection="multiple"
+          v-model:selected="selected"
+        />
+        <div class="buttonActions">
+          <q-btn
+            :loading="loadingInvoice"
+            color="positive"
+            label="finalizar compra"
+            @click="invoice"
+            :disable="
+              !client ||
+              (rows.length === 0 && client.membresia?.status === 'vencida') ||
+              !client.membresia
+            "
+          />
+          <q-btn color="negative" label="eliminar" @click="deleteProduct" />
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <style>
-table{
-  width:100%;
-}
-thead th{
-  padding:1em;
-}
-td,th{
-  text-align:center;
-  line-height:1.5;
-}
-tr:nth-child(even) {background-color: #f2f2f2;}
-
 .orderContainer {
   display: flex;
   flex-direction: column;

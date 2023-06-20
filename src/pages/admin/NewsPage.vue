@@ -143,6 +143,7 @@ import { ref,onMounted } from 'vue'
 import getNewsInformative from 'src/api/getNewsInformative.js'
 import createNoticiaInformativa from 'src/api/createNoticiaInformativa.js'
 import editNoticiaInformativa from 'src/api/editNoticiaInformativa.js'
+
 const paginador = ref({
   current: 1,
   lastPage: 1,
