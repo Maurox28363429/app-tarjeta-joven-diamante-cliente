@@ -5,7 +5,7 @@ export const ADMIN_MENU_DESKTOP = [
     label: 'Perfil',
   },
   {
-    path: '/',
+    path: '/admin/offers',
     icon: 'receipt_long',
     label: 'Ordenes',
   },
@@ -18,7 +18,7 @@ export const ADMIN_MENU_DESKTOP = [
     path: '/admin/noticias',
     icon: 'newspaper',
     label: 'Noticias',
-  }
+  },
 ];
 
 export const ADMIN_MENU_MOBILE = [

@@ -187,7 +187,11 @@ const routes = [
           {
             path: 'noticias_pachama',
             component: () => import('pages/admin/NewsPachamaPage.vue'),
-          }
+          },
+          {
+            path: 'offers',
+            component: () => import('pages/admin/OffersPage.vue'),
+          },
         ],
       },
       {

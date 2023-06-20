@@ -2,30 +2,30 @@
 import { ref, computed, watchEffect, watch } from 'vue';
 import { useValidateForm } from 'src/composables/useValidateForm.js';
 import {
-  useGetNewsInformative,
   useCreateNewMutation,
   useEditNewMutation,
   useDeleteNewMutation,
 } from 'src/querys/newsQuerys';
 import { newSchema } from 'src/schemas/newSchema.js';
 import { checkFileType } from 'src/utils/checkFileType';
+import { useGetOffersFromBusiness } from 'src/querys/offersQuerys';
 
-const paginador = ref({
-  current: 1,
-  lastPage: 1,
-});
+const paginador = ref(1);
 const formulario = ref(false);
 const edit_id = ref(null);
+const state = ref('');
 
 const search = ref('');
+
 const {
-  data: noticias,
+  data: offers,
   refetch,
-  isLoading: isLoadingNews,
-  isFetching: isFetchedNews,
-} = useGetNewsInformative({
-  pages: paginador,
+  isLoading: isLoadingOffers,
+  isFetching: isFetchedOffers,
+} = useGetOffersFromBusiness({
+  page: paginador,
   search,
+  dir: state,
 });
 
 const { mutate: createNewInformative, isLoading: isLoadingCreate } =
@@ -40,12 +40,12 @@ const { useForm, validatInput } = useValidateForm({
 });
 
 const currentNews = computed(() => {
-  return noticias?.value?.data?.data?.find(({ id }) => {
+  return offers?.value?.data?.data?.find(({ id }) => {
     return id === edit_id.value;
   });
 });
-watch([noticias, isFetchedNews, currentNews], () => {
-  if (noticias.value && edit_id.value) {
+watch([offers, isFetchedOffers, currentNews], () => {
+  if (offers.value && edit_id.value) {
     useForm.value.titulo = currentNews?.value?.titulo;
     useForm.value.descripcion = currentNews?.value?.descripcion;
     useForm.value.prioridad = currentNews?.value?.prioridad;
@@ -56,8 +56,8 @@ const ACCEPTED_TYPES_FOR_DNI = ['image/jpeg', 'image/png', 'image/jpg', 'jpg'];
 
 watchEffect(() => {
   paginador.value = {
-    current: noticias?.value?.data?.pagination?.currentPage,
-    lastPage: noticias?.value?.data?.pagination?.lastPage,
+    current: offers?.value?.data?.pagination?.currentPage,
+    lastPage: offers?.value?.data?.pagination?.lastPage,
   };
 });
 
@@ -97,14 +97,24 @@ const columns = [
     label: 'ID',
     align: 'left',
   },
-  { name: 'img_url', align: 'center', label: 'IMG', field: 'img_url' },
-  { name: 'titulo', label: 'TITULO', field: 'titulo' },
+  { name: 'nombre', align: 'center', label: 'NOMBRE', field: 'nombre' },
+  { name: 'comercio', align: 'center', label: 'COMERCIO', field: 'comercio' },
   {
-    name: 'descripcion',
-    label: 'DESCRIPCION',
-    field: 'descripcion',
-    sortable: true,
+    name: 'img_array_url',
+    align: 'center',
+    label: 'IMG',
+    field: 'img_array_url',
   },
+  { name: 'titulo', label: 'TITULO', field: 'titulo' },
+  { name: 'descripcion', label: 'DESCRIPCION', field: 'descripcion' },
+  { name: 'descuento', label: 'DESCUENTO', field: 'descuento' },
+  { name: 'dir', label: 'PROVINCIA', field: 'dir' },
+  {
+    name: 'fecha_tope_descuento',
+    label: 'FECHA TOPE',
+    field: 'fecha_tope_descuento',
+  },
+  { name: 'stock', label: 'STOCK', field: 'stock', sortable: true },
   { name: 'prioridad', label: 'PRIORIDAD', field: 'prioridad' },
   { name: 'created_at', label: 'FECHA', field: 'created_at' },
   { name: 'action', label: 'ACTION', field: 'action' },
@@ -136,7 +146,7 @@ const onPaste = (evt) => {
     <section
       class="row"
       style="width: 100%; padding: 1em"
-      v-if="!isLoadingNews"
+      v-if="!isLoadingOffers"
     >
       <div class="col-12">
         <q-form
@@ -173,8 +183,8 @@ const onPaste = (evt) => {
         <q-table
           flat
           bordered
-          title="Noticias"
-          :rows="noticias?.data?.data"
+          title="Ofertas"
+          :rows="offers?.data"
           :columns="columns"
           row-key="name"
         >
@@ -183,9 +193,15 @@ const onPaste = (evt) => {
               <q-td key="id" :props="props">
                 {{ props.row?.id }}
               </q-td>
-              <q-td key="img_url" :props="props">
+              <q-td key="nombre" :props="props">
+                {{ props.row?.nombre }}
+              </q-td>
+              <q-td key="comercio" :props="props">
+                {{ props.row?.comercio.name }}
+              </q-td>
+              <q-td key="img_array_url" :props="props">
                 <q-img
-                  :src="props.row.img_url"
+                  :src="props.row.img_array_url[0]"
                   alt="img"
                   spinner-color="dark"
                   style="width: 100px; height: 100px"
@@ -194,8 +210,8 @@ const onPaste = (evt) => {
               <q-td key="titulo" :props="props">
                 {{ props.row?.titulo }}
               </q-td>
-              <q-td key="descripcion" :props="props">
-                {{ props.row?.descripcion }}
+              <q-td key="stock" :props="props">
+                {{ props.row?.stock }}
               </q-td>
               <q-td key="prioridad" :props="props">
                 {{ props.row?.prioridad }}
