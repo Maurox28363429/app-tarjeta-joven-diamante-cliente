@@ -43,6 +43,9 @@ const handleLink = () => {
         :width="title === '' ? '114px' : '72px'"
       />
       <p class="q-ma-none body-large text-center">{{ title }}</p>
+      <p v-if="!enabled">
+        Proximamente <q-icon name="info" color="primary" />
+      </p>
     </q-card-section>
   </q-card>
 </template>
