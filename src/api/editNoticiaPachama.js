@@ -1,19 +1,11 @@
 import { instance } from '.';
+import { convertToFormdata } from 'src/utils/convertToFormdata';
 
-export default async function createNoticiaPachama(
-  id,
-  {
-    // id es el id de la noticia
-    titulo,
-    descripcion,
-    prioridad,
-    img,
-  }
-) {
-  return await instance.post(`/noticias_pachama/${id}`, {
-    titulo,
-    descripcion,
-    prioridad,
-    img,
+export default async function editNoticiaPachama(data) {
+  const formData = convertToFormdata(data);
+  return await instance.post(`/noticias_pachama/${data.id}`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
   });
 }
