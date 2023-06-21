@@ -10,6 +10,7 @@ import {
   useCreateOfferMutation,
   useGetStates,
 } from 'src/querys/offersQuerys';
+import { useGetBusiness } from 'src/querys/businessQuerys';
 
 const formulario = ref(false);
 const edit_id = ref(null);
@@ -38,10 +39,20 @@ const { mutate: createOffer, isLoading: isLoadingCreate } =
 const { data: states } = useGetStates({ sort_ofertas: '1' });
 const { mutate: deleteOffer } = useDeleteOfferMutation();
 const { mutate: editOffer, isLoading: isLoadingEdit } = useEditOfferMutation();
+const { data: businessData } = useGetBusiness();
 
 const { useForm } = useValidateForm({
   initialValue: {},
   schema: newSchema,
+});
+
+const businessId = computed(() => {
+  return businessData?.value?.data?.map((element) => {
+    return {
+      label: element.name,
+      value: element.id,
+    };
+  });
 });
 
 const provinceOptions = computed(() =>
@@ -58,6 +69,7 @@ const currentNews = computed(() => {
 watch([offers, isFetchedOffers, currentNews], () => {
   if (offers.value && edit_id.value) {
     useForm.value = { ...currentNews.value };
+    useForm.active = false;
   }
 });
 
@@ -95,6 +107,7 @@ const deleteNew = (id) => {
 };
 
 const options = ref(provinceOptions.value);
+const optionsBusiness = ref(businessId.value);
 
 const filterFn = (val, update) => {
   if (val === '') {
@@ -107,6 +120,22 @@ const filterFn = (val, update) => {
   update(() => {
     const needle = val.toLowerCase();
     options.value = provinceOptions.value.filter(
+      (v) => v.toLowerCase().indexOf(needle) > -1
+    );
+  });
+};
+
+const filterBusiness = (val, update) => {
+  if (val === '') {
+    update(() => {
+      optionsBusiness.value = businessId.value;
+    });
+    return;
+  }
+
+  update(() => {
+    const needle = val.toLowerCase();
+    optionsBusiness.value = businessId.value.filter(
       (v) => v.toLowerCase().indexOf(needle) > -1
     );
   });
@@ -327,8 +356,8 @@ const onPaste = (evt) => {
           </q-card-section>
 
           <q-card-section class="q-pt-none q-gutter-md">
+            <q-toggle v-model="useForm.active" label="Activo" />
             <q-input outlined v-model="useForm.nombre" label="Nombre" />
-            <q-input outlined v-model="useForm.active" label="Activo" />
             <q-input outlined v-model="useForm.stock" label="Stock" />
             <q-input outlined v-model="useForm.descuento" label="Descuento" />
             <q-input
@@ -367,12 +396,33 @@ const onPaste = (evt) => {
                 </q-item>
               </template>
             </q-select>
+            <q-select
+              outlined
+              v-model="useForm.role_id"
+              use-input
+              input-debounce="0"
+              label="Comercio"
+              :options="optionsBusiness"
+              @filter="filterBusiness"
+              behavior="menu"
+            >
+              <template v-slot:no-option>
+                <q-item>
+                  <q-item-section class="text-grey">
+                    No results
+                  </q-item-section>
+                </q-item>
+              </template>
+            </q-select>
+
+            <q-date v-model="useForm.fecha_tope_descuento" />
 
             <q-file
               outlined
               :filter="checkFileType(ACCEPTED_TYPES_FOR_DNI)"
               v-model="useForm.img_array_url"
               label="Imagen"
+              multiple
             >
               <template v-slot:prepend>
                 <q-icon name="cloud_upload" />
