@@ -1,126 +1,126 @@
 <script setup>
-import { ref, onMounted, watch, computed } from 'vue';
-import { userAuth } from 'src/composables/userAuth';
-import { userCart } from 'src/stores/userCart';
-import { useToast } from 'src/composables/useToast';
-import { useGetOffers } from 'src/querys/offersQuerys';
-// import { useInvoiceOfferMutation } from 'src/querys/invoiceQuerys';
-// import { ORDER_CREATION_COLUMNS } from 'src/shared/constansts/orderCreationColumns';
+// import { ref, onMounted, watch, computed } from 'vue';
+// import { userAuth } from 'src/composables/userAuth';
+// import { userCart } from 'src/stores/userCart';
+// import { useToast } from 'src/composables/useToast';
+// import { useGetOffers } from 'src/querys/offersQuerys';
+// // import { useInvoiceOfferMutation } from 'src/querys/invoiceQuerys';
+// // import { ORDER_CREATION_COLUMNS } from 'src/shared/constansts/orderCreationColumns';
 
-const { triggerPositive } = useToast();
+// const { triggerPositive } = useToast();
 
-const storeClient = userCart();
+// const storeClient = userCart();
 
-const { user } = userAuth();
+// const { user } = userAuth();
 
-// const { mutate, isLoading: loadingInvoice } = useInvoiceOfferMutation();
-const client = computed(() => storeClient.client);
+// // const { mutate, isLoading: loadingInvoice } = useInvoiceOfferMutation();
+// const client = computed(() => storeClient.client);
 
-const search = ref('');
-const pages = ref(1);
-const currentPaginate = ref(1);
-// const selected = ref([]);
-const rows = ref([]);
+// const search = ref('');
+// // const pages = ref(1);
+// const currentPaginate = ref(1);
+// // const selected = ref([]);
+// const rows = ref([]);
 
-const { data: offersData, refetch } = useGetOffers({
-  name: search.value,
-  page: currentPaginate.value,
-  id: user.value.id,
-});
-
-// const userScaneo = computed(() => {
-//   if (client.value.membresia?.status === 'vencida' || !client.value.membresia) {
-//     return 'Usuario sin membresía ';
-//   } else {
-//     return client.value.name;
-//   }
+// const { data: offersData, refetch } = useGetOffers({
+//   name: search.value,
+//   page: currentPaginate.value,
+//   id: user.value.id,
 // });
 
-// const getTotal = (property) => {
-//   return (
-//     (100 * rows.value.reduce((acc, item) => acc + item[property], 0)) / 100
-//   );
-// };
+// // const userScaneo = computed(() => {
+// //   if (client.value.membresia?.status === 'vencida' || !client.value.membresia) {
+// //     return 'Usuario sin membresía ';
+// //   } else {
+// //     return client.value.name;
+// //   }
+// // });
 
-// const total = computed(() => Math.round(100 * getTotal('priceTotal')) / 100);
+// // const getTotal = (property) => {
+// //   return (
+// //     (100 * rows.value.reduce((acc, item) => acc + item[property], 0)) / 100
+// //   );
+// // };
 
-// const totalSaving = computed(() => Math.round(100 * getTotal('savings')) / 100);
+// // const total = computed(() => Math.round(100 * getTotal('priceTotal')) / 100);
 
-// function invoice() {
-//   const products = rows.value.map((item) => {
-//     return {
-//       id: item.id,
-//       cantidad: item.cantidad,
-//     };
-//   });
-//   mutate({
-//     comercio_id: user.value.id,
-//     total_descuento: totalSaving,
-//     ofertas: products,
-//     total,
-//     client_id: storeClient.client.id,
-//   });
-// }
+// // const totalSaving = computed(() => Math.round(100 * getTotal('savings')) / 100);
 
-// function deleteProduct() {
-//   rows.value = rows.value.filter(
-//     (item) =>
-//       !selected.value.some((selectedItem) => selectedItem.id === item.id)
-//   );
-//   if (selected.value.length > 0) {
-//     triggerPositive('Producto eliminado');
+// // function invoice() {
+// //   const products = rows.value.map((item) => {
+// //     return {
+// //       id: item.id,
+// //       cantidad: item.cantidad,
+// //     };
+// //   });
+// //   mutate({
+// //     comercio_id: user.value.id,
+// //     total_descuento: totalSaving,
+// //     ofertas: products,
+// //     total,
+// //     client_id: storeClient.client.id,
+// //   });
+// // }
+
+// // function deleteProduct() {
+// //   rows.value = rows.value.filter(
+// //     (item) =>
+// //       !selected.value.some((selectedItem) => selectedItem.id === item.id)
+// //   );
+// //   if (selected.value.length > 0) {
+// //     triggerPositive('Producto eliminado');
+// //   }
+// // }
+
+// // function addMount(id) {
+// //   const item = offersData.value.find((item) => item.id === id);
+// //   if (item) {
+// //     item.cantidad++;
+// //     item.priceTotal = item.priceWidthDiscount * item.cantidad;
+// //   }
+// // }
+
+// // function subtractMount(id) {
+// //   const item = offersData.value.find((item) => {
+// //     return item.id === id;
+// //   });
+
+// //   if (item && item.cantidad > 1) {
+// //     item.cantidad--;
+// //     item.priceTotal = item.priceWidthDiscount * item.cantidad;
+// //     item.savings = item.savings * item.cantidad;
+// //   }
+// // }
+
+// function addProduct(product) {
+//   const index = rows.value.findIndex((item) => item.id === product.id);
+//   if (index !== -1) {
+//     const productExist = rows.value[index];
+//     productExist.cantidad += product.cantidad;
+//     productExist.priceTotal =
+//       product.priceWidthDiscount * productExist.cantidad;
+//     productExist.savings = product.savings * productExist.cantidad;
+//   } else {
+//     product.savings = Math.round(100 * product.savings) / 100;
+//     rows.value.push({
+//       ...product,
+//       priceTotal: product.priceWidthDiscount * product.cantidad,
+//     });
 //   }
+//   triggerPositive('Producto agregado');
 // }
 
-// function addMount(id) {
-//   const item = offersData.value.find((item) => item.id === id);
-//   if (item) {
-//     item.cantidad++;
-//     item.priceTotal = item.priceWidthDiscount * item.cantidad;
-//   }
-// }
+// watch(search, () => {
+//   refetch();
+// });
 
-// function subtractMount(id) {
-//   const item = offersData.value.find((item) => {
-//     return item.id === id;
-//   });
+// watch(currentPaginate, () => {
+//   refetch();
+// });
 
-//   if (item && item.cantidad > 1) {
-//     item.cantidad--;
-//     item.priceTotal = item.priceWidthDiscount * item.cantidad;
-//     item.savings = item.savings * item.cantidad;
-//   }
-// }
-
-function addProduct(product) {
-  const index = rows.value.findIndex((item) => item.id === product.id);
-  if (index !== -1) {
-    const productExist = rows.value[index];
-    productExist.cantidad += product.cantidad;
-    productExist.priceTotal =
-      product.priceWidthDiscount * productExist.cantidad;
-    productExist.savings = product.savings * productExist.cantidad;
-  } else {
-    product.savings = Math.round(100 * product.savings) / 100;
-    rows.value.push({
-      ...product,
-      priceTotal: product.priceWidthDiscount * product.cantidad,
-    });
-  }
-  triggerPositive('Producto agregado');
-}
-
-watch(search, () => {
-  refetch();
-});
-
-watch(currentPaginate, () => {
-  refetch();
-});
-
-onMounted(async () => {
-  refetch();
-});
+// onMounted(async () => {
+//   refetch();
+// });
 </script>
 
 <template>
