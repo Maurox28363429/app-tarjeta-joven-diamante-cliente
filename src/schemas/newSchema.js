@@ -11,5 +11,5 @@ export const newSchema = object({
   link_facebook: string().required(REQUIRED_MESSAGE),
   link_instragram: string().required(REQUIRED_MESSAGE),
   link_web: string().required(REQUIRED_MESSAGE),
-  link_otros: string().required(REQUIRED_MESSAGE)
+  link_otros: string().required(REQUIRED_MESSAGE),
 });
