@@ -1,6 +1,6 @@
 <template>
   <div class="text-center q-pa-md flex">
-    <section style="width:100%">
+    <section style="width: 100%">
       <q-card>
         <table>
           <thead>
@@ -11,11 +11,10 @@
             <th>Fecha de expiracion</th>
           </thead>
           <tbody>
-            <tr v-for="d,index in datos" :key="index">
-              <td>{{d.id}}</td>
-              <td>{{d.name}} {{d.last_name}}</td>
-              <td>
-              </td>
+            <tr v-for="(d, index) in datos" :key="index">
+              <td>{{ d.id }}</td>
+              <td>{{ d.name }} {{ d.last_name }}</td>
+              <td></td>
             </tr>
           </tbody>
         </table>
@@ -32,25 +31,26 @@
   </div>
 </template>
 <style scoped>
-table{
-  width:100%;
+table {
+  width: 100%;
 }
-td,th{
-  padding:1em
+td,
+th {
+  padding: 1em;
 }
 </style>
 <script setup>
-import { ref,onMounted } from 'vue';
-import getUserMembresiaComprada from 'src/api/getUserMembresiaComprada.js'
+import { ref, onMounted } from 'vue';
+import getUserMembresiaComprada from 'src/api/getUserMembresiaComprada.js';
 const current = ref(1);
 const maxpage = ref(1);
-const datos=ref([]);
-const cargar=async()=>{
-  const {data,pagination}=await getUserMembresiaComprada(current.value)
-  datos.value=data;
-  current.value=pagination.currentPage;
-  maxpage.value=pagination.lastPage;
-}
+const datos = ref([]);
+const cargar = async () => {
+  const { data, pagination } = await getUserMembresiaComprada(current.value);
+  datos.value = data;
+  current.value = pagination.currentPage;
+  maxpage.value = pagination.lastPage;
+};
 onMounted(async () => {
   await cargar();
 });

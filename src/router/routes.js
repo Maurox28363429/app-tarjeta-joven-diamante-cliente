@@ -199,7 +199,7 @@ const routes = [
           {
             path: 'users',
             component: () => import('pages/admin/AdminUsers.vue'),
-          }
+          },
         ],
       },
       {
