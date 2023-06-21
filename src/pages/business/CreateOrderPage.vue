@@ -92,7 +92,7 @@ const { data: offersData, refetch } = useGetOffers({
 //   }
 // }
 
-function addProduct(product) {
+/* function addProduct(product) {
   const index = rows.value.findIndex((item) => item.id === product.id);
   if (index !== -1) {
     const productExist = rows.value[index];
@@ -108,7 +108,7 @@ function addProduct(product) {
     });
   }
   triggerPositive('Producto agregado');
-}
+} */
 
 watch(search, () => {
   refetch();
@@ -138,7 +138,58 @@ onMounted(async () => {
         </h5>
       </section>
       <section class="col-12" style="text-align: center" v-if="client">
-        {{ client }}
+        <q-card
+          style="width: 100%; max-width: 600px; margin: 0 auto"
+          class="q-pa-md"
+        >
+        <q-avatar size="80px" class="q-mr-md">
+            <q-img :src="client.img_url" spinner-color="dark" />
+        </q-avatar>
+         <q-list bordered separator>
+            <q-item clickable v-ripple>
+              <q-item-section>
+                Nombre: {{ client.name }} {{ client.last_name }}
+              </q-item-section>
+            </q-item>
+            <q-item clickable v-ripple>
+              <q-item-section>
+                Membresia: {{ client.membresia?.status }}
+                <q-chip
+                  v-if="client.membresia?.status === 'vencida'"
+                  color="red"
+                  text-color="white"
+                  label="Vencida"
+                />
+                <q-chip
+                  v-if="client.membresia?.status === 'activa'"
+                  color="primary"
+                  text-color="white"
+                  label="Activa"
+                />
+              </q-item-section>
+            </q-item>
+            <q-item clickable v-ripple>
+              <q-item-section>
+                Correo: {{ client.email }}
+              </q-item-section>
+            </q-item>
+            <q-item clickable v-ripple>
+              <q-item-section>
+                Teléfono: {{ client.phone }}
+              </q-item-section>
+            </q-item>
+            <q-item clickable v-ripple>
+              <q-item-section>
+                Cedula: {{ client.dni_text }}
+              </q-item-section>
+            </q-item>
+            <q-item clickable v-ripple>
+              <q-item-section>
+                Fecha de nacimiento: {{ client.fecha_nacimiento }}
+              </q-item-section>
+            </q-item>
+         </q-list>
+        </q-card>
       </section>
     </section>
   </q-page>

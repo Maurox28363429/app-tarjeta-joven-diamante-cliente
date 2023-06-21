@@ -317,12 +317,12 @@ pb.collection('tarjetajoven_mensajes').subscribe('*', function (e) {
             </q-item-section>
             <q-item-section>Home</q-item-section>
           </q-item>
-          <q-item clickable v-ripple to="/cliente/transactionsTable">
+<!--           <q-item clickable v-ripple to="/cliente/transactionsTable">
             <q-item-section avatar>
               <q-icon name="shopping_basket" />
             </q-item-section>
             <q-item-section>Mis compras</q-item-section>
-          </q-item>
+          </q-item> -->
           <q-item clickable v-ripple to="/cliente/promotions">
             <q-item-section avatar>
               <q-icon name="newspaper" />
