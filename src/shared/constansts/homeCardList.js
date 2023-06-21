@@ -64,13 +64,13 @@ export const HOME_CARD_LIST = [
     link: '/cliente/promotions',
     enabled: true,
   },
-  {
+/*   {
     id: 8,
     title: 'Compras',
     icon: bagIcon,
     link: '/cliente/transactionsTable',
     enabled: true,
-  },
+  }, */
   {
     id: 9,
     title: '',

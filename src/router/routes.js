@@ -142,7 +142,7 @@ const routes = [
         children: [
           {
             path: '',
-            component: () => import('src/components/TransactionsTable.vue'),
+            component: () => import('pages/business/DashboardPage.vue'),
           },
           {
             path: 'account',
