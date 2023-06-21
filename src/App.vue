@@ -7,6 +7,8 @@ const $q = useQuasar();
 
 const { data: versionApp, isLoading } = useGetAppVersion();
 
+console.log('api');
+
 function alertMessage() {
   $q.dialog({
     title: `Actualización disponible: ${versionApp.value?.version}`,
