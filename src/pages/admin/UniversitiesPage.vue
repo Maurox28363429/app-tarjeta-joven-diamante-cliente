@@ -60,23 +60,23 @@ const { useForm } = useValidateForm({
 const { data: universitiesRoles } = useGetUniversitiesRoles();
 
 const universitiesId = computed(() => {
-  return universitiesRoles?.value?.data?.map((element) => {
+  return universitiesRoles?.value?.data?.map(({ name, id }) => {
     return {
-      label: element.name,
-      value: element.id,
+      label: name,
+      value: id,
     };
   });
 });
 
 const findUniversity = (id) => {
-  return universitiesId.value?.find((element) => {
-    return element.value === id;
+  return universitiesId.value?.find(({ value }) => {
+    return value === id;
   });
 };
 
 const provinceOptions = computed(() =>
-  states?.value?.map((element) => {
-    return element.name;
+  states?.value?.map(({ name }) => {
+    return name;
   })
 );
 
@@ -101,10 +101,6 @@ watchEffect(() => {
   pages.value = offers?.value?.pagination?.currentPage;
   lastPage.value = offers?.value?.pagination?.lastPage;
 });
-
-const buscar = () => {
-  refetch();
-};
 
 const handleNews = () => {
   edit_id.value
@@ -156,32 +152,32 @@ const universitiesFilter = (val, update) => {
   });
 };
 
-const newLinkMap = computed(() => {
+const newMapLink = computed(() => {
   return useForm.value?.link_map?.map((elements) => {
-    return { ...elements };
+    return elements;
   });
 });
 
-watch([newLinkMap, useForm], () => {
-  if (useForm.value && newLinkMap.value) {
-    mapRef.value = newLinkMap.value;
+watch([newMapLink, useForm], () => {
+  if (useForm.value && newMapLink.value) {
+    mapRef.value = newMapLink.value;
   }
 });
 
-const handleModal = (id) => {
+const openEditOfferForm = (id) => {
   edit_id.value = id;
   formulario.value = true;
-  mapRef.value = newLinkMap.value;
+  mapRef.value = newMapLink.value;
 };
 
-const createNew = () => {
+const openCreateOfferForm = () => {
   edit_id.value = null;
   useForm.value = INITIAL_VALUE;
   formulario.value = true;
-  mapRef.value = newLinkMap.value;
+  mapRef.value = newMapLink.value;
 };
 
-const addNew = () => {
+const addNewMapLink = () => {
   const lastLink = mapRef.value?.at(-1);
   if (
     lastLink?.map !== '' ||
@@ -192,7 +188,7 @@ const addNew = () => {
   }
 };
 
-const deleteLink = (index) => {
+const deleteMapLink = (index) => {
   mapRef.value.splice(index, 1);
 };
 
@@ -240,6 +236,7 @@ const onPaste = (evt) => {
   }
 };
 </script>
+
 <template>
   <q-page class="flex">
     <section
@@ -250,7 +247,7 @@ const onPaste = (evt) => {
       <div class="col-12">
         <q-form
           class="full-width row justify-center"
-          @submit="buscar"
+          @submit="refetch"
           style="padding: 1em"
         >
           <q-input
@@ -344,7 +341,8 @@ const onPaste = (evt) => {
                   <q-menu>
                     <q-list style="min-width: 100px">
                       <q-item clickable v-close-popup>
-                        <q-item-section @click="handleModal(props.row?.id)"
+                        <q-item-section
+                          @click="openEditOfferForm(props.row?.id)"
                           >Editar</q-item-section
                         >
                       </q-item>
@@ -421,7 +419,7 @@ const onPaste = (evt) => {
                     color="red-8"
                     round
                     class="full-width full-height"
-                    @click="deleteLink(index)"
+                    @click="deleteMapLink(index)"
                   >
                     <q-tooltip>Eliminar ubicación</q-tooltip>
                   </q-btn>
@@ -434,7 +432,7 @@ const onPaste = (evt) => {
                   size="md"
                   icon="add"
                   class="full-width full-height"
-                  @click="addNew"
+                  @click="addNewMapLink"
                 >
                   <q-tooltip> Agregar nueva ubicacion </q-tooltip>
                 </q-btn>
@@ -507,7 +505,7 @@ const onPaste = (evt) => {
     </q-dialog>
     <!--Floating button-->
     <q-page-sticky position="bottom-right" style="margin: 12px; bottom: 60px">
-      <q-btn fab icon="add" color="primary" @click="createNew" />
+      <q-btn fab icon="add" color="primary" @click="openCreateOfferForm" />
     </q-page-sticky>
   </q-page>
 </template>
