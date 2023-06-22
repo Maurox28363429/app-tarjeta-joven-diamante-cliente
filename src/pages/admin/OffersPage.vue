@@ -27,7 +27,6 @@ const {
   data: offers,
   refetch,
   isLoading: isLoadingOffers,
-  isFetching: isFetchedOffers,
 } = useGetOffersFromBusiness({
   page: pages,
   search,
@@ -55,6 +54,12 @@ const businessId = computed(() => {
   });
 });
 
+const findBusiness = (id) => {
+  return businessId.value.find((element) => {
+    return element.value === id;
+  });
+};
+
 const provinceOptions = computed(() =>
   states?.value?.map((element) => {
     return element.name;
@@ -66,10 +71,12 @@ const currentNews = computed(() => {
     return id === edit_id.value;
   });
 });
-watch([offers, isFetchedOffers, currentNews], () => {
-  if (offers.value && edit_id.value) {
+watch([offers, currentNews], () => {
+  if (offers.value && edit_id.value && currentNews.value) {
     useForm.value = { ...currentNews.value };
-    useForm.active = false;
+    useForm.value.comercio_id = findBusiness(
+      Number(useForm?.value?.comercio_id)
+    );
   }
 });
 
@@ -98,7 +105,11 @@ const createNew = () => {
 
 const handleNews = () => {
   edit_id.value
-    ? editOffer({ ...useForm.value, id: edit_id.value })
+    ? editOffer({
+        ...useForm.value,
+        id: edit_id.value,
+        comercio_id: useForm.value.comercio_id.value,
+      })
     : createOffer(useForm.value);
 };
 
@@ -139,6 +150,32 @@ const filterBusiness = (val, update) => {
       (v) => v.toLowerCase().indexOf(needle) > -1
     );
   });
+};
+
+watchEffect(() => {
+  if (typeof useForm.value?.link_map === 'string') {
+    useForm.value.link_map = JSON.parse(useForm.value?.link_map);
+  }
+});
+
+const actualizarUbicacion = (index, propiedad, valor) => {
+  console.log(index, propiedad, valor);
+  // const ubicacionActualizada = { ...useForm.value.link_map[index] };
+  // ubicacionActualizada[propiedad] = valor;
+  // Vue.set(useForm.value.link_map, index, ubicacionActualizada);
+};
+
+const linkRef = ref([]);
+
+watchEffect(() => {
+  if (useForm.value?.link_map) {
+    linkRef.value = Object.assign({}, useForm.value.link_map);
+  }
+});
+
+const addNew = () => {
+  console.log('link');
+  useForm.value.link_map.push({ link: '', ubication: '' });
 };
 
 const columns = [
@@ -293,8 +330,13 @@ const onPaste = (evt) => {
               </q-td>
               <q-td key="link_map" :props="props">
                 <div>
-                  <p v-for="map in props.row?.link_map" :key="map.link">
-                    Ubicacion:
+                  <p
+                    class="text-justify"
+                    v-for="map in typeof props.row?.link_map === 'string'
+                      ? JSON.parse(props.row?.link_map)
+                      : props.row?.link_map"
+                    :key="map.link"
+                  >
                     <a href="{{ map.link }}" target="_blank">
                       {{ map.ubication }}</a
                     >
@@ -356,10 +398,21 @@ const onPaste = (evt) => {
           </q-card-section>
 
           <q-card-section class="q-pt-none q-gutter-md">
-            <q-toggle v-model="useForm.active" label="Activo" />
+            <q-radio v-model="useForm.active" val="1" label="Activo" />
+            <q-radio v-model="useForm.active" val="0" label="No activo" />
             <q-input outlined v-model="useForm.nombre" label="Nombre" />
-            <q-input outlined v-model="useForm.stock" label="Stock" />
-            <q-input outlined v-model="useForm.descuento" label="Descuento" />
+            <q-input
+              type="number"
+              outlined
+              v-model="useForm.stock"
+              label="Stock"
+            />
+            <q-input
+              type="number"
+              outlined
+              v-model="useForm.descuento"
+              label="Descuento"
+            />
             <q-input
               outlined
               type="number"
@@ -377,6 +430,39 @@ const onPaste = (evt) => {
               v-model="useForm.prioridad"
               label="Prioridad"
             />
+            <div class="row q-gutter-md q-ml-none">
+              <div
+                class="row q-gutter-x-md q-ml-none"
+                v-for="(map, index) in linkRef"
+                :key="index"
+              >
+                <q-input
+                  outlined
+                  v-model="map.ubication"
+                  label="Ubicacion"
+                  @input="
+                    actualizarUbicacion(index, 'ubication', $event.target.value)
+                  "
+                />
+                <q-input
+                  outlined
+                  v-model="map.link"
+                  label="Link"
+                  @input="
+                    actualizarUbicacion(index, 'link', $event.target.value)
+                  "
+                />
+              </div>
+              <q-btn
+                rounded
+                color="primary"
+                size="md"
+                icon="add"
+                @click="addNew"
+              >
+                <q-tooltip> Agregar nueva ubicacion </q-tooltip>
+              </q-btn>
+            </div>
 
             <q-select
               outlined
@@ -398,7 +484,7 @@ const onPaste = (evt) => {
             </q-select>
             <q-select
               outlined
-              v-model="useForm.role_id"
+              v-model="useForm.comercio_id"
               use-input
               input-debounce="0"
               label="Comercio"
@@ -419,10 +505,10 @@ const onPaste = (evt) => {
 
             <q-file
               outlined
+              max-files="2"
               :filter="checkFileType(ACCEPTED_TYPES_FOR_DNI)"
-              v-model="useForm.img_array_url"
+              v-model="useForm.img"
               label="Imagen"
-              multiple
             >
               <template v-slot:prepend>
                 <q-icon name="cloud_upload" />
