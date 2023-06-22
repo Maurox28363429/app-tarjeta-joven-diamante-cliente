@@ -7,7 +7,6 @@ import createOffer from 'src/api/createOffer';
 import getOffersFromStore from 'src/api/getOffersFromStore';
 import getOffers from 'src/api/getOffers';
 import getStates from 'src/api/getStates';
-import getOffersForUniversitys from 'src/api/getOffersForUniversitys';
 import getUniversities from 'src/api/getUniversity';
 import createUniversityOffer from 'src/api/createUniversityOffer';
 import deleteUniversity from 'src/api/deleteUniversity';
@@ -32,16 +31,6 @@ export const useGetStates = ({ sort_ofertas = 0, sort_uni = 0 }) => {
 export const useGetUniversities = ({ search, page, dir }) => {
   return useQuery(['universities', search, page], () =>
     getUniversities({
-      search: search.value,
-      page: page.value,
-      dir: dir.value,
-    })
-  );
-};
-
-export const useGetOffersForUniversity = ({ search, page, dir }) => {
-  return useQuery(['offersForUniversity', page, dir], () =>
-    getOffersForUniversitys({
       search: search.value,
       page: page.value,
       dir: dir.value,

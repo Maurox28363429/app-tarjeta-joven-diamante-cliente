@@ -23,6 +23,8 @@ const lastPage = ref(1);
 const state = ref('todos');
 const editorRef = ref(null);
 
+const mapRef = ref([]);
+
 const {
   data: offers,
   refetch,
@@ -72,6 +74,7 @@ const currentNews = computed(() => {
     return id === edit_id.value;
   });
 });
+
 watch([offers, currentNews], () => {
   if (offers.value && edit_id.value && currentNews.value) {
     useForm.value = { ...currentNews.value };
@@ -93,25 +96,16 @@ const buscar = () => {
   refetch();
 };
 
-const handleModal = (id) => {
-  edit_id.value = id;
-  formulario.value = true;
-};
-
-const createNew = () => {
-  edit_id.value = null;
-  useForm.value = {};
-  formulario.value = true;
-};
-
 const handleNews = () => {
+  console.log(mapRef.value, 'mapRef');
+  console.log(useForm.value.link_map, 'map');
   edit_id.value
     ? editOffer({
         ...useForm.value,
         id: edit_id.value,
-        comercio_id: useForm.value.comercio_id.value,
+        link_map: mapRef.value,
       })
-    : createOffer(useForm.value);
+    : createOffer({ ...useForm.value, link_map: mapRef.value });
 };
 
 const deleteNew = (id) => {
@@ -159,24 +153,50 @@ watchEffect(() => {
   }
 });
 
-const actualizarUbicacion = (index, propiedad, valor) => {
-  console.log(index, propiedad, valor);
-  // const ubicacionActualizada = { ...useForm.value.link_map[index] };
-  // ubicacionActualizada[propiedad] = valor;
-  // Vue.set(useForm.value.link_map, index, ubicacionActualizada);
-};
-
-const linkRef = ref([]);
+const newLinkMap = computed(() => {
+  return useForm.value?.link_map?.map((elements) => {
+    return { ...elements };
+  });
+});
 
 watchEffect(() => {
-  if (useForm.value?.link_map) {
-    linkRef.value = Object.assign({}, useForm.value.link_map);
+  if (useForm.value) {
+    mapRef.value = newLinkMap.value;
+    console.log(mapRef.value, 'mapRef');
   }
 });
 
+const handleModal = (id) => {
+  edit_id.value = id;
+  formulario.value = true;
+  mapRef.value = newLinkMap.value;
+};
+
+const createNew = () => {
+  edit_id.value = null;
+  useForm.value = {};
+  formulario.value = true;
+  mapRef.value = newLinkMap.value;
+};
+
 const addNew = () => {
   console.log('link');
-  useForm.value.link_map.push({ link: '', ubication: '' });
+  console.log(mapRef.value, 'mapRef');
+  console.log(useForm.value?.link_map, 'map');
+
+  const lastLink = mapRef.value?.at(-1);
+  if (
+    lastLink?.map !== '' ||
+    lastLink?.ubication !== '' ||
+    lastLink === undefined
+  ) {
+    mapRef.value.push({ ubication: '', link: '' });
+    console.log(mapRef.value, 'mapRef');
+  }
+};
+
+const deleteLink = (index) => {
+  mapRef.value.splice(index, 1);
 };
 
 const columns = [
@@ -312,9 +332,15 @@ const onPaste = (evt) => {
                       : props.row?.link_map"
                     :key="map.link"
                   >
-                    <a href="{{ map.link }}" target="_blank">
-                      {{ map.ubication }}</a
-                    >
+                    <q-badge color="blue">
+                      <a
+                        class="text-white"
+                        href="{{ map.link }}"
+                        target="_blank"
+                      >
+                        {{ map.ubication }}</a
+                      >
+                    </q-badge>
                   </p>
                 </div>
               </q-td>
@@ -411,35 +437,35 @@ const onPaste = (evt) => {
             <div class="row q-gutter-md q-ml-none">
               <div
                 class="row q-gutter-x-md q-ml-none"
-                v-for="(map, index) in linkRef"
+                v-for="(map, index) in mapRef"
                 :key="index"
               >
-                <q-input
-                  outlined
-                  v-model="map.ubication"
-                  label="Ubicacion"
-                  @input="
-                    actualizarUbicacion(index, 'ubication', $event.target.value)
-                  "
-                />
-                <q-input
-                  outlined
-                  v-model="map.link"
-                  label="Link"
-                  @input="
-                    actualizarUbicacion(index, 'link', $event.target.value)
-                  "
-                />
+                <q-input outlined v-model="map.ubication" label="Ubicacion" />
+                <q-input outlined v-model="map.link" label="Link" />
+                <div style="height: 46px; width: 46px">
+                  <q-btn
+                    icon="delete"
+                    color="red-8"
+                    round
+                    class="full-width full-height"
+                    @click="deleteLink(index)"
+                  >
+                    <q-tooltip>Eliminar ubicación</q-tooltip>
+                  </q-btn>
+                </div>
               </div>
-              <q-btn
-                rounded
-                color="primary"
-                size="md"
-                icon="add"
-                @click="addNew"
-              >
-                <q-tooltip> Agregar nueva ubicacion </q-tooltip>
-              </q-btn>
+              <div style="height: 46px; width: 46px">
+                <q-btn
+                  rounded
+                  color="primary"
+                  size="md"
+                  icon="add"
+                  class="full-width full-height"
+                  @click="addNew"
+                >
+                  <q-tooltip> Agregar nueva ubicacion </q-tooltip>
+                </q-btn>
+              </div>
             </div>
 
             <q-select

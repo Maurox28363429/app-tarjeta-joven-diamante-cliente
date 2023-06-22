@@ -85,32 +85,23 @@ const ACCEPTED_TYPES_FOR_DNI = ['image/jpeg', 'image/png', 'image/jpg', 'jpg'];
 watchEffect(() => {
   pages.value = offers?.value?.pagination?.currentPage;
   lastPage.value = offers?.value?.pagination?.lastPage;
-  console.log(editorRef.value);
 });
 
 const buscar = () => {
   refetch();
 };
 
-const handleModal = (id) => {
-  edit_id.value = id;
-  formulario.value = true;
-};
-
-const createNew = () => {
-  edit_id.value = null;
-  useForm.value = {};
-  formulario.value = true;
-};
+const mapRef = ref([]);
 
 const handleNews = () => {
   edit_id.value
     ? editOffer({
         ...useForm.value,
         id: edit_id.value,
+        link_map: mapRef.value,
         comercio_id: useForm.value.comercio_id.value,
       })
-    : createOffer(useForm.value);
+    : createOffer({ ...useForm.value, link_map: mapRef.value });
 };
 
 const deleteNew = (id) => {
@@ -158,24 +149,47 @@ watchEffect(() => {
   }
 });
 
-const actualizarUbicacion = (index, propiedad, valor) => {
-  console.log(index, propiedad, valor);
-  // const ubicacionActualizada = { ...useForm.value.link_map[index] };
-  // ubicacionActualizada[propiedad] = valor;
-  // Vue.set(useForm.value.link_map, index, ubicacionActualizada);
-};
-
-const linkRef = ref([]);
-
-watchEffect(() => {
-  if (useForm.value?.link_map) {
-    linkRef.value = Object.assign({}, useForm.value.link_map);
-  }
+const newLinkMap = computed(() => {
+  return useForm.value?.link_map?.map((elements) => {
+    return { ...elements };
+  });
 });
 
+watchEffect(() => {
+  if (useForm.value) {
+    mapRef.value = newLinkMap.value;
+  }
+
+  console.log(mapRef.value, 'mapRef');
+});
+
+const handleModal = (id) => {
+  edit_id.value = id;
+  mapRef.value = newLinkMap.value;
+  formulario.value = true;
+};
+
+const createNew = () => {
+  edit_id.value = null;
+  useForm.value = {};
+  mapRef.value = newLinkMap.value;
+  formulario.value = true;
+};
+
 const addNew = () => {
-  console.log('link');
-  useForm.value.link_map.push({ link: '', ubication: '' });
+  const lastLink = mapRef.value?.at(-1);
+
+  if (
+    lastLink?.map !== '' ||
+    lastLink?.ubication !== '' ||
+    lastLink === undefined
+  ) {
+    mapRef.value.push({ link: '', ubication: '' });
+  }
+};
+
+const deleteLink = (index) => {
+  mapRef.value.splice(index, 1);
 };
 
 const columns = [
@@ -331,15 +345,21 @@ const onPaste = (evt) => {
               <q-td key="link_map" :props="props">
                 <div>
                   <p
-                    class="text-justify"
+                    class="text-justify text-white"
                     v-for="map in typeof props.row?.link_map === 'string'
                       ? JSON.parse(props.row?.link_map)
                       : props.row?.link_map"
                     :key="map.link"
                   >
-                    <a href="{{ map.link }}" target="_blank">
-                      {{ map.ubication }}</a
-                    >
+                    <q-badge color="blue">
+                      <a
+                        class="text-white"
+                        href="{{ map.link }}"
+                        target="_blank"
+                      >
+                        {{ map.ubication }}</a
+                      >
+                    </q-badge>
                   </p>
                 </div>
               </q-td>
@@ -430,38 +450,41 @@ const onPaste = (evt) => {
               v-model="useForm.prioridad"
               label="Prioridad"
             />
-            <div class="row q-gutter-md q-ml-none">
-              <div
-                class="row q-gutter-x-md q-ml-none"
-                v-for="(map, index) in linkRef"
-                :key="index"
-              >
-                <q-input
-                  outlined
-                  v-model="map.ubication"
-                  label="Ubicacion"
-                  @input="
-                    actualizarUbicacion(index, 'ubication', $event.target.value)
-                  "
-                />
-                <q-input
-                  outlined
-                  v-model="map.link"
-                  label="Link"
-                  @input="
-                    actualizarUbicacion(index, 'link', $event.target.value)
-                  "
-                />
+            <div class="q-ml-none">
+              <p class="q-ml-md text-body1">Link de ubicaciones</p>
+              <div class="row q-gutter-md q-ml-none items-center">
+                <div
+                  class="row q-gutter-x-md q-ml-none items-center"
+                  v-for="(map, index) in mapRef"
+                  :key="index"
+                >
+                  <q-input outlined v-model="map.ubication" label="Ubicación" />
+                  <q-input outlined v-model="map.link" label="Link" />
+                  <div style="height: 46px; width: 46px">
+                    <q-btn
+                      icon="delete"
+                      color="red-8"
+                      round
+                      class="full-width full-height"
+                      @click="deleteLink(index)"
+                    >
+                      <q-tooltip>Eliminar ubicación</q-tooltip>
+                    </q-btn>
+                  </div>
+                </div>
+                <div style="height: 46px; width: 46px">
+                  <q-btn
+                    rounded
+                    color="primary"
+                    size="md"
+                    icon="add"
+                    class="full-width full-height"
+                    @click="addNew"
+                  >
+                    <q-tooltip> Agregar nueva ubicacion </q-tooltip>
+                  </q-btn>
+                </div>
               </div>
-              <q-btn
-                rounded
-                color="primary"
-                size="md"
-                icon="add"
-                @click="addNew"
-              >
-                <q-tooltip> Agregar nueva ubicacion </q-tooltip>
-              </q-btn>
             </div>
 
             <q-select
@@ -501,7 +524,10 @@ const onPaste = (evt) => {
               </template>
             </q-select>
 
-            <q-date v-model="useForm.fecha_tope_descuento" />
+            <div>
+              <p class="text-body1">Fecha tope</p>
+              <q-date v-model="useForm.fecha_tope_descuento" />
+            </div>
 
             <q-file
               outlined
