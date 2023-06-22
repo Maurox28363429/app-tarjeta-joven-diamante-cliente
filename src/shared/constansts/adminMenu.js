@@ -19,6 +19,11 @@ export const ADMIN_MENU_DESKTOP = [
     icon: 'newspaper',
     label: 'Universidades',
   },
+  {
+    path: '/admin/membresias',
+    icon: 'newspaper',
+    label: 'Membresias',
+  },
 ];
 
 export const ADMIN_MENU_MOBILE = [
