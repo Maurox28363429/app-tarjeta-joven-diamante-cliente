@@ -13,6 +13,7 @@
     "dev:android": "quasar dev -m cordova -T android",
     "build": "quasar build",
     "build:android": " quasar build  -m cordova -T android --ide",
+    "serve": "quasar serve ./dist/spa",
     "lint:fix": "eslint --ext .js,.vue ./ --fix",
     "build:pwa": "quasar build -m pwa",
     "prepare": "husky install",
@@ -43,6 +44,7 @@
   },
   "devDependencies": {
     "@quasar/app-vite": "^1.0.0",
+    "@quasar/cli": "^2.2.1",
     "@quasar/quasar-app-extension-qiconpicker": "^2.0.6",
     "@vue/devtools": "^6.5.0",
     "autoprefixer": "^10.4.2",

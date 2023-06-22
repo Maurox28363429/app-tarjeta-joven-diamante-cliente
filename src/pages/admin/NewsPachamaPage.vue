@@ -2,7 +2,7 @@
 import { ref, computed, watchEffect, watch } from 'vue';
 import { useValidateForm } from 'src/composables/useValidateForm.js';
 import {
-  useGetNewsInformative,
+  useGetPachamaNews,
   useCreateNewMutation,
   useEditNewMutation,
   useDeleteNewMutation,
@@ -23,7 +23,7 @@ const {
   refetch,
   isLoading: isLoadingNews,
   isFetching: isFetchedNews,
-} = useGetNewsInformative({
+} = useGetPachamaNews({
   pages: paginador,
   search,
 });

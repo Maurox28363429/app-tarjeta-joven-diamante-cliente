@@ -6,7 +6,7 @@ import editNoticiaPachama from 'src/api/editNoticiaPachama.js';
 import deleteNew from 'src/api/deleteNew';
 
 const ERROR_MESSAGE = 'Ah ocurrido un error, intente nuevamente';
-export const useGetNewsInformative = ({ search, pages = {} }) => {
+export const useGetPachamaNews = ({ search, pages = {} }) => {
   return useQuery(['news', pages], () =>
     getNewsPachama({ search: search.value, pages: pages.value.current })
   );
