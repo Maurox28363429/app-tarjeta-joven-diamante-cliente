@@ -1,7 +1,7 @@
 export const ADMIN_MENU_DESKTOP = [
   {
     path: '/admin/offers',
-    icon: 'newspaper',
+    icon: 'sell',
     label: 'ofertas',
   },
   {
@@ -11,17 +11,17 @@ export const ADMIN_MENU_DESKTOP = [
   },
   {
     path: '/admin/noticias_pachama',
-    icon: 'newspaper',
+    icon: 'support_agent',
     label: 'Noticias Pachama',
   },
   {
     path: '/admin/universities',
-    icon: 'newspaper',
+    icon: 'menu_book',
     label: 'Universidades',
   },
   {
     path: '/admin/membresias',
-    icon: 'newspaper',
+    icon: 'card_giftcard',
     label: 'Membresias',
   },
 ];
