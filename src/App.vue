@@ -7,6 +7,8 @@ const $q = useQuasar();
 
 const { data: versionApp, isLoading } = useGetAppVersion();
 
+console.log('api');
+
 function alertMessage() {
   $q.dialog({
     title: `Actualización disponible: ${versionApp.value?.version}`,
@@ -15,7 +17,6 @@ function alertMessage() {
     cancel: true,
   })
     .onOk(() => {
-      // console.log('OK')
       window.open(
         'https://play.google.com/store/apps/details?id=com.phoenixtechsa.app',
         '_system'
@@ -45,7 +46,6 @@ watchEffect(() => {
       if (
         Number(process.env.VUE_APP_VERSION) < Number(versionApp.value?.version)
       ) {
-        // console.log("hay una nueva version");
         alertMessage();
       } else {
         // console.log("no hay una nueva version");

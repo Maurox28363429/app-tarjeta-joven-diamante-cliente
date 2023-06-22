@@ -4,10 +4,10 @@ import { useValidateForm } from 'src/composables/useValidateForm.js';
 import { newSchema } from 'src/schemas/newSchema.js';
 import { checkFileType } from 'src/utils/checkFileType';
 import {
-  useGetOffersFromBusiness,
-  useDeleteOfferMutation,
-  useEditOfferMutation,
-  useCreateOfferMutation,
+  useGetUniversities,
+  useDeleteUniversityOfferMutation,
+  useEditUniversityOfferMutation,
+  useCreateUniversityOfferMutation,
   useGetStates,
 } from 'src/querys/offersQuerys';
 import { useGetBusiness } from 'src/querys/businessQuerys';
@@ -23,21 +23,24 @@ const lastPage = ref(1);
 const state = ref('todos');
 const editorRef = ref(null);
 
+const mapRef = ref([]);
+
 const {
   data: offers,
   refetch,
   isLoading: isLoadingOffers,
-} = useGetOffersFromBusiness({
+} = useGetUniversities({
   page: pages,
   search,
   dir: state,
 });
 
 const { mutate: createOffer, isLoading: isLoadingCreate } =
-  useCreateOfferMutation();
+  useCreateUniversityOfferMutation();
 const { data: states } = useGetStates({ sort_ofertas: '1' });
-const { mutate: deleteOffer } = useDeleteOfferMutation();
-const { mutate: editOffer, isLoading: isLoadingEdit } = useEditOfferMutation();
+const { mutate: deleteOffer } = useDeleteUniversityOfferMutation();
+const { mutate: editOffer, isLoading: isLoadingEdit } =
+  useEditUniversityOfferMutation();
 const { data: businessData } = useGetBusiness();
 
 const { useForm } = useValidateForm({
@@ -71,6 +74,7 @@ const currentNews = computed(() => {
     return id === edit_id.value;
   });
 });
+
 watch([offers, currentNews], () => {
   if (offers.value && edit_id.value && currentNews.value) {
     useForm.value = { ...currentNews.value };
@@ -85,21 +89,21 @@ const ACCEPTED_TYPES_FOR_DNI = ['image/jpeg', 'image/png', 'image/jpg', 'jpg'];
 watchEffect(() => {
   pages.value = offers?.value?.pagination?.currentPage;
   lastPage.value = offers?.value?.pagination?.lastPage;
+  console.log(editorRef.value);
 });
 
 const buscar = () => {
   refetch();
 };
 
-const mapRef = ref([]);
-
 const handleNews = () => {
+  console.log(mapRef.value, 'mapRef');
+  console.log(useForm.value.link_map, 'map');
   edit_id.value
     ? editOffer({
         ...useForm.value,
         id: edit_id.value,
         link_map: mapRef.value,
-        comercio_id: useForm.value.comercio_id.value,
       })
     : createOffer({ ...useForm.value, link_map: mapRef.value });
 };
@@ -158,33 +162,36 @@ const newLinkMap = computed(() => {
 watchEffect(() => {
   if (useForm.value) {
     mapRef.value = newLinkMap.value;
+    console.log(mapRef.value, 'mapRef');
   }
-
-  console.log(mapRef.value, 'mapRef');
 });
 
 const handleModal = (id) => {
   edit_id.value = id;
-  mapRef.value = newLinkMap.value;
   formulario.value = true;
+  mapRef.value = newLinkMap.value;
 };
 
 const createNew = () => {
   edit_id.value = null;
   useForm.value = {};
-  mapRef.value = newLinkMap.value;
   formulario.value = true;
+  mapRef.value = newLinkMap.value;
 };
 
 const addNew = () => {
-  const lastLink = mapRef.value?.at(-1);
+  console.log('link');
+  console.log(mapRef.value, 'mapRef');
+  console.log(useForm.value?.link_map, 'map');
 
+  const lastLink = mapRef.value?.at(-1);
   if (
     lastLink?.map !== '' ||
     lastLink?.ubication !== '' ||
     lastLink === undefined
   ) {
-    mapRef.value.push({ link: '', ubication: '' });
+    mapRef.value.push({ ubication: '', link: '' });
+    console.log(mapRef.value, 'mapRef');
   }
 };
 
@@ -201,7 +208,6 @@ const columns = [
   },
   { name: 'active', align: 'center', label: 'ACTIVO', field: 'active' },
   { name: 'nombre', align: 'center', label: 'NOMBRE', field: 'nombre' },
-  { name: 'comercio', align: 'center', label: 'COMERCIO', field: 'comercio' },
   {
     name: 'img_array_url',
     align: 'center',
@@ -209,15 +215,7 @@ const columns = [
     field: 'img_array_url',
   },
   { name: 'description', label: 'DESCRIPCION', field: 'description' },
-  { name: 'descuento', label: 'DESCUENTO', field: 'descuento' },
-  { name: 'price_total', label: 'PRECIO TOTAL', field: 'price_total' },
   { name: 'dir', label: 'PROVINCIA', field: 'dir' },
-  {
-    name: 'fecha_tope_descuento',
-    label: 'FECHA TOPE',
-    field: 'fecha_tope_descuento',
-  },
-  { name: 'stock', label: 'STOCK', field: 'stock', sortable: true },
   { name: 'prioridad', label: 'PRIORIDAD', field: 'prioridad' },
   { name: 'link_map', label: 'LINK MAP', field: 'link_map' },
   { name: 'created_at', label: 'FECHA', field: 'created_at' },
@@ -287,7 +285,7 @@ const onPaste = (evt) => {
         <q-table
           flat
           bordered
-          title="Ofertas"
+          title="Ofertas de universidades"
           :rows="offers?.data"
           :columns="columns"
           row-key="name"
@@ -302,9 +300,6 @@ const onPaste = (evt) => {
               </q-td>
               <q-td key="nombre" :props="props">
                 {{ props.row?.nombre }}
-              </q-td>
-              <q-td key="comercio" :props="props">
-                {{ props.row?.comercio.name }}
               </q-td>
               <q-td key="img_array_url" :props="props">
                 <q-img
@@ -322,22 +317,8 @@ const onPaste = (evt) => {
                   />
                 </div>
               </q-td>
-              <q-td key="descuento" :props="props">
-                %{{ props.row?.descuento }}
-              </q-td>
-              <q-td key="price_total" :props="props">
-                ${{ props.row?.price_total }}
-              </q-td>
               <q-td key="dir" :props="props">
                 {{ props.row?.dir === '' ? 'sin provincia' : props.row?.dir }}
-              </q-td>
-              <q-td key="fecha_tope_descuento" :props="props">
-                {{
-                  new Date(props.row?.fecha_tope_descuento).toLocaleDateString()
-                }}
-              </q-td>
-              <q-td key="stock" :props="props">
-                {{ props.row?.stock }}
               </q-td>
               <q-td key="prioridad" :props="props">
                 {{ props.row?.prioridad }}
@@ -345,7 +326,7 @@ const onPaste = (evt) => {
               <q-td key="link_map" :props="props">
                 <div>
                   <p
-                    class="text-justify text-white"
+                    class="text-justify"
                     v-for="map in typeof props.row?.link_map === 'string'
                       ? JSON.parse(props.row?.link_map)
                       : props.row?.link_map"
@@ -421,24 +402,7 @@ const onPaste = (evt) => {
             <q-radio v-model="useForm.active" val="1" label="Activo" />
             <q-radio v-model="useForm.active" val="0" label="No activo" />
             <q-input outlined v-model="useForm.nombre" label="Nombre" />
-            <q-input
-              type="number"
-              outlined
-              v-model="useForm.stock"
-              label="Stock"
-            />
-            <q-input
-              type="number"
-              outlined
-              v-model="useForm.descuento"
-              label="Descuento"
-            />
-            <q-input
-              outlined
-              type="number"
-              v-model="useForm.price_total"
-              label="Precio total"
-            />
+
             <q-editor
               ref="editorRef"
               @paste="onPaste"
@@ -450,40 +414,57 @@ const onPaste = (evt) => {
               v-model="useForm.prioridad"
               label="Prioridad"
             />
-            <div class="q-ml-none">
-              <p class="q-ml-md text-body1">Link de ubicaciones</p>
-              <div class="row q-gutter-md q-ml-none items-center">
-                <div
-                  class="row q-gutter-x-md q-ml-none items-center"
-                  v-for="(map, index) in mapRef"
-                  :key="index"
-                >
-                  <q-input outlined v-model="map.ubication" label="Ubicación" />
-                  <q-input outlined v-model="map.link" label="Link" />
-                  <div style="height: 46px; width: 46px">
-                    <q-btn
-                      icon="delete"
-                      color="red-8"
-                      round
-                      class="full-width full-height"
-                      @click="deleteLink(index)"
-                    >
-                      <q-tooltip>Eliminar ubicación</q-tooltip>
-                    </q-btn>
-                  </div>
-                </div>
+
+            <q-select
+              outlined
+              v-model="useForm.comercio_id"
+              use-input
+              input-debounce="0"
+              label="Comercio"
+              :options="optionsBusiness"
+              @filter="filterBusiness"
+              behavior="menu"
+            >
+              <template v-slot:no-option>
+                <q-item>
+                  <q-item-section class="text-grey">
+                    No results
+                  </q-item-section>
+                </q-item>
+              </template>
+            </q-select>
+
+            <div class="row q-gutter-md q-ml-none">
+              <div
+                class="row q-gutter-x-md q-ml-none"
+                v-for="(map, index) in mapRef"
+                :key="index"
+              >
+                <q-input outlined v-model="map.ubication" label="Ubicacion" />
+                <q-input outlined v-model="map.link" label="Link" />
                 <div style="height: 46px; width: 46px">
                   <q-btn
-                    rounded
-                    color="primary"
-                    size="md"
-                    icon="add"
+                    icon="delete"
+                    color="red-8"
+                    round
                     class="full-width full-height"
-                    @click="addNew"
+                    @click="deleteLink(index)"
                   >
-                    <q-tooltip> Agregar nueva ubicacion </q-tooltip>
+                    <q-tooltip>Eliminar ubicación</q-tooltip>
                   </q-btn>
                 </div>
+              </div>
+              <div style="height: 46px; width: 46px">
+                <q-btn
+                  rounded
+                  color="primary"
+                  size="md"
+                  icon="add"
+                  class="full-width full-height"
+                  @click="addNew"
+                >
+                  <q-tooltip> Agregar nueva ubicacion </q-tooltip>
+                </q-btn>
               </div>
             </div>
 
@@ -505,29 +486,6 @@ const onPaste = (evt) => {
                 </q-item>
               </template>
             </q-select>
-            <q-select
-              outlined
-              v-model="useForm.comercio_id"
-              use-input
-              input-debounce="0"
-              label="Comercio"
-              :options="optionsBusiness"
-              @filter="filterBusiness"
-              behavior="menu"
-            >
-              <template v-slot:no-option>
-                <q-item>
-                  <q-item-section class="text-grey">
-                    No results
-                  </q-item-section>
-                </q-item>
-              </template>
-            </q-select>
-
-            <div>
-              <p class="text-body1">Fecha tope</p>
-              <q-date v-model="useForm.fecha_tope_descuento" />
-            </div>
 
             <q-file
               outlined

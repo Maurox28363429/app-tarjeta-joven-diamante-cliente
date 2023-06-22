@@ -1,6 +1,6 @@
 <template>
   <div class="text-center q-pa-md flex">
-    <section style="width:100%">
+    <section style="width: 100%">
       <q-card>
         <h5 style="margin-left:1em;text-align:left;padding:1em">Membresias compradas</h5>
         <hr>
@@ -45,14 +45,16 @@
   </div>
 </template>
 <style scoped>
-table{
-  width:100%;
+table {
+  width: 100%;
 }
-td,th{
-  padding:1em
+td,
+th {
+  padding: 1em;
 }
 </style>
 <script setup>
+
 import { ref,onMounted, watch } from 'vue';
 import getUserMembresiaComprada from 'src/api/getUserMembresiaComprada.js'
 const current = ref(1);
@@ -70,6 +72,7 @@ const cargar=async()=>{
 const cambiar=async(id,status)=>{
 
 }
+
 onMounted(async () => {
   await cargar();
 });
