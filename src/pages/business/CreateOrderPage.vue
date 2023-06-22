@@ -1,6 +1,4 @@
-<script setup>
-
-</script>
+<script setup></script>
 
 <template>
   <q-page class="flex flex-center">
@@ -21,10 +19,10 @@
           style="width: 100%; max-width: 600px; margin: 0 auto"
           class="q-pa-md"
         >
-        <q-avatar size="80px" class="q-mr-md">
+          <q-avatar size="80px" class="q-mr-md">
             <q-img :src="client.img_url" spinner-color="dark" />
-        </q-avatar>
-         <q-list bordered separator>
+          </q-avatar>
+          <q-list bordered separator>
             <q-item clickable v-ripple>
               <q-item-section>
                 Nombre: {{ client.name }} {{ client.last_name }}
@@ -48,26 +46,20 @@
               </q-item-section>
             </q-item>
             <q-item clickable v-ripple>
-              <q-item-section>
-                Correo: {{ client.email }}
-              </q-item-section>
+              <q-item-section> Correo: {{ client.email }} </q-item-section>
             </q-item>
             <q-item clickable v-ripple>
-              <q-item-section>
-                Teléfono: {{ client.phone }}
-              </q-item-section>
+              <q-item-section> Teléfono: {{ client.phone }} </q-item-section>
             </q-item>
             <q-item clickable v-ripple>
-              <q-item-section>
-                Cedula: {{ client.dni_text }}
-              </q-item-section>
+              <q-item-section> Cedula: {{ client.dni_text }} </q-item-section>
             </q-item>
             <q-item clickable v-ripple>
               <q-item-section>
                 Fecha de nacimiento: {{ client.fecha_nacimiento }}
               </q-item-section>
             </q-item>
-         </q-list>
+          </q-list>
         </q-card>
       </section>
     </section>

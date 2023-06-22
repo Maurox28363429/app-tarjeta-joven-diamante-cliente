@@ -1,8 +1,8 @@
 <template>
   <section>
     <article class="row">
-      <div class="col-12 col-md-6" style="padding:1em">
-         <q-card>
+      <div class="col-12 col-md-6" style="padding: 1em">
+        <q-card>
           <q-card-section>
             <q-img
               :src="chartUrl"
@@ -14,34 +14,34 @@
           </q-card-section>
         </q-card>
       </div>
-       <div class="col-12 col-md-6" style="padding:1em">
-           <q-card>
-            <q-card-section>
-              <q-img
-                :src="chartUrl"
-                loading="lazy"
-                spinner-color="black"
-                spinner-size="50"
-                style="width: 100%; height: 100%"
-              />
-            </q-card-section>
-          </q-card>
-        </div>
-         <div class="col-12 col-md-6" style="padding:1em">
-           <q-card>
-            <q-card-section>
-              <q-img
-                :src="chartUrl"
-                loading="lazy"
-                spinner-color="black"
-                spinner-size="50"
-                style="width: 100%; height: 100%"
-              />
-            </q-card-section>
-          </q-card>
-        </div>
-         <div class="col-12 col-md-6" style="padding:1em">
-         <q-card>
+      <div class="col-12 col-md-6" style="padding: 1em">
+        <q-card>
+          <q-card-section>
+            <q-img
+              :src="chartUrl"
+              loading="lazy"
+              spinner-color="black"
+              spinner-size="50"
+              style="width: 100%; height: 100%"
+            />
+          </q-card-section>
+        </q-card>
+      </div>
+      <div class="col-12 col-md-6" style="padding: 1em">
+        <q-card>
+          <q-card-section>
+            <q-img
+              :src="chartUrl"
+              loading="lazy"
+              spinner-color="black"
+              spinner-size="50"
+              style="width: 100%; height: 100%"
+            />
+          </q-card-section>
+        </q-card>
+      </div>
+      <div class="col-12 col-md-6" style="padding: 1em">
+        <q-card>
           <q-card-section>
             <q-img
               :src="chartUrl"
