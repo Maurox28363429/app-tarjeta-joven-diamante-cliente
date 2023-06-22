@@ -1,10 +1,5 @@
 export const ADMIN_MENU_DESKTOP = [
   {
-    path: '/admin/membresias',
-    icon: 'credit_card',
-    label: 'Membresias',
-  },
-  {
     path: '/admin/offers',
     icon: 'newspaper',
     label: 'ofertas',
@@ -18,6 +13,11 @@ export const ADMIN_MENU_DESKTOP = [
     path: '/admin/noticias_pachama',
     icon: 'newspaper',
     label: 'Noticias Pachama',
+  },
+  {
+    path: '/admin/universities',
+    icon: 'newspaper',
+    label: 'Universidades',
   },
 ];
 

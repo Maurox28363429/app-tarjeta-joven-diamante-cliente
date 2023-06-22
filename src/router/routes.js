@@ -181,6 +181,10 @@ const routes = [
             component: () => import('pages/admin/AdminHomePage.vue'),
           },
           {
+            path: 'universities',
+            component: () => import('pages/admin/UniversitiesPage.vue'),
+          },
+          {
             path: 'noticias',
             component: () => import('pages/admin/NewsPage.vue'),
           },
