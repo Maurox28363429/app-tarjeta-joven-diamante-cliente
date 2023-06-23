@@ -82,7 +82,6 @@ const createNew = () => {
 };
 
 const handleNews = () => {
-  console.log(useForm.value.img[0]);
   edit_id.value
     ? editNewInformative({ ...useForm.value, id: edit_id.value })
     : createNewInformative(useForm.value);
