@@ -1,5 +1,32 @@
-<script setup></script>
+<script setup>
+import { ref, watch, computed } from 'vue';
+import { userAuth } from 'src/composables/userAuth';
+import { userCart } from 'src/stores/userCart';
+import { useToast } from 'src/composables/useToast';
+import createTracking from 'src/api/createTracking.js';
 
+const { triggerPositive } = useToast();
+const storeClient = userCart();
+const { user } = userAuth();
+// const { mutate, isLoading: loadingInvoice } = useInvoiceOfferMutation();
+const client = computed(() => storeClient.client);
+const guardado = ref(false);
+const saveVisit = async () => {
+  const response = await createTracking(client.value.id, user.value.id);
+  if (response) {
+    triggerPositive('Visita guardada');
+    guardado.value = true;
+  }
+};
+const cancelVisit = () => {
+  guardado.value = true;
+};
+watch(client, (value) => {
+  if (value) {
+    guardado.value = false;
+  }
+});
+</script>
 <template>
   <q-page class="flex flex-center">
     <section class="row" style="width: 100%">
@@ -30,18 +57,18 @@
             </q-item>
             <q-item clickable v-ripple>
               <q-item-section>
-                Membresia: {{ client.membresia?.status }}
-                <q-chip
+                <span>
+                  {{ client.membresia?.status }}
+                </span>
+                <q-icon
                   v-if="client.membresia?.status === 'vencida'"
                   color="red"
-                  text-color="white"
-                  label="Vencida"
+                  name="close"
                 />
-                <q-chip
+                <q-icon
                   v-if="client.membresia?.status === 'activa'"
                   color="primary"
-                  text-color="white"
-                  label="Activa"
+                  name="done"
                 />
               </q-item-section>
             </q-item>
@@ -60,6 +87,23 @@
               </q-item-section>
             </q-item>
           </q-list>
+          <div
+            style="padding: 2em; text-align: center"
+            v-show="guardado == false"
+          >
+            <q-btn
+              label="Guardar visita"
+              icon="save"
+              color="primary"
+              @click="saveVisit()"
+            />
+            <q-btn
+              label="Cancelar"
+              icon="cancel"
+              color="red"
+              @click="cancelVisit()"
+            />
+          </div>
         </q-card>
       </section>
     </section>

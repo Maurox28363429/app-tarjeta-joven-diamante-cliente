@@ -4,6 +4,20 @@
       <q-card>
         <h5 style="margin-left: 1em; text-align: left; padding: 1em">
           Membresias compradas
+          <div style="float: right">
+            <q-btn
+              style="background: #0c844f; color: white; margin-left: 0.2em"
+              round
+              icon="file_download"
+              @click="excelDonwload()"
+            />
+            <q-btn
+              style="background: #840c0c; color: white; margin-left: 0.2em"
+              round
+              icon="picture_as_pdf"
+              @click="pdfDonwload()"
+            />
+          </div>
         </h5>
         <hr />
         <table>
@@ -19,7 +33,8 @@
               <td>{{ d.id }}</td>
               <td>{{ d.name }} {{ d.last_name }}</td>
               <td>
-                <q-toggle
+                <!-- <q-toggle
+                  disabled="true"
                   v-model="d.membresia.status_num"
                   @change="
                     cambiar(
@@ -29,7 +44,14 @@
                   "
                   :true-value="1"
                   :false-value="0"
+                /> -->
+                <q-icon
+                  v-if="d.membresia.status_num == 1"
+                  name="check_circle"
+                  color="primary"
+                  size="2rem"
                 />
+                <q-icon v-else name="cancel" color="red" size="2rem" />
               </td>
               <td>
                 {{ d.membresia.days }}
@@ -71,9 +93,21 @@ const cargar = async () => {
   current.value = pagination.currentPage;
   maxpage.value = pagination.lastPage;
 };
-const cambiar = async (id, status) => {};
-
+/* const cambiar=async(id,status)=>{
+  console.log(id,status)
+}
+ */
 onMounted(async () => {
   await cargar();
 });
+
+const excelDonwload = async () => {
+  window.open(
+    process.env.VUE_APP_API_URL + 'export_membresia?membresia=1',
+    '_blank'
+  );
+};
+const pdfDonwload = async () => {
+  window.open(process.env.VUE_APP_API_URL + 'export_pdf_membresia', '_blank');
+};
 </script>

@@ -121,6 +121,14 @@ const drawerClick = (e) => {
       >
         <q-list padding>
           <q-separator inset v-show="!miniState" />
+          <q-item clickable v-ripple to="/">
+            <q-item-section avatar>
+              <q-icon name="home" />
+            </q-item-section>
+
+            <q-item-section>Home</q-item-section>
+          </q-item>
+
           <q-item clickable v-ripple to="/empresa/account">
             <q-item-section avatar>
               <q-icon name="person" />
@@ -140,7 +148,7 @@ const drawerClick = (e) => {
               <q-icon name="border_color" />
             </q-item-section>
 
-            <q-item-section>Escaner QR</q-item-section>
+            <q-item-section>Escanear</q-item-section>
           </q-item>
         </q-list>
         <div

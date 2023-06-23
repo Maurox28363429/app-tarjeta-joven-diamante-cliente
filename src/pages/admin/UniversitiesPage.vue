@@ -42,18 +42,8 @@ const { mutate: deleteOffer } = useDeleteUniversityOfferMutation();
 const { mutate: editOffer, isLoading: isLoadingEdit } =
   useEditUniversityOfferMutation();
 
-const INITIAL_VALUE = {
-  description: '',
-  nombre: '',
-  active: '0',
-  universidad_id: '222',
-  link_map: [{ ubication: '', link: '' }],
-  dir: 'Herrera',
-  prioridad: '1',
-};
-
 const { useForm } = useValidateForm({
-  initialValue: INITIAL_VALUE,
+  initialValue: {},
   schema: newSchema,
 });
 
@@ -86,12 +76,12 @@ const currentNews = computed(() => {
   });
 });
 
-watch([offers, currentNews, edit_id], () => {
+watch([offers, currentNews], () => {
   if (offers.value && edit_id.value && currentNews.value) {
-    useForm.value = {
-      ...currentNews.value,
-      universidad_id: findUniversity(Number(useForm?.value?.universidad_id)),
-    };
+    useForm.value = { ...currentNews.value };
+    useForm.value.comercio_id = findUniversity(
+      Number(useForm?.value?.comercio_id)
+    );
   }
 });
 
@@ -100,9 +90,12 @@ const ACCEPTED_TYPES_FOR_DNI = ['image/jpeg', 'image/png', 'image/jpg', 'jpg'];
 watchEffect(() => {
   pages.value = offers?.value?.pagination?.currentPage;
   lastPage.value = offers?.value?.pagination?.lastPage;
+  console.log(editorRef.value);
 });
 
 const handleNews = () => {
+  console.log(mapRef.value, 'mapRef');
+  console.log(useForm.value.link_map, 'map');
   edit_id.value
     ? editOffer({
         ...useForm.value,
@@ -117,8 +110,7 @@ const deleteNew = (id) => {
 };
 
 const options = ref(provinceOptions.value);
-
-const universitiesOpcions = ref(universitiesId.value);
+const optionsBusiness = ref(universitiesId.value);
 
 const filterFn = (val, update) => {
   if (val === '') {
@@ -136,17 +128,17 @@ const filterFn = (val, update) => {
   });
 };
 
-const universitiesFilter = (val, update) => {
+const filterBusiness = (val, update) => {
   if (val === '') {
     update(() => {
-      universitiesOpcions.value = universitiesId.value;
+      optionsBusiness.value = universitiesId.value;
     });
     return;
   }
 
   update(() => {
     const needle = val.toLowerCase();
-    universitiesOpcions.value = universitiesId.value.filter(
+    optionsBusiness.value = universitiesId.value.filter(
       (v) => v.toLowerCase().indexOf(needle) > -1
     );
   });
@@ -172,7 +164,7 @@ const openEditOfferForm = (id) => {
 
 const openCreateOfferForm = () => {
   edit_id.value = null;
-  useForm.value = INITIAL_VALUE;
+  useForm.value = {};
   formulario.value = true;
   mapRef.value = newMapLink.value;
 };
@@ -185,6 +177,7 @@ const addNewMapLink = () => {
     lastLink === undefined
   ) {
     mapRef.value.push({ ubication: '', link: '' });
+    console.log(mapRef.value, 'mapRef');
   }
 };
 
@@ -318,11 +311,17 @@ const onPaste = (evt) => {
                 <div>
                   <p
                     class="text-justify"
-                    v-for="map in props.row?.link_map"
+                    v-for="map in typeof props.row?.link_map === 'string'
+                      ? JSON.parse(props.row?.link_map)
+                      : props.row?.link_map"
                     :key="map.link"
                   >
                     <q-badge color="blue">
-                      <a class="text-white" :href="map.link" target="_blank">
+                      <a
+                        class="text-white"
+                        href="{{ map.link }}"
+                        target="_blank"
+                      >
                         {{ map.ubication }}</a
                       >
                     </q-badge>
@@ -401,6 +400,25 @@ const onPaste = (evt) => {
               label="Prioridad"
             />
 
+            <q-select
+              outlined
+              v-model="useForm.comercio_id"
+              use-input
+              input-debounce="0"
+              label="Comercio"
+              :options="optionsBusiness"
+              @filter="filterBusiness"
+              behavior="menu"
+            >
+              <template v-slot:no-option>
+                <q-item>
+                  <q-item-section class="text-grey">
+                    No results
+                  </q-item-section>
+                </q-item>
+              </template>
+            </q-select>
+
             <div class="row q-gutter-md q-ml-none">
               <div
                 class="row q-gutter-x-md q-ml-none"
@@ -443,25 +461,6 @@ const onPaste = (evt) => {
               label="Provincia"
               :options="options"
               @filter="filterFn"
-              behavior="menu"
-            >
-              <template v-slot:no-option>
-                <q-item>
-                  <q-item-section class="text-grey">
-                    No results
-                  </q-item-section>
-                </q-item>
-              </template>
-            </q-select>
-
-            <q-select
-              outlined
-              v-model="useForm.universidad_id"
-              use-input
-              input-debounce="0"
-              label="Universidades"
-              :options="universitiesOpcions"
-              @filter="universitiesFilter"
               behavior="menu"
             >
               <template v-slot:no-option>
