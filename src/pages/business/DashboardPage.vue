@@ -57,37 +57,58 @@
   </section>
 </template>
 <script setup>
-import { ref } from 'vue';
+import { ref,onMounted } from 'vue';
 import QuickChart from 'quickchart-js';
+import getDashboardComercio from 'src/api/getDashboardComercio.js';
+
+
 const chart = new QuickChart();
 const chartUrl = ref('');
-chart.setConfig({
-  type: 'bar',
-  data: {
-    labels: ['Q1', 'Q2', 'Q3', 'Q4'],
-    datasets: [{
-      label: 'Users',
-      data: [50, 60, 70, 180]
-    }, {
-      label: 'Revenue',
-      data: [100, 200, 300, 400]
-    }]
-  },
-});
-chartUrl.value = chart.getUrl();
 
-const chartUrl2= ref('');
+
+const chartUrl2 = ref('');
 const chart2 = new QuickChart();
-chart2.setConfig({ type: 'radar', data: { labels: ['January', 'February', 'March', 'April', 'May'], datasets: [{ label: 'Dogs', data: [50, 60, 70, 180, 190] }, { label: 'Cats', data: [100, 200, 300, 400, 500] }] } });
-chartUrl2.value = chart2.getUrl();
 
-const chartUrl3= ref('');
+
+const chartUrl3 = ref('');
 const chart3 = new QuickChart();
-chart3.setConfig({ type: 'doughnut', data: { datasets: [{ data: [24, 66], backgroundColor: ['green', '#eee'], label: 'Dataset1', borderWidth: 0 }], labels: ['A', 'C'] }, options: { circumference: Math.PI, rotation: Math.PI, cutoutPercentage: 75, layout: { padding: 40 }, legend: { display: false }, plugins: { datalabels: { color: '#404040', anchor: 'end', align: 'end', formatter: (val) => val + '%', font: { size: 25, weight: 'bold' } }, doughnutlabel: { labels: [{ text: '\nYourstatusis', font: { size: 20 } }, { text: '\nhealthy', color: '#000', font: { size: 25, weight: 'bold' } }] } } } });
-chartUrl3.value = chart3.getUrl();
 
-const chartUrl4= ref('');
+const chartUrl4 = ref('');
 const chart4 = new QuickChart();
-chart4.setConfig({ type: 'polarArea', data: { labels: ['January', 'February', 'March', 'April', 'May'], datasets: [{ data: [50, 60, 70, 180, 190] }] } });
-chartUrl4.value = chart4.getUrl();
+
+const obtenerData = async () => {
+  const response = await getDashboardComercio(
+    JSON.parse(localStorage.getItem('user')).user.id
+  );
+  if (response) {
+    console.log(response);
+    //
+    chart.setConfig({
+      type: 'bar',
+      data: {
+        labels: ['Q1', 'Q2', 'Q3', 'Q4'],
+        datasets: [{
+          label: 'Users',
+          data: [50, 60, 70, 180]
+        }, {
+          label: 'Revenue',
+          data: [100, 200, 300, 400]
+        }]
+      },
+    });
+    chartUrl.value = chart.getUrl();
+
+    chart2.setConfig({ type: 'radar', data: { labels: ['January', 'February', 'March', 'April', 'May'], datasets: [{ label: 'Dogs', data: [50, 60, 70, 180, 190] }, { label: 'Cats', data: [100, 200, 300, 400, 500] }] } });
+    chartUrl2.value = chart2.getUrl();
+
+    chart3.setConfig({ type: 'doughnut', data: { datasets: [{ data: [24, 66], backgroundColor: ['green', '#eee'], label: 'Dataset1', borderWidth: 0 }], labels: ['A', 'C'] }, options: { circumference: Math.PI, rotation: Math.PI, cutoutPercentage: 75, layout: { padding: 40 }, legend: { display: false }, plugins: { datalabels: { color: '#404040', anchor: 'end', align: 'end', formatter: (val) => val + '%', font: { size: 25, weight: 'bold' } }, doughnutlabel: { labels: [{ text: '\nYourstatusis', font: { size: 20 } }, { text: '\nhealthy', color: '#000', font: { size: 25, weight: 'bold' } }] } } } });
+    chartUrl3.value = chart3.getUrl();
+
+    chart4.setConfig({ type: 'polarArea', data: { labels: ['January', 'February', 'March', 'April', 'May'], datasets: [{ data: [50, 60, 70, 180, 190] }] } });
+    chartUrl4.value = chart4.getUrl();
+  }
+};
+onMounted(async () => {
+  await obtenerData();
+});
 </script>
