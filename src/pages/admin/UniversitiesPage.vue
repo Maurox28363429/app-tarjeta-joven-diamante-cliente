@@ -149,7 +149,7 @@ const filterBusiness = (val, update) => {
 
 watchEffect(() => {
   if (typeof useForm.value?.link_map === 'string') {
-    useForm.value.link_map = JSON.parse('');
+    useForm.value.link_map = JSON.parse(useForm.value?.link_map);
   }
 });
 

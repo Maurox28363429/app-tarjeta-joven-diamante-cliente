@@ -60,6 +60,20 @@
               </q-item-section>
             </q-item>
           </q-list>
+          <div style="padding:2em;text-align:center;">
+            <q-btn
+                label="Guardar visita"
+                icon="save"
+                color="primary"
+                @click="saveVisit()"
+              />
+              <q-btn
+                label="Cancelar"
+                icon="cancel"
+                color="red"
+                @click="cancelVisit()"
+              />
+          </div>
         </q-card>
       </section>
     </section>

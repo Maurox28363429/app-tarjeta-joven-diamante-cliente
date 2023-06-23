@@ -143,12 +143,6 @@ const filterBusiness = (val, update) => {
   });
 };
 
-watchEffect(() => {
-  if (typeof useForm.value?.link_map === 'string') {
-    useForm.value.link_map = JSON.parse(useForm.value?.link_map);
-  }
-});
-
 const newLinkMap = computed(() => {
   return useForm.value?.link_map?.map((elements) => {
     return { ...elements };
@@ -159,8 +153,6 @@ watchEffect(() => {
   if (useForm.value) {
     mapRef.value = newLinkMap.value;
   }
-
-  console.log(mapRef.value, 'mapRef');
 });
 
 const handleModal = (id) => {
@@ -346,17 +338,11 @@ const onPaste = (evt) => {
                 <div>
                   <p
                     class="text-justify text-white"
-                    v-for="map in typeof props.row?.link_map === 'string'
-                      ? JSON.parse(props.row?.link_map)
-                      : props.row?.link_map"
+                    v-for="map in props.row?.link_map"
                     :key="map.link"
                   >
                     <q-badge color="blue">
-                      <a
-                        class="text-white"
-                        href="{{ map.link }}"
-                        target="_blank"
-                      >
+                      <a class="text-white" :href="map.link" target="_blank">
                         {{ map.ubication }}</a
                       >
                     </q-badge>

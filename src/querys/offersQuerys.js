@@ -11,6 +11,7 @@ import getUniversities from 'src/api/getUniversity';
 import createUniversityOffer from 'src/api/createUniversityOffer';
 import deleteUniversity from 'src/api/deleteUniversity';
 import editUniversityOffer from 'src/api/editUniversityOffer';
+import getUniversitiesRole from 'src/api/getUniversitiesRole';
 
 export const useGetOffers = ({ name, page, id }) => {
   return useQuery(['offers', page], () =>
@@ -36,6 +37,10 @@ export const useGetUniversities = ({ search, page, dir }) => {
       dir: dir.value,
     })
   );
+};
+
+export const useGetUniversitiesRoles = () => {
+  return useQuery(['universitiesRoles'], getUniversitiesRole);
 };
 
 export const useDeleteOfferMutation = () => {
