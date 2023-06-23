@@ -244,8 +244,13 @@ const onPaste = (evt) => {
       </div>
     </section>
     <!--Modal ADD AND EDIT-->
-    <q-dialog v-model="formulario" persistent>
-      <q-card style="min-width: 350px; width: 80%">
+    <q-dialog
+      v-model="formulario"
+      :maximized="$q.screen.lt.md"
+      persistent
+      class="full-width"
+    >
+      <q-card style="max-width: 750px" class="full-width">
         <q-card-section>
           <div class="text-h6">
             {{ edit_id ? 'Editar' : 'Agregar' }} Noticia pachama
@@ -253,7 +258,7 @@ const onPaste = (evt) => {
         </q-card-section>
 
         <q-form @submit.prevent="handleNews" class="full-width">
-          <q-card-section class="q-gutter-md row full-width">
+          <q-card-section style="gap: 14px" class="row full-width">
             <div class="col-12">
               <q-input
                 outlined
