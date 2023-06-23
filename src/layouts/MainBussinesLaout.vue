@@ -224,7 +224,7 @@ const drawerClick = (e) => {
         name="cuenta"
         label="Cuenta"
         color="white"
-        class="text-capitalize q-px-none"
+        class="text-capitalize q-px-none full-width"
         icon="person"
         to="/empresa/account"
         exact
@@ -243,7 +243,7 @@ const drawerClick = (e) => {
         to="/empresa/create-order"
         label="Escaner QR"
         color="white"
-        class="text-capitalize q-px-none"
+        class="text-capitalize q-px-none full-width"
         icon="border_color"
         exact
       />

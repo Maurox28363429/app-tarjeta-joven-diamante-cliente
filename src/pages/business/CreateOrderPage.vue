@@ -28,100 +28,140 @@ watch(client, (value) => {
 });
 </script>
 <template>
-  <q-page class="flex flex-center">
-    <section class="row" style="width: 100%">
-      <section class="col-12" style="text-align: center" v-if="!client">
-        <q-img
-          style="width: 200px"
-          src="~assets/images/scanme.png"
-          loading="lazy"
-          spinner-color="black"
-        />
-        <h5>
-          Escanea el código QR de tu cliente para comenzar a crear la orden
-        </h5>
-      </section>
-      <section class="col-12" style="text-align: center" v-if="client">
-        <q-card
-          style="width: 100%; max-width: 600px; margin: 0 auto"
-          class="q-pa-md"
-        >
-          <q-avatar size="80px" class="q-mr-md">
-            <q-img :src="client.img_url" spinner-color="dark" />
-          </q-avatar>
-          <q-list bordered separator>
-            <q-item clickable v-ripple>
-              <q-item-section>
-                Nombre: {{ client.name }} {{ client.last_name }}
-              </q-item-section>
-            </q-item>
-            <q-item clickable v-ripple>
-              <q-item-section>
-                <span>
-                  {{ client.membresia?.status }}
-                </span>
-                <q-icon
-                  v-if="client.membresia?.status === 'vencida'"
-                  color="red"
-                  name="close"
-                />
-                <q-icon
-                  v-if="client.membresia?.status === 'activa'"
-                  color="primary"
-                  name="done"
-                />
-              </q-item-section>
-            </q-item>
-            <q-item clickable v-ripple>
-              <q-item-section> Correo: {{ client.email }} </q-item-section>
-            </q-item>
-            <q-item clickable v-ripple>
-              <q-item-section> Teléfono: {{ client.phone }} </q-item-section>
-            </q-item>
-            <q-item clickable v-ripple>
-              <q-item-section> Cedula: {{ client.dni_text }} </q-item-section>
-            </q-item>
-            <q-item clickable v-ripple>
-              <q-item-section>
-                Fecha de nacimiento: {{ client.fecha_nacimiento }}
-              </q-item-section>
-            </q-item>
-          </q-list>
-          <div
-            style="padding: 2em; text-align: center"
-            v-show="guardado == false"
-          >
-            <q-btn
-              label="Guardar visita"
-              icon="save"
-              color="primary"
-              @click="saveVisit()"
-            />
-            <q-btn
-              label="Cancelar"
-              icon="cancel"
-              color="red"
-              @click="cancelVisit()"
-            />
-          </div>
-        </q-card>
-      </section>
+  <section class="row q-pa-md" style="width: 100%">
+    <section
+      class="full-width column items-center absolute-center"
+      style="text-align: center"
+      v-if="!client"
+    >
+      <q-img
+        style="width: 200px"
+        src="~assets/images/scanme.png"
+        loading="lazy"
+        spinner-color="black"
+      />
+      <p class="text-h5" style="max-width: 400px">
+        Escanea el código QR de tu cliente para comenzar a crear la orden
+      </p>
     </section>
-  </q-page>
+    <section
+      :class="
+        $q.screen.lt.md
+          ? 'full-width column items-center'
+          : 'full-width column items-center absolute-center'
+      "
+      style="text-align: center"
+      v-if="client"
+    >
+      <q-card
+        style="width: 100%; max-width: 550px; margin: 0 auto"
+        class="q-pa-md"
+      >
+        <q-card-section>
+          <q-avatar size="100px">
+            <q-img :src="client.img_url" fit="cover" spinner-color="dark" />
+          </q-avatar>
+        </q-card-section>
+
+        <q-card-section class="q-gutter-y-md">
+          <div
+            :class="
+              $q.screen.lt.md ? 'column items-start' : 'row justify-between'
+            "
+          >
+            <p class="q-ma-none text-grey">Nombre:</p>
+            <p class="q-ma-none">{{ client.name }} {{ client.last_name }}</p>
+          </div>
+          <div
+            :class="
+              $q.screen.lt.md ? 'column items-start' : 'row justify-between'
+            "
+          >
+            <p class="q-ma-none text-grey">Status de membresia:</p>
+            <p class="q-ma-none">
+              {{ client.membresia?.status }}
+              <q-icon
+                v-if="client.membresia?.status === 'vencida'"
+                color="red"
+                name="close"
+                size="18px"
+              />
+              <q-icon
+                v-if="client.membresia?.status === 'activa'"
+                color="positive"
+                name="done"
+                size="18px"
+              />
+            </p>
+          </div>
+          <div
+            :class="
+              $q.screen.lt.md ? 'column items-start' : 'row justify-between'
+            "
+          >
+            <p class="q-ma-none text-grey">Correo:</p>
+            <p class="q-ma-none">{{ client.email }}</p>
+          </div>
+          <div
+            :class="
+              $q.screen.lt.md ? 'column items-start' : 'row justify-between'
+            "
+          >
+            <p class="q-ma-none text-grey">Teléfono:</p>
+            <p class="q-ma-none">{{ client.phone }}</p>
+          </div>
+          <div
+            :class="
+              $q.screen.lt.md ? 'column items-start' : 'row justify-between'
+            "
+          >
+            <p class="q-ma-none text-grey">DNI:</p>
+            <p class="q-ma-none">{{ client.dni_text }}</p>
+          </div>
+          <div
+            :class="
+              $q.screen.lt.md ? 'column items-start' : 'row justify-between'
+            "
+          >
+            <p class="q-ma-none text-grey">Fecha de nacimiento:</p>
+            <p class="q-ma-none">{{ client.fecha_nacimiento }}</p>
+          </div>
+        </q-card-section>
+
+        <div class="q-pa-md q-gutter-md" v-show="guardado == false">
+          <q-btn
+            label="Guardar visita"
+            icon="save"
+            color="primary"
+            @click="saveVisit()"
+          />
+          <q-btn
+            label="Cancelar"
+            icon="cancel"
+            color="red"
+            @click="cancelVisit()"
+          />
+        </div>
+      </q-card>
+    </section>
+  </section>
 </template>
 
 <style>
 table {
   width: 100%;
 }
+
 thead th {
   padding: 1em;
 }
+
 td,
 th {
   text-align: center;
   line-height: 1.5;
 }
+
 tr:nth-child(even) {
   background-color: #f2f2f2;
 }
@@ -219,14 +259,17 @@ thead tr th {
   position: sticky;
   z-index: 1;
 }
+
 /* this will be the loading indicator */
 thead tr:last-child th {
   /* height of all previous header rows */
   top: 48px;
 }
+
 thead tr:first-child th {
   top: 0;
 }
+
 /* prevent scrolling behind sticky top row on focus */
 tbody {
   /* height of all previous header rows */
