@@ -121,9 +121,7 @@ const handleSearch = () => {
                 class="q-pt-none q-px-xs column"
                 style="min-height: 100px; justify-content: end"
               >
-                <p class="news-description line-clamp-3">
-                  {{ descripcion }}
-                </p>
+                <p class="news-description line-clamp-3" v-html="descripcion" />
               </q-card-section>
 
               <q-card-actions
@@ -156,15 +154,16 @@ const handleSearch = () => {
           <div class="news-title">{{ modalCurrent.titulo }}</div>
         </q-card-section>
         <q-separator />
-        <img
-          :src="modalCurrent.img_url"
-          class="body-medium"
-          style="object-fit: contain"
-        />
+        <div class="full-width row justify-center">
+          <img
+            :src="modalCurrent.img_url"
+            style="object-fit: contain; width: 240px; min-height: 200px"
+          />
+        </div>
         <q-separator />
 
         <q-card-section class="q-pt-none scroll" style="max-height: 50vh">
-          <div class="news-description">{{ modalCurrent.descripcion }}</div>
+          <div class="news-description" v-html="modalCurrent.descripcion" />
         </q-card-section>
 
         <q-card-actions align="right">

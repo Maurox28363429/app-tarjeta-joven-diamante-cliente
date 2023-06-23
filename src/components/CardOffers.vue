@@ -90,9 +90,7 @@ defineProps({
             >
           </q-item-section>
         </q-item>
-        <p class="line-clamp-4 q-mb-none q-px-md">
-          {{ description }}
-        </p>
+        <p class="line-clamp-4 q-mb-none q-px-md" v-html="description" />
       </q-list>
     </q-card-section>
     <q-card-actions
@@ -133,7 +131,7 @@ defineProps({
       <q-card-section class="q-pt-none scroll" style="max-height: 50vh">
         <img :src="images[0]" class="news-image" />
         <q-separator />
-        <div class="body-medium">{{ description }}</div>
+        <div class="body-medium" v-html="description" />
         <div>
           <p>Dirección:</p>
           <q-img

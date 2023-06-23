@@ -126,9 +126,10 @@ const handleSearch = () => {
                 class="q-pt-none q-px-xs column"
                 style="min-height: 100px; justify-content: end"
               >
-                <p class="news-description line-clamp-3">
-                  {{ item.descripcion }}
-                </p>
+                <p
+                  class="news-description line-clamp-3"
+                  v-html="item.descripcion"
+                />
               </q-card-section>
 
               <q-card-actions
@@ -167,7 +168,7 @@ const handleSearch = () => {
         <q-separator />
 
         <q-card-section class="q-pt-none scroll">
-          <div class="news-description">{{ modalCurrent.descripcion }}</div>
+          <div class="news-description" v-html="modalCurrent.descripcion" />
         </q-card-section>
 
         <q-separator />

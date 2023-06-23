@@ -239,11 +239,7 @@ const onPaste = (evt) => {
 
 <template>
   <q-page class="flex">
-    <section
-      class="row"
-      style="width: 100%; padding: 1em"
-      v-if="!isLoadingOffers"
-    >
+    <section class="row" style="width: 100%; padding: 1em">
       <div class="col-12">
         <q-form
           class="full-width row justify-center"
@@ -282,7 +278,7 @@ const onPaste = (evt) => {
           title="Ofertas de universidades"
           :rows="offers?.data"
           :columns="columns"
-          :row-key="(row) => row.id"
+          row-key="id"
           v-if="!isLoadingOffers"
         >
           <template v-slot:body="props">
