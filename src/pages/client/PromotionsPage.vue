@@ -148,7 +148,16 @@ watchEffect(() => {
     </div>
 
     <div class="q-pa-lg flex flex-center">
-      <q-pagination v-model="currentPaginate" :max="pages" />
+      <q-pagination
+        v-model="currentPaginate"
+        :max="pages"
+        direction-links
+        outline
+        color="blue"
+        active-design="unelevated"
+        active-color="white"
+        active-text-color="blue"
+      />
     </div>
 
     <q-dialog v-model="openModal">
@@ -205,6 +214,7 @@ watchEffect(() => {
 .promotions {
   padding: 0 24px;
 }
+
 .loading {
   top: 318px;
   left: 0;

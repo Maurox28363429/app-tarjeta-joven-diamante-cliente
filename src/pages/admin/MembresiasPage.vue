@@ -63,7 +63,16 @@
           </tbody>
         </table>
         <div class="flex flex-center" style="padding: 1em">
-          <q-pagination v-model="current" :max="maxpage" direction-links />
+          <q-pagination
+            v-model="current"
+            :max="maxpage"
+            direction-links
+            outline
+            color="blue"
+            active-design="unelevated"
+            active-color="white"
+            active-text-color="blue"
+          />
         </div>
       </q-card>
     </section>

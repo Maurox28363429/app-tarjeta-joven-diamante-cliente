@@ -2,10 +2,9 @@
 import { computed, ref, watchEffect } from 'vue';
 import { useGetStates } from 'src/querys/offersQuerys';
 
-const OPTIONS = [];
-for (let i = 0; i < 50; i++) {
-  OPTIONS.push(`Promotor ${i}`);
-}
+const OPTIONS = new Array(50).fill(0).map((_, index) => {
+  return `Promotor ${index + 1}`;
+});
 
 const { data } = useGetStates({});
 
@@ -47,21 +46,19 @@ const updateValue = (key, value) => {
 };
 
 const filterFn = (val, update) => {
-  if (val.length < 1) {
-    return;
-  }
-  if (val !== '') {
-    const needle = val.toLowerCase();
-    update(() => {
-      stringOptions.value = OPTIONS.filter(
-        (v) => v.toLowerCase().indexOf(needle) > -1
-      );
-    });
-  } else {
+  if (val === '') {
     update(() => {
       stringOptions.value = OPTIONS;
     });
+    return;
   }
+
+  update(() => {
+    const needle = val.toLowerCase();
+    stringOptions.value = OPTIONS.filter(
+      (v) => v.toLowerCase().indexOf(needle) > -1
+    );
+  });
 };
 </script>
 
@@ -83,7 +80,7 @@ const filterFn = (val, update) => {
         @update:modelValue="updateValue('vendedor', $event)"
         @filter="filterFn"
         behavior="menu"
-      ></q-select>
+      />
       <p class="error" v-if="!!validateMessage.errors.vendedor">
         {{ validateMessage.errors.vendedor }}
       </p>
