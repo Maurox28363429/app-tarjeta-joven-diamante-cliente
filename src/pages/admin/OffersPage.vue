@@ -178,7 +178,7 @@ const addNew = () => {
     lastLink?.ubication !== '' ||
     lastLink === undefined
   ) {
-    mapRef.value.push({ link: '', ubication: '' });
+    mapRef.value.push({ ubication: options.value[0], link: '' });
   }
 };
 
@@ -205,7 +205,6 @@ const columns = [
   { name: 'description', label: 'DESCRIPCION', field: 'description' },
   { name: 'descuento', label: 'DESCUENTO', field: 'descuento' },
   { name: 'price_total', label: 'PRECIO TOTAL', field: 'price_total' },
-  { name: 'dir', label: 'PROVINCIA', field: 'dir' },
   {
     name: 'fecha_tope_descuento',
     label: 'FECHA TOPE',
@@ -322,9 +321,6 @@ const onPaste = (evt) => {
               </q-td>
               <q-td key="price_total" :props="props">
                 ${{ props.row?.price_total }}
-              </q-td>
-              <q-td key="dir" :props="props">
-                {{ props.row?.dir === '' ? 'sin provincia' : props.row?.dir }}
               </q-td>
               <q-td key="fecha_tope_descuento" :props="props">
                 {{
@@ -447,8 +443,29 @@ const onPaste = (evt) => {
                   v-for="(map, index) in mapRef"
                   :key="index"
                 >
-                  <q-input outlined v-model="map.ubication" label="Ubicación" />
-                  <q-input outlined v-model="map.link" label="Link" />
+                  <q-select
+                    outlined
+                    v-model="map.ubication"
+                    use-input
+                    input-debounce="0"
+                    label="Provincia"
+                    :options="options"
+                    @filter="filterFn"
+                    behavior="menu"
+                  >
+                    <template v-slot:no-option>
+                      <q-item>
+                        <q-item-section class="text-grey">
+                          No results
+                        </q-item-section>
+                      </q-item>
+                    </template>
+                  </q-select>
+                  <q-input
+                    outlined
+                    v-model="map.link"
+                    label="Link de ubicación"
+                  />
                   <div style="height: 46px; width: 46px">
                     <q-btn
                       icon="delete"

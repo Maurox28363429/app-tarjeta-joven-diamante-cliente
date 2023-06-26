@@ -179,7 +179,7 @@ const addNewMapLink = () => {
     lastLink?.ubication !== '' ||
     lastLink === undefined
   ) {
-    mapRef.value.push({ ubication: '', link: '' });
+    mapRef.value.push({ ubication: options.value[0], link: '' });
     console.log(mapRef.value, 'mapRef');
   }
 };
@@ -204,7 +204,6 @@ const columns = [
     field: 'img_array_url',
   },
   { name: 'description', label: 'DESCRIPCION', field: 'description' },
-  { name: 'dir', label: 'PROVINCIA', field: 'dir' },
   { name: 'prioridad', label: 'PRIORIDAD', field: 'prioridad' },
   { name: 'link_map', label: 'LINK MAP', field: 'link_map' },
   { name: 'created_at', label: 'FECHA', field: 'created_at' },
@@ -304,9 +303,6 @@ const onPaste = (evt) => {
                     v-html="props.row?.description"
                   />
                 </div>
-              </q-td>
-              <q-td key="dir" :props="props">
-                {{ props.row?.dir === '' ? 'sin provincia' : props.row?.dir }}
               </q-td>
               <q-td key="prioridad" :props="props">
                 {{ props.row?.prioridad }}
@@ -429,8 +425,30 @@ const onPaste = (evt) => {
                 v-for="(map, index) in mapRef"
                 :key="index"
               >
-                <q-input outlined v-model="map.ubication" label="Ubicacion" />
-                <q-input outlined v-model="map.link" label="Link" />
+                <q-select
+                  outlined
+                  v-model="map.ubication"
+                  use-input
+                  input-debounce="0"
+                  label="Provincia"
+                  :options="options"
+                  @filter="filterFn"
+                  behavior="menu"
+                >
+                  <template v-slot:no-option>
+                    <q-item>
+                      <q-item-section class="text-grey">
+                        No results
+                      </q-item-section>
+                    </q-item>
+                  </template>
+                </q-select>
+
+                <q-input
+                  outlined
+                  v-model="map.link"
+                  label="Link de ubicación"
+                />
                 <div style="height: 46px; width: 46px">
                   <q-btn
                     icon="delete"
@@ -456,25 +474,6 @@ const onPaste = (evt) => {
                 </q-btn>
               </div>
             </div>
-
-            <q-select
-              outlined
-              v-model="useForm.dir"
-              use-input
-              input-debounce="0"
-              label="Provincia"
-              :options="options"
-              @filter="filterFn"
-              behavior="menu"
-            >
-              <template v-slot:no-option>
-                <q-item>
-                  <q-item-section class="text-grey">
-                    No results
-                  </q-item-section>
-                </q-item>
-              </template>
-            </q-select>
 
             <q-file
               outlined
