@@ -36,7 +36,9 @@ const {
 
 const { mutate: createOffer, isLoading: isLoadingCreate } =
   useCreateOfferMutation();
-const { data: states } = useGetStates({ sort_ofertas: '1' });
+const { data: states, isLoading: isLoadingStates } = useGetStates({
+  sort_ofertas: '1',
+});
 const { mutate: deleteOffer } = useDeleteOfferMutation();
 const { mutate: editOffer, isLoading: isLoadingEdit } = useEditOfferMutation();
 const { data: businessData } = useGetBusiness();
@@ -61,11 +63,15 @@ const findBusiness = (id) => {
   });
 };
 
-const provinceOptions = computed(() =>
-  states?.value?.map((element) => {
-    return element.name;
-  })
-);
+const provinceOptions = ref([]);
+
+watchEffect(() => {
+  if (state.value && !isLoadingStates.value) {
+    provinceOptions.value = states?.value?.map(({ name }) => {
+      return name;
+    });
+  }
+});
 
 const currentNews = computed(() => {
   return offers?.value?.data?.find(({ id }) => {
@@ -146,9 +152,11 @@ const filterBusiness = (val, update) => {
 };
 
 const newLinkMap = computed(() => {
-  return useForm.value?.link_map?.map((elements) => {
-    return { ...elements };
-  });
+  return (
+    useForm.value?.link_map?.map((elements) => {
+      return { ...elements };
+    }) ?? []
+  );
 });
 
 watchEffect(() => {
@@ -178,7 +186,7 @@ const addNew = () => {
     lastLink?.ubication !== '' ||
     lastLink === undefined
   ) {
-    mapRef.value.push({ ubication: options.value[0], link: '' });
+    mapRef.value.push({ ubication: provinceOptions?.value[0], link: '' });
   }
 };
 
@@ -243,7 +251,7 @@ const onPaste = (evt) => {
     <section
       class="row"
       style="width: 100%; padding: 1em"
-      v-if="!isLoadingOffers"
+      v-if="!isLoadingOffers && !isLoadingStates"
     >
       <div class="col-12">
         <q-form
@@ -298,11 +306,13 @@ const onPaste = (evt) => {
                 {{ props.row?.nombre }}
               </q-td>
               <q-td key="comercio" :props="props">
-                {{ props.row?.comercio.name }}
+                {{ props.row?.comercio?.name }}
               </q-td>
               <q-td key="img_array_url" :props="props">
                 <q-img
-                  :src="props.row.img_array_url[0]"
+                  :src="
+                    props.row?.img_array_url ? props.row?.img_array_url[0] : ''
+                  "
                   alt="img"
                   spinner-color="dark"
                   style="width: 100px; height: 100px"
@@ -394,7 +404,11 @@ const onPaste = (evt) => {
       persistent
       class="full-width"
     >
-      <q-card style="max-width: 750px" class="full-width">
+      <q-card
+        v-if="!isLoadingStates"
+        style="max-width: 750px"
+        class="full-width"
+      >
         <q-form @submit.prevent="handleNews" class="full-width">
           <q-card-section>
             <div class="text-h6">
@@ -492,25 +506,6 @@ const onPaste = (evt) => {
                 </div>
               </div>
             </div>
-
-            <q-select
-              outlined
-              v-model="useForm.dir"
-              use-input
-              input-debounce="0"
-              label="Provincia"
-              :options="options"
-              @filter="filterFn"
-              behavior="menu"
-            >
-              <template v-slot:no-option>
-                <q-item>
-                  <q-item-section class="text-grey">
-                    No results
-                  </q-item-section>
-                </q-item>
-              </template>
-            </q-select>
             <q-select
               outlined
               v-model="useForm.comercio_id"

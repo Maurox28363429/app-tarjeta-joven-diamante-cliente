@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, watchEffect, watch } from 'vue';
+import { ref, computed, watchEffect } from 'vue';
 import { useValidateForm } from 'src/composables/useValidateForm.js';
 import { newSchema } from 'src/schemas/newSchema.js';
 import { checkFileType } from 'src/utils/checkFileType';
@@ -38,7 +38,9 @@ const {
 
 const { mutate: createOffer, isLoading: isLoadingCreate } =
   useCreateUniversityOfferMutation();
-const { data: states } = useGetStates({ sort_ofertas: '1' });
+const { data: states, isLoading: isLoadingStates } = useGetStates({
+  sort_ofertas: '1',
+});
 const { mutate: deleteOffer } = useDeleteUniversityOfferMutation();
 const { mutate: editOffer, isLoading: isLoadingEdit } =
   useEditUniversityOfferMutation();
@@ -65,19 +67,29 @@ const findUniversity = (id) => {
   });
 };
 
-const provinceOptions = computed(() =>
-  states?.value?.map(({ name }) => {
-    return name;
-  })
-);
+const provinceOptions = ref([]);
 
-const currentNews = computed(() => {
-  return offers?.value?.data?.find(({ id }) => {
-    return id === edit_id.value;
-  });
+watchEffect(() => {
+  if (state.value && !isLoadingStates.value) {
+    provinceOptions.value = states?.value?.map(({ name }) => {
+      return name;
+    });
+  }
 });
 
-watch([offers, currentNews], () => {
+console.log(provinceOptions.value, 'provinceOptions');
+
+const currentNews = ref([]);
+
+watchEffect(() => {
+  if (offers.value) {
+    currentNews.value = offers?.value?.data?.find(({ id }) => {
+      return id === edit_id.value;
+    });
+  }
+});
+
+watchEffect(() => {
   if (offers.value && edit_id.value && currentNews.value) {
     useForm.value = {
       ...currentNews.value,
@@ -89,9 +101,11 @@ watch([offers, currentNews], () => {
 const ACCEPTED_TYPES_FOR_DNI = ['image/jpeg', 'image/png', 'image/jpg', 'jpg'];
 
 watchEffect(() => {
-  pages.value = offers?.value?.pagination?.currentPage;
-  lastPage.value = offers?.value?.pagination?.lastPage;
-  itemsPerPage.value = [offers?.value?.pagination?.itemsPerPage];
+  if (offers.value) {
+    pages.value = offers?.value?.pagination?.currentPage;
+    lastPage.value = offers?.value?.pagination?.lastPage;
+    itemsPerPage.value = [offers?.value?.pagination?.itemsPerPage];
+  }
 });
 
 const handleNews = () => {
@@ -179,7 +193,7 @@ const addNewMapLink = () => {
     lastLink?.ubication !== '' ||
     lastLink === undefined
   ) {
-    mapRef.value.push({ ubication: options.value[0], link: '' });
+    mapRef.value.push({ ubication: provinceOptions.value[0], link: '' });
     console.log(mapRef.value, 'mapRef');
   }
 };
@@ -275,7 +289,7 @@ const onPaste = (evt) => {
           :columns="columns"
           :rows-per-page-options="itemsPerPage"
           row-key="id"
-          v-if="!isLoadingOffers"
+          v-if="!isLoadingOffers && !isLoadingStates"
         >
           <template v-slot:body="props">
             <q-tr :props="props">
@@ -290,7 +304,9 @@ const onPaste = (evt) => {
               </q-td>
               <q-td key="img_array_url" :props="props">
                 <q-img
-                  :src="props.row.img_array_url[0]"
+                  :src="
+                    props.row?.img_array_url ? props.row?.img_array_url[0] : ''
+                  "
                   alt="img"
                   spinner-color="dark"
                   style="width: 100px; height: 100px"
