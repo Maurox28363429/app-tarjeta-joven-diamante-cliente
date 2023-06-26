@@ -2,9 +2,9 @@
   <div class="text-center q-pa-md flex">
     <section style="width: 100%">
       <q-card>
-        <h5 style="margin-left: 1em; text-align: left; padding: 1em">
+        <h5 style="margin-left: 1em; text-align: left; padding: 1em;">
           Membresias compradas
-          <div style="float: right">
+          <div style="float: right;margin-top:1em">
             <q-btn
               style="background: #0c844f; color: white; margin-left: 0.2em"
               round
@@ -19,7 +19,37 @@
             />
           </div>
         </h5>
-        <hr />
+
+        <div
+            class="full-width row justify-center"
+            style="padding: 1em"
+          >
+            <q-input
+              class="full-width"
+              rounded
+              v-model="search"
+              style="max-width: 400px"
+              outlined
+              type="search"
+              label="Buscar ofertas"
+              color="primary"
+            >
+              <q-btn
+                @click="cargar()"
+                size="md"
+                style="
+                right: -12px;
+                bottom: 0;
+                top: 0;
+                border-radius: 0 26px 26px 0;
+              "
+                color="primary"
+                label="Buscar"
+                icon="search"
+                class="absolute"
+              />
+            </q-input>
+          </div>
         <table>
           <thead>
             <th>ID</th>
@@ -93,11 +123,12 @@ import getUserMembresiaComprada from 'src/api/getUserMembresiaComprada.js';
 const current = ref(1);
 const maxpage = ref(1);
 const datos = ref([]);
+const search = ref('');
 watch(current, async (val) => {
   await cargar();
 });
 const cargar = async () => {
-  const { data, pagination } = await getUserMembresiaComprada(current.value);
+  const { data, pagination } = await getUserMembresiaComprada(current.value,search.value);
   datos.value = data;
   current.value = pagination.currentPage;
   maxpage.value = pagination.lastPage;
