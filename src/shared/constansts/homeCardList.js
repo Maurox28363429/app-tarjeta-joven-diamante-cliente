@@ -46,14 +46,14 @@ export const HOME_CARD_LIST = [
     title: 'Ecommerce',
     icon: ecommerceIcon,
     link: '/cliente/ecommerce',
-    enabled: false,
+    enabled: true,
   },
   {
     id: 6,
     title: 'Premios',
     icon: campeonIcon,
     link: '/cliente/gifts',
-    enabled: false,
+    enabled: true,
   },
   {
     id: 7,
@@ -88,7 +88,7 @@ export const HOME_CARD_LIST = [
     title: 'SOS',
     icon: helpIcon,
     link: '/cliente/sos',
-    enabled: false,
+    enabled: true,
   },
   {
     id: 12,
