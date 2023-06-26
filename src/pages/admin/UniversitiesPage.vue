@@ -79,10 +79,10 @@ const currentNews = computed(() => {
 
 watch([offers, currentNews], () => {
   if (offers.value && edit_id.value && currentNews.value) {
-    useForm.value = { ...currentNews.value };
-    useForm.value.comercio_id = findUniversity(
-      Number(useForm?.value?.comercio_id)
-    );
+    useForm.value = {
+      ...currentNews.value,
+      universidad_id: findUniversity(Number(useForm?.value?.universidad_id)),
+    };
   }
 });
 
@@ -92,7 +92,6 @@ watchEffect(() => {
   pages.value = offers?.value?.pagination?.currentPage;
   lastPage.value = offers?.value?.pagination?.lastPage;
   itemsPerPage.value = [offers?.value?.pagination?.itemsPerPage];
-  console.log(itemsPerPage.value);
 });
 
 const handleNews = () => {
@@ -145,13 +144,16 @@ const filterBusiness = (val, update) => {
 };
 
 const newMapLink = computed(() => {
-  return useForm.value?.link_map?.map((elements) => {
-    return elements;
-  });
+  return (
+    useForm.value?.link_map?.map((elements) => {
+      return elements;
+    }) ?? []
+  );
 });
 
-watch([newMapLink, useForm], () => {
+watchEffect(() => {
   if (useForm.value && newMapLink.value) {
+    console.log(newMapLink.value, 'newMapLink');
     mapRef.value = newMapLink.value;
   }
 });
@@ -160,6 +162,7 @@ const openEditOfferForm = (id) => {
   edit_id.value = id;
   formulario.value = true;
   mapRef.value = newMapLink.value;
+  console.log(newMapLink.value, 'newMapLink');
 };
 
 const openCreateOfferForm = () => {
@@ -403,10 +406,10 @@ const onPaste = (evt) => {
 
             <q-select
               outlined
-              v-model="useForm.comercio_id"
+              v-model="useForm.universidad_id"
               use-input
               input-debounce="0"
-              label="Comercio"
+              label="Universidad"
               :options="optionsBusiness"
               @filter="filterBusiness"
               behavior="menu"

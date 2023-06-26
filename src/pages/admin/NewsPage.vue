@@ -13,6 +13,7 @@ import { checkFileType } from 'src/utils/checkFileType';
 const paginador = ref({
   current: 1,
   lastPage: 1,
+  itemsPerPage: 1,
 });
 const formulario = ref(false);
 const edit_id = ref(null);
@@ -64,6 +65,7 @@ watchEffect(() => {
   paginador.value = {
     current: noticias?.value?.data?.pagination?.currentPage,
     lastPage: noticias?.value?.data?.pagination?.lastPage,
+    itemsPerPage: [noticias?.value?.data?.pagination?.itemsPerPage],
   };
 });
 
@@ -177,6 +179,7 @@ const onPaste = (evt) => {
           bordered
           title="Noticias"
           :rows="noticias?.data?.data"
+          :rows-per-page-options="paginador.itemsPerPage"
           :columns="columns"
           row-key="name"
         >
