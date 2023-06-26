@@ -19,6 +19,7 @@ const search = ref('');
 
 const pages = ref(1);
 const lastPage = ref(1);
+const itemsPerPage = ref([]);
 
 const state = ref('todos');
 const editorRef = ref(null);
@@ -78,10 +79,10 @@ const currentNews = computed(() => {
 
 watch([offers, currentNews], () => {
   if (offers.value && edit_id.value && currentNews.value) {
-    useForm.value = { ...currentNews.value };
-    useForm.value.comercio_id = findUniversity(
-      Number(useForm?.value?.comercio_id)
-    );
+    useForm.value = {
+      ...currentNews.value,
+      universidad_id: findUniversity(Number(useForm?.value?.universidad_id)),
+    };
   }
 });
 
@@ -90,12 +91,10 @@ const ACCEPTED_TYPES_FOR_DNI = ['image/jpeg', 'image/png', 'image/jpg', 'jpg'];
 watchEffect(() => {
   pages.value = offers?.value?.pagination?.currentPage;
   lastPage.value = offers?.value?.pagination?.lastPage;
-  console.log(editorRef.value);
+  itemsPerPage.value = [offers?.value?.pagination?.itemsPerPage];
 });
 
 const handleNews = () => {
-  console.log(mapRef.value, 'mapRef');
-  console.log(useForm.value.link_map, 'map');
   edit_id.value
     ? editOffer({
         ...useForm.value,
@@ -145,13 +144,16 @@ const filterBusiness = (val, update) => {
 };
 
 const newMapLink = computed(() => {
-  return useForm.value?.link_map?.map((elements) => {
-    return elements;
-  });
+  return (
+    useForm.value?.link_map?.map((elements) => {
+      return elements;
+    }) ?? []
+  );
 });
 
-watch([newMapLink, useForm], () => {
+watchEffect(() => {
   if (useForm.value && newMapLink.value) {
+    console.log(newMapLink.value, 'newMapLink');
     mapRef.value = newMapLink.value;
   }
 });
@@ -160,6 +162,7 @@ const openEditOfferForm = (id) => {
   edit_id.value = id;
   formulario.value = true;
   mapRef.value = newMapLink.value;
+  console.log(newMapLink.value, 'newMapLink');
 };
 
 const openCreateOfferForm = () => {
@@ -176,7 +179,7 @@ const addNewMapLink = () => {
     lastLink?.ubication !== '' ||
     lastLink === undefined
   ) {
-    mapRef.value.push({ ubication: '', link: '' });
+    mapRef.value.push({ ubication: options.value[0], link: '' });
     console.log(mapRef.value, 'mapRef');
   }
 };
@@ -201,7 +204,6 @@ const columns = [
     field: 'img_array_url',
   },
   { name: 'description', label: 'DESCRIPCION', field: 'description' },
-  { name: 'dir', label: 'PROVINCIA', field: 'dir' },
   { name: 'prioridad', label: 'PRIORIDAD', field: 'prioridad' },
   { name: 'link_map', label: 'LINK MAP', field: 'link_map' },
   { name: 'created_at', label: 'FECHA', field: 'created_at' },
@@ -271,6 +273,7 @@ const onPaste = (evt) => {
           title="Ofertas de universidades"
           :rows="offers?.data"
           :columns="columns"
+          :rows-per-page-options="itemsPerPage"
           row-key="id"
           v-if="!isLoadingOffers"
         >
@@ -300,9 +303,6 @@ const onPaste = (evt) => {
                     v-html="props.row?.description"
                   />
                 </div>
-              </q-td>
-              <q-td key="dir" :props="props">
-                {{ props.row?.dir === '' ? 'sin provincia' : props.row?.dir }}
               </q-td>
               <q-td key="prioridad" :props="props">
                 {{ props.row?.prioridad }}
@@ -402,10 +402,10 @@ const onPaste = (evt) => {
 
             <q-select
               outlined
-              v-model="useForm.comercio_id"
+              v-model="useForm.universidad_id"
               use-input
               input-debounce="0"
-              label="Comercio"
+              label="Universidad"
               :options="optionsBusiness"
               @filter="filterBusiness"
               behavior="menu"
@@ -425,8 +425,30 @@ const onPaste = (evt) => {
                 v-for="(map, index) in mapRef"
                 :key="index"
               >
-                <q-input outlined v-model="map.ubication" label="Ubicacion" />
-                <q-input outlined v-model="map.link" label="Link" />
+                <q-select
+                  outlined
+                  v-model="map.ubication"
+                  use-input
+                  input-debounce="0"
+                  label="Provincia"
+                  :options="options"
+                  @filter="filterFn"
+                  behavior="menu"
+                >
+                  <template v-slot:no-option>
+                    <q-item>
+                      <q-item-section class="text-grey">
+                        No results
+                      </q-item-section>
+                    </q-item>
+                  </template>
+                </q-select>
+
+                <q-input
+                  outlined
+                  v-model="map.link"
+                  label="Link de ubicación"
+                />
                 <div style="height: 46px; width: 46px">
                   <q-btn
                     icon="delete"
@@ -452,25 +474,6 @@ const onPaste = (evt) => {
                 </q-btn>
               </div>
             </div>
-
-            <q-select
-              outlined
-              v-model="useForm.dir"
-              use-input
-              input-debounce="0"
-              label="Provincia"
-              :options="options"
-              @filter="filterFn"
-              behavior="menu"
-            >
-              <template v-slot:no-option>
-                <q-item>
-                  <q-item-section class="text-grey">
-                    No results
-                  </q-item-section>
-                </q-item>
-              </template>
-            </q-select>
 
             <q-file
               outlined

@@ -4,9 +4,7 @@
       <div class="col-12 col-md-6" style="padding: 1em">
         <q-card>
           <q-card-section>
-            <h5>
-              Visitas por mes
-            </h5>
+            <h5>Visitas por mes</h5>
             <q-img
               :src="chartUrl"
               loading="lazy"
@@ -20,9 +18,7 @@
       <div class="col-12 col-md-6" style="padding: 1em">
         <q-card>
           <q-card-section>
-            <h5>
-              Visitas por edad
-            </h5>
+            <h5>Visitas por edad</h5>
             <q-img
               :src="chartUrl2"
               loading="lazy"
@@ -63,17 +59,14 @@ const chart2 = new QuickChart();
 const chartUrl3 = ref('');
 const chart3 = new QuickChart();
 
-const chartUrl4 = ref('');
-const chart4 = new QuickChart();
-
 const obtenerData = async () => {
   const response = await getDashboardComercio(
     JSON.parse(localStorage.getItem('user')).user.id
   );
   if (response) {
     console.log(response);
-    let meses=[];
-    let meses_datos=[];
+    const meses = [];
+    const meses_datos = [];
     response.visitas_por_mes.forEach((element) => {
       meses.push(element.mes);
       meses_datos.push(element.visitas);
@@ -83,16 +76,18 @@ const obtenerData = async () => {
       type: 'bar',
       data: {
         labels: meses,
-        datasets: [{
-          label: 'Visitas',
-          data: meses_datos
-        }]
+        datasets: [
+          {
+            label: 'Visitas',
+            data: meses_datos,
+          },
+        ],
       },
     });
     chartUrl.value = chart.getUrl();
 
-    let edades=[];
-    let edades_datos=[];
+    const edades = [];
+    const edades_datos = [];
     response.edades_visitas.forEach((element) => {
       edades.push(element.edad);
       edades_datos.push(element.visitas);
