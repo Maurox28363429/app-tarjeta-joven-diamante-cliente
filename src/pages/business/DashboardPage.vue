@@ -46,19 +46,6 @@
           </q-card-section>
         </q-card>
       </div>
-      <div class="col-12 col-md-6" style="padding: 1em">
-        <q-card>
-          <q-card-section>
-            <q-img
-              :src="chartUrl4"
-              loading="lazy"
-              spinner-color="black"
-              spinner-size="50"
-              style="width: 100%; height: 100%"
-            />
-          </q-card-section>
-        </q-card>
-      </div>
     </article>
   </section>
 </template>
@@ -120,6 +107,16 @@ const obtenerData = async () => {
             data:edades_datos
           }
         ]
+      },
+      options: {
+        scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: true,
+              fontColor: 'white' // set color of numbers on y-axis to white
+            }
+          }]
+        }
       }
     });
     chartUrl2.value = chart2.getUrl();
@@ -129,33 +126,33 @@ const obtenerData = async () => {
       data: {
         datasets: [
           {
-            data: [24, 66],
-            backgroundColor: ['green', '#eee'],
+            data: [response.sexo_visitas[0], response.sexo_visitas[1]],
+            backgroundColor: ['#ff7ea3', '#4153f7'],
             label: 'Dataset1',
             borderWidth: 0,
           },
         ],
-        labels: ['A', 'C'],
+        labels: ['Mujeres', 'Hombres'],
       },
       options: {
         circumference: Math.PI,
         rotation: Math.PI,
         cutoutPercentage: 75,
-        layout: { padding: 40 },
+        layout: { padding: 50 },
         legend: { display: false },
         plugins: {
           datalabels: {
             color: '#404040',
             anchor: 'end',
             align: 'end',
-            formatter: (val) => val + '%',
+            formatter: (val) => val + '',
             font: { size: 25, weight: 'bold' },
           },
           doughnutlabel: {
             labels: [
-              { text: '\nYourstatusis', font: { size: 20 } },
+              { text: '\nVisitas', font: { size: 20 } },
               {
-                text: '\nhealthy',
+                text: '\nPor genero',
                 color: '#000',
                 font: { size: 25, weight: 'bold' },
               },
@@ -166,14 +163,6 @@ const obtenerData = async () => {
     });
     chartUrl3.value = chart3.getUrl();
 
-    chart4.setConfig({
-      type: 'polarArea',
-      data: {
-        labels: ['January', 'February', 'March', 'April', 'May'],
-        datasets: [{ data: [50, 60, 70, 180, 190] }],
-      },
-    });
-    chartUrl4.value = chart4.getUrl();
   }
 };
 onMounted(async () => {
