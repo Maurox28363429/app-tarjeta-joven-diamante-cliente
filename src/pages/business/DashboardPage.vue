@@ -63,18 +63,15 @@
   </section>
 </template>
 <script setup>
-import { ref,onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 import QuickChart from 'quickchart-js';
 import getDashboardComercio from 'src/api/getDashboardComercio.js';
-
 
 const chart = new QuickChart();
 const chartUrl = ref('');
 
-
 const chartUrl2 = ref('');
 const chart2 = new QuickChart();
-
 
 const chartUrl3 = ref('');
 const chart3 = new QuickChart();
@@ -127,10 +124,55 @@ const obtenerData = async () => {
     });
     chartUrl2.value = chart2.getUrl();
 
-    chart3.setConfig({ type: 'doughnut', data: { datasets: [{ data: [24, 66], backgroundColor: ['green', '#eee'], label: 'Dataset1', borderWidth: 0 }], labels: ['A', 'C'] }, options: { circumference: Math.PI, rotation: Math.PI, cutoutPercentage: 75, layout: { padding: 40 }, legend: { display: false }, plugins: { datalabels: { color: '#404040', anchor: 'end', align: 'end', formatter: (val) => val + '%', font: { size: 25, weight: 'bold' } }, doughnutlabel: { labels: [{ text: '\nYourstatusis', font: { size: 20 } }, { text: '\nhealthy', color: '#000', font: { size: 25, weight: 'bold' } }] } } } });
+    chart3.setConfig({
+      type: 'doughnut',
+      data: {
+        datasets: [
+          {
+            data: [24, 66],
+            backgroundColor: ['green', '#eee'],
+            label: 'Dataset1',
+            borderWidth: 0,
+          },
+        ],
+        labels: ['A', 'C'],
+      },
+      options: {
+        circumference: Math.PI,
+        rotation: Math.PI,
+        cutoutPercentage: 75,
+        layout: { padding: 40 },
+        legend: { display: false },
+        plugins: {
+          datalabels: {
+            color: '#404040',
+            anchor: 'end',
+            align: 'end',
+            formatter: (val) => val + '%',
+            font: { size: 25, weight: 'bold' },
+          },
+          doughnutlabel: {
+            labels: [
+              { text: '\nYourstatusis', font: { size: 20 } },
+              {
+                text: '\nhealthy',
+                color: '#000',
+                font: { size: 25, weight: 'bold' },
+              },
+            ],
+          },
+        },
+      },
+    });
     chartUrl3.value = chart3.getUrl();
 
-    chart4.setConfig({ type: 'polarArea', data: { labels: ['January', 'February', 'March', 'April', 'May'], datasets: [{ data: [50, 60, 70, 180, 190] }] } });
+    chart4.setConfig({
+      type: 'polarArea',
+      data: {
+        labels: ['January', 'February', 'March', 'April', 'May'],
+        datasets: [{ data: [50, 60, 70, 180, 190] }],
+      },
+    });
     chartUrl4.value = chart4.getUrl();
   }
 };

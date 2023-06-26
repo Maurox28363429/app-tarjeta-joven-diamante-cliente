@@ -109,7 +109,12 @@ watchEffect(() => {
           style="margin-top: 1em"
           v-model="currentPaginate"
           :max="paginas"
-          boundary-numbers
+          direction-links
+          outline
+          color="blue"
+          active-design="unelevated"
+          active-color="white"
+          active-text-color="blue"
         />
       </div>
     </div>

@@ -121,7 +121,12 @@ watchEffect(() => {
           class="q-mt-lg"
           v-model="currentPaginate"
           :max="pages"
-          boundary-numbers
+          direction-links
+          outline
+          color="blue"
+          active-design="unelevated"
+          active-color="white"
+          active-text-color="blue"
         />
       </div>
     </div>

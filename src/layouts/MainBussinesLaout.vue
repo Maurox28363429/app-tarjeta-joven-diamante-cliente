@@ -122,12 +122,12 @@ const drawerClick = (e) => {
         <q-list padding>
           <q-separator inset v-show="!miniState" />
           <q-item clickable v-ripple to="/">
-              <q-item-section avatar>
-                <q-icon name="home" />
-              </q-item-section>
+            <q-item-section avatar>
+              <q-icon name="home" />
+            </q-item-section>
 
-              <q-item-section>Home</q-item-section>
-            </q-item>
+            <q-item-section>Home</q-item-section>
+          </q-item>
 
           <q-item clickable v-ripple to="/empresa/account">
             <q-item-section avatar>
@@ -224,7 +224,7 @@ const drawerClick = (e) => {
         name="cuenta"
         label="Cuenta"
         color="white"
-        class="text-capitalize q-px-none"
+        class="text-capitalize q-px-none full-width"
         icon="person"
         to="/empresa/account"
         exact
@@ -243,7 +243,7 @@ const drawerClick = (e) => {
         to="/empresa/create-order"
         label="Escaner QR"
         color="white"
-        class="text-capitalize q-px-none"
+        class="text-capitalize q-px-none full-width"
         icon="border_color"
         exact
       />

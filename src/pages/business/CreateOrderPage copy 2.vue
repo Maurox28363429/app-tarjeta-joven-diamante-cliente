@@ -218,9 +218,11 @@ const tab = ref('productos');
                   v-model="currentPaginate"
                   :max="pages"
                   direction-links
-                  flat
-                  color="grey"
-                  active-color="primary"
+                  outline
+                  color="blue"
+                  active-design="unelevated"
+                  active-color="white"
+                  active-text-color="blue"
                 />
               </div>
             </q-tab-panel>

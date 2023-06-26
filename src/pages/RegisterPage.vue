@@ -50,103 +50,114 @@ const updateForm = ({ key, value }) => {
 
 <template>
   <div class="full-width items-center row justify-center registerContainer">
-    <div class="column items-center q-mx-none register">
-      <div class="column items-center justify-center">
+    <q-card
+      :class="
+        $q.screen.lt.xl
+          ? 'full-width column items-center no-shadow'
+          : 'full-width column items-center '
+      "
+      style="max-width: 500px; background-color: #f8fdff"
+    >
+      <q-card-section class="column items-center justify-center">
         <q-img
           :src="logo"
-          width="100px"
+          width="170px"
           alt="logo"
-          height="80px"
+          height="auto"
           class="rounded-borders q-mb-md"
         />
-        <p class="q-mb-xl title-large text-center">
+        <p class="q-ma-none title-large text-center">
           Bienvenido a Tarjeta Joven Diamante
         </p>
-      </div>
+      </q-card-section>
 
-      <form
-        @submit.prevent="onSubmit"
-        class="q-gutter-md full-width column items-center loginForm"
-        autocomplete="nope"
-      >
-        <div class="full-width row justify-between">
-          <p class="title-medium">Crear cuenta</p>
-          <p class="text-weight-bold">{{ currentForm }}/{{ lastStep }}</p>
-        </div>
-        <div class="q-mb-md q-ma-none text-dark column items-center full-width">
-          <div v-show="currentForm === 1" class="full-width">
-            <StepOne
-              @update:modelValue="updateForm($event)"
-              :validateMessage="validateMessage"
-              :validatInput="validatInput"
-              :useForm="useForm"
-            />
-          </div>
-          <div v-show="currentForm === 2" class="full-width">
-            <StepTwo
-              @update:modelValue="updateForm($event)"
-              :validateMessage="validateMessage"
-              :validatInput="validatInput"
-              :useForm="useForm"
-            />
-          </div>
-          <div v-show="currentForm === 3" class="full-width">
-            <StepFour
-              @update:modelValue="updateForm($event)"
-              :validateMessage="validateMessage"
-              :validatInput="validatInput"
-              :useForm="useForm"
-            />
-          </div>
-          <div v-show="currentForm === 4" class="full-width">
-            <StepThree
-              @update:modelValue="updateForm($event)"
-              :validateMessage="validateMessage"
-              :validatInput="validatInput"
-              :useForm="useForm"
-            />
-          </div>
-        </div>
-
-        <div class="q-py-none full-width row q-gutter-md justify-center">
-          <q-btn
-            :disable="disableLastButton"
-            @click="prevStep"
-            label="Anterior"
-            class="col-5"
-            height="48px"
-            color="secondary"
-            size="14px"
-            fill
-          />
-          <q-btn
-            v-if="!isLastStep"
-            @click="nextStep"
-            label="Siguiente"
-            height="48px"
-            class="col-5"
-            color="secondary"
-            size="14px"
-            fill
-          />
-          <q-btn
-            v-else
-            :disable="!validateMessage.isvalid"
-            type="submit"
-            label="Registrar"
-            height="48px"
-            class="col-5"
-            color="primary"
-            :loading="isLoadingRegister"
-            size="14px"
-            fill
-          />
-        </div>
-        <router-link class="text-link" to="/login"
-          >¿Ya tienes cuenta?
-          <span class="text-weight-bold">Login</span></router-link
+      <q-card-section class="full-width">
+        <form
+          @submit.prevent="onSubmit"
+          class="q-gutter-y-md full-width column items-center loginForm"
+          autocomplete="nope"
         >
-      </form>
-    </div>
+          <div class="full-width row justify-between">
+            <p class="title-medium">Crear cuenta</p>
+            <p class="text-weight-bold">{{ currentForm }}/{{ lastStep }}</p>
+          </div>
+          <div
+            class="q-mb-md q-ma-none text-dark column items-center full-width"
+          >
+            <div v-show="currentForm === 1" class="full-width">
+              <StepOne
+                @update:modelValue="updateForm($event)"
+                :validateMessage="validateMessage"
+                :validatInput="validatInput"
+                :useForm="useForm"
+              />
+            </div>
+            <div v-show="currentForm === 2" class="full-width">
+              <StepTwo
+                @update:modelValue="updateForm($event)"
+                :validateMessage="validateMessage"
+                :validatInput="validatInput"
+                :useForm="useForm"
+              />
+            </div>
+            <div v-show="currentForm === 3" class="full-width">
+              <StepFour
+                @update:modelValue="updateForm($event)"
+                :validateMessage="validateMessage"
+                :validatInput="validatInput"
+                :useForm="useForm"
+              />
+            </div>
+            <div v-show="currentForm === 4" class="full-width">
+              <StepThree
+                @update:modelValue="updateForm($event)"
+                :validateMessage="validateMessage"
+                :validatInput="validatInput"
+                :useForm="useForm"
+              />
+            </div>
+          </div>
+
+          <div class="q-py-none full-width row q-gutter-x-md justify-center">
+            <q-btn
+              :disable="disableLastButton"
+              @click="prevStep"
+              label="Anterior"
+              class="col-5"
+              height="48px"
+              color="secondary"
+              size="14px"
+              fill
+            />
+            <q-btn
+              v-if="!isLastStep"
+              @click="nextStep"
+              label="Siguiente"
+              height="48px"
+              class="col-5"
+              color="secondary"
+              size="14px"
+              fill
+            />
+            <q-btn
+              v-else
+              :disable="!validateMessage.isvalid"
+              type="submit"
+              label="Registrar"
+              height="48px"
+              class="col-5"
+              color="primary"
+              :loading="isLoadingRegister"
+              size="14px"
+              fill
+            />
+          </div>
+          <router-link class="text-link" to="/login"
+            >¿Ya tienes cuenta?
+            <span class="text-weight-bold">Login</span></router-link
+          >
+        </form>
+      </q-card-section>
+    </q-card>
   </div>
 </template>

@@ -126,9 +126,10 @@ const handleSearch = () => {
                 class="q-pt-none q-px-xs column"
                 style="min-height: 100px; justify-content: end"
               >
-                <p class="news-description line-clamp-3">
-                  {{ item.descripcion }}
-                </p>
+                <p
+                  class="news-description line-clamp-3"
+                  v-html="item.descripcion"
+                />
               </q-card-section>
 
               <q-card-actions
@@ -147,7 +148,16 @@ const handleSearch = () => {
     </div>
 
     <div class="q-pa-lg flex flex-center">
-      <q-pagination v-model="currentPaginate" :max="pages" />
+      <q-pagination
+        v-model="currentPaginate"
+        :max="pages"
+        direction-links
+        outline
+        color="blue"
+        active-design="unelevated"
+        active-color="white"
+        active-text-color="blue"
+      />
     </div>
 
     <q-dialog v-model="openModal">
@@ -167,7 +177,7 @@ const handleSearch = () => {
         <q-separator />
 
         <q-card-section class="q-pt-none scroll">
-          <div class="news-description">{{ modalCurrent.descripcion }}</div>
+          <div class="news-description" v-html="modalCurrent.descripcion" />
         </q-card-section>
 
         <q-separator />
@@ -183,6 +193,7 @@ const handleSearch = () => {
 .promotions {
   padding: 0 24px;
 }
+
 .loading {
   top: 318px;
   left: 0;

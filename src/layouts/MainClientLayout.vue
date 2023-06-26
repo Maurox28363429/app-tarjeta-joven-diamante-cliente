@@ -3,23 +3,27 @@ import { useQuasar } from 'quasar';
 import { ref, watch, watchEffect } from 'vue';
 import { useRouter } from 'vue-router';
 import { userAuth } from 'src/composables/userAuth';
+import { useValidateForm } from 'src/composables/useValidateForm';
 import { useUpdateUserMutation } from 'src/querys/userQuerys';
 import { convertToFile, openCamera } from 'src/utils/openCamera';
 import { checkFileType } from 'src/utils/checkFileType';
 import QrUser from '../components/QrUser.vue';
-import triangle from '../assets/images/triangulo.png';
-import logo from '../assets/icons/acronimo.svg';
-import { useValidateForm } from 'src/composables/useValidateForm';
 import { policySchema } from 'src/schemas/policySchema';
 
-import PocketBase from 'pocketbase';
-
+import {
+  CLIENT_MENU_DESKTOP,
+  CLIENT_MENU_MOBILE,
+} from 'src/shared/constansts/clientMenu';
 import { PARENTAGE } from 'src/shared/constansts/parentage';
+
+import PocketBase from 'pocketbase';
 
 import offersIcon from '../assets/images/offersIcon.png';
 import universityIcon from '../assets/images/universityIcon.png';
 import newsIcon from '../assets/images/newsIcon.png';
 import pachama from '../assets/images/GifPachama.gif';
+import triangle from '../assets/images/triangulo.png';
+import logo from '../assets/icons/acronimo.svg';
 
 const $q = useQuasar();
 const {
@@ -311,45 +315,17 @@ pb.collection('tarjetajoven_mensajes').subscribe('*', function (e) {
             </q-item-section>
           </q-item>
           <q-separator inset v-show="!miniState" />
-          <q-item clickable v-ripple to="/cliente/home">
+          <q-item
+            v-for="menu in CLIENT_MENU_DESKTOP"
+            :key="menu.path"
+            clickable
+            v-ripple
+            :to="menu.path"
+          >
             <q-item-section avatar>
-              <q-icon name="home" />
+              <q-icon :name="menu.icon" />
             </q-item-section>
-            <q-item-section>Home</q-item-section>
-          </q-item>
-          <!--           <q-item clickable v-ripple to="/cliente/transactionsTable">
-            <q-item-section avatar>
-              <q-icon name="shopping_basket" />
-            </q-item-section>
-            <q-item-section>Mis compras</q-item-section>
-          </q-item> -->
-          <q-item clickable v-ripple to="/cliente/promotions">
-            <q-item-section avatar>
-              <q-icon name="newspaper" />
-            </q-item-section>
-
-            <q-item-section>Promociones</q-item-section>
-          </q-item>
-          <q-item clickable v-ripple to="/cliente/account">
-            <q-item-section avatar>
-              <q-icon name="person" />
-            </q-item-section>
-
-            <q-item-section>Mi perfil</q-item-section>
-          </q-item>
-          <q-item clickable v-ripple to="/cliente/Offers">
-            <q-item-section avatar>
-              <q-icon name="sell" />
-            </q-item-section>
-
-            <q-item-section>Ofertas</q-item-section>
-          </q-item>
-          <q-item clickable v-ripple to="/memberships">
-            <q-item-section avatar>
-              <q-icon name="rocket_launch" />
-            </q-item-section>
-
-            <q-item-section>Membresías</q-item-section>
+            <q-item-section>{{ menu.label }}</q-item-section>
           </q-item>
         </q-list>
         <div
@@ -369,7 +345,7 @@ pb.collection('tarjetajoven_mensajes').subscribe('*', function (e) {
       <div v-show="!miniState" class="absolute-top" style="height: 150px">
         <div class="column items-center absolute-bottom bg-transparent">
           <q-avatar size="56px" class="q-mb-sm">
-            <img :src="userData?.img_url" />
+            <q-img :src="userData?.img_url" fit="cover" />
           </q-avatar>
           <div class="text-weight-bold">
             ¡Hola, {{ userData?.name + ' ' + userData?.last_name }}!
@@ -623,38 +599,15 @@ pb.collection('tarjetajoven_mensajes').subscribe('*', function (e) {
       narrow-indicator
     >
       <q-route-tab
-        name="home"
-        label="Home"
+        v-for="menu in CLIENT_MENU_MOBILE"
+        :key="menu.path"
+        :name="menu.label"
+        :label="menu.label"
         color="white"
         class="text-capitalize q-px-none full-width"
-        icon="home"
-        to="/cliente/home"
+        :icon="menu.icon"
+        :to="menu.path"
         exact
-      />
-      <q-route-tab
-        name="misCompras"
-        label="Mis compras"
-        color="white"
-        class="text-capitalize q-px-none full-width"
-        icon="shopping_basket"
-        to="/cliente/transactionsTable"
-        exact
-      />
-      <q-route-tab
-        name="Ofertas"
-        label="Ofertas"
-        color="white"
-        class="text-capitalize q-px-none full-width"
-        icon="sell"
-        to="/cliente/Offers"
-      />
-      <q-route-tab
-        name="news"
-        label="Noticias"
-        color="white"
-        class="text-capitalize q-px-none full-width"
-        icon="newspaper"
-        to="/cliente/news"
       />
     </q-tabs>
     <q-img :src="triangle" class="trianguloTop" spinner-color="dark" />

@@ -9,8 +9,8 @@ import {
   useEditUniversityOfferMutation,
   useCreateUniversityOfferMutation,
   useGetStates,
+  useGetUniversitiesRoles,
 } from 'src/querys/offersQuerys';
-import { useGetBusiness } from 'src/querys/businessQuerys';
 
 const formulario = ref(false);
 const edit_id = ref(null);
@@ -41,7 +41,6 @@ const { data: states } = useGetStates({ sort_ofertas: '1' });
 const { mutate: deleteOffer } = useDeleteUniversityOfferMutation();
 const { mutate: editOffer, isLoading: isLoadingEdit } =
   useEditUniversityOfferMutation();
-const { data: businessData } = useGetBusiness();
 
 const { useForm } = useValidateForm({
   initialValue: {},
@@ -80,7 +79,7 @@ const currentNews = computed(() => {
 watch([offers, currentNews], () => {
   if (offers.value && edit_id.value && currentNews.value) {
     useForm.value = { ...currentNews.value };
-    useForm.value.comercio_id = findBusiness(
+    useForm.value.comercio_id = findUniversity(
       Number(useForm?.value?.comercio_id)
     );
   }
@@ -111,7 +110,7 @@ const deleteNew = (id) => {
 };
 
 const options = ref(provinceOptions.value);
-const optionsBusiness = ref(businessId.value);
+const optionsBusiness = ref(universitiesId.value);
 
 const filterFn = (val, update) => {
   if (val === '') {
@@ -132,14 +131,14 @@ const filterFn = (val, update) => {
 const filterBusiness = (val, update) => {
   if (val === '') {
     update(() => {
-      optionsBusiness.value = businessId.value;
+      optionsBusiness.value = universitiesId.value;
     });
     return;
   }
 
   update(() => {
     const needle = val.toLowerCase();
-    optionsBusiness.value = businessId.value.filter(
+    optionsBusiness.value = universitiesId.value.filter(
       (v) => v.toLowerCase().indexOf(needle) > -1
     );
   });
@@ -233,11 +232,7 @@ const onPaste = (evt) => {
 
 <template>
   <q-page class="flex">
-    <section
-      class="row"
-      style="width: 100%; padding: 1em"
-      v-if="!isLoadingOffers"
-    >
+    <section class="row" style="width: 100%; padding: 1em">
       <div class="col-12">
         <q-form
           class="full-width row justify-center"
@@ -276,7 +271,8 @@ const onPaste = (evt) => {
           title="Ofertas de universidades"
           :rows="offers?.data"
           :columns="columns"
-          row-key="name"
+          row-key="id"
+          v-if="!isLoadingOffers"
         >
           <template v-slot:body="props">
             <q-tr :props="props">

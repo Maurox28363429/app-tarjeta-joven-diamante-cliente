@@ -30,7 +30,7 @@ export const useGetStates = ({ sort_ofertas = 0, sort_uni = 0 }) => {
 };
 
 export const useGetUniversities = ({ search, page, dir }) => {
-  return useQuery(['universities', search, page], () =>
+  return useQuery(['universities', dir, page], () =>
     getUniversities({
       search: search.value,
       page: page.value,
