@@ -1,5 +1,10 @@
 export const ADMIN_MENU_DESKTOP = [
   {
+    path: '/admin/',
+    icon: 'home',
+    label: 'Home',
+  },
+  {
     path: '/admin/offers',
     icon: 'sell',
     label: 'ofertas',
@@ -32,6 +37,11 @@ export const ADMIN_MENU_DESKTOP = [
 ];
 
 export const ADMIN_MENU_MOBILE = [
+  {
+    path: '/admin/',
+    icon: 'home',
+    label: 'Home',
+  },
   {
     path: '/',
     icon: 'person',
