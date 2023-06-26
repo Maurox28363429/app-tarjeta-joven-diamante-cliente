@@ -19,6 +19,7 @@ const search = ref('');
 
 const pages = ref(1);
 const lastPage = ref(1);
+const itemsPerPage = ref([]);
 
 const state = ref('todos');
 const editorRef = ref(null);
@@ -90,12 +91,11 @@ const ACCEPTED_TYPES_FOR_DNI = ['image/jpeg', 'image/png', 'image/jpg', 'jpg'];
 watchEffect(() => {
   pages.value = offers?.value?.pagination?.currentPage;
   lastPage.value = offers?.value?.pagination?.lastPage;
-  console.log(editorRef.value);
+  itemsPerPage.value = [offers?.value?.pagination?.itemsPerPage];
+  console.log(itemsPerPage.value);
 });
 
 const handleNews = () => {
-  console.log(mapRef.value, 'mapRef');
-  console.log(useForm.value.link_map, 'map');
   edit_id.value
     ? editOffer({
         ...useForm.value,
@@ -271,6 +271,7 @@ const onPaste = (evt) => {
           title="Ofertas de universidades"
           :rows="offers?.data"
           :columns="columns"
+          :rows-per-page-options="itemsPerPage"
           row-key="id"
           v-if="!isLoadingOffers"
         >

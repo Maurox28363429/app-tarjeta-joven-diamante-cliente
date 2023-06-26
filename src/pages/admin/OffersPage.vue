@@ -19,6 +19,7 @@ const search = ref('');
 
 const pages = ref(1);
 const lastPage = ref(1);
+const itemsPerPage = ref([]);
 
 const state = ref('todos');
 const editorRef = ref(null);
@@ -85,6 +86,7 @@ const ACCEPTED_TYPES_FOR_DNI = ['image/jpeg', 'image/png', 'image/jpg', 'jpg'];
 watchEffect(() => {
   pages.value = offers?.value?.pagination?.currentPage;
   lastPage.value = offers?.value?.pagination?.lastPage;
+  itemsPerPage.value = [offers?.value?.pagination?.itemsPerPage];
 });
 
 const buscar = () => {
@@ -282,6 +284,7 @@ const onPaste = (evt) => {
           title="Ofertas"
           :rows="offers?.data"
           :columns="columns"
+          :rows-per-page-options="itemsPerPage"
           row-key="name"
         >
           <template v-slot:body="props">
