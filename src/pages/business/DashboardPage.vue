@@ -4,6 +4,9 @@
       <div class="col-12 col-md-6" style="padding: 1em">
         <q-card>
           <q-card-section>
+            <h5>
+              Visitas por mes
+            </h5>
             <q-img
               :src="chartUrl"
               loading="lazy"
@@ -17,6 +20,9 @@
       <div class="col-12 col-md-6" style="padding: 1em">
         <q-card>
           <q-card-section>
+            <h5>
+              Visitas por edad
+            </h5>
             <q-img
               :src="chartUrl2"
               loading="lazy"
@@ -82,23 +88,43 @@ const obtenerData = async () => {
   );
   if (response) {
     console.log(response);
-    //
+    let meses=[];
+    let meses_datos=[];
+    response.visitas_por_mes.forEach((element) => {
+      meses.push(element.mes);
+      meses_datos.push(element.visitas);
+    });
+
     chart.setConfig({
       type: 'bar',
       data: {
-        labels: ['Q1', 'Q2', 'Q3', 'Q4'],
+        labels: meses,
         datasets: [{
-          label: 'Users',
-          data: [50, 60, 70, 180]
-        }, {
-          label: 'Revenue',
-          data: [100, 200, 300, 400]
+          label: 'Visitas',
+          data: meses_datos
         }]
       },
     });
     chartUrl.value = chart.getUrl();
 
-    chart2.setConfig({ type: 'radar', data: { labels: ['January', 'February', 'March', 'April', 'May'], datasets: [{ label: 'Dogs', data: [50, 60, 70, 180, 190] }, { label: 'Cats', data: [100, 200, 300, 400, 500] }] } });
+    let edades=[];
+    let edades_datos=[];
+    response.edades_visitas.forEach((element) => {
+      edades.push(element.edad);
+      edades_datos.push(element.visitas);
+    });
+    chart2.setConfig({
+      type: 'pie',
+      data: {
+        labels: edades,
+        datasets: [
+          {
+            label: 'Visitas',
+            data:edades_datos
+          }
+        ]
+      }
+    });
     chartUrl2.value = chart2.getUrl();
 
     chart3.setConfig({ type: 'doughnut', data: { datasets: [{ data: [24, 66], backgroundColor: ['green', '#eee'], label: 'Dataset1', borderWidth: 0 }], labels: ['A', 'C'] }, options: { circumference: Math.PI, rotation: Math.PI, cutoutPercentage: 75, layout: { padding: 40 }, legend: { display: false }, plugins: { datalabels: { color: '#404040', anchor: 'end', align: 'end', formatter: (val) => val + '%', font: { size: 25, weight: 'bold' } }, doughnutlabel: { labels: [{ text: '\nYourstatusis', font: { size: 20 } }, { text: '\nhealthy', color: '#000', font: { size: 25, weight: 'bold' } }] } } } });
