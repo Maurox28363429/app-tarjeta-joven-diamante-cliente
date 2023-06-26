@@ -109,6 +109,9 @@ watchEffect(() => {
 });
 
 const handleNews = () => {
+
+  useForm.value.universidad_id=useForm.value.universidad_id.value
+
   edit_id.value
     ? editOffer({
         ...useForm.value,
