@@ -204,6 +204,10 @@ const routes = [
             path: 'users',
             component: () => import('pages/admin/AdminUsers.vue'),
           },
+          {
+            path: 'create_user',
+            component: () => import('pages/admin/CreateUserPage.vue'),
+          },
         ],
       },
       {

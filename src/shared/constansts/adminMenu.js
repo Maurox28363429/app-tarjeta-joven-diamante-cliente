@@ -24,6 +24,11 @@ export const ADMIN_MENU_DESKTOP = [
     icon: 'card_giftcard',
     label: 'Membresias',
   },
+  {
+    path: '/admin/create_user',
+    icon: 'card_giftcard',
+    label: 'Crear usuario',
+  },
 ];
 
 export const ADMIN_MENU_MOBILE = [

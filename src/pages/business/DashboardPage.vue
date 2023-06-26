@@ -99,20 +99,22 @@ const obtenerData = async () => {
         datasets: [
           {
             label: 'Visitas',
-            data:edades_datos
-          }
-        ]
+            data: edades_datos,
+          },
+        ],
       },
       options: {
         scales: {
-          yAxes: [{
-            ticks: {
-              beginAtZero: true,
-              fontColor: 'white' // set color of numbers on y-axis to white
-            }
-          }]
-        }
-      }
+          yAxes: [
+            {
+              ticks: {
+                beginAtZero: true,
+                fontColor: 'white', // set color of numbers on y-axis to white
+              },
+            },
+          ],
+        },
+      },
     });
     chartUrl2.value = chart2.getUrl();
 
@@ -157,7 +159,6 @@ const obtenerData = async () => {
       },
     });
     chartUrl3.value = chart3.getUrl();
-
   }
 };
 onMounted(async () => {

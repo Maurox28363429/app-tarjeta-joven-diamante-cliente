@@ -34,6 +34,10 @@ export const useAuthStore = defineStore('userAuth', {
       localStorageAuth.setUser(data);
       this.router.push({ path: '/memberships' });
     },
+    async adminRegister(registerData) {
+      const { data } = await registerUser(registerData);
+      return data;
+    },
     async addMembership({ user_id }) {
       const { data } = await membershipsTest({ user_id });
       this.user.membresia = data;

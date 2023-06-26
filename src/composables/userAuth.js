@@ -59,6 +59,19 @@ export const userAuth = () => {
     }
   };
 
+  const adminRegister = async (data) => {
+    try {
+      isLoadingRegister.value = true;
+      await authStore.adminRegister(data);
+      triggerPositive('Usuario registrado con éxito');
+    } catch (err) {
+      if (err.response?.status === 400) {
+        triggerWarning('Ese usuario ya exite, por favor ingrese otro correo');
+      }
+    } finally {
+      isLoadingRegister.value = false;
+    }
+  };
   const addMembership = async ({ user_id }) => {
     try {
       refetchUser();
@@ -95,6 +108,7 @@ export const userAuth = () => {
     isFetchingUser,
     isFetchedAfterMountUser,
     isFetchedUser,
+    adminRegister,
     updatedUser: authStore.updated,
     refetchUser,
   };
