@@ -64,7 +64,6 @@ const obtenerData = async () => {
     JSON.parse(localStorage.getItem('user')).user.id
   );
   if (response) {
-    console.log(response);
     const meses = [];
     const meses_datos = [];
     response.visitas_por_mes.forEach((element) => {

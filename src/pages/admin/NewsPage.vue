@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, watchEffect, watch } from 'vue';
+import { ref, computed, watchEffect } from 'vue';
 import { useValidateForm } from 'src/composables/useValidateForm.js';
 import {
   useGetNewsInformative,
@@ -24,7 +24,6 @@ const {
   data: noticias,
   refetch,
   isLoading: isLoadingNews,
-  isFetching: isFetchedNews,
 } = useGetNewsInformative({
   pages: paginador,
   search,
@@ -36,8 +35,21 @@ const { mutate: deleteNewInformative } = useDeleteNewMutation();
 const { mutate: editNewInformative, isLoading: isLoadingEdit } =
   useEditNewMutation();
 
+const initialValues = () => ({
+  titulo: '',
+  descripcion: '',
+  img_url: '',
+  prioridad: 1,
+  link_youtube: '',
+  link_facebook: '',
+  link_instragram: '',
+  link_web: '',
+  link_otros: '',
+  img: [],
+});
+
 const { useForm, validatInput } = useValidateForm({
-  initialValue: {},
+  initialValue: initialValues(),
   schema: newSchema,
 });
 
@@ -46,41 +58,28 @@ const currentNews = computed(() => {
     return id === edit_id.value;
   });
 });
-watch([noticias, isFetchedNews, currentNews], () => {
-  if (noticias.value && edit_id.value) {
-    useForm.value.titulo = currentNews?.value?.titulo;
-    useForm.value.descripcion = currentNews?.value?.descripcion;
-    useForm.value.prioridad = currentNews?.value?.prioridad;
-    useForm.value.link_youtube = currentNews?.value?.link_youtube;
-    useForm.value.link_facebook = currentNews?.value?.link_facebook;
-    useForm.value.link_instragram = currentNews?.value?.link_instragram;
-    useForm.value.link_web = currentNews?.value?.link_web;
-    useForm.value.link_otros = currentNews?.value?.link_otros;
-  }
-});
 
 const ACCEPTED_TYPES_FOR_DNI = ['image/jpeg', 'image/png', 'image/jpg', 'jpg'];
 
 watchEffect(() => {
-  paginador.value = {
-    current: noticias?.value?.data?.pagination?.currentPage,
-    lastPage: noticias?.value?.data?.pagination?.lastPage,
-    itemsPerPage: [noticias?.value?.data?.pagination?.itemsPerPage],
-  };
+  if (noticias.value && !isLoadingNews.value) {
+    paginador.value = {
+      current: noticias?.value?.data?.pagination?.currentPage,
+      lastPage: noticias?.value?.data?.pagination?.lastPage,
+      itemsPerPage: [noticias?.value?.data?.pagination?.itemsPerPage],
+    };
+  }
 });
-
-const buscar = () => {
-  refetch();
-};
 
 const handleModal = (id) => {
   edit_id.value = id;
   formulario.value = true;
+  useForm.value = { ...currentNews.value };
 };
 
 const createNew = () => {
   edit_id.value = null;
-  useForm.value = {};
+  useForm.value = initialValues();
   formulario.value = true;
 };
 
@@ -145,7 +144,7 @@ const onPaste = (evt) => {
       <div class="col-12">
         <q-form
           class="full-width row justify-center"
-          @submit="buscar"
+          @submit="refetch"
           style="padding: 1em"
         >
           <q-input
@@ -182,6 +181,7 @@ const onPaste = (evt) => {
           :rows-per-page-options="paginador.itemsPerPage"
           :columns="columns"
           row-key="name"
+          v-if="!isLoadingNews"
         >
           <template v-slot:body="props">
             <q-tr :props="props">

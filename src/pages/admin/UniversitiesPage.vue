@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, watchEffect } from 'vue';
+import { ref, computed, watchEffect, watch } from 'vue';
 import { useValidateForm } from 'src/composables/useValidateForm.js';
 import { newSchema } from 'src/schemas/newSchema.js';
 import { checkFileType } from 'src/utils/checkFileType';
@@ -38,15 +38,23 @@ const {
 
 const { mutate: createOffer, isLoading: isLoadingCreate } =
   useCreateUniversityOfferMutation();
-const { data: states, isLoading: isLoadingStates } = useGetStates({
-  sort_ofertas: '1',
-});
+const { data: states, isLoading: isLoadingStates } = useGetStates({});
 const { mutate: deleteOffer } = useDeleteUniversityOfferMutation();
 const { mutate: editOffer, isLoading: isLoadingEdit } =
   useEditUniversityOfferMutation();
 
+const initialFormValue = () => ({
+  img_array_url: [],
+  description: '',
+  nombre: '',
+  active: '1',
+  universidad_id: '222',
+  link_map: [],
+  prioridad: '1',
+});
+
 const { useForm } = useValidateForm({
-  initialValue: {},
+  initialValue: initialFormValue(),
   schema: newSchema,
 });
 
@@ -70,14 +78,12 @@ const findUniversity = (id) => {
 const provinceOptions = ref([]);
 
 watchEffect(() => {
-  if (state.value && !isLoadingStates.value) {
-    provinceOptions.value = states?.value?.map(({ name }) => {
+  if (states.value?.data?.length > 2 && states.value?.data) {
+    provinceOptions.value = states?.value?.data?.map(({ name }) => {
       return name;
     });
   }
 });
-
-console.log(provinceOptions.value, 'provinceOptions');
 
 const currentNews = ref([]);
 
@@ -89,14 +95,21 @@ watchEffect(() => {
   }
 });
 
-watchEffect(() => {
-  if (offers.value && edit_id.value && currentNews.value) {
-    useForm.value = {
-      ...currentNews.value,
-      universidad_id: findUniversity(Number(useForm?.value?.universidad_id)),
-    };
-  }
-});
+watch(
+  [offers, edit_id, currentNews],
+  () => {
+    if (offers.value && edit_id.value && currentNews.value) {
+      const updatedForm = { ...currentNews.value };
+      updatedForm.description = currentNews.value.description ?? '';
+      updatedForm.universidad_id = findUniversity(
+        Number(useForm?.value?.universidad_id)
+      );
+
+      useForm.value = updatedForm;
+    }
+  },
+  { deep: true }
+);
 
 const ACCEPTED_TYPES_FOR_DNI = ['image/jpeg', 'image/png', 'image/jpg', 'jpg'];
 
@@ -167,7 +180,6 @@ const newMapLink = computed(() => {
 
 watchEffect(() => {
   if (useForm.value && newMapLink.value) {
-    console.log(newMapLink.value, 'newMapLink');
     mapRef.value = newMapLink.value;
   }
 });
@@ -176,12 +188,11 @@ const openEditOfferForm = (id) => {
   edit_id.value = id;
   formulario.value = true;
   mapRef.value = newMapLink.value;
-  console.log(newMapLink.value, 'newMapLink');
 };
 
 const openCreateOfferForm = () => {
   edit_id.value = null;
-  useForm.value = {};
+  useForm.value = initialFormValue();
   formulario.value = true;
   mapRef.value = newMapLink.value;
 };
@@ -194,7 +205,6 @@ const addNewMapLink = () => {
     lastLink === undefined
   ) {
     mapRef.value.push({ ubication: provinceOptions.value[0], link: '' });
-    console.log(mapRef.value, 'mapRef');
   }
 };
 
@@ -391,7 +401,11 @@ const onPaste = (evt) => {
       persistent
       class="full-width"
     >
-      <q-card style="max-width: 750px" class="full-width">
+      <q-card
+        style="max-width: 750px"
+        class="full-width"
+        v-if="!isLoadingStates && useForm"
+      >
         <q-form @submit.prevent="handleNews" class="full-width">
           <q-card-section>
             <div class="text-h6">

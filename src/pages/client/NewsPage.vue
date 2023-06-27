@@ -18,7 +18,6 @@ const {
 
 const showModal = (modalInfo) => {
   modalCurrent.value = modalInfo;
-  console.log(modalCurrent.value, 'modal');
   openModal.value = true;
 };
 

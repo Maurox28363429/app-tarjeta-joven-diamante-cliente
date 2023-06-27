@@ -13,7 +13,6 @@ const winners = computed(() =>
 );
 
 const handleDetail = (id) => {
-  console.log(id);
   router.push('/cliente/gifts/' + id);
 };
 

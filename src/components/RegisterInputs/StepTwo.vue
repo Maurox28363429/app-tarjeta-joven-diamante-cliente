@@ -53,8 +53,9 @@ const updateValue = (key, value) => {
         lazy-rules
         type="tel"
         outlined
+        mask="#### - ####"
+        placeholder="6208-8987"
         v-model="phone"
-        placeholder="041459789"
         name="phone"
         autocomplete="nope"
         @blur="validatInput('phone')"

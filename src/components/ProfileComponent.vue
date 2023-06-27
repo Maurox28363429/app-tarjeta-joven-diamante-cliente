@@ -335,7 +335,8 @@ const updateUser = async () => {
                       v-model="useForm.phone"
                       outlined
                       autocomplete="nope"
-                      placeholder="0414767997"
+                      mask="#### - ####"
+                      placeholder="6208-8987"
                       @blur="validatInput('phone')"
                       @keypress="validatInput('phone')"
                       name="phone"

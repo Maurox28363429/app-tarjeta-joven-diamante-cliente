@@ -31,7 +31,7 @@ export const ADMIN_MENU_DESKTOP = [
   },
   {
     path: '/admin/create_user',
-    icon: 'card_giftcard',
+    icon: 'person_add',
     label: 'Crear usuario',
   },
 ];

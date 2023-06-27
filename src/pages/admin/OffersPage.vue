@@ -36,15 +36,27 @@ const {
 
 const { mutate: createOffer, isLoading: isLoadingCreate } =
   useCreateOfferMutation();
-const { data: states, isLoading: isLoadingStates } = useGetStates({
-  sort_ofertas: '1',
-});
+const { data: states, isLoading: isLoadingStates } = useGetStates({});
 const { mutate: deleteOffer } = useDeleteOfferMutation();
 const { mutate: editOffer, isLoading: isLoadingEdit } = useEditOfferMutation();
 const { data: businessData } = useGetBusiness();
 
+const initialValues = () => ({
+  img_array_url: [],
+  price_total: 0.0,
+  descuento: 0.0,
+  description: '',
+  nombre: '',
+  fecha_tope_descuento: '2029/10/19',
+  active: '1',
+  comercio_id: 186,
+  stock: 8.0,
+  link_map: [],
+  prioridad: 3,
+});
+
 const { useForm } = useValidateForm({
-  initialValue: {},
+  initialValue: initialValues(),
   schema: newSchema,
 });
 
@@ -66,8 +78,8 @@ const findBusiness = (id) => {
 const provinceOptions = ref([]);
 
 watchEffect(() => {
-  if (state.value && !isLoadingStates.value) {
-    provinceOptions.value = states?.value?.map(({ name }) => {
+  if (states.value?.data?.length > 2 && states.value?.data) {
+    provinceOptions.value = states?.value?.data?.map(({ name }) => {
       return name;
     });
   }
@@ -78,14 +90,22 @@ const currentNews = computed(() => {
     return id === edit_id.value;
   });
 });
-watch([offers, currentNews], () => {
-  if (offers.value && edit_id.value && currentNews.value) {
-    useForm.value = { ...currentNews.value };
-    useForm.value.comercio_id = findBusiness(
-      Number(useForm?.value?.comercio_id)
-    );
-  }
-});
+
+watch(
+  [offers, currentNews, edit_id],
+  () => {
+    if (offers.value && edit_id.value && currentNews.value) {
+      const updatedForm = { ...currentNews.value };
+      updatedForm.description = currentNews.value.description ?? '';
+      updatedForm.comercio_id = findBusiness(
+        Number(currentNews.value.comercio_id)
+      );
+
+      useForm.value = updatedForm;
+    }
+  },
+  { deep: true }
+);
 
 const ACCEPTED_TYPES_FOR_DNI = ['image/jpeg', 'image/png', 'image/jpg', 'jpg'];
 
@@ -99,17 +119,17 @@ const buscar = () => {
   refetch();
 };
 
-const mapRef = ref([]);
+const map = ref([]);
 
 const handleNews = () => {
   edit_id.value
     ? editOffer({
         ...useForm.value,
         id: edit_id.value,
-        link_map: mapRef.value,
+        link_map: map.value,
         comercio_id: useForm.value.comercio_id.value,
       })
-    : createOffer({ ...useForm.value, link_map: mapRef.value });
+    : createOffer({ ...useForm.value, link_map: map.value });
 };
 
 const deleteNew = (id) => {
@@ -161,37 +181,37 @@ const newLinkMap = computed(() => {
 
 watchEffect(() => {
   if (useForm.value) {
-    mapRef.value = newLinkMap.value;
+    map.value = newLinkMap.value;
   }
 });
 
 const handleModal = (id) => {
   edit_id.value = id;
-  mapRef.value = newLinkMap.value;
+  map.value = newLinkMap.value;
   formulario.value = true;
 };
 
 const createNew = () => {
   edit_id.value = null;
-  useForm.value = {};
-  mapRef.value = newLinkMap.value;
+  useForm.value = initialValues();
+  map.value = newLinkMap.value;
   formulario.value = true;
 };
 
 const addNew = () => {
-  const lastLink = mapRef.value?.at(-1);
+  const lastLink = map.value?.at(-1);
 
   if (
     lastLink?.map !== '' ||
     lastLink?.ubication !== '' ||
     lastLink === undefined
   ) {
-    mapRef.value.push({ ubication: provinceOptions?.value[0], link: '' });
+    map.value.push({ ubication: provinceOptions?.value[0], link: '' });
   }
 };
 
 const deleteLink = (index) => {
-  mapRef.value.splice(index, 1);
+  map.value.splice(index, 1);
 };
 
 const columns = [
@@ -352,8 +372,8 @@ const onPaste = (evt) => {
                   >
                     <q-badge color="blue">
                       <a class="text-white" :href="map.link" target="_blank">
-                        {{ map.ubication }}</a
-                      >
+                        {{ map.ubication }}
+                      </a>
                     </q-badge>
                   </p>
                 </div>
@@ -454,7 +474,7 @@ const onPaste = (evt) => {
               <div class="row q-gutter-md q-ml-none items-center">
                 <div
                   class="row q-gutter-x-md q-ml-none items-center"
-                  v-for="(map, index) in mapRef"
+                  v-for="(map, index) in map"
                   :key="index"
                 >
                   <q-select

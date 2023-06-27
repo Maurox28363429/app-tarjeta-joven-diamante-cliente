@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, watchEffect, watch } from 'vue';
+import { ref, computed, watchEffect } from 'vue';
 import { useValidateForm } from 'src/composables/useValidateForm.js';
 import {
   useGetPachamaNews,
@@ -13,7 +13,7 @@ import { checkFileType } from 'src/utils/checkFileType';
 const paginador = ref({
   current: 1,
   lastPage: 1,
-  itemsPerPage: 1,
+  itemsPerPage: [1],
 });
 const formulario = ref(false);
 const edit_id = ref(null);
@@ -23,7 +23,6 @@ const {
   data: noticias,
   refetch,
   isLoading: isLoadingNews,
-  isFetching: isFetchedNews,
 } = useGetPachamaNews({
   pages: paginador,
   search,
@@ -35,8 +34,21 @@ const { mutate: deleteNewInformative } = useDeletePachamaNewMutation();
 const { mutate: editNewInformative, isLoading: isLoadingEdit } =
   useEditNewMutation();
 
+const initialValues = () => ({
+  titulo: '',
+  descripcion: '',
+  img_url: '',
+  prioridad: 1,
+  link_youtube: '',
+  link_facebook: '',
+  link_instragram: '',
+  link_web: '',
+  link_otros: '',
+  img: [],
+});
+
 const { useForm, validatInput } = useValidateForm({
-  initialValue: {},
+  initialValue: initialValues(),
   schema: newSchema,
 });
 
@@ -45,41 +57,29 @@ const currentNews = computed(() => {
     return id === edit_id.value;
   });
 });
-watch([noticias, isFetchedNews, currentNews], () => {
-  if (noticias.value && edit_id.value) {
-    useForm.value.titulo = currentNews?.value?.titulo;
-    useForm.value.descripcion = currentNews?.value?.descripcion;
-    useForm.value.prioridad = currentNews?.value?.prioridad;
-    useForm.value.link_youtube = currentNews?.value?.link_youtube;
-    useForm.value.link_facebook = currentNews?.value?.link_facebook;
-    useForm.value.link_instragram = currentNews?.value?.link_instragram;
-    useForm.value.link_web = currentNews?.value?.link_web;
-    useForm.value.link_otros = currentNews?.value?.link_otros;
-  }
-});
 
 const ACCEPTED_TYPES_FOR_DNI = ['image/jpeg', 'image/png', 'image/jpg', 'jpg'];
 
 watchEffect(() => {
-  paginador.value = {
-    current: noticias?.value?.data?.pagination?.currentPage,
-    lastPage: noticias?.value?.data?.pagination?.lastPage,
-    itemsPerPage: [noticias?.value?.data?.pagination?.lastPage],
-  };
+  if (noticias.value && !isLoadingNews.value) {
+    const { pagination } = noticias.value.data;
+    paginador.value = {
+      current: pagination.currentPage,
+      lastPage: pagination.lastPage,
+      itemsPerPage: [pagination.itemsPerPage],
+    };
+  }
 });
-
-const buscar = () => {
-  refetch();
-};
 
 const handleModal = (id) => {
   edit_id.value = id;
   formulario.value = true;
+  useForm.value = { ...currentNews.value };
 };
 
 const createNew = () => {
   edit_id.value = null;
-  useForm.value = {};
+  useForm.value = initialValues();
   formulario.value = true;
 };
 
@@ -90,7 +90,6 @@ const handleNews = () => {
 };
 
 const deleteNew = (id) => {
-  console.log(id);
   deleteNewInformative(id);
 };
 
@@ -147,7 +146,7 @@ const onPaste = (evt) => {
       <div class="full-width">
         <q-form
           class="full-width row justify-center"
-          @submit="buscar"
+          @submit="refetch"
           style="padding: 1em"
         >
           <q-input
@@ -184,6 +183,7 @@ const onPaste = (evt) => {
           :rows-per-page-options="paginador.itemsPerPage"
           :columns="columns"
           row-key="name"
+          v-if="!isLoadingNews"
         >
           <template v-slot:body="props">
             <q-tr :props="props">
@@ -192,7 +192,7 @@ const onPaste = (evt) => {
               </q-td>
               <q-td key="img_url" :props="props">
                 <q-img
-                  :src="props.row.img_url"
+                  :src="props.row.img_url ?? ''"
                   alt="img"
                   spinner-color="dark"
                   style="width: 100px; height: 100px"

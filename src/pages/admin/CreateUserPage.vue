@@ -53,6 +53,10 @@ const onSubmit = () => {
   adminRegister({ ...useForm.value, role_id: useForm.value.role_id.value });
 };
 
+const onReset = () => {
+  useForm.value = INITIAL_VALUES;
+};
+
 const updateForm = ({ key, value }) => {
   useForm.value[key] = value;
 };
@@ -71,6 +75,7 @@ const updateForm = ({ key, value }) => {
       <q-card-section class="full-width">
         <form
           @submit.prevent="onSubmit"
+          @reset="onReset"
           class="q-gutter-y-md full-width column items-center loginForm"
           autocomplete="nope"
         >
