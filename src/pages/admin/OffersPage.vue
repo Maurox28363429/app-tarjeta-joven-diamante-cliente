@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, watchEffect, watch } from 'vue';
+import { ref, computed, watchEffect } from 'vue';
 import { useValidateForm } from 'src/composables/useValidateForm.js';
 import { newSchema } from 'src/schemas/newSchema.js';
 import { checkFileType } from 'src/utils/checkFileType';
@@ -39,26 +39,8 @@ const { mutate: createOffer, isLoading: isLoadingCreate } =
 const { data: states, isLoading: isLoadingStates } = useGetStates({});
 const { mutate: deleteOffer } = useDeleteOfferMutation();
 const { mutate: editOffer, isLoading: isLoadingEdit } = useEditOfferMutation();
+
 const { data: businessData } = useGetBusiness();
-
-const initialValues = () => ({
-  img_array_url: [],
-  price_total: 0.0,
-  descuento: 0.0,
-  description: '',
-  nombre: '',
-  fecha_tope_descuento: '2029/10/19',
-  active: '1',
-  comercio_id: 186,
-  stock: 8.0,
-  link_map: [],
-  prioridad: 3,
-});
-
-const { useForm } = useValidateForm({
-  initialValue: initialValues(),
-  schema: newSchema,
-});
 
 const businessId = computed(() => {
   return businessData?.value?.data?.map((element) => {
@@ -69,8 +51,33 @@ const businessId = computed(() => {
   });
 });
 
+const initialValues = ref({});
+
+watchEffect(() => {
+  const listOfBusiness = businessId.value;
+  if (listOfBusiness && businessData?.value?.data) {
+    initialValues.value = {
+      price_total: 0.0,
+      descuento: 0.0,
+      description: '',
+      comercio_id: businessId.value[0],
+      nombre: '',
+      fecha_tope_descuento: '2029/10/19',
+      active: '1',
+      stock: 8.0,
+      link_map: [],
+      prioridad: 3,
+    };
+  }
+});
+
+const { useForm } = useValidateForm({
+  initialValue: initialValues.value,
+  schema: newSchema,
+});
+
 const findBusiness = (id) => {
-  return businessId.value.find((element) => {
+  return businessId.value?.find((element) => {
     return element.value === id;
   });
 };
@@ -90,22 +97,6 @@ const currentNews = computed(() => {
     return id === edit_id.value;
   });
 });
-
-watch(
-  [offers, currentNews, edit_id],
-  () => {
-    if (offers.value && edit_id.value && currentNews.value) {
-      const updatedForm = { ...currentNews.value };
-      updatedForm.description = currentNews.value.description ?? '';
-      updatedForm.comercio_id = findBusiness(
-        Number(currentNews.value.comercio_id)
-      );
-
-      useForm.value = updatedForm;
-    }
-  },
-  { deep: true }
-);
 
 const ACCEPTED_TYPES_FOR_DNI = ['image/jpeg', 'image/png', 'image/jpg', 'jpg'];
 
@@ -190,11 +181,16 @@ const handleModal = (id) => {
   edit_id.value = id;
   map.value = newLinkMap.value;
   formulario.value = true;
+  const updatedForm = { ...currentNews.value };
+  updatedForm.description = currentNews.value.description ?? '';
+  updatedForm.comercio_id = findBusiness(Number(currentNews.value.comercio_id));
+
+  useForm.value = updatedForm;
 };
 
 const createNew = () => {
   edit_id.value = null;
-  useForm.value = initialValues();
+  useForm.value = initialValues.value;
   map.value = newLinkMap.value;
   formulario.value = true;
 };

@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, watchEffect, watch } from 'vue';
+import { ref, computed, watchEffect } from 'vue';
 import { useValidateForm } from 'src/composables/useValidateForm.js';
 import { newSchema } from 'src/schemas/newSchema.js';
 import { checkFileType } from 'src/utils/checkFileType';
@@ -43,21 +43,6 @@ const { mutate: deleteOffer } = useDeleteUniversityOfferMutation();
 const { mutate: editOffer, isLoading: isLoadingEdit } =
   useEditUniversityOfferMutation();
 
-const initialFormValue = () => ({
-  img_array_url: [],
-  description: '',
-  nombre: '',
-  active: '1',
-  universidad_id: '222',
-  link_map: [],
-  prioridad: '1',
-});
-
-const { useForm } = useValidateForm({
-  initialValue: initialFormValue(),
-  schema: newSchema,
-});
-
 const { data: universitiesRoles } = useGetUniversitiesRoles();
 
 const universitiesId = computed(() => {
@@ -67,6 +52,27 @@ const universitiesId = computed(() => {
       value: id,
     };
   });
+});
+
+const initialFormValue = ref({});
+
+watchEffect(() => {
+  const listOfUniversities = universitiesId.value;
+  if (listOfUniversities && universitiesRoles.value) {
+    initialFormValue.value = {
+      description: '',
+      nombre: '',
+      active: '1',
+      universidad_id: universitiesId.value[0],
+      link_map: [],
+      prioridad: '1',
+    };
+  }
+});
+
+const { useForm } = useValidateForm({
+  initialValue: initialFormValue.value,
+  schema: newSchema,
 });
 
 const findUniversity = (id) => {
@@ -95,22 +101,6 @@ watchEffect(() => {
   }
 });
 
-watch(
-  [offers, edit_id, currentNews],
-  () => {
-    if (offers.value && edit_id.value && currentNews.value) {
-      const updatedForm = { ...currentNews.value };
-      updatedForm.description = currentNews.value.description ?? '';
-      updatedForm.universidad_id = findUniversity(
-        Number(useForm?.value?.universidad_id)
-      );
-
-      useForm.value = updatedForm;
-    }
-  },
-  { deep: true }
-);
-
 const ACCEPTED_TYPES_FOR_DNI = ['image/jpeg', 'image/png', 'image/jpg', 'jpg'];
 
 watchEffect(() => {
@@ -122,8 +112,7 @@ watchEffect(() => {
 });
 
 const handleNews = () => {
-
-  useForm.value.universidad_id=useForm.value.universidad_id.value
+  useForm.value.universidad_id = useForm.value?.universidad_id?.value;
 
   edit_id.value
     ? editOffer({
@@ -191,11 +180,19 @@ const openEditOfferForm = (id) => {
   edit_id.value = id;
   formulario.value = true;
   mapRef.value = newMapLink.value;
+
+  const updatedForm = { ...currentNews.value };
+  updatedForm.description = currentNews.value.description ?? '';
+  updatedForm.universidad_id = findUniversity(
+    Number(currentNews.value.universidad_id)
+  );
+
+  useForm.value = updatedForm;
 };
 
 const openCreateOfferForm = () => {
   edit_id.value = null;
-  useForm.value = initialFormValue();
+  useForm.value = initialFormValue.value;
   formulario.value = true;
   mapRef.value = newMapLink.value;
 };
