@@ -122,6 +122,7 @@ const buscar = () => {
 const map = ref([]);
 
 const handleNews = () => {
+  useForm.value.comercio_id = useForm.value.comercio_id.value;
   edit_id.value
     ? editOffer({
         ...useForm.value,
