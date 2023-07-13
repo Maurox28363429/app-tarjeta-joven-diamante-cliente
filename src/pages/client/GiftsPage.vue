@@ -15,8 +15,6 @@ const winners = computed(() =>
 const handleDetail = (id) => {
   router.push('/cliente/gifts/' + id);
 };
-
-console.log(winners.value);
 </script>
 
 <template>

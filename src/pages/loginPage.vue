@@ -28,7 +28,10 @@ const showPassword = () => {
 </script>
 
 <template>
-  <div class="full-width window-height row flex-center loginContainer">
+  <div
+    style="min-height: 100vh"
+    class="full-width q-py-md row flex-center loginContainer"
+  >
     <q-card
       :class="
         $q.screen.lt.xl

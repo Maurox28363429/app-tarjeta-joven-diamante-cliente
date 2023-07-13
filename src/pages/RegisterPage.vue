@@ -49,7 +49,9 @@ const updateForm = ({ key, value }) => {
 </script>
 
 <template>
-  <div class="full-width items-center row justify-center registerContainer">
+  <div
+    class="full-width items-center row justify-center registerContainer q-py-md"
+  >
     <q-card
       :class="
         $q.screen.lt.xl

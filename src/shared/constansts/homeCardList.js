@@ -4,12 +4,13 @@ import VIPIcon from '../../assets/images/VIPIcon.png';
 import speakerIcon from '../../assets/images/speakerIcon.png';
 import pachama from '../../assets/images/GifPachama.gif';
 import universityIcon from '../../assets/images/universityIcon.png';
-import helpIcon from '../../assets/icons/sosIcon.png';
+// import helpIcon from '../../assets/icons/sosIcon.png';
 import newsIcon from '../../assets/images/newsIcon.png';
 import iconoTarjeta from '../../assets/images/t.webp';
 import profileIcon from '../../assets/images/profileIcon.png';
-import ecommerceIcon from '../../assets/images/ecommerce.png';
-import campeonIcon from '../../assets/images/campeon.png';
+// import ecommerceIcon from '../../assets/images/ecommerce.png';
+// import campeonIcon from '../../assets/images/campeon.png';
+import disableIcon from '../../assets/images/bandImage.png';
 
 export const HOME_CARD_LIST = [
   {
@@ -44,16 +45,16 @@ export const HOME_CARD_LIST = [
   {
     id: 5,
     title: 'Ecommerce',
-    icon: ecommerceIcon,
+    icon: disableIcon,
     link: '/cliente/ecommerce',
-    enabled: true,
+    enabled: false,
   },
   {
     id: 6,
     title: 'Premios',
-    icon: campeonIcon,
+    icon: disableIcon,
     link: '/cliente/gifts',
-    enabled: true,
+    enabled: false,
   },
   {
     id: 7,
@@ -86,9 +87,9 @@ export const HOME_CARD_LIST = [
   {
     id: 11,
     title: 'SOS',
-    icon: helpIcon,
+    icon: disableIcon,
     link: '/cliente/sos',
-    enabled: true,
+    enabled: false,
   },
   {
     id: 12,
