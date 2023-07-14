@@ -16,7 +16,8 @@
       </div>
       <div class="col-12 col-md-6" style="padding: 1em">
         <q-card>
-          <q-card-section>
+          <q-card-section style="text-align:center;">
+            <h6>Comercios por provincia</h6>
             <q-img
               :src="chartUrl2"
               loading="lazy"
