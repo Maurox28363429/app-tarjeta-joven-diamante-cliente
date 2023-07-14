@@ -38,7 +38,11 @@ onMounted(() => {
 
 <template>
   <div v-if="!loading">
-    <MembershipsPayment :name="plan.name" :price="plan.price" />
+    <MembershipsPayment
+      :name="plan?.name"
+      :price="plan?.price"
+      :plan-id="plan?.id"
+    />
   </div>
   <div
     v-if="loading"

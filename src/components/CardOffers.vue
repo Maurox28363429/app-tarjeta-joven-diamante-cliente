@@ -18,7 +18,7 @@ const showModal = () => {
   openModal.value = true;
 };
 
-defineProps({
+const props = defineProps({
   mapLink: {
     type: Object,
     required: true,
@@ -32,7 +32,7 @@ defineProps({
     required: true,
   },
   discount: {
-    type: Number,
+    type: String,
     required: false,
   },
   commerceName: {
@@ -40,7 +40,7 @@ defineProps({
     required: false,
   },
   totalPrice: {
-    type: Number,
+    type: String,
     required: false,
   },
   images: {
@@ -52,6 +52,12 @@ defineProps({
     default: true,
   },
 });
+
+const links = props.mapLink.filter((element) => {
+  return element.link.includes('http');
+});
+
+const isValidLink = props.mapLink && links.length > 0;
 </script>
 
 <template>
@@ -106,7 +112,8 @@ defineProps({
       />
       <div class="row full-width justify-between" v-if="withModal">
         <q-img
-          @click="openWaze(mapLink)"
+          v-if="isValidLink"
+          @click="openWaze(links)"
           :src="wazeIcon"
           spinner-color="white"
           style="

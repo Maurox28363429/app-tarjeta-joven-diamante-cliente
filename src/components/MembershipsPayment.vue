@@ -5,26 +5,35 @@ import { userAuth } from '../composables/userAuth.js';
 import logo from '../assets/icons/acronimo.svg';
 import rocketIcon from '../assets/icons/rokectPrimarysvg.svg';
 import yappyIcon from './../assets/icons/yappyIcon.svg';
+import UploadImg from './UploadImg.vue';
+import { copyToClipboard } from 'quasar';
 
 const { userData, addMembership, isLoadingMembership } = userAuth();
+const payImg = ref(null);
 
 // Subscribe to changes in any pasarela_de_pago_tarjeta_joven record
 
 const isAcceptedTerms = ref(false);
 const textError = ref(false);
+const showPayment = ref(false);
 
 const { go } = useRouter();
 
 const props = defineProps({
   price: {
-    type: Number,
+    type: String,
     required: true,
-    default: 0,
+    default: '0',
   },
   name: {
     type: String,
     required: true,
     default: '',
+  },
+  planId: {
+    type: Number,
+    required: true,
+    default: 0,
   },
 });
 
@@ -77,6 +86,20 @@ const HandlePayment = () => {
   }
 };
 const isFree = Boolean(props.name === 'free') || props.price <= 0;
+
+const uploadFile = (file) => {
+  payImg.value = file;
+};
+
+const sendPay = () => {
+  console.log({
+    user_id: userData.value?.id,
+    image: payImg.value,
+    price: props.price,
+    name: props.name,
+    membership_id: props.planId,
+  });
+};
 </script>
 
 <template>
@@ -155,6 +178,24 @@ const isFree = Boolean(props.name === 'free') || props.price <= 0;
                     alt="yappy icon"
                   />
                 </button>
+                <p class="q-ma-none">o Enviar comprobante</p>
+                <q-btn
+                  @click="showPayment = true"
+                  :disabled="!isAcceptedTerms"
+                  color="secondary"
+                  label="Datos del pago"
+                  size="sm"
+                  style="max-width: 140px"
+                />
+                <upload-img v-if="!isFree" @files-dropped="uploadFile" />
+                <q-btn
+                  v-if="!isFree"
+                  @click="sendPay"
+                  :disabled="!isAcceptedTerms"
+                  label="Enviar comprobante"
+                  color="primary"
+                />
+
                 <button
                   :disabled="!isAcceptedTerms"
                   v-if="isFree"
@@ -172,7 +213,7 @@ const isFree = Boolean(props.name === 'free') || props.price <= 0;
                   <q-checkbox
                     right-label
                     v-model="isAcceptedTerms"
-                    label="Acepto expresamente todos los Términos y condiciones"
+                    label="Estoy deacuerdo con la informacion de pago suministrada"
                   />
                   <p class="text-negative" v-if="textError">
                     Debe aceptar los terminos
@@ -273,6 +314,88 @@ const isFree = Boolean(props.name === 'free') || props.price <= 0;
       </div>
     </q-page-container>
   </q-layout>
+
+  <q-dialog v-model="showPayment">
+    <q-card class="full-width" style="max-width: 340px; min-height: 300px">
+      <q-card-section>
+        <p class="text-h6 text-weight-bold text-capitalize q-ma-none">
+          Transferencia
+        </p>
+      </q-card-section>
+      <q-card-section class="column gutter-md">
+        <div>
+          <p class="text-weight-bold text-grey q-ma-none">N. de cuenta:</p>
+          <div class="row q-gutter-x-sm">
+            <p class="text-weight-medium">9879879865546</p>
+            <div>
+              <q-tooltip> copiar </q-tooltip>
+              <q-icon
+                @click="copyToClipboard(9879879865546)"
+                class="cursor-pointer"
+                name="content_copy"
+                color="primary"
+              />
+            </div>
+          </div>
+        </div>
+        <div>
+          <p class="text-weight-bold text-grey q-ma-none">Banco:</p>
+          <div class="row q-gutter-x-sm">
+            <p class="text-weight-medium">Banesco</p>
+            <div>
+              <q-tooltip> copiar </q-tooltip>
+              <q-icon
+                @click="copyToClipboard('Banesco')"
+                class="cursor-pointer"
+                name="content_copy"
+                color="primary"
+              />
+            </div>
+          </div>
+        </div>
+        <div>
+          <p class="text-weight-bold text-grey q-ma-none">Tipo de documento:</p>
+          <div class="row q-gutter-x-sm">
+            <p class="text-weight-medium">Juridico</p>
+            <div>
+              <q-tooltip> copiar </q-tooltip>
+              <q-icon
+                @click="copyToClipboard('Juridico')"
+                class="cursor-pointer"
+                name="content_copy"
+                color="primary"
+              />
+            </div>
+          </div>
+        </div>
+        <div>
+          <p class="text-weight-bold text-grey q-ma-none">
+            Numero de documento:
+          </p>
+          <div class="row q-gutter-x-sm">
+            <p class="text-weight-medium">23454545</p>
+            <div>
+              <q-tooltip> copiar </q-tooltip>
+              <q-icon
+                @click="copyToClipboard(23454545)"
+                class="cursor-pointer"
+                name="content_copy"
+                color="primary"
+              />
+            </div>
+          </div>
+        </div>
+      </q-card-section>
+      <q-card-actions align="center" class="text-primary full-width">
+        <q-btn
+          color="primary"
+          label="Cerrar"
+          v-close-popup
+          class="full-width"
+        />
+      </q-card-actions>
+    </q-card>
+  </q-dialog>
 </template>
 
 <style>
@@ -289,7 +412,8 @@ const isFree = Boolean(props.name === 'free') || props.price <= 0;
   max-width: 410px;
   margin: 20px 0;
   padding: 32px;
-  height: 257px;
+  min-height: 257px;
+  gap: 10px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
