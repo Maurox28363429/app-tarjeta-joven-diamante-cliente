@@ -1,7 +1,15 @@
 <template>
   <label>
     <div @drop.prevent="onDrop" :class="isActive">
-      <input type="file" hidden @change="handleFile" />
+      <input
+        :value="null"
+        type="file"
+        hidden
+        @change="handleFile"
+        @keypress="validate"
+        @blur="validate"
+        name="img"
+      />
       <div v-if="!file" class="justify-center column items-center">
         <q-icon name="cloud_download" color="primary" size="60px" />
         <p class="text-subtitle1 q-mb-none text-center">
@@ -14,21 +22,41 @@
         style="max-width: 300px; max-height: 300px"
       />
     </div>
+    <p class="error" v-if="!!validateMessage?.errors?.img">
+      {{ validateMessage?.errors?.img }}
+    </p>
   </label>
 </template>
 
 <script setup>
-import { onMounted, onUnmounted, ref, computed } from 'vue';
+import { onMounted, onUnmounted, ref, computed, defineProps } from 'vue';
 
-const emit = defineEmits(['files-dropped']);
+const props = defineProps({
+  validatInput: {
+    type: Function,
+    required: true,
+  },
+  validateMessage: {
+    type: Object,
+    required: true,
+  },
+});
+
+const emit = defineEmits(['files-dropped', 'validate']);
 const active = ref(false);
 const file = ref(null);
+
+const validate = () => {
+  props.validatInput('img');
+  emit('validate');
+};
 
 const handleFile = (e) => {
   const files = e.target.files;
   if (files && files.length > 0) {
     file.value = URL.createObjectURL(files[0]);
     emit('files-dropped', files[0]);
+    props.validatInput('img');
   }
 };
 
@@ -61,6 +89,10 @@ onMounted(() => {
         active.value = true;
       } else {
         active.value = false;
+      }
+
+      if (eventName === 'dragleave') {
+        props.validatInput('img');
       }
     });
   });

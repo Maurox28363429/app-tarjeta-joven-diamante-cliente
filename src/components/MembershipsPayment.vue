@@ -7,9 +7,22 @@ import rocketIcon from '../assets/icons/rokectPrimarysvg.svg';
 import yappyIcon from './../assets/icons/yappyIcon.svg';
 import UploadImg from './UploadImg.vue';
 import { copyToClipboard } from 'quasar';
+import { useSendPaymentMutation } from 'src/querys/membership';
+import { sendPaymentShema } from 'src/schemas/sendPaymentShema';
+import { useValidateForm } from 'src/composables/useValidateForm';
 
 const { userData, addMembership, isLoadingMembership } = userAuth();
+const { mutate: sendPaymentMutation, isLoading: isLoadingPayment } =
+  useSendPaymentMutation();
 const payImg = ref(null);
+
+const INITIAL_VALUES = {
+  img: null,
+  referencia: null,
+};
+
+const { useForm, validatInput, validateMessage, validateForm } =
+  useValidateForm({ initialValue: INITIAL_VALUES, schema: sendPaymentShema });
 
 // Subscribe to changes in any pasarela_de_pago_tarjeta_joven record
 
@@ -89,16 +102,23 @@ const isFree = Boolean(props.name === 'free') || props.price <= 0;
 
 const uploadFile = (file) => {
   payImg.value = file;
+  useForm.value.img = file;
+  validatInput('img');
 };
 
 const sendPay = () => {
-  console.log({
+  validateForm();
+  sendPaymentMutation({
+    ...useForm.value,
     user_id: userData.value?.id,
-    image: payImg.value,
-    price: props.price,
-    name: props.name,
+    payment: props.price,
     membership_id: props.planId,
   });
+};
+
+const updateForm = ({ key, value }) => {
+  useForm.value[key] = value;
+  console.log({ key, value }, 'updateForm');
 };
 </script>
 
@@ -178,8 +198,9 @@ const sendPay = () => {
                     alt="yappy icon"
                   />
                 </button>
-                <p class="q-ma-none">o Enviar comprobante</p>
+                <p v-if="!isFree" class="q-ma-none">o Enviar comprobante</p>
                 <q-btn
+                  v-if="!isFree"
                   @click="showPayment = true"
                   :disabled="!isAcceptedTerms"
                   color="secondary"
@@ -187,14 +208,41 @@ const sendPay = () => {
                   size="sm"
                   style="max-width: 140px"
                 />
-                <upload-img v-if="!isFree" @files-dropped="uploadFile" />
-                <q-btn
-                  v-if="!isFree"
-                  @click="sendPay"
-                  :disabled="!isAcceptedTerms"
-                  label="Enviar comprobante"
-                  color="primary"
-                />
+                <q-form @submit.prevent="sendPay" v-if="!isFree">
+                  <upload-img
+                    @update:modelValue="updateForm"
+                    @validate="validatInput('img')"
+                    @files-dropped="uploadFile"
+                    :validatInput="validatInput"
+                    :validateMessage="validateMessage"
+                  />
+                  <div class="q-my-md">
+                    <q-input
+                      label="Referencia"
+                      outlined
+                      dense
+                      name="referencia"
+                      v-model="useForm.referencia"
+                      @keypress="validatInput('referencia')"
+                      @blur="validatInput('referencia')"
+                    />
+                    <p
+                      class="error"
+                      v-if="!!validateMessage.errors?.referencia"
+                    >
+                      {{ validateMessage.errors?.referencia }}
+                    </p>
+                  </div>
+
+                  <q-btn
+                    v-if="!isFree"
+                    type="submit"
+                    :disabled="!isAcceptedTerms || !validateMessage.isvalid"
+                    :loading="isLoadingPayment"
+                    label="Enviar comprobante"
+                    color="primary"
+                  />
+                </q-form>
 
                 <button
                   :disabled="!isAcceptedTerms"
