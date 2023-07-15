@@ -6,6 +6,7 @@ import getCodeForRecoveryPassword from 'src/api/getCodeForRecoveryPassword';
 import validatePasswordAndCode from 'src/api/validatePasswordAndCode';
 import changePassword from 'src/api/changePassword';
 import getUser from 'src/api/getUser';
+import getUsers from 'src/api/getUsers';
 
 import { useToast } from 'src/composables/useToast';
 
@@ -99,4 +100,8 @@ export const useSendEmailAgain = () => {
       triggerWarning(ERROR_MESSAGE);
     },
   });
+};
+
+export const useGetUsersQuery = () => {
+  return useQuery(['users'], getUsers);
 };
