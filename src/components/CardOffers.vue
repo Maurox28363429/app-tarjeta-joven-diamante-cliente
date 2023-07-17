@@ -54,10 +54,10 @@ const props = defineProps({
 });
 
 const links = props.mapLink.filter((element) => {
-  return element.link.includes('http');
+  return element.link?.includes('http');
 });
 
-const isValidLink = props.mapLink && links.length > 0;
+const isValidLink = props.mapLink && links?.length > 0;
 </script>
 
 <template>
