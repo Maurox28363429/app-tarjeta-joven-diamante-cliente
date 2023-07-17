@@ -1,9 +1,12 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
+import { useQuasar } from 'quasar';
 import { loginSchema } from 'src/schemas/loginSchema';
 import { useValidateForm } from 'src/composables/useValidateForm';
 import { userAuth } from 'src/composables/userAuth';
 import logo from './../assets/icons/logo.svg';
+
+const $q = useQuasar();
 
 const { login, isLoadingLogin } = userAuth();
 
@@ -15,9 +18,9 @@ const INITIAL_VALUES = {
 const { useForm, validatInput, validateMessage, validateForm } =
   useValidateForm({ initialValue: INITIAL_VALUES, schema: loginSchema });
 
-const onSubmit = async () => {
+const onSubmit = () => {
   validateForm();
-  login({ ...useForm.value });
+  login(useForm.value);
 };
 
 const isVisible = ref(false);
@@ -25,6 +28,15 @@ const isVisible = ref(false);
 const showPassword = () => {
   isVisible.value = !isVisible.value;
 };
+
+const isLowerThanExtraLarge = computed(() => {
+  const baseClass = 'full-width column items-center ';
+  if ($q.screen.lt.xl) {
+    return `${baseClass} no-shadow`;
+  } else {
+    return baseClass;
+  }
+});
 </script>
 
 <template>
@@ -33,11 +45,7 @@ const showPassword = () => {
     class="full-width q-py-md row flex-center loginContainer"
   >
     <q-card
-      :class="
-        $q.screen.lt.xl
-          ? 'full-width column items-center no-shadow'
-          : 'full-width column items-center '
-      "
+      :class="isLowerThanExtraLarge"
       style="max-width: 500px; background-color: #f8fdff"
     >
       <q-card-section class="column full-width items-center">

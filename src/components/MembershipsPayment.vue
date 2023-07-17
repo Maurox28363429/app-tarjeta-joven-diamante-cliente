@@ -10,6 +10,7 @@ import { copyToClipboard } from 'quasar';
 import { useSendPaymentMutation } from 'src/querys/membership';
 import { sendPaymentShema } from 'src/schemas/sendPaymentShema';
 import { useValidateForm } from 'src/composables/useValidateForm';
+import BANK_INFO from 'src/shared/constansts/bankInfo';
 
 const { userData, addMembership, isLoadingMembership } = userAuth();
 const { mutate: sendPaymentMutation, isLoading: isLoadingPayment } =
@@ -372,28 +373,13 @@ const updateForm = ({ key, value }) => {
       </q-card-section>
       <q-card-section class="column gutter-md">
         <div>
-          <p class="text-weight-bold text-grey q-ma-none">N. de cuenta:</p>
-          <div class="row q-gutter-x-sm">
-            <p class="text-weight-medium">9879879865546</p>
-            <div>
-              <q-tooltip> copiar </q-tooltip>
-              <q-icon
-                @click="copyToClipboard(9879879865546)"
-                class="cursor-pointer"
-                name="content_copy"
-                color="primary"
-              />
-            </div>
-          </div>
-        </div>
-        <div>
           <p class="text-weight-bold text-grey q-ma-none">Banco:</p>
           <div class="row q-gutter-x-sm">
-            <p class="text-weight-medium">Banesco</p>
+            <p class="text-weight-medium">{{ BANK_INFO.name }}</p>
             <div>
               <q-tooltip> copiar </q-tooltip>
               <q-icon
-                @click="copyToClipboard('Banesco')"
+                @click="copyToClipboard(BANK_INFO.name)"
                 class="cursor-pointer"
                 name="content_copy"
                 color="primary"
@@ -402,13 +388,13 @@ const updateForm = ({ key, value }) => {
           </div>
         </div>
         <div>
-          <p class="text-weight-bold text-grey q-ma-none">Tipo de documento:</p>
+          <p class="text-weight-bold text-grey q-ma-none">Numero de cuenta:</p>
           <div class="row q-gutter-x-sm">
-            <p class="text-weight-medium">Juridico</p>
+            <p class="text-weight-medium">{{ BANK_INFO.account }}</p>
             <div>
               <q-tooltip> copiar </q-tooltip>
               <q-icon
-                @click="copyToClipboard('Juridico')"
+                @click="copyToClipboard(BANK_INFO.account)"
                 class="cursor-pointer"
                 name="content_copy"
                 color="primary"
@@ -417,15 +403,13 @@ const updateForm = ({ key, value }) => {
           </div>
         </div>
         <div>
-          <p class="text-weight-bold text-grey q-ma-none">
-            Numero de documento:
-          </p>
+          <p class="text-weight-bold text-grey q-ma-none">Tipo de cuenta:</p>
           <div class="row q-gutter-x-sm">
-            <p class="text-weight-medium">23454545</p>
+            <p class="text-weight-medium">{{ BANK_INFO.accountType }}</p>
             <div>
               <q-tooltip> copiar </q-tooltip>
               <q-icon
-                @click="copyToClipboard(23454545)"
+                @click="copyToClipboard(BANK_INFO.accountType)"
                 class="cursor-pointer"
                 name="content_copy"
                 color="primary"

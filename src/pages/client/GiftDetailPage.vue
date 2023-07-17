@@ -37,21 +37,23 @@ const detail = computed(() =>
       </q-timeline-entry>
     </q-timeline>
 
-    <q-card class="q-my-md">
-      <q-card-section class="row">
-        <div>
-          <p class="q-ma-none text-h6">Recompensa</p>
-          <p class="q-ma-none text-subtitle1" style="width: 200px">
-            Membresia por 1 año mas
-          </p>
-        </div>
-        <q-img
-          src="../../assets/images/gift.png"
-          alt="gift"
-          width="91px"
-          height="86px"
-        />
-      </q-card-section>
-    </q-card>
+    <div class="row justify-center full-width">
+      <q-card class="q-my-md full-width" style="max-width: 800px">
+        <q-card-section class="row">
+          <div>
+            <p class="q-ma-none text-h6">Recompensa</p>
+            <p class="q-ma-none text-subtitle1" style="width: 200px">
+              Membresia por 1 año mas
+            </p>
+          </div>
+          <q-img
+            src="../../assets/images/gift.png"
+            alt="gift"
+            width="91px"
+            height="86px"
+          />
+        </q-card-section>
+      </q-card>
+    </div>
   </div>
 </template>

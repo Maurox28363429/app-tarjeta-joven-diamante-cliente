@@ -9,3 +9,12 @@ export const paymentShema = object().shape({
   payment: number().required(REQUIRED_MESSAGE),
   user_id: number().required(REQUIRED_MESSAGE),
 });
+
+export const paymentShemaUpdate = object().shape({
+  membresia_id: object()
+    .shape({ label: string(), value: number() })
+    .required(REQUIRED_MESSAGE),
+  user_id: object()
+    .shape({ label: string(), value: number() })
+    .required(REQUIRED_MESSAGE),
+});

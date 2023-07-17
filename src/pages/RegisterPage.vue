@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue';
+import { useQuasar } from 'quasar';
 import { registerSchema } from 'src/schemas/registerSchema';
 import StepOne from '../components/RegisterInputs/StepOne.vue';
 import StepTwo from '../components/RegisterInputs/StepTwo.vue';
@@ -10,6 +11,7 @@ import logo from './../assets/icons/logo.svg';
 import { userAuth } from 'src/composables/userAuth';
 import { useValidateForm } from 'src/composables/useValidateForm';
 
+const $q = useQuasar();
 const { register, isLoadingRegister } = userAuth();
 
 const GENDER_OPTIONS = ['Hombre', 'Mujer'];
@@ -38,14 +40,24 @@ const { useForm, validatInput, validateMessage, validateForm } =
   useValidateForm({ initialValue: INITIAL_VALUES, schema: registerSchema });
 
 const onSubmit = () => {
-  validateForm();
   const roleIdClient = 3;
+
+  validateForm();
   register({ ...useForm.value, role_id: roleIdClient });
 };
 
 const updateForm = ({ key, value }) => {
   useForm.value[key] = value;
 };
+
+const isLowerThanExtraLarge = computed(() => {
+  const baseClass = 'full-width column items-center ';
+  if ($q.screen.lt.xl) {
+    return `${baseClass} no-shadow`;
+  } else {
+    return baseClass;
+  }
+});
 </script>
 
 <template>
@@ -53,11 +65,7 @@ const updateForm = ({ key, value }) => {
     class="full-width items-center row justify-center registerContainer q-py-md"
   >
     <q-card
-      :class="
-        $q.screen.lt.xl
-          ? 'full-width column items-center no-shadow'
-          : 'full-width column items-center '
-      "
+      :class="isLowerThanExtraLarge"
       style="max-width: 500px; background-color: #f8fdff"
     >
       <q-card-section class="column items-center justify-center">
