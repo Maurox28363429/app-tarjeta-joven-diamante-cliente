@@ -208,6 +208,10 @@ const routes = [
             path: 'create_user',
             component: () => import('pages/admin/CreateUserPage.vue'),
           },
+          {
+            path: 'sos',
+            component: () => import('pages/admin/AdminSos.vue'),
+          },
         ],
       },
       {

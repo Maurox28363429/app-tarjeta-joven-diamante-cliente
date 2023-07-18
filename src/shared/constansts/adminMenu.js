@@ -34,6 +34,11 @@ export const ADMIN_MENU_DESKTOP = [
     icon: 'person_add',
     label: 'Crear usuario',
   },
+  {
+    path: '/admin/sos',
+    icon: 'heart',
+    label: 'SOS',
+  },
 ];
 
 export const ADMIN_MENU_MOBILE = [
