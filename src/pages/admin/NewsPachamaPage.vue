@@ -153,6 +153,7 @@ const onPaste = (evt) => {
             class="full-width"
             rounded
             v-model="search"
+            dense
             style="max-width: 400px"
             outlined
             type="search"

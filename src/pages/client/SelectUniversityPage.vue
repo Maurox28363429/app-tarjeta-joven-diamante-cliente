@@ -34,6 +34,7 @@ watchEffect(() => {
         <q-form class="full-width row justify-center" @submit="refetch">
           <q-input
             class="full-width"
+            dense
             v-model="search"
             style="max-width: 400px"
             outlined

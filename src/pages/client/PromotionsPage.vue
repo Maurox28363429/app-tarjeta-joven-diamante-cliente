@@ -36,6 +36,7 @@ watchEffect(() => {
         <q-input
           v-model="search"
           outlined
+          dense
           class="full-width"
           style="max-width: 400px"
           type="search"

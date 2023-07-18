@@ -34,6 +34,7 @@ watchEffect(() => {
           <q-input
             class="full-width"
             v-model="search"
+            dense
             style="max-width: 400px"
             outlined
             rounded

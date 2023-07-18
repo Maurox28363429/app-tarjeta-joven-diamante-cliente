@@ -280,6 +280,7 @@ const onPaste = (evt) => {
           <q-input
             class="full-width"
             rounded
+            dense
             v-model="search"
             style="max-width: 400px"
             outlined

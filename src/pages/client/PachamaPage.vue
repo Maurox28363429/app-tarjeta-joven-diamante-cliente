@@ -50,6 +50,7 @@ const handleSearch = () => {
       <q-form class="full-width row justify-center" @submit="handleSearch">
         <q-input
           v-model="search"
+          dense
           outlined
           class="full-width"
           style="max-width: 400px"
