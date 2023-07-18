@@ -36,7 +36,7 @@ export const ADMIN_MENU_DESKTOP = [
   },
   {
     path: '/admin/sos',
-    icon: 'heart',
+    icon: 'sos',
     label: 'SOS',
   },
 ];
