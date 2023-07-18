@@ -9,7 +9,7 @@ export default async function updateSos(data) {
     descripcion: data.descripcion,
   });
 
-  return await instance.put(`sos/${data.id}`, formData, {
+  return await instance.post(`sos/${data.id}`, formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
