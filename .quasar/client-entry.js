@@ -48,6 +48,8 @@ import quasarUserOptions from './quasar-user-options.js'
 
 
 
+console.info('[Quasar] Running SPA.')
+
 
 const publicPath = `/`
 
@@ -56,9 +58,9 @@ async function start ({
   router
   , store
 }, bootFiles) {
+  
 
-
-
+  
   let hasRedirected = false
   const getRedirectUrl = url => {
     try { return router.resolve(url).href }
@@ -113,25 +115,22 @@ async function start ({
   if (hasRedirected === true) {
     return
   }
-
+  
 
   app.use(router)
+  
 
+  
 
+    
 
+    
+      app.mount('#q-app')
+    
 
+    
 
-
-
-      document.addEventListener('deviceready', () => {
-        app.config.globalProperties.$q.cordova = window.cordova
-        app.mount('#q-app')
-      }, false) // on deviceready
-
-
-
-
-
+  
 
 }
 
@@ -156,13 +155,13 @@ createQuasarApp(createApp, quasarUserOptions)
       ]
 
     return Promise[ method ]([
-
+      
       import('boot/axios'),
-
+      
       import('boot/vue-query'),
-
+      
       import('@quasar/quasar-app-extension-qiconpicker/src/boot/register.js')
-
+      
     ]).then(bootFiles => {
       const boot = mapFn(bootFiles).filter(entry => typeof entry === 'function')
       start(app, boot)
