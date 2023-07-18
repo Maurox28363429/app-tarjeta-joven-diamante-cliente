@@ -4,7 +4,7 @@ import VIPIcon from '../../assets/images/VIPIcon.png';
 import speakerIcon from '../../assets/images/speakerIcon.png';
 import pachama from '../../assets/images/GifPachama.gif';
 import universityIcon from '../../assets/images/universityIcon.png';
-// import helpIcon from '../../assets/icons/sosIcon.png';
+import helpIcon from '../../assets/icons/sosIcon.png';
 import newsIcon from '../../assets/images/newsIcon.png';
 import iconoTarjeta from '../../assets/images/t.webp';
 import profileIcon from '../../assets/images/profileIcon.png';
@@ -87,9 +87,9 @@ export const HOME_CARD_LIST = [
   {
     id: 11,
     title: 'SOS',
-    icon: disableIcon,
+    icon: helpIcon,
     link: '/cliente/sos',
-    enabled: false,
+    enabled: true,
   },
   {
     id: 12,

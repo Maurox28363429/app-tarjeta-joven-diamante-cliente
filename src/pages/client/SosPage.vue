@@ -1,7 +1,11 @@
 <script setup>
+import { ref } from 'vue';
 import { useGetHelpNumber } from 'src/querys/sosQuerys';
 
-const { data, isLoading } = useGetHelpNumber();
+const search = ref('');
+const page = ref(1);
+
+const { data, isLoading } = useGetHelpNumber({ page, search });
 const handleNumber = (phone) => {
   window.open(`https://wa.me/${phone}`, '_blank');
 };
@@ -21,6 +25,34 @@ const handleNumber = (phone) => {
         width="207px"
         height="167px"
       />
+      <div class="full-width q-my-md row justify-center">
+        <q-input
+          class="full-width"
+          rounded
+          dense
+          v-model="search"
+          style="max-width: 400px"
+          outlined
+          type="search"
+          label="Buscar sos"
+          color="primary"
+        >
+          <q-btn
+            type="submit"
+            size="md"
+            style="
+              right: -12px;
+              bottom: 0;
+              top: 0;
+              border-radius: 0 26px 26px 0;
+            "
+            color="primary"
+            label="Buscar"
+            icon="search"
+            class="absolute"
+          />
+        </q-input>
+      </div>
       <p class="full-width text-justify text-subtitle2">
         Personas que pueden ayudarte:
       </p>
