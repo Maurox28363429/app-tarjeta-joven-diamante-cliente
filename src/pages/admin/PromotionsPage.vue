@@ -1,91 +1,92 @@
 <script setup>
 import { ref, computed, watchEffect } from 'vue';
 import { useValidateForm } from 'src/composables/useValidateForm.js';
-import { updateSosSchema, createSosSchema } from 'src/schemas/sosSchema';
-import { checkFileType } from 'src/utils/checkFileType';
-import {
-  useGetHelpNumber,
-  updateSosMutate,
-  createSosMutate,
-  deleteSosMutate,
-} from 'src/querys/sosQuerys';
 
-const itemsPerPage = ref([]);
-const lastPage = ref(1);
-const currentPage = ref(1);
+import {
+  useGetPromotions,
+  useCreatePromotionMutation,
+  useEditPromotionMutation,
+  useDeletePromotionMutation,
+} from 'src/querys/promotionsQuerys';
+
+import { promotionsSchema } from 'src/schemas/promotionsSchema.js';
+import { checkFileType } from 'src/utils/checkFileType';
 
 const formulario = ref(false);
 const edit_id = ref(null);
 const editorRef = ref(null);
 
+const pages = ref(1);
+const itemsPerPage = ref([]);
+const lastPage = ref(1);
 const search = ref('');
 
 const {
-  data: sosData,
-  isLoading: sosLoading,
+  data: promotionsData,
+  isLoading,
   refetch,
-} = useGetHelpNumber({
-  page: currentPage,
-  search,
+} = useGetPromotions({ search, pages });
+
+watchEffect(() => {
+  if (!isLoading.value && promotionsData?.value?.pagination) {
+    pages.value = promotionsData?.value?.pagination?.currentPage;
+    itemsPerPage.value = [promotionsData?.value?.pagination?.itemsPerPage];
+    lastPage.value = promotionsData?.value?.pagination?.lastPage;
+  }
 });
 
-const { mutate: create, isLoading: isLoadingCreate } = createSosMutate();
-const { mutate: deleteSos } = deleteSosMutate();
-const { mutate: editSos, isLoading: isLoadingEdit } = updateSosMutate();
+const { mutate: createNewInformative, isLoading: isLoadingCreate } =
+  useCreatePromotionMutation();
+const { mutate: deleteNewInformative } = useDeletePromotionMutation();
+const { mutate: editNewInformative, isLoading: isLoadingEdit } =
+  useEditPromotionMutation();
 
 const initialValues = () => ({
-  name: '',
+  titulo: '',
   descripcion: '',
-  img: [],
-  phone: '',
+  categoria: '',
+  img_url: [],
+  prioridad: 1,
+  link_youtube: '',
+  link_facebook: '',
+  link_instragram: '',
+  link_web: '',
+  link_otros: '',
 });
 
-const schema = computed(() => {
-  return edit_id.value ? updateSosSchema : createSosSchema;
-});
-
-const { useForm, validatInput, validateMessage } = useValidateForm({
+const { useForm, validatInput } = useValidateForm({
   initialValue: initialValues(),
-  schema: schema.value,
+  schema: promotionsSchema,
 });
 
-const currentSosNumber = computed(() => {
-  return sosData?.value?.data?.find(({ id }) => {
+const currentNews = computed(() => {
+  return promotionsData?.value?.data?.find(({ id }) => {
     return id === edit_id.value;
   });
 });
 
 const ACCEPTED_TYPES_FOR_DNI = ['image/jpeg', 'image/png', 'image/jpg', 'jpg'];
 
-watchEffect(() => {
-  console.log('sosData', sosData.value?.pagination?.itemsPerPage);
-  if (!sosLoading.value && sosData?.value?.pagination) {
-    currentPage.value = sosData?.value?.pagination?.currentPage;
-    itemsPerPage.value = [sosData?.value?.pagination?.itemsPerPage];
-    lastPage.value = sosData?.value?.pagination?.lastPage;
-  }
-});
-
 const handleModal = (id) => {
   edit_id.value = id;
   formulario.value = true;
-  useForm.value = { ...currentSosNumber.value };
+  useForm.value = { ...currentNews.value };
 };
 
-const createSos = () => {
+const createNew = () => {
   edit_id.value = null;
   useForm.value = initialValues();
   formulario.value = true;
 };
 
-const handleSos = () => {
+const handleNews = () => {
   edit_id.value
-    ? editSos({ ...useForm.value, id: edit_id.value })
-    : create(useForm.value);
+    ? editNewInformative({ ...useForm.value, id: edit_id.value })
+    : createNewInformative(useForm.value);
 };
 
-const deleteSosNumber = (id) => {
-  deleteSos(id);
+const deleteNew = (id) => {
+  deleteNewInformative(id);
 };
 
 const columns = [
@@ -95,14 +96,16 @@ const columns = [
     label: 'ID',
     align: 'left',
   },
-  { name: 'img', align: 'center', label: 'IMG', field: 'img' },
-  { name: 'name', label: 'Nombre', field: 'name' },
-  { name: 'phone', label: 'Teléfono', field: 'phone' },
+  { name: 'img_url', align: 'center', label: 'IMG', field: 'img_url' },
+  { name: 'titulo', label: 'TITULO', field: 'titulo' },
   {
     name: 'descripcion',
     label: 'DESCRIPCION',
     field: 'descripcion',
+    sortable: true,
   },
+  { name: 'prioridad', label: 'PRIORIDAD', field: 'prioridad' },
+  { name: 'categoria', label: 'CATEGORIA', field: 'categoria' },
   { name: 'created_at', label: 'FECHA', field: 'created_at' },
   { name: 'action', label: 'ACTION', field: 'action' },
 ];
@@ -145,7 +148,7 @@ const onPaste = (evt) => {
             style="max-width: 400px"
             outlined
             type="search"
-            label="Buscar sos"
+            label="Buscar promociones"
             color="primary"
           >
             <q-btn
@@ -165,39 +168,46 @@ const onPaste = (evt) => {
           </q-input>
         </q-form>
         <q-table
-          :loading="sosLoading && !itemsPerPage.length > 0"
           flat
           bordered
-          title="SOS"
-          :rows="sosData?.data"
           :rows-per-page-options="itemsPerPage"
+          title="Promociones"
+          :loading="isLoading && !itemsPerPage.length > 0"
+          :rows="promotionsData?.data ?? []"
           :columns="columns"
-          row-key="id"
+          row-key="name"
         >
           <template v-slot:body="props">
             <q-tr :props="props">
               <q-td key="id" :props="props">
                 {{ props.row?.id }}
               </q-td>
-              <q-td key="img" :props="props">
+              <q-td key="img_url" :props="props">
                 <q-img
-                  :src="props.row.img"
+                  :src="props.row.img_url"
                   alt="img"
                   spinner-color="dark"
                   style="width: 100px; height: 100px"
                 />
               </q-td>
-              <q-td key="name" :props="props">
-                {{ props.row?.name }}
-              </q-td>
-              <q-td key="phone" :props="props">
-                {{ props.row?.phone }}
+              <q-td key="titulo" :props="props">
+                {{ props.row?.titulo }}
               </q-td>
               <q-td key="descripcion" :props="props">
-                {{ props.row?.descripcion }}
+                <div
+                  class="line-clamp-3"
+                  style="max-width: 200px"
+                  v-html="props.row?.descripcion"
+                />
+              </q-td>
+              <q-td key="prioridad" :props="props">
+                {{ props.row?.prioridad }}
+              </q-td>
+              <q-td key="categoria" :props="props">
+                {{ props.row?.categoria }}
               </q-td>
               <q-td key="created_at" :props="props">
-                {{ new Date(props.row?.created_at).toLocaleDateString() }}
+                {{ props.row?.created_at }}
               </q-td>
               <q-td key="action" :props="props">
                 <q-btn flat icon="more_vert">
@@ -209,7 +219,7 @@ const onPaste = (evt) => {
                         >
                       </q-item>
                       <q-item clickable v-close-popup>
-                        <q-item-section @click="deleteSosNumber(props.row?.id)"
+                        <q-item-section @click="deleteNew(props.row?.id)"
                           >Eliminar</q-item-section
                         >
                       </q-item>
@@ -222,7 +232,7 @@ const onPaste = (evt) => {
         </q-table>
         <article style="margin: 1em">
           <q-pagination
-            v-model="currentPage"
+            v-model="pages"
             :max="lastPage"
             direction-links
             outline
@@ -243,38 +253,31 @@ const onPaste = (evt) => {
       class="full-width"
     >
       <q-card style="max-width: 750px">
-        <q-form @submit.prevent="handleSos">
+        <q-form @submit.prevent="handleNews">
           <q-card-section>
-            <div class="text-h6">{{ edit_id ? 'Editar' : 'Agregar' }} SOS</div>
+            <div class="text-h6">
+              {{ edit_id ? 'Editar' : 'Agregar' }} Promoción
+            </div>
           </q-card-section>
 
           <q-card-section class="row full-width" style="gap: 14px">
             <div class="col-12">
               <q-input
                 outlined
-                v-model="useForm.name"
-                label="Nombre"
-                @blur="validatInput('name')"
-                @keypress="validatInput('name')"
+                v-model="useForm.titulo"
+                label="Titulo"
+                @blur="validatInput('titulo')"
+                @keypress="validatInput('titulo')"
               />
-              <div>
-                <p class="text-error" v-if="!!validateMessage.errors.name">
-                  {{ validateMessage.errors.name }}
-                </p>
-              </div>
             </div>
             <div class="col-12">
               <q-input
                 outlined
-                type="tel"
-                v-model="useForm.phone"
-                label="Teléfono"
-                @blur="validatInput('phone')"
-                @keypress="validatInput('phone')"
+                v-model="useForm.categoria"
+                label="Categoria"
+                @blur="validatInput('categoria')"
+                @keypress="validatInput('categoria')"
               />
-              <p class="text-error" v-if="!!validateMessage.errors.phone">
-                {{ validateMessage.errors.phone }}
-              </p>
             </div>
             <div class="col-12">
               <q-editor
@@ -284,9 +287,80 @@ const onPaste = (evt) => {
                 @blur="validatInput('descripcion')"
                 @keypress="validatInput('descripcion')"
               />
-              <p class="text-error" v-if="!!validateMessage.errors.descripcion">
-                {{ validateMessage.errors.descripcion }}
-              </p>
+            </div>
+            <div class="col-12 col-md-5">
+              <q-input
+                outlined
+                v-model="useForm.prioridad"
+                label="Prioridad"
+                @blur="validatInput('prioridad')"
+                @keypress="validatInput('prioridad')"
+              />
+            </div>
+            <div class="col-12 col-md-5">
+              <q-input
+                outlined
+                v-model="useForm.link_youtube"
+                label="Link youtube"
+                @blur="validatInput('link_youtube')"
+                @keypress="validatInput('link_youtube')"
+              >
+                <template v-slot:prepend>
+                  <q-icon name="la la-youtube" />
+                </template>
+              </q-input>
+            </div>
+            <div class="col-12 col-md-5">
+              <q-input
+                outlined
+                v-model="useForm.link_facebook"
+                label="Link facebook"
+                @blur="validatInput('link_facebook')"
+                @keypress="validatInput('link_facebook')"
+              >
+                <template v-slot:prepend>
+                  <q-icon name="facebook" />
+                </template>
+              </q-input>
+            </div>
+            <div class="col-12 col-md-5">
+              <q-input
+                outlined
+                v-model="useForm.link_instragram"
+                label="Link instragram"
+                @blur="validatInput('link_instragram')"
+                @keypress="validatInput('link_instragram')"
+              >
+                <template v-slot:prepend>
+                  <q-icon name="la la-instagram" />
+                </template>
+              </q-input>
+            </div>
+            <div class="col-12 col-md-5">
+              <q-input
+                outlined
+                v-model="useForm.link_web"
+                label="Link webidad"
+                @blur="validatInput('link_web')"
+                @keypress="validatInput('link_web')"
+              >
+                <template v-slot:prepend>
+                  <q-icon name="public" />
+                </template>
+              </q-input>
+            </div>
+            <div class="col-12 col-md-5">
+              <q-input
+                outlined
+                v-model="useForm.link_otros"
+                label="Link otrosad"
+                @blur="validatInput('link_otros')"
+                @keypress="validatInput('link_otros')"
+              >
+                <template v-slot:prepend>
+                  <q-icon name="link" />
+                </template>
+              </q-input>
             </div>
             <div class="col-12">
               <q-file
@@ -300,9 +374,6 @@ const onPaste = (evt) => {
                   <q-icon name="cloud_upload" />
                 </template>
               </q-file>
-              <p class="text-error" v-if="!!validateMessage.errors.img">
-                {{ validateMessage.errors.img }}
-              </p>
             </div>
           </q-card-section>
 
@@ -321,7 +392,7 @@ const onPaste = (evt) => {
     </q-dialog>
     <!--Floating button-->
     <q-page-sticky position="bottom-right" style="margin: 12px; bottom: 60px">
-      <q-btn fab icon="add" color="primary" @click="createSos" />
+      <q-btn fab icon="add" color="primary" @click="createNew" />
     </q-page-sticky>
   </q-page>
 </template>

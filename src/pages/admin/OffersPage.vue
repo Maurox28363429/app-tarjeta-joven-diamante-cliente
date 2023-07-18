@@ -267,8 +267,7 @@ const onPaste = (evt) => {
 <template>
   <q-page class="flex">
     <section
-      class="row"
-      style="width: 100%; padding: 1em"
+      class="row full-width q-px-md"
       v-if="!isLoadingOffers && !isLoadingStates"
     >
       <div class="col-12">

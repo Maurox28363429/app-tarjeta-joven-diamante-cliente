@@ -12,7 +12,6 @@ const { userData } = userAuth();
 const { push, go } = useRouter();
 
 const leftDrawerOpen = ref(false);
-const miniState = ref(true);
 
 const handledLogout = (e) => {
   e.preventDefault();
@@ -21,15 +20,7 @@ const handledLogout = (e) => {
 };
 
 const toggleLeftDrawer = () => {
-  leftDrawerOpen.value = true;
-  miniState.value = !miniState.value;
-};
-
-const drawerClick = (e) => {
-  if (miniState.value) {
-    miniState.value = false;
-    e.stopPropagation();
-  }
+  leftDrawerOpen.value = !leftDrawerOpen.value;
 };
 </script>
 
@@ -54,14 +45,6 @@ const drawerClick = (e) => {
           color="dark"
           @click="toggleLeftDrawer"
         />
-        <div @click="go(-1)">
-          <q-icon
-            name="arrow_back"
-            size="md"
-            color="dark"
-            class="cursor-pointer"
-          />
-        </div>
         <q-toolbar-title class="row items-center">
           <q-img
             :src="logo"
@@ -90,26 +73,11 @@ const drawerClick = (e) => {
     <q-drawer
       v-model="leftDrawerOpen"
       show-if-above
-      :mini="!leftDrawerOpen || miniState"
-      @click.capture="drawerClick"
-      :width="214"
+      :width="200"
       :breakpoint="700"
       bordered
       :class="$q.dark.isActive ? 'bg-grey-9' : 'bg-grey-3'"
     >
-      <div
-        class="q-mini-drawer-hide absolute"
-        style="top: 15px; right: -17px; z-index: 20"
-      >
-        <q-btn
-          dense
-          round
-          unelevated
-          color="accent"
-          icon="chevron_left"
-          @click="miniState = true"
-        />
-      </div>
       <q-scroll-area
         style="
           height: calc(100% - 150px);
@@ -118,7 +86,7 @@ const drawerClick = (e) => {
         "
       >
         <q-list padding>
-          <q-separator inset v-show="!miniState" />
+          <q-separator inset />
           <q-item
             v-for="item in ADMIN_MENU_DESKTOP"
             :key="item.name"
@@ -139,7 +107,7 @@ const drawerClick = (e) => {
         >
           <q-btn
             icon="power_settings_new"
-            :label="!miniState ? 'Cerrar sesión' : ''"
+            label="Cerrar sesión"
             text-color="white"
             class="body-small"
             style="position: absolute; bottom: 20px; background-color: #ba1a1a"
@@ -147,7 +115,7 @@ const drawerClick = (e) => {
         </div>
       </q-scroll-area>
 
-      <div v-show="!miniState" class="absolute-top" style="height: 150px">
+      <div class="absolute-top" style="height: 150px">
         <div class="column items-center absolute-bottom bg-transparent">
           <q-avatar size="56px" class="q-mb-sm">
             <img :src="userData?.img_url" />
@@ -167,6 +135,14 @@ const drawerClick = (e) => {
       </div>
     </q-drawer>
     <q-page-container style="background: #f8fdff">
+      <div @click="go(-1)" class="q-px-md q-pt-sm">
+        <q-icon
+          name="arrow_back"
+          size="md"
+          color="dark"
+          class="cursor-pointer"
+        />
+      </div>
       <router-view />
     </q-page-container>
     <q-tabs
@@ -222,12 +198,6 @@ aside {
 }
 
 @media (max-width: 700px) {
-  .menu {
-    display: none;
-  }
-  .menuMobile {
-    display: block;
-  }
   .qrButton {
     bottom: 64px;
   }

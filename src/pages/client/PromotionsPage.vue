@@ -16,16 +16,16 @@ const {
   isFetching,
 } = useGetPromotions({ search, pages });
 
+watchEffect(() => {
+  if (promotionsData.value) {
+    pages.value = promotionsData?.value?.pagination.lastPage;
+  }
+});
+
 const showModal = (modalInfo) => {
   modalCurrent.value = { ...modalInfo };
   openModal.value = true;
 };
-
-watchEffect(() => {
-  if (promotionsData.value) {
-    pages.value = promotionsData?.value?.data?.pagination.lastPage;
-  }
-});
 </script>
 
 <template>
@@ -87,12 +87,12 @@ watchEffect(() => {
 
       <!-- Si las noticias están cargadas, muestra la cuadrícula -->
       <template v-else>
-        <template v-if="promotionsData?.data?.data.length === 0">
+        <template v-if="promotionsData?.data?.length === 0">
           <div class="no-results">No se encontraron resultados</div>
         </template>
 
         <template v-else>
-          <template v-for="item in promotionsData?.data?.data" :key="item.id">
+          <template v-for="item in promotionsData?.data" :key="item.id">
             <q-card class="news-card">
               <q-img
                 :src="item.img_url"

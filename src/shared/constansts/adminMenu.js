@@ -1,8 +1,8 @@
 export const ADMIN_MENU_DESKTOP = [
   {
-    path: '/admin/',
-    icon: 'home',
-    label: 'Home',
+    path: '/',
+    icon: 'dashboard',
+    label: 'Dashboard',
   },
   {
     path: '/admin/offers',
@@ -39,18 +39,18 @@ export const ADMIN_MENU_DESKTOP = [
     icon: 'sos',
     label: 'SOS',
   },
+  {
+    path: '/admin/promotions',
+    icon: 'newspaper',
+    label: 'Promociones',
+  },
 ];
 
 export const ADMIN_MENU_MOBILE = [
   {
-    path: '/admin/',
-    icon: 'home',
-    label: 'Home',
-  },
-  {
     path: '/',
-    icon: 'person',
-    label: 'Perfil',
+    icon: 'dashboard',
+    label: 'Dashboard',
   },
   {
     path: '/admin/noticias',

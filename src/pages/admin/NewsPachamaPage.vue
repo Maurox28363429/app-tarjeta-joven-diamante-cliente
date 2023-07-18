@@ -138,11 +138,7 @@ const onPaste = (evt) => {
 </script>
 <template>
   <q-page class="flex">
-    <section
-      class="row"
-      style="width: 100%; padding: 1em"
-      v-if="!isLoadingNews"
-    >
+    <section class="row full-width q-px-md" v-if="!isLoadingNews">
       <div class="full-width">
         <q-form
           class="full-width row justify-center"

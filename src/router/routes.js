@@ -212,6 +212,10 @@ const routes = [
             path: 'sos',
             component: () => import('pages/admin/AdminSos.vue'),
           },
+          {
+            path: 'promotions',
+            component: () => import('pages/admin/PromotionsPage.vue'),
+          },
         ],
       },
       {

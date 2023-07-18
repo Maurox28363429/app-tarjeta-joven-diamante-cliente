@@ -30,6 +30,20 @@ watchEffect(() => {
 const handleSearch = () => {
   refetch();
 };
+
+const thereAreRedes = (redes) => {
+  return (
+    redes?.link_facebook !== 'null' ||
+    redes?.link_instragram !== 'null' ||
+    redes?.link_otros !== 'null' ||
+    redes?.link_web !== 'null' ||
+    redes?.link_youtube !== 'null'
+  );
+};
+
+const isLink = (link) => {
+  return link !== 'null';
+};
 </script>
 
 <template>
@@ -105,7 +119,7 @@ const handleSearch = () => {
               ?.data?.data"
             :key="id"
           >
-            <q-card>
+            <q-card class="column no-wrap">
               <img
                 :src="img_url"
                 class="news-image"
@@ -121,7 +135,41 @@ const handleSearch = () => {
                 class="q-pt-none q-px-xs column"
                 style="min-height: 100px; justify-content: end"
               >
-                <p class="news-description line-clamp-3" v-html="descripcion" />
+                <p class="line-clamp-3" v-html="descripcion" />
+                <div style="justify-self: self-end">
+                  <div class="row">
+                    <a
+                      v-if="isLink(item?.link_youtube)"
+                      :href="item?.link_youtube"
+                      target="_blank"
+                      ><q-icon name="la la-youtube" color="primary" size="md"
+                    /></a>
+                    <a
+                      v-if="isLink(item?.link_web)"
+                      :href="item?.link_web"
+                      target="_blank"
+                      ><q-icon name="language" color="primary" size="md"
+                    /></a>
+                    <a
+                      v-if="isLink(item?.link_instragram)"
+                      :href="item?.link_instragram"
+                      target="_blank"
+                      ><q-icon name="la la-instagram" color="primary" size="md"
+                    /></a>
+                    <a
+                      v-if="isLink(item?.link_facebook)"
+                      :href="item?.link_facebook"
+                      target="_blank"
+                      ><q-icon name="facebook" color="primary" size="md"
+                    /></a>
+                    <a
+                      v-if="isLink(item?.link_otros)"
+                      :href="item?.link_otros"
+                      target="_blank"
+                      ><q-icon name="link" color="primary" size="md"
+                    /></a>
+                  </div>
+                </div>
               </q-card-section>
 
               <q-card-actions
@@ -173,6 +221,42 @@ const handleSearch = () => {
 
         <q-card-section class="q-pt-none scroll" style="max-height: 50vh">
           <div class="news-description" v-html="modalCurrent.descripcion" />
+          <div>
+            <p>Redes:</p>
+            <p v-if="!thereAreRedes(modalCurrent)">No hay redes</p>
+            <div class="row" v-if="thereAreRedes(modalCurrent)">
+              <a
+                v-if="isLink(modalCurrent?.link_youtube)"
+                :href="modalCurrent.link_youtube"
+                target="_blank"
+                ><q-icon name="la la-youtube" color="primary" size="md"
+              /></a>
+              <a
+                v-if="isLink(modalCurrent?.link_web)"
+                :href="modalCurrent?.link_web"
+                target="_blank"
+                ><q-icon name="language" color="primary" size="md"
+              /></a>
+              <a
+                v-if="isLink(modalCurrent?.link_instragram)"
+                :href="modalCurrent?.link_instragram"
+                target="_blank"
+                ><q-icon name="la la-instagram" color="primary" size="md"
+              /></a>
+              <a
+                v-if="isLink(modalCurrent?.link_facebook)"
+                :href="modalCurrent?.link_facebook"
+                target="_blank"
+                ><q-icon name="facebook" color="primary" size="md"
+              /></a>
+              <a
+                v-if="isLink(modalCurrent?.link_otros)"
+                :href="modalCurrent?.link_otros"
+                target="_blank"
+                ><q-icon name="link" color="primary" size="md"
+              /></a>
+            </div>
+          </div>
         </q-card-section>
 
         <q-card-actions align="right">
@@ -247,19 +331,5 @@ const handleSearch = () => {
   font-style: italic;
   text-align: center;
   margin: 32px 0;
-}
-
-.line-clamp-2 {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.line-clamp-3 {
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
 }
 </style>

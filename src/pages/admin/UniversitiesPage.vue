@@ -258,7 +258,7 @@ const onPaste = (evt) => {
 
 <template>
   <q-page class="flex">
-    <section class="row" style="width: 100%; padding: 1em">
+    <section class="row full-width q-px-md">
       <div class="col-12">
         <q-form
           class="full-width row justify-center"

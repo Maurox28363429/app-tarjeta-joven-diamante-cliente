@@ -155,31 +155,30 @@ const addMembership = async () => {
 
 <template>
   <div class="text-center q-pa-md flex">
-    <section style="width: 100%">
+    <section class="full-width">
       <q-card>
-        <h5 style="margin-left: 1em; text-align: left; padding: 1em">
-          Membresias compradas
-          <div style="float: right; margin-top: 1em" class="q-gutter-x-md">
-            <q-btn
-              label="Asignar membresia"
-              color="primary"
-              @click="showAssignMembershipModal = true"
-            />
-            <q-btn
-              style="background: #0c844f; color: white"
-              round
-              icon="file_download"
-              @click="excelDonwload()"
-            />
-            <q-btn
-              style="background: #840c0c; color: white"
-              round
-              icon="picture_as_pdf"
-              @click="pdfDonwload()"
-            />
-          </div>
-        </h5>
-
+        <q-card-section>
+          <p class="text-h5 q-mt-md">Membresias compradas</p>
+        </q-card-section>
+        <div style="gap: 10px" class="q-my-md row justify-end q-px-md">
+          <q-btn
+            label="Asignar membresia"
+            color="primary"
+            @click="showAssignMembershipModal = true"
+          />
+          <q-btn
+            style="background: #0c844f; color: white"
+            round
+            icon="file_download"
+            @click="excelDonwload()"
+          />
+          <q-btn
+            style="background: #840c0c; color: white"
+            round
+            icon="picture_as_pdf"
+            @click="pdfDonwload()"
+          />
+        </div>
         <div class="full-width row justify-center" style="padding: 1em">
           <q-input
             class="full-width"

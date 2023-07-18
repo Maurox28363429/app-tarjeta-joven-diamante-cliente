@@ -294,7 +294,7 @@ pb.collection('tarjetajoven_mensajes').subscribe('*', function (e) {
           border-right: 1px solid #ddd;
         "
       >
-        <q-list padding>
+        <q-list padding class="q-mb-xl">
           <q-item>
             <q-item-section>
               <p class="text-weight-bold text-h6 q-ma-none">

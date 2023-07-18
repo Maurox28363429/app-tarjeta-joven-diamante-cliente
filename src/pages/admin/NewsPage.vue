@@ -136,11 +136,7 @@ const onPaste = (evt) => {
 </script>
 <template>
   <q-page class="flex">
-    <section
-      class="row"
-      style="width: 100%; padding: 1em"
-      v-if="!isLoadingNews"
-    >
+    <section class="row full-width q-px-md" v-if="!isLoadingNews">
       <div class="col-12">
         <q-form
           class="full-width row justify-center"
@@ -201,7 +197,7 @@ const onPaste = (evt) => {
                 {{ props.row?.titulo }}
               </q-td>
               <q-td key="descripcion" :props="props">
-                <div v-html="props.row?.descripcion" />
+                <div class="line-clamp-3" v-html="props.row?.descripcion" />
               </q-td>
               <q-td key="prioridad" :props="props">
                 {{ props.row?.prioridad }}
