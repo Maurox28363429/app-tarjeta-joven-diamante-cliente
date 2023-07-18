@@ -47,14 +47,14 @@ export const HOME_CARD_LIST = [
     title: 'Ecommerce',
     icon: disableIcon,
     link: '/cliente/ecommerce',
-    enabled: false,
+    enabled: true,
   },
   {
     id: 6,
     title: 'Premios',
     icon: disableIcon,
     link: '/cliente/gifts',
-    enabled: false,
+    enabled: true,
   },
   {
     id: 7,
