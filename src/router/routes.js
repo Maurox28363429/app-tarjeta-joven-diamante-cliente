@@ -201,6 +201,10 @@ const routes = [
             component: () => import('pages/admin/MembresiasPage.vue'),
           },
           {
+            path: 'premios',
+            component: () => import('pages/admin/premiosPage.vue'),
+          },
+          {
             path: 'users',
             component: () => import('pages/admin/AdminUsers.vue'),
           },

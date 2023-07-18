@@ -30,6 +30,11 @@ export const ADMIN_MENU_DESKTOP = [
     label: 'Membresias',
   },
   {
+    path: '/admin/premios',
+    icon: 'emoji_events',
+    label: 'Premios',
+  },
+  {
     path: '/admin/create_user',
     icon: 'person_add',
     label: 'Crear usuario',
