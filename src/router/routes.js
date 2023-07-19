@@ -220,6 +220,10 @@ const routes = [
             path: 'promotions',
             component: () => import('pages/admin/PromotionsPage.vue'),
           },
+          {
+            path: 'ecommerce',
+            component: () => import('pages/admin/EcommercePage.vue'),
+          },
         ],
       },
       {

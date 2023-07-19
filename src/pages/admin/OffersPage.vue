@@ -113,8 +113,6 @@ const buscar = () => {
 const map = ref([]);
 
 const handleNews = () => {
-  console.log(useForm.value.comercio_id, 'comercio_id');
-  console.log(useForm.value, 'useForm.value');
   edit_id.value
     ? editOffer({
         ...useForm.value,
@@ -266,10 +264,7 @@ const onPaste = (evt) => {
 </script>
 <template>
   <q-page class="flex">
-    <section
-      class="row full-width q-px-md"
-      v-if="!isLoadingOffers && !isLoadingStates"
-    >
+    <section class="row full-width q-px-md">
       <div class="col-12">
         <q-form
           class="full-width row justify-center"
@@ -309,6 +304,7 @@ const onPaste = (evt) => {
           title="Ofertas"
           :rows="offers?.data"
           :columns="columns"
+          v-if="!isLoadingOffers && !isLoadingStates"
           :rows-per-page-options="itemsPerPage"
           row-key="name"
         >
@@ -402,6 +398,7 @@ const onPaste = (evt) => {
         </q-table>
         <article style="margin: 1em">
           <q-pagination
+            v-if="!isLoadingOffers && offers?.data"
             v-model="pages"
             :max="lastPage"
             direction-links

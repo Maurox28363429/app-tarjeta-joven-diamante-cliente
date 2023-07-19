@@ -3,10 +3,7 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { userAuth } from 'src/composables/userAuth';
 import logo from '../assets/icons/acronimo.svg';
-import {
-  ADMIN_MENU_DESKTOP,
-  ADMIN_MENU_MOBILE,
-} from 'src/shared/constansts/adminMenu';
+import { ADMIN_MENU_DESKTOP } from 'src/shared/constansts/adminMenu';
 
 const { userData } = userAuth();
 const { push, go } = useRouter();
@@ -86,7 +83,6 @@ const toggleLeftDrawer = () => {
         "
       >
         <q-list padding>
-          <q-separator inset />
           <q-item
             v-for="item in ADMIN_MENU_DESKTOP"
             :key="item.name"
@@ -130,6 +126,7 @@ const toggleLeftDrawer = () => {
             >
               {{ userData?.email }}
             </p>
+            <q-separator inset />
           </div>
         </div>
       </div>
@@ -145,25 +142,6 @@ const toggleLeftDrawer = () => {
       </div>
       <router-view />
     </q-page-container>
-    <q-tabs
-      style="z-index: 100"
-      dense
-      class="menuMobile bg-primary text-white justify-center full-width fixed-bottom"
-      align="center"
-      narrow-indicator
-    >
-      <q-route-tab
-        v-for="item in ADMIN_MENU_MOBILE"
-        :key="item.label"
-        :name="item.label"
-        :label="item.label"
-        color="white"
-        class="text-capitalize q-px-none full-width"
-        :icon="item.icon"
-        :to="item.path"
-        exact
-      />
-    </q-tabs>
   </q-layout>
 </template>
 

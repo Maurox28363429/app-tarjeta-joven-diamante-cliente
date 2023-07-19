@@ -45,26 +45,13 @@ export const ADMIN_MENU_DESKTOP = [
     label: 'SOS',
   },
   {
+    path: '/admin/ecommerce',
+    icon: 'store',
+    label: 'Ecommerce',
+  },
+  {
     path: '/admin/promotions',
     icon: 'newspaper',
     label: 'Promociones',
-  },
-];
-
-export const ADMIN_MENU_MOBILE = [
-  {
-    path: '/',
-    icon: 'dashboard',
-    label: 'Dashboard',
-  },
-  {
-    path: '/admin/noticias',
-    icon: 'newspaper',
-    label: 'Noticias',
-  },
-  {
-    path: '/admin/noticias_pachama',
-    icon: 'newspaper',
-    label: 'Pachama',
   },
 ];
