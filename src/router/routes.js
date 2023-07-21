@@ -133,6 +133,14 @@ const routes = [
             path: 'news',
             component: () => import('pages/client/NewsPage.vue'),
           },
+          {
+            path: 'ecommerce/:id',
+            component: () => import('pages/client/productDetail.vue'),
+          },
+          {
+            path: 'cart',
+            component: () => import('pages/client/CartPage.vue'),
+          },
         ],
       },
       {

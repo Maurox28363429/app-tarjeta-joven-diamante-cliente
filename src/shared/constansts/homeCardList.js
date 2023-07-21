@@ -8,7 +8,7 @@ import helpIcon from '../../assets/icons/sosIcon.png';
 import newsIcon from '../../assets/images/newsIcon.png';
 import iconoTarjeta from '../../assets/images/t.webp';
 import profileIcon from '../../assets/images/profileIcon.png';
-// import ecommerceIcon from '../../assets/images/ecommerce.png';
+import ecommerceIcon from '../../assets/images/ecommerce.png';
 // import campeonIcon from '../../assets/images/campeon.png';
 import disableIcon from '../../assets/images/bandImage.png';
 
@@ -45,7 +45,7 @@ export const HOME_CARD_LIST = [
   {
     id: 5,
     title: 'Ecommerce',
-    icon: disableIcon,
+    icon: ecommerceIcon,
     link: '/cliente/ecommerce',
     enabled: true,
   },

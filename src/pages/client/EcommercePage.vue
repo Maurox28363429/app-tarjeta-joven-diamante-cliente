@@ -1,12 +1,34 @@
 <script setup>
-import { ref } from 'vue';
-import shoesimg from '../../assets/images/shoes.png';
+import { ref, watchEffect } from 'vue';
+import { useGetProducts } from 'src/querys/productQuery';
+import { useProductCart } from 'src/stores/useProductCart';
+import { useToast } from 'src/composables/useToast';
+
+const pages = ref(1);
+const lastPage = ref(1);
+const itemsPerPage = ref([]);
+const { triggerPositive } = useToast();
+
+const store = useProductCart();
 
 const search = ref('');
 
-const submit = () => {
-  console.log(search.value);
-};
+const {
+  data: products,
+  refetch,
+  isLoading: isLoadingNews,
+} = useGetProducts({
+  pages,
+  search,
+});
+
+watchEffect(() => {
+  if (products.value && !isLoadingNews.value) {
+    pages.value = products?.value?.pagination?.currentPage;
+    lastPage.value = products?.value?.pagination?.lastPage;
+    itemsPerPage.value = [products?.value?.pagination?.itemsPerPage];
+  }
+});
 
 const heavyList = [
   {
@@ -31,45 +53,24 @@ const heavyList = [
   },
 ];
 
-const products = [
-  {
-    id: 1,
-    name: 'Zapatos',
-    price: 100,
-    img: shoesimg,
-  },
-  {
-    id: 1,
-    name: 'Zapatos',
-    price: 100,
-    img: shoesimg,
-  },
-  {
-    id: 1,
-    name: 'Zapatos',
-    price: 100,
-    img: shoesimg,
-  },
-  {
-    id: 1,
-    name: 'Zapatos',
-    price: 100,
-    img: shoesimg,
-  },
-];
+const addToCart = (item) => {
+  triggerPositive('Producto agregado al carrito');
+  store.setProduct(item);
+};
 </script>
 
 <template>
   <div class="q-pa-md">
     <p class="q-ma-none text-h6 full-width">Recargas</p>
     <div class="full-width full-height row q-mt-lg">
-      <q-form class="full-width row justify-center" @submit="submit">
+      <q-form class="full-width row justify-center" @submit="refetch">
         <q-input
           class="full-width"
           rounded
           v-model="search"
           style="max-width: 400px"
           outlined
+          dense
           type="search"
           label="Buscar pproductos"
           color="primary"
@@ -112,33 +113,34 @@ const products = [
         </q-virtual-scroll>
       </div>
 
-      <div class="row wrap q-gutter-sm justify-center">
-        <q-card
-          style="width: 160px; height: 300px"
-          v-for="item in products"
-          :key="item.id"
-        >
-          <img
-            :src="item.img"
-            style="height: 160px; width: 100%; object-fit: contain"
-            alt="Shoes"
-          />
-          <q-separator />
-          <q-card-section>
-            <p class="q-ma-none">{{ item.name }}</p>
-            <p class="q-ma-none text-weight-medium text-body1">
-              ${{ item.price }}
-            </p>
-          </q-card-section>
-          <q-card-actions align="end" class="full-width q-py-none">
-            <q-btn
-              label="Comprar"
-              color="secondary"
-              size="sm"
-              class="full-width"
-            />
-          </q-card-actions>
-        </q-card>
+      <div v-if="!isLoadingNews" class="row wrap q-gutter-sm justify-center">
+        <template v-for="item in products?.data" :key="item.id">
+          <q-card style="width: 160px; height: 300px" class="column">
+            <router-link :to="'ecommerce/' + item.id">
+              <img
+                :src="item.img"
+                style="height: 160px; width: 100%; object-fit: contain"
+                alt="Shoes"
+              />
+            </router-link>
+            <q-separator />
+            <q-card-section>
+              <p class="q-ma-none">{{ item.nombre }}</p>
+              <p class="q-ma-none text-weight-medium text-body1">
+                ${{ item.precio }}
+              </p>
+            </q-card-section>
+            <q-card-actions class="full-width q-py-none" style="flex: 1">
+              <q-btn
+                label="Comprar"
+                color="secondary"
+                size="sm"
+                @click="addToCart(item)"
+                class="full-width self-end q-mb-sm"
+              />
+            </q-card-actions>
+          </q-card>
+        </template>
       </div>
     </div>
   </div>

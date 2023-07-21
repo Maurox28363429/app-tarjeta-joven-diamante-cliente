@@ -276,7 +276,7 @@ const updateForm = ({ key, value }) => {
               </p>
             </div>
           </section>
-          <section class="">
+          <section>
             <div class="detailPayment q-gutter-y-lg">
               <div
                 class="row justify-between q-pa-md bg-white rounded-borders text-h6"

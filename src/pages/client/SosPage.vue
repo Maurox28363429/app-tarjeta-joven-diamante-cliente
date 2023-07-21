@@ -7,7 +7,7 @@ const page = ref(1);
 
 const { data, isLoading } = useGetHelpNumber({ page, search });
 const handleNumber = (phone) => {
-  window.open(`https://wa.me/${phone}`, '_blank');
+  window.open(`https://wa.me/507${phone}`, '_blank');
 };
 </script>
 

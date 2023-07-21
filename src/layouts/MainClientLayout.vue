@@ -9,6 +9,7 @@ import { convertToFile, openCamera } from 'src/utils/openCamera';
 import { checkFileType } from 'src/utils/checkFileType';
 import QrUser from '../components/QrUser.vue';
 import { policySchema } from 'src/schemas/policySchema';
+import { useProductCart } from 'src/stores/useProductCart';
 
 import {
   CLIENT_MENU_DESKTOP,
@@ -33,6 +34,8 @@ const {
   isLoadingMembership,
   isFetchedUser,
 } = userAuth();
+
+const cartStore = useProductCart();
 
 const { useForm, validatInput, validateMessage, validateForm } =
   useValidateForm({ initialValue: {}, schema: policySchema });
@@ -251,12 +254,20 @@ pb.collection('tarjetajoven_mensajes').subscribe('*', function (e) {
           />
         </q-toolbar-title>
         <q-btn
-          style="height: 35px; width: 35px; display: none"
+          style="height: 35px; width: 35px"
           fill
           round
+          to="/cliente/cart"
           icon="shopping_cart"
-          color="secondary"
-        />
+          color="primary"
+        >
+          <q-badge
+            v-if="cartStore.cart?.length > 0"
+            color="secondary"
+            floating
+            :label="cartStore.cart?.length"
+          />
+        </q-btn>
         <router-link to="/cliente/account" class="cursor-pointer">
           <q-avatar size="42px" class="q-ml-md">
             <q-img :src="userData?.img_url" spinner-color="dark" />

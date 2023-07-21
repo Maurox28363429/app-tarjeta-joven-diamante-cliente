@@ -34,11 +34,11 @@ import { onMounted, onUnmounted, ref, computed, defineProps } from 'vue';
 const props = defineProps({
   validatInput: {
     type: Function,
-    required: true,
+    required: false,
   },
   validateMessage: {
     type: Object,
-    required: true,
+    required: false,
   },
 });
 
@@ -47,8 +47,10 @@ const active = ref(false);
 const file = ref(null);
 
 const validate = () => {
-  props.validatInput('img');
-  emit('validate');
+  if (props.validatInput) {
+    props?.validatInput('img');
+    emit('validate');
+  }
 };
 
 const handleFile = (e) => {
@@ -56,7 +58,9 @@ const handleFile = (e) => {
   if (files && files.length > 0) {
     file.value = URL.createObjectURL(files[0]);
     emit('files-dropped', files[0]);
-    props.validatInput('img');
+    if (props.validatInput) {
+      props.validatInput('img');
+    }
   }
 };
 
@@ -84,14 +88,13 @@ onMounted(() => {
   events.forEach((eventName) => {
     document.body.addEventListener(eventName, (e) => {
       e.preventDefault();
-      console.log(eventName);
       if (eventName === 'dragover') {
         active.value = true;
       } else {
         active.value = false;
       }
 
-      if (eventName === 'dragleave') {
+      if (eventName === 'dragleave' && props.validatInput) {
         props.validatInput('img');
       }
     });
@@ -111,11 +114,13 @@ onUnmounted(() => {
     min-height: 140px
 
 .active
+    height: 300px
     border: 4px dotted $primary
     background: rgba(77, 87, 169, 0.48)
     color: white
 
 .no-active
+    height: 300px
     border: 4px dotted $grey
     color: $secondary
 </style>

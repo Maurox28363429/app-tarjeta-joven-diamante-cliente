@@ -2,59 +2,54 @@
 import { ref, computed, watchEffect } from 'vue';
 import { useValidateForm } from 'src/composables/useValidateForm.js';
 import {
-  useGetNewsInformative,
-  useCreateNewMutation,
-  useEditNewMutation,
-  useDeleteNewMutation,
-} from 'src/querys/newsQuerys';
-import { newSchema } from 'src/schemas/newSchema.js';
+  useGetProducts,
+  useCreateProductMutation,
+  useEditProductMutation,
+  useDeleteProductMutation,
+} from 'src/querys/productQuery';
+import { productSchema } from 'src/schemas/productSchema.js';
 import { checkFileType } from 'src/utils/checkFileType';
 
-const paginador = ref({
-  current: 1,
-  lastPage: 1,
-  itemsPerPage: 1,
-});
 const formulario = ref(false);
 const edit_id = ref(null);
 const editorRef = ref(null);
 
+const pages = ref(1);
+const lastPage = ref(1);
+const itemsPerPage = ref([]);
+
 const search = ref('');
 const {
-  data: noticias,
+  data: products,
   refetch,
   isLoading: isLoadingNews,
-} = useGetNewsInformative({
-  pages: paginador,
+} = useGetProducts({
+  pages,
   search,
 });
 
 const { mutate: createNewInformative, isLoading: isLoadingCreate } =
-  useCreateNewMutation();
-const { mutate: deleteNewInformative } = useDeleteNewMutation();
+  useCreateProductMutation();
+const { mutate: deleteNewInformative } = useDeleteProductMutation();
 const { mutate: editNewInformative, isLoading: isLoadingEdit } =
-  useEditNewMutation();
+  useEditProductMutation();
 
 const initialValues = () => ({
-  titulo: '',
-  descripcion: '',
-  img_url: '',
-  prioridad: 1,
-  link_youtube: '',
-  link_facebook: '',
-  link_instragram: '',
-  link_web: '',
-  link_otros: '',
-  img: [],
+  nombre: null,
+  descripcion: null,
+  precio: null,
+  stock: null,
+  img: null,
+  whatsap: null,
 });
 
 const { useForm, validatInput } = useValidateForm({
   initialValue: initialValues(),
-  schema: newSchema,
+  schema: productSchema,
 });
 
 const currentNews = computed(() => {
-  return noticias?.value?.data?.data?.find(({ id }) => {
+  return products?.value?.data?.find(({ id }) => {
     return id === edit_id.value;
   });
 });
@@ -62,12 +57,10 @@ const currentNews = computed(() => {
 const ACCEPTED_TYPES_FOR_DNI = ['image/jpeg', 'image/png', 'image/jpg', 'jpg'];
 
 watchEffect(() => {
-  if (noticias.value && !isLoadingNews.value) {
-    paginador.value = {
-      current: noticias?.value?.data?.pagination?.currentPage,
-      lastPage: noticias?.value?.data?.pagination?.lastPage,
-      itemsPerPage: [noticias?.value?.data?.pagination?.itemsPerPage],
-    };
+  if (products.value && !isLoadingNews.value) {
+    pages.value = products?.value?.pagination?.currentPage;
+    lastPage.value = products?.value?.pagination?.lastPage;
+    itemsPerPage.value = [products?.value?.pagination?.itemsPerPage];
   }
 });
 
@@ -86,7 +79,10 @@ const createNew = () => {
 const handleNews = () => {
   edit_id.value
     ? editNewInformative({ ...useForm.value, id: edit_id.value })
-    : createNewInformative(useForm.value);
+    : createNewInformative({
+        ...useForm.value,
+        whatsap: useForm.value.whatsap.replace(/[\s-]/g, ''),
+      });
 };
 
 const deleteNew = (id) => {
@@ -100,15 +96,17 @@ const columns = [
     label: 'ID',
     align: 'left',
   },
-  { name: 'img_url', align: 'center', label: 'IMG', field: 'img_url' },
-  { name: 'titulo', label: 'TITULO', field: 'titulo' },
+  { name: 'img', align: 'center', label: 'IMG', field: 'img' },
+  { name: 'nombre', label: 'NOMBRE', field: 'nombre' },
   {
     name: 'descripcion',
     label: 'DESCRIPCION',
     field: 'descripcion',
     sortable: true,
   },
-  { name: 'prioridad', label: 'PRIORIDAD', field: 'prioridad' },
+  { name: 'precio', label: 'PRECIO', field: 'precio' },
+  { name: 'stock', label: 'STOCK', field: 'stock' },
+  { name: 'whatsap', label: 'WHATSAAP', field: 'whatsap' },
   { name: 'created_at', label: 'FECHA', field: 'created_at' },
   { name: 'action', label: 'ACTION', field: 'action' },
 ];
@@ -174,8 +172,8 @@ const onPaste = (evt) => {
           flat
           bordered
           title="Productos"
-          :rows="noticias?.data?.data"
-          :rows-per-page-options="paginador.itemsPerPage"
+          :rows="products?.data"
+          :rows-per-page-options="itemsPerPage"
           :columns="columns"
           row-key="name"
           v-if="!isLoadingNews"
@@ -185,25 +183,35 @@ const onPaste = (evt) => {
               <q-td key="id" :props="props">
                 {{ props.row?.id }}
               </q-td>
-              <q-td key="img_url" :props="props">
+              <q-td key="img" :props="props">
                 <q-img
-                  :src="props.row.img_url"
+                  :src="props.row.img"
                   alt="img"
                   spinner-color="dark"
                   style="width: 100px; height: 100px"
                 />
               </q-td>
-              <q-td key="titulo" :props="props">
-                {{ props.row?.titulo }}
+              <q-td key="nombre" :props="props">
+                {{ props.row?.nombre }}
               </q-td>
               <q-td key="descripcion" :props="props">
-                <div class="line-clamp-3" v-html="props.row?.descripcion" />
+                <div
+                  class="line-clamp-3"
+                  style="max-width: 100px"
+                  v-html="props.row?.descripcion"
+                />
               </q-td>
-              <q-td key="prioridad" :props="props">
-                {{ props.row?.prioridad }}
+              <q-td key="precio" :props="props">
+                {{ props.row?.precio }}
+              </q-td>
+              <q-td key="stock" :props="props">
+                {{ props.row?.stock }}
+              </q-td>
+              <q-td key="whatsap" :props="props">
+                {{ props.row?.whatsap }}
               </q-td>
               <q-td key="created_at" :props="props">
-                {{ props.row?.created_at }}
+                {{ new Date(props.row?.created_at).toLocaleDateString() }}
               </q-td>
               <q-td key="action" :props="props">
                 <q-btn flat icon="more_vert">
@@ -228,8 +236,8 @@ const onPaste = (evt) => {
         </q-table>
         <article style="margin: 1em">
           <q-pagination
-            v-model="paginador.current"
-            :max="paginador.lastPage"
+            v-model="pages"
+            :max="lastPage"
             direction-links
             outline
             color="blue"
@@ -260,10 +268,10 @@ const onPaste = (evt) => {
             <div class="col-12">
               <q-input
                 outlined
-                v-model="useForm.titulo"
-                label="Titulo"
-                @blur="validatInput('titulo')"
-                @keypress="validatInput('titulo')"
+                v-model="useForm.nombre"
+                label="Nombre"
+                @blur="validatInput('nombre')"
+                @keypress="validatInput('nombre')"
               />
             </div>
             <div class="col-12">
@@ -278,76 +286,35 @@ const onPaste = (evt) => {
             <div class="col-12 col-md-5">
               <q-input
                 outlined
-                v-model="useForm.prioridad"
-                label="Prioridad"
-                @blur="validatInput('prioridad')"
-                @keypress="validatInput('prioridad')"
+                v-model="useForm.precio"
+                label="Precio"
+                prefix="$"
+                mask="#.##"
+                fill-mask="0"
+                reverse-fill-mask
+                @blur="validatInput('precio')"
+                @keypress="validatInput('precio')"
               />
             </div>
             <div class="col-12 col-md-5">
               <q-input
                 outlined
-                v-model="useForm.link_youtube"
-                label="Link youtube"
-                @blur="validatInput('link_youtube')"
-                @keypress="validatInput('link_youtube')"
-              >
-                <template v-slot:prepend>
-                  <q-icon name="la la-youtube" />
-                </template>
-              </q-input>
+                v-model="useForm.stock"
+                prefix="N°"
+                label="Stock"
+                @blur="validatInput('stock')"
+                @keypress="validatInput('stock')"
+              />
             </div>
             <div class="col-12 col-md-5">
               <q-input
                 outlined
-                v-model="useForm.link_facebook"
-                label="Link facebook"
-                @blur="validatInput('link_facebook')"
-                @keypress="validatInput('link_facebook')"
-              >
-                <template v-slot:prepend>
-                  <q-icon name="facebook" />
-                </template>
-              </q-input>
-            </div>
-            <div class="col-12 col-md-5">
-              <q-input
-                outlined
-                v-model="useForm.link_instragram"
-                label="Link instragram"
-                @blur="validatInput('link_instragram')"
-                @keypress="validatInput('link_instragram')"
-              >
-                <template v-slot:prepend>
-                  <q-icon name="la la-instagram" />
-                </template>
-              </q-input>
-            </div>
-            <div class="col-12 col-md-5">
-              <q-input
-                outlined
-                v-model="useForm.link_web"
-                label="Link webidad"
-                @blur="validatInput('link_web')"
-                @keypress="validatInput('link_web')"
-              >
-                <template v-slot:prepend>
-                  <q-icon name="public" />
-                </template>
-              </q-input>
-            </div>
-            <div class="col-12 col-md-5">
-              <q-input
-                outlined
-                v-model="useForm.link_otros"
-                label="Link otrosad"
-                @blur="validatInput('link_otros')"
-                @keypress="validatInput('link_otros')"
-              >
-                <template v-slot:prepend>
-                  <q-icon name="link" />
-                </template>
-              </q-input>
+                v-model="useForm.whatsap"
+                label="Whatsaap"
+                mask="### - ###"
+                @blur="validatInput('whatsap')"
+                @keypress="validatInput('whatsap')"
+              />
             </div>
             <div class="col-12">
               <q-file
