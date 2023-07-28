@@ -108,14 +108,14 @@ const lessProduct = (product) => {
               <p class="text-grey">Cantidad:</p>
               <div class="row items-center justify-center" style="gap: 4px">
                 <q-btn
-                  label="-"
+                  icon="remove"
                   color="primary"
                   size="sm"
                   @click="lessProduct(item.id)"
                 />
                 <p class="q-ma-none text-center">{{ item?.cantidad }}</p>
                 <q-btn
-                  label="+"
+                  icon="add"
                   color="primary"
                   size="sm"
                   @click="addProduct(item)"

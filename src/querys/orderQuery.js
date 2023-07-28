@@ -5,6 +5,7 @@ import editProduct from 'src/api/editProduct';
 import getProducts from 'src/api/getProducts';
 import getProductById from 'src/api/getProductById';
 import createOrder from 'src/api/createOrder';
+import { useProductCart } from 'src/stores/useProductCart';
 
 const ERROR_MESSAGE = 'Ah ocurrido un error, intente nuevamente';
 
@@ -21,10 +22,12 @@ export const useGetProductById = (id) => {
 export const useCreateOrderMutation = () => {
   const { triggerPositive, triggerWarning } = useToast();
   const queryClient = useQueryClient();
+  const store = useProductCart();
 
   return useMutation(createOrder, {
     onSuccess: () => {
       triggerPositive('Orden creada con éxito');
+      store.clearCart();
       queryClient.invalidateQueries({ queryKey: ['order'] });
     },
     onError: () => {
