@@ -9,6 +9,7 @@ import uploadEcommerceCategory from 'src/api/uploadEcommerceCategory';
 import createEcommerceCategory from 'src/api/createEcommerceCategory';
 import deleteEcommerceCategory from 'src/api/deleteEcommerceCategory';
 import getEcommerceCategories from 'src/api/getEcommerceCategories';
+import getCategoryById from 'src/api/getCategoryById';
 
 const ERROR_MESSAGE = 'Ah ocurrido un error, intente nuevamente';
 
@@ -123,4 +124,8 @@ export const useDeleteProductCategoryMutation = () => {
       triggerWarning(ERROR_MESSAGE);
     },
   });
+};
+
+export const useGetProductCategoryById = (id) => {
+  return useQuery(['productCategory', id], () => getCategoryById(id));
 };

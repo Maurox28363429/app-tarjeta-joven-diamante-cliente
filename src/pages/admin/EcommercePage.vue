@@ -6,6 +6,7 @@ import {
   useCreateProductMutation,
   useEditProductMutation,
   useDeleteProductMutation,
+  useGetProductCategories,
 } from 'src/querys/productQuery';
 import { productSchema } from 'src/schemas/productSchema.js';
 import { checkFileType } from 'src/utils/checkFileType';
@@ -28,11 +29,34 @@ const {
   search,
 });
 
+const pageCategory = ref(1);
+const searchCategory = ref('');
+
+const { data: categories, isLoading: isLoadingCategories } =
+  useGetProductCategories({
+    page: pageCategory,
+    search: searchCategory,
+  });
+
 const { mutate: createNewInformative, isLoading: isLoadingCreate } =
   useCreateProductMutation();
 const { mutate: deleteNewInformative } = useDeleteProductMutation();
 const { mutate: editNewInformative, isLoading: isLoadingEdit } =
   useEditProductMutation();
+
+const categoryOptions = computed(() => {
+  return categories.value?.data?.map((category) => ({
+    label: category.name,
+    value: category.id,
+  }));
+});
+
+const findCategory = (id) => {
+  return (
+    categoryOptions.value?.find((category) => category.value === Number(id)) ??
+    null
+  );
+};
 
 const initialValues = () => ({
   nombre: null,
@@ -41,6 +65,7 @@ const initialValues = () => ({
   stock: null,
   img: null,
   whatsap: null,
+  category_id: categoryOptions.value ? categoryOptions.value[0] : null,
 });
 
 const { useForm, validatInput } = useValidateForm({
@@ -67,7 +92,15 @@ watchEffect(() => {
 const handleModal = (id) => {
   edit_id.value = id;
   formulario.value = true;
-  useForm.value = { ...currentNews.value };
+  useForm.value = {
+    ...currentNews.value,
+    category_id: findCategory(currentNews.value?.category_id),
+  };
+  console.log(
+    useForm.value,
+    currentNews.value,
+    findCategory(currentNews.value?.category_id)
+  );
 };
 
 const createNew = () => {
@@ -78,9 +111,14 @@ const createNew = () => {
 
 const handleNews = () => {
   edit_id.value
-    ? editNewInformative({ ...useForm.value, id: edit_id.value })
+    ? editNewInformative({
+        ...useForm.value,
+        id: edit_id.value,
+        category_id: useForm.value.category_id.value,
+      })
     : createNewInformative({
         ...useForm.value,
+        category_id: useForm.value.category_id.value,
         whatsap: useForm.value.whatsap.replace(/[\s-]/g, ''),
       });
 };
@@ -98,6 +136,11 @@ const columns = [
   },
   { name: 'img', align: 'center', label: 'IMG', field: 'img' },
   { name: 'nombre', label: 'NOMBRE', field: 'nombre' },
+  {
+    name: 'category_id',
+    label: 'CATEGORIA',
+    field: 'category_id',
+  },
   {
     name: 'descripcion',
     label: 'DESCRIPCION',
@@ -134,7 +177,10 @@ const onPaste = (evt) => {
 </script>
 <template>
   <q-page class="flex">
-    <section class="row full-width q-px-md" v-if="!isLoadingNews">
+    <section
+      class="row full-width q-px-md"
+      v-if="!isLoadingNews && !isLoadingCategories"
+    >
       <div class="col-12">
         <q-form
           class="full-width row justify-center"
@@ -193,6 +239,11 @@ const onPaste = (evt) => {
               </q-td>
               <q-td key="nombre" :props="props">
                 {{ props.row?.nombre }}
+              </q-td>
+              <q-td key="category_id" :props="props">
+                {{
+                  findCategory(props.row?.category_id)?.label ?? 'Sin categoria'
+                }}
               </q-td>
               <q-td key="descripcion" :props="props">
                 <div
@@ -281,6 +332,16 @@ const onPaste = (evt) => {
                 v-model="useForm.descripcion"
                 @blur="validatInput('descripcion')"
                 @keypress="validatInput('descripcion')"
+              />
+            </div>
+            <div class="col-12">
+              <q-select
+                :options="categoryOptions"
+                outlined
+                label="Categoria"
+                v-model="useForm.category_id"
+                @blur="validatInput('category_id')"
+                @keypress="validatInput('category_id')"
               />
             </div>
             <div class="col-12 col-md-5">

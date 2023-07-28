@@ -7,6 +7,10 @@ export const productSchema = object({
   precio: string().required(REQUIRED_MESSAGE),
   stock: string().required(REQUIRED_MESSAGE),
   whatsap: string().required(REQUIRED_MESSAGE),
+  category_id: object({
+    label: string().required(REQUIRED_MESSAGE),
+    value: string().required(REQUIRED_MESSAGE),
+  }),
   nombre: string().required(REQUIRED_MESSAGE),
 });
 
