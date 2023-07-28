@@ -9,3 +9,8 @@ export const productSchema = object({
   whatsap: string().required(REQUIRED_MESSAGE),
   nombre: string().required(REQUIRED_MESSAGE),
 });
+
+export const productCategorySchema = object({
+  name: string().required(REQUIRED_MESSAGE),
+  icon: string().required(REQUIRED_MESSAGE),
+});

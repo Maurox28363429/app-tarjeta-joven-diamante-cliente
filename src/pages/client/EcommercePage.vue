@@ -1,8 +1,20 @@
 <script setup>
 import { ref, watchEffect } from 'vue';
-import { useGetProducts } from 'src/querys/productQuery';
+import {
+  useGetProducts,
+  useGetProductCategories,
+} from 'src/querys/productQuery';
 import { useProductCart } from 'src/stores/useProductCart';
 import { useToast } from 'src/composables/useToast';
+
+const page = ref(1);
+const searchCategory = ref('');
+
+const { data: category, isLoading: isLoadingCategory } =
+  useGetProductCategories({
+    page,
+    search: searchCategory,
+  });
 
 const pages = ref(1);
 const lastPage = ref(1);
@@ -12,6 +24,7 @@ const { triggerPositive } = useToast();
 const store = useProductCart();
 
 const search = ref('');
+const currentCategory = ref(null);
 
 const {
   data: products,
@@ -19,6 +32,7 @@ const {
   isLoading: isLoadingNews,
 } = useGetProducts({
   pages,
+  category_id: currentCategory,
   search,
 });
 
@@ -29,29 +43,6 @@ watchEffect(() => {
     itemsPerPage.value = [products?.value?.pagination?.itemsPerPage];
   }
 });
-
-const heavyList = [
-  {
-    name: 'Recargas',
-    icon: 'phone',
-  },
-  {
-    name: 'Comida',
-    icon: 'fastfood',
-  },
-  {
-    name: 'Ropa',
-    icon: 'checkroom',
-  },
-  {
-    name: 'recargas',
-    icon: 'phone',
-  },
-  {
-    name: 'recargas',
-    icon: 'phone',
-  },
-];
 
 const addToCart = (item) => {
   triggerPositive('Producto agregado al carrito');
@@ -92,22 +83,40 @@ const addToCart = (item) => {
         </q-input>
       </q-form>
       <div class="full-width q-my-md">
-        <p class="q-ma-none full-width text-subtitle1">Servicios</p>
+        <p class="q-ma-none full-width text-subtitle1">Categorias</p>
+        <div
+          class="text-grey row q-gutter-x-md cursor-pointer"
+          @click="currentCategory = null"
+        >
+          <p>Limpiar filtro</p>
+          <q-icon name="delete" color="negative" />
+        </div>
         <q-virtual-scroll
           virtual-scroll-horizontal
-          :items="heavyList"
+          :items="category.data"
+          v-if="!isLoadingCategory"
           v-slot="{ item, index }"
         >
           <q-card
             :key="index"
-            style="height: 72px; width: 72px"
-            class="q-pa-none row justify-center items-center q-ma-sm"
+            @click="currentCategory = item.id"
+            :style="currentCategory === item.id ? 'background: #bcc2ff' : ''"
+            class="q-pa-none row justify-center items-center q-ma-sm cursor-pointer categoryCard"
           >
             <q-card-section
               class="column items-center justify-center q-pa-none"
             >
-              <q-icon :name="item.icon" size="md" />
-              <p class="q-ma-none">{{ item.name }}</p>
+              <q-img :src="item.icon" width="32px" height="32px" alt="icon" />
+              <p
+                style="
+                  text-overflow: ellipsis;
+                  overflow: hidden;
+                  white-space: nowrap;
+                "
+                class="q-ma-none"
+              >
+                {{ item.name }}
+              </p>
             </q-card-section>
           </q-card>
         </q-virtual-scroll>
@@ -145,3 +154,13 @@ const addToCart = (item) => {
     </div>
   </div>
 </template>
+
+<style scoped>
+.categoryCard {
+  width: 100px;
+  height: 100px;
+}
+.categoryCard:hover {
+  background-color: #bcc2ff;
+}
+</style>

@@ -236,6 +236,10 @@ const routes = [
             path: 'directivos',
             component: () => import('pages/admin/DirectivosPage.vue'),
           },
+          {
+            path: 'ecommerceCategory',
+            component: () => import('pages/admin/EcommerceCategory.vue'),
+          },
         ],
       },
       {

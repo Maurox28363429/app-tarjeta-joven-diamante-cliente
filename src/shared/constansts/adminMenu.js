@@ -59,4 +59,9 @@ export const ADMIN_MENU_DESKTOP = [
     icon: 'person',
     label: 'Directivos',
   },
+  {
+    path: '/admin/ecommerceCategory',
+    icon: 'category',
+    label: 'Categorias de productos',
+  },
 ];

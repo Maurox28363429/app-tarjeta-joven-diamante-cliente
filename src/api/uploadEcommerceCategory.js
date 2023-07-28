@@ -1,5 +1,11 @@
 import { instance } from '.';
+import { convertToFormdata } from 'src/utils/convertToFormdata';
 
 export default async function uploadEcommerceCategory(data) {
-  return await instance.post(`/product-category/${data.id}`, data);
+  const formData = convertToFormdata(data);
+  return await instance.post(`/product-category/${data.id}`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
 }
