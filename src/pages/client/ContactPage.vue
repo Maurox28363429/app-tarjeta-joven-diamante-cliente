@@ -1,45 +1,24 @@
 <script setup>
+import { ref } from 'vue';
+import { useGetDirectivo } from 'src/querys/directivoQuery';
+
+const page = ref(1);
+const search = ref('');
+
+const { data: directivo, isLoading: isLoadingDirectivos } = useGetDirectivo({
+  page,
+  search,
+});
+
 const INSTAGRAM_URL = 'https://www.instagram.com/tarjetajovendiamante/';
 const EMAIL_URL =
   'https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=informacion@tarjetajovendiamante.com';
 const WEB_URL = 'https://www.tarjetajovendiamante.com/';
-
-const DIRETORY = [
-  {
-    name: 'Ing. Jean Carlos Tuñón Pretelt',
-    charge: 'Director',
-    phoneNumber: '6578-9280',
-  },
-  {
-    name: 'Lic. Lourdes Klumpp',
-    charge: 'Secretaria ejecutiva',
-    phoneNumber: '6578-9280',
-  },
-  {
-    name: 'Xiomara Durango',
-    charge: 'Social y Pachamá Ecológico',
-    phoneNumber: '6540-9984',
-  },
-  {
-    name: 'Lic. Alicia Saldaña',
-    charge: 'Publicidad y comunicación',
-    phoneNumber: '62308757',
-  },
-  {
-    name: 'Patricia Bárcenas',
-    charge: 'Ventas y Atención al cliente',
-    phoneNumber: '6540-9984',
-  },
-  {
-    name: 'Elvia Abrego',
-    charge: 'Administración y contabilidad',
-    phoneNumber: '6540-9984',
-  },
-];
 </script>
 
 <template>
   <div
+    v-if="!isLoadingDirectivos"
     class="full-width q-py-xl column justify-center items-center q-gutter-y-md q-px-md"
   >
     <div style="max-width: 500px" class="text-center full-width">
@@ -49,9 +28,9 @@ const DIRETORY = [
           <q-icon name="la la-address-book" size="md" />
         </q-toolbar-title>
       </q-toolbar>
-      <template v-for="diretory in DIRETORY" :key="diretory.phoneNumber">
+      <template v-for="diretory in directivo.data" :key="diretory.id">
         <a
-          :href="'https://wa.me/507' + diretory.phoneNumber.replace('-', '')"
+          :href="'https://wa.me/507' + diretory.telefono.replace('-', '')"
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -62,13 +41,15 @@ const DIRETORY = [
               <q-item class="text-justify">
                 <q-item-section class="diretory-info">
                   <q-item-label lines="1"
-                    ><p class="q-ma-none">{{ diretory.name }}</p></q-item-label
+                    ><p class="q-ma-none">
+                      {{ diretory.nombre }}
+                    </p></q-item-label
                   >
                   <q-item-label caption lines="1">
-                    <p class="q-ma-none">{{ diretory.charge }}</p>
+                    <p class="q-ma-none">{{ diretory.role }}</p>
                   </q-item-label>
                   <q-item-label caption>
-                    <p class="q-ma-none">{{ diretory.phoneNumber }}</p>
+                    <p class="q-ma-none">{{ diretory.telefono }}</p>
                   </q-item-label>
                 </q-item-section>
                 <q-item-section side>

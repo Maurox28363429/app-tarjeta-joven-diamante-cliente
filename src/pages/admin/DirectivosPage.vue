@@ -2,36 +2,35 @@
 import { ref, computed, watchEffect } from 'vue';
 import { useValidateForm } from 'src/composables/useValidateForm.js';
 import {
-  useGetNewsInformative,
-  useCreateNewMutation,
-  useEditNewMutation,
-  useDeleteNewMutation,
-} from 'src/querys/newsQuerys';
+  useGetDirectivo,
+  useDeleteDirectivoMutation,
+  useCreateDirectivoMutation,
+  useUploadDirectivoMutation,
+} from 'src/querys/directivoQuery';
 import { directivosSchema } from 'src/schemas/directivoSchema';
 
-const paginador = ref({
-  current: 1,
-  lastPage: 1,
-  itemsPerPage: 1,
-});
+const page = ref(1);
+const lastPage = ref(1);
+const itemsPerPage = ref([1]);
 const formulario = ref(false);
 const edit_id = ref(null);
 
 const search = ref('');
+
 const {
-  data: noticias,
+  data: directivo,
   refetch,
-  isLoading: isLoadingNews,
-} = useGetNewsInformative({
-  pages: paginador,
+  isLoading: isLoadingDirectivos,
+} = useGetDirectivo({
+  page,
   search,
 });
 
-const { mutate: createNewInformative, isLoading: isLoadingCreate } =
-  useCreateNewMutation();
-const { mutate: deleteNewInformative } = useDeleteNewMutation();
-const { mutate: editNewInformative, isLoading: isLoadingEdit } =
-  useEditNewMutation();
+const { mutate: createDirectivo, isLoading: isLoadingCreate } =
+  useCreateDirectivoMutation();
+const { mutate: deleteDirectivo } = useDeleteDirectivoMutation();
+const { mutate: editDirectivo, isLoading: isLoadingEdit } =
+  useUploadDirectivoMutation();
 
 const initialValues = () => ({
   nombre: '',
@@ -39,24 +38,22 @@ const initialValues = () => ({
   telefono: '',
 });
 
-const { useForm, validatInput } = useValidateForm({
+const { useForm, validatInput, validateMessage } = useValidateForm({
   initialValue: initialValues(),
   schema: directivosSchema,
 });
 
 const currentNews = computed(() => {
-  return noticias?.value?.data?.data?.find(({ id }) => {
+  return directivo?.value?.data?.find(({ id }) => {
     return id === edit_id.value;
   });
 });
 
 watchEffect(() => {
-  if (noticias.value && !isLoadingNews.value) {
-    paginador.value = {
-      current: noticias?.value?.data?.pagination?.currentPage,
-      lastPage: noticias?.value?.data?.pagination?.lastPage,
-      itemsPerPage: [noticias?.value?.data?.pagination?.itemsPerPage],
-    };
+  if (directivo.value && !isLoadingDirectivos.value) {
+    page.value = directivo?.value?.pagination?.currentPage;
+    lastPage.value = directivo?.value?.pagination?.lastPage;
+    itemsPerPage.value = [directivo?.value?.pagination?.itemsPerPage];
   }
 });
 
@@ -74,12 +71,12 @@ const createNew = () => {
 
 const handleNews = () => {
   edit_id.value
-    ? editNewInformative({ ...useForm.value, id: edit_id.value })
-    : createNewInformative(useForm.value);
+    ? editDirectivo({ ...useForm.value, id: edit_id.value })
+    : createDirectivo(useForm.value);
 };
 
 const deleteNew = (id) => {
-  deleteNewInformative(id);
+  deleteDirectivo(id);
 };
 
 const columns = [
@@ -90,13 +87,13 @@ const columns = [
     align: 'left',
   },
   { name: 'nombre', align: 'center', label: 'NOMBRE', field: 'nombre' },
-  { name: 'rol', label: 'ROL', field: 'rol' },
   {
     name: 'telefono',
     label: 'TELEFONO',
     field: 'telefono',
     sortable: true,
   },
+  { name: 'rol', label: 'ROL', field: 'rol' },
   {
     name: 'actions',
     label: 'ACCIONES',
@@ -106,7 +103,7 @@ const columns = [
 </script>
 <template>
   <q-page class="flex">
-    <section class="row full-width q-px-md" v-if="!isLoadingNews">
+    <section class="row full-width q-px-md" v-if="!isLoadingDirectivos">
       <div class="col-12">
         <q-form
           class="full-width row justify-center"
@@ -144,11 +141,11 @@ const columns = [
           flat
           bordered
           title="Directivos"
-          :rows="noticias?.data?.data"
-          :rows-per-page-options="paginador.itemsPerPage"
+          :rows="directivo?.data"
+          :rows-per-page-options="itemsPerPage"
           :columns="columns"
           row-key="name"
-          v-if="!isLoadingNews"
+          v-if="!isLoadingDirectivos"
         >
           <template v-slot:body="props">
             <q-tr :props="props">
@@ -187,8 +184,8 @@ const columns = [
         </q-table>
         <article style="margin: 1em">
           <q-pagination
-            v-model="paginador.current"
-            :max="paginador.lastPage"
+            v-model="page"
+            :max="lastPage"
             direction-links
             outline
             color="blue"
@@ -224,17 +221,24 @@ const columns = [
                 @blur="validatInput('nombre')"
                 @keypress="validatInput('nombre')"
               />
+              <p class="text-error" v-if="!!validateMessage.errors.nombre">
+                {{ validateMessage.errors.nombre }}
+              </p>
             </div>
-            <div class="col-12 col-md-5">
+            <div class="col-12">
               <q-input
                 outlined
                 v-model="useForm.telefono"
                 label="Telefono"
+                mask="########"
                 @blur="validatInput('telefono')"
                 @keypress="validatInput('telefono')"
               />
+              <p class="text-error" v-if="!!validateMessage.errors.telefono">
+                {{ validateMessage.errors.telefono }}
+              </p>
             </div>
-            <div class="col-12 col-md-5">
+            <div class="col-12">
               <q-input
                 outlined
                 v-model="useForm.rol"
@@ -242,6 +246,9 @@ const columns = [
                 @blur="validatInput('rol')"
                 @keypress="validatInput('rol')"
               />
+              <p class="text-error" v-if="!!validateMessage.errors.rol">
+                {{ validateMessage.errors.rol }}
+              </p>
             </div>
           </q-card-section>
 
@@ -251,6 +258,7 @@ const columns = [
               :loading="isLoadingCreate || isLoadingEdit"
               type="submit"
               flat
+              :disable="!validateMessage.isvalid"
               label="Enviar"
               v-close-popup
             />
