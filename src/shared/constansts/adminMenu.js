@@ -54,4 +54,9 @@ export const ADMIN_MENU_DESKTOP = [
     icon: 'newspaper',
     label: 'Promociones',
   },
+  {
+    path: '/admin/directivos',
+    icon: 'person',
+    label: 'Directivos',
+  },
 ];

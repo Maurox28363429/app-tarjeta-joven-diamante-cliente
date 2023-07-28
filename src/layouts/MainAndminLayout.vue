@@ -105,8 +105,8 @@ const toggleLeftDrawer = () => {
             icon="power_settings_new"
             label="Cerrar sesión"
             text-color="white"
-            class="body-small"
-            style="position: absolute; bottom: 20px; background-color: #ba1a1a"
+            class="body-small q-mb-md"
+            style="background-color: #ba1a1a"
           />
         </div>
       </q-scroll-area>

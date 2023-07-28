@@ -232,6 +232,10 @@ const routes = [
             path: 'ecommerce',
             component: () => import('pages/admin/EcommercePage.vue'),
           },
+          {
+            path: 'directivos',
+            component: () => import('pages/admin/DirectivosPage.vue'),
+          },
         ],
       },
       {
