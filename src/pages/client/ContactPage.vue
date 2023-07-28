@@ -46,7 +46,7 @@ const WEB_URL = 'https://www.tarjetajovendiamante.com/';
                     </p></q-item-label
                   >
                   <q-item-label caption lines="1">
-                    <p class="q-ma-none">{{ diretory.role }}</p>
+                    <p class="q-ma-none">{{ diretory.rol }}</p>
                   </q-item-label>
                   <q-item-label caption>
                     <p class="q-ma-none">{{ diretory.telefono }}</p>
