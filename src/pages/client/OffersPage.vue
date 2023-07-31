@@ -22,17 +22,23 @@ const { data, isLoading, refetch, isFetching } = useGetOffersFromBusiness({
 
 const { data: offer, isLoading: isLoadingOffer } = useGetOffer(params.id);
 
+const links = ref([]);
+
 watchEffect(() => {
   if (offer.value && params.id && !isLoadingOffer.value) {
     openModal.value = true;
   }
+
+  if (offer.value && !isLoadingOffer.value) {
+    links.value = offer?.value?.link_map
+      ? JSON.parse(offer?.value?.link_map)?.filter((element) => {
+          return element?.link?.includes('http');
+        })
+      : null;
+  }
 });
 
-const links = offer.value?.link_map?.filter((element) => {
-  return element.link?.includes('http');
-});
-
-const isValidLink = offer.value?.link_map && links?.length > 0;
+const isValidLink = offer.value?.link_map && links.value?.length > 0;
 
 watchEffect(() => {
   if (data.value) {
