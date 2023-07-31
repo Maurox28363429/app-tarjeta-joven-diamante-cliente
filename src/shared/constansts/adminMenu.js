@@ -50,6 +50,11 @@ export const ADMIN_MENU_DESKTOP = [
     label: 'Ecommerce',
   },
   {
+    path: '/admin/ecommerceOrders',
+    icon: 'shopping_cart',
+    label: 'Ordenes de compra',
+  },
+  {
     path: '/admin/promotions',
     icon: 'newspaper',
     label: 'Promociones',

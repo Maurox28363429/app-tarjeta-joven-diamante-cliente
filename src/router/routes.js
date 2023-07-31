@@ -240,6 +240,10 @@ const routes = [
             path: 'ecommerceCategory',
             component: () => import('pages/admin/EcommerceCategory.vue'),
           },
+          {
+            path: 'ecommerceOrders',
+            component: () => import('pages/admin/EcommerceOrden.vue'),
+          }
         ],
       },
       {
