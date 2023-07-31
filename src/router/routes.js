@@ -36,12 +36,26 @@ const routes = [
         component: () => import('src/layouts/MainClientLayout.vue'),
         children: [
           {
-            name: 'Offers',
             path: 'Offers/:countryName',
+            params: { countryName: 'Panamá' },
+            component: () => import('src/pages/client/OffersPage.vue'),
+          },
+          {
+            name: 'ofertas',
+            path: 'Offers/:countryName/:id',
+            params: { countryName: 'Panamá' },
             component: () => import('src/pages/client/OffersPage.vue'),
           },
           {
             path: 'OffersForUniversitys/:countryName',
+            params: { countryName: 'Panamá' },
+            component: () =>
+              import('src/pages/client/SelectUniversityPage.vue'),
+          },
+          {
+            name: 'universidad',
+            path: 'OffersForUniversitys/:countryName/:id',
+            params: { countryName: 'Panamá' },
             component: () =>
               import('src/pages/client/SelectUniversityPage.vue'),
           },
@@ -68,7 +82,6 @@ const routes = [
             props: { typeOffers: 'OffersForUniversitys' },
           },
           {
-            name: 'universidad',
             path: 'OffersForUniversitys',
             component: () =>
               import('src/pages/client/SelectStateForffersPage.vue'),
@@ -79,7 +92,7 @@ const routes = [
             component: () => import('pages/client/PachamaPage.vue'),
           },
           {
-            name: 'noticia_pachama',
+            name: 'pachama',
             path: 'pachama/:id',
             component: () => import('pages/client/PachamaPage.vue'),
           },
@@ -141,11 +154,16 @@ const routes = [
             component: () => import('pages/client/PromotionsPage.vue'),
           },
           {
-            name: 'news',
             path: 'news',
             component: () => import('pages/client/NewsPage.vue'),
           },
           {
+            name: 'noticias',
+            path: 'news/:id',
+            component: () => import('pages/client/NewsPage.vue'),
+          },
+          {
+            name: 'producto',
             path: 'ecommerce/:id',
             component: () => import('pages/client/productDetail.vue'),
           },

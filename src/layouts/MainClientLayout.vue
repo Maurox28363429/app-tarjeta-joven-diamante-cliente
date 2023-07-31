@@ -65,8 +65,38 @@ const messageToGetMembership = ref('');
 
 const { push, go } = useRouter();
 const pageNotification = ref(1);
-const { data: notifications, isLoading: isLoadingNotification } =
-  useGetNotificationsQuery({ id: user?.id, page: pageNotification });
+const {
+  data: notifications,
+  isLoading: isLoadingNotification,
+  refetch,
+} = useGetNotificationsQuery({ id: user?.id, page: pageNotification });
+
+const redirectNotification = (item) => {
+  if (item.type === 'universidad') {
+    push({
+      name: item.type,
+      params: { countryName: 'Panamá', id: item.id_post },
+    });
+    return;
+  }
+  if (item.type === 'ofertas') {
+    push({
+      name: item.type,
+      params: {
+        countryName: item.data.link_map
+          ? JSON.parse(item.data?.link_map)[0].ubication
+          : null,
+        id: item.id_post,
+      },
+    });
+    return;
+  }
+  if (item.type === 'noticias') {
+    push({ name: item.type, params: { id: item.id_post } });
+  } else {
+    push({ name: item.type, params: { id: item.id_post } });
+  }
+};
 
 const MESSAGES_TO_GET_MEMBERSHIP = {
   messageToNewUsers:
@@ -191,6 +221,7 @@ pb.collection('tarjetajoven_mensajes').subscribe('*', function (e) {
   if (e.record.type === 'pachama') {
     avatar_img = pachama;
   }
+  refetch();
   $q.notify({
     message: e.record.titulo,
     color: 'white',
@@ -287,7 +318,7 @@ pb.collection('tarjetajoven_mensajes').subscribe('*', function (e) {
                 v-ripple
                 v-for="item in notifications?.data"
                 :key="item.id"
-                :to="{ name: item.type, params: { id: item.id_post } }"
+                @click="redirectNotification(item)"
               >
                 <q-item-section>
                   <q-item-label>{{ item.titulo }}</q-item-label>

@@ -2,21 +2,48 @@
 import { ref, watchEffect } from 'vue';
 import { useRoute } from 'vue-router';
 import CardOffers from 'src/components/CardOffers.vue';
+import { useGetUniversitiesById } from '../../querys/offersQuerys';
 
 import { useGetUniversities } from 'src/querys/offersQuerys';
+import wazeIcon from '../../assets/images/wazeIcon.jpg';
 
 const currentPaginate = ref(1);
 const pages = ref(0);
 const search = ref('');
 
-const route = useRoute();
-const state = ref(route.params.countryName);
+const { params } = useRoute();
+const state = ref(params.countryName);
+
+const openModal = ref(false);
+
+console.log('univerdad', params);
 
 const { data, isLoading, refetch, isFetching } = useGetUniversities({
   search,
   page: currentPaginate,
   dir: state,
 });
+
+const { data: university, isLoading: isLoadingUniversity } =
+  useGetUniversitiesById(params.id);
+
+const links = ref([]);
+
+watchEffect(() => {
+  if (university.value && params.id && !isLoadingUniversity.value) {
+    openModal.value = true;
+  }
+
+  if (university.value && !isLoadingUniversity.value) {
+    links.value = university?.value?.link_map
+      ? JSON.parse(university?.value?.link_map)?.filter((element) => {
+          return element?.link?.includes('http');
+        })
+      : null;
+  }
+});
+
+const isValidLink = university?.value?.link_map && links?.value?.length > 0;
 
 watchEffect(() => {
   if (data.value) {
@@ -128,6 +155,41 @@ watchEffect(() => {
       </div>
     </div>
   </div>
+
+  <q-dialog v-model="openModal">
+    <q-card class="news-card modal-card">
+      <q-card-section class="q-py-xs q-px-md">
+        <div class="news-title">{{ university.nombre }}</div>
+      </q-card-section>
+      <q-separator />
+
+      <q-card-section class="q-pt-none scroll" style="max-height: 50vh">
+        <img :src="university.img_array_url[0]" class="news-image" />
+        <q-separator />
+        <div class="body-medium" v-html="university.description" />
+        <div>
+          <p>Dirección:</p>
+          <q-img
+            v-if="isValidLink"
+            @click="openWaze(university.link_map)"
+            :src="wazeIcon"
+            spinner-color="white"
+            style="
+              height: 40px;
+              max-width: 40px;
+              border-radius: 8px;
+              cursor: pointer;
+            "
+          />
+        </div>
+      </q-card-section>
+      <q-separator />
+
+      <q-card-actions align="right">
+        <q-btn v-close-popup flat color="primary" label="Cerrar" />
+      </q-card-actions>
+    </q-card>
+  </q-dialog>
 </template>
 
 <style>

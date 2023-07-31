@@ -18,7 +18,7 @@ console.log(NewData.value, params.id);
 console.log(openModal.value, 'openModal');
 
 watchEffect(() => {
-  if (NewData.value) {
+  if (NewData.value && params.id) {
     modalCurrent.value = NewData.value;
     openModal.value = true;
   }

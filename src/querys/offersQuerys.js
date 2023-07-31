@@ -12,11 +12,20 @@ import createUniversityOffer from 'src/api/createUniversityOffer';
 import deleteUniversity from 'src/api/deleteUniversity';
 import editUniversityOffer from 'src/api/editUniversityOffer';
 import getUniversitiesRole from 'src/api/getUniversitiesRole';
+import getOffer from 'src/api/getOffer';
+import getUniversityById from 'src/api/getUniversityById';
 
 export const useGetOffers = ({ name, page, id }) => {
   return useQuery(['offers', page], () =>
     getOffersFromStore({ name, page, id })
   );
+};
+
+export const useGetOffer = (id) => {
+  return useQuery(['offers'], () => getOffer(id));
+};
+export const useGetUniversitiesById = (id) => {
+  return useQuery(['universities'], () => getUniversityById(id));
 };
 
 export const useGetOffersFromBusiness = ({ search, page, dir }) => {

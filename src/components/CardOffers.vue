@@ -1,22 +1,6 @@
 <script setup>
 import { defineProps, ref } from 'vue';
-import wazeIcon from './../assets/images/wazeIcon.jpg';
-
-const openModal = ref(false);
-
-const openWaze = (link) => {
-  link.forEach((element) => {
-    window.open(element.link, '_blank');
-  });
-};
-
-const handleBuy = () => {
-  console.log('buy');
-};
-
-const showModal = () => {
-  openModal.value = true;
-};
+import wazeIcon from '../assets/images/wazeIcon.jpg';
 
 const props = defineProps({
   mapLink: {
@@ -52,6 +36,22 @@ const props = defineProps({
     default: true,
   },
 });
+
+const openModal = ref(false);
+
+const openWaze = (link) => {
+  link.forEach((element) => {
+    window.open(element.link, '_blank');
+  });
+};
+
+const handleBuy = () => {
+  console.log('buy');
+};
+
+const showModal = () => {
+  openModal.value = true;
+};
 
 const links = props.mapLink.filter((element) => {
   return element.link?.includes('http');
@@ -142,6 +142,7 @@ const isValidLink = props.mapLink && links?.length > 0;
         <div>
           <p>Dirección:</p>
           <q-img
+            v-if="isValidLink"
             @click="openWaze(mapLink)"
             :src="wazeIcon"
             spinner-color="white"

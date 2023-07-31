@@ -4,12 +4,17 @@ import getNewsInformative from 'src/api/getNewsInformative';
 import createNoticiaInformativa from 'src/api/createNoticiaInformativa.js';
 import editNoticiaInformativa from 'src/api/editNoticiaInformativa.js';
 import deleteNew from 'src/api/deleteNew';
+import getNew from 'src/api/getNew';
 
 const ERROR_MESSAGE = 'Ah ocurrido un error, intente nuevamente';
 export const useGetNewsInformative = ({ search, pages = {} }) => {
   return useQuery(['news', pages], () =>
     getNewsInformative({ search: search.value, pages: pages.value.current })
   );
+};
+
+export const useGetNewInformative = (id) => {
+  return useQuery(['news'], () => getNew(id));
 };
 
 export const useCreateNewMutation = () => {
