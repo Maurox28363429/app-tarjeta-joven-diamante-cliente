@@ -68,7 +68,19 @@ const routes = [
             props: { typeOffers: 'OffersForUniversitys' },
           },
           {
+            name: 'universidad',
+            path: 'OffersForUniversitys',
+            component: () =>
+              import('src/pages/client/SelectStateForffersPage.vue'),
+            props: { typeOffers: 'OffersForUniversitys' },
+          },
+          {
             path: 'pachama',
+            component: () => import('pages/client/PachamaPage.vue'),
+          },
+          {
+            name: 'noticia_pachama',
+            path: 'pachama/:id',
             component: () => import('pages/client/PachamaPage.vue'),
           },
           {
@@ -243,7 +255,7 @@ const routes = [
           {
             path: 'ecommerceOrders',
             component: () => import('pages/admin/EcommerceOrden.vue'),
-          }
+          },
         ],
       },
       {

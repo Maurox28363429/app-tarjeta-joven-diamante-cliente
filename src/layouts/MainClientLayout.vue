@@ -10,6 +10,8 @@ import { checkFileType } from 'src/utils/checkFileType';
 import QrUser from '../components/QrUser.vue';
 import { policySchema } from 'src/schemas/policySchema';
 import { useProductCart } from 'src/stores/useProductCart';
+import { useGetNotificationsQuery } from 'src/querys/notificationsQuery';
+import { useAuthStore } from 'src/stores/useAuthStore';
 
 import {
   CLIENT_MENU_DESKTOP,
@@ -36,6 +38,7 @@ const {
 } = userAuth();
 
 const cartStore = useProductCart();
+const { user } = useAuthStore();
 
 const { useForm, validatInput, validateMessage, validateForm } =
   useValidateForm({ initialValue: {}, schema: policySchema });
@@ -61,6 +64,9 @@ const isSoonExpires = ref(false);
 const messageToGetMembership = ref('');
 
 const { push, go } = useRouter();
+const pageNotification = ref(1);
+const { data: notifications, isLoading: isLoadingNotification } =
+  useGetNotificationsQuery({ id: user?.id, page: pageNotification });
 
 const MESSAGES_TO_GET_MEMBERSHIP = {
   messageToNewUsers:
@@ -254,6 +260,53 @@ pb.collection('tarjetajoven_mensajes').subscribe('*', function (e) {
           />
         </q-toolbar-title>
         <q-btn
+          style="height: 35px; width: 35px"
+          fill
+          round
+          icon="notifications"
+          color="primary"
+        >
+          <q-badge
+            v-if="!isLoadingNotification"
+            color="secondary"
+            floating
+            :label="notifications?.notificaciones"
+          />
+          <q-menu
+            transition-show="jump-down"
+            transition-hide="jump-up"
+            fit
+            anchor="bottom middle"
+            self="top middle"
+          >
+            <q-list bordered separator v-if="!isLoadingNotification">
+              <q-item-label header>Notificaciones</q-item-label>
+              <q-separator />
+              <q-item
+                clickable
+                v-ripple
+                v-for="item in notifications?.data"
+                :key="item.id"
+                :to="{ name: item.type, params: { id: item.id_post } }"
+              >
+                <q-item-section>
+                  <q-item-label>{{ item.titulo }}</q-item-label>
+                  <q-item-label caption>{{ item.body }}</q-item-label>
+                </q-item-section>
+              </q-item>
+            </q-list>
+            <div class="full-width row justify-center">
+              <q-pagination
+                v-if="!isLoadingNotification"
+                v-model="pageNotification"
+                :max="notifications.pagination.lastPage"
+                input
+              />
+            </div>
+          </q-menu>
+        </q-btn>
+        <q-btn
+          class="q-ml-md"
           style="height: 35px; width: 35px"
           fill
           round
@@ -558,7 +611,8 @@ pb.collection('tarjetajoven_mensajes').subscribe('*', function (e) {
             <br />
             <p class="text-h6 text-center">
               {{
-                `Hola! Gracias por formar parte de Tarjeta Joven Diamante, te informamos que debes renovar tu membresía para seguir disfrutando de los beneficios, te quedan ${userData.membresia.days} días para renovar`
+                `Hola! Gracias por formar parte de Tarjeta Joven Diamante, te informamos que debes renovar tu membresía para
+              seguir disfrutando de los beneficios, te quedan ${userData.membresia.days} días para renovar`
               }}
             </p>
           </q-card-section>
@@ -677,6 +731,7 @@ aside {
   .menu {
     display: none;
   }
+
   .menuMobile {
     display: block;
   }
@@ -686,6 +741,7 @@ aside {
     left: -60px;
     height: 90px;
   }
+
   .qrButton {
     bottom: 64px;
   }

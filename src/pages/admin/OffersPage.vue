@@ -120,7 +120,11 @@ const handleNews = () => {
         link_map: map.value,
         comercio_id: useForm.value.comercio_id.value,
       })
-    : createOffer({ ...useForm.value, link_map: map.value });
+    : createOffer({
+        ...useForm.value,
+        link_map: map.value,
+        comercio_id: useForm.value.comercio_id.value,
+      });
 };
 
 const deleteNew = (id) => {

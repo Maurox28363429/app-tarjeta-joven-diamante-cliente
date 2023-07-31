@@ -3,6 +3,7 @@ import { useToast } from 'src/composables/useToast';
 import getNewsPachama from 'src/api/getNewsPachama';
 import createNoticiaPachama from 'src/api/createNoticiaPachama.js';
 import editNoticiaPachama from 'src/api/editNoticiaPachama.js';
+import getPachamaNew from 'src/api/getPachamaNew';
 import deletePachamaNew from 'src/api/deletePachamaNew';
 
 const ERROR_MESSAGE = 'Ah ocurrido un error, intente nuevamente';
@@ -10,6 +11,10 @@ export const useGetPachamaNews = ({ search, pages = {} }) => {
   return useQuery(['pachamaNews', pages], () =>
     getNewsPachama({ search: search.value, pages: pages.value.current })
   );
+};
+
+export const useGetPachamaNew = (id) => {
+  return useQuery(['pachamaNews'], () => getPachamaNew(id));
 };
 
 export const useCreateNewMutation = () => {

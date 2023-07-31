@@ -1,10 +1,28 @@
 <script setup>
 import { ref, watchEffect } from 'vue';
-import { useGetPachamaNews } from 'src/querys/pachamaNewsQuerys.js';
+import {
+  useGetPachamaNews,
+  useGetPachamaNew,
+} from 'src/querys/pachamaNewsQuerys.js';
+import { useRoute } from 'vue-router';
 
 const openModal = ref(false);
 const modalCurrent = ref({});
 const currentPaginate = ref(1);
+
+const { params } = useRoute();
+
+const { data: NewData } = useGetPachamaNew(params.id ?? null);
+
+console.log(NewData.value, params.id);
+console.log(openModal.value, 'openModal');
+
+watchEffect(() => {
+  if (NewData.value) {
+    modalCurrent.value = NewData.value;
+    openModal.value = true;
+  }
+});
 
 const pages = ref(1);
 const search = ref('');
