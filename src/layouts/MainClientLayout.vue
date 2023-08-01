@@ -12,7 +12,6 @@ import { policySchema } from 'src/schemas/policySchema';
 import { useProductCart } from 'src/stores/useProductCart';
 import { useGetNotificationsQuery } from 'src/querys/notificationsQuery';
 import { useAuthStore } from 'src/stores/useAuthStore';
-import NewDetail from 'src/components/NewDetail.vue';
 
 import {
   CLIENT_MENU_DESKTOP,
@@ -728,12 +727,12 @@ pb.collection('tarjetajoven_mensajes').subscribe('*', function (e) {
     <q-img :src="triangle" class="trianguloBottom" spinner-color="dark" />
   </q-layout>
 
-  <q-dialog v-model="showModalNew">
+  <!-- <q-dialog v-model="showModalNew">
     <NewDetail
       :modalCurrent="currenNotification.data"
       v-if="!isLoadingNotification"
     />
-  </q-dialog>
+  </q-dialog> -->
 </template>
 
 <style>

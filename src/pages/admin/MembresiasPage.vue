@@ -8,6 +8,8 @@ import {
   useGetMembershipsQuery,
   usePaymentMembershipMutation,
 } from 'src/querys/membership';
+import { openURL } from 'quasar';
+
 const current = ref(1);
 const maxpage = ref(1);
 const datos = ref([]);
@@ -123,22 +125,19 @@ const cargar = async () => {
   current.value = pagination.currentPage;
   maxpage.value = pagination.lastPage;
 };
-/* const cambiar=async(id,status)=>{
-  console.log(id,status)
-}
- */
+
 onMounted(async () => {
   await cargar();
 });
 
 const excelDonwload = async () => {
-  window.open(
+  openURL(
     process.env.VUE_APP_API_URL + 'export_membresia?membresia=1',
     '_blank'
   );
 };
 const pdfDonwload = async () => {
-  window.open(process.env.VUE_APP_API_URL + 'export_pdf_membresia', '_blank');
+  openURL(process.env.VUE_APP_API_URL + 'export_pdf_membresia', '_blank');
 };
 
 const addMembership = async () => {
@@ -150,6 +149,10 @@ const addMembership = async () => {
     price: price.value,
     yappy: 1,
   });
+};
+
+const openPDF = (id) => {
+  openURL(process.env.VUE_APP_API_URL + 'export_pdf_seguro/' + id, '_blank');
 };
 </script>
 
@@ -214,11 +217,12 @@ const addMembership = async () => {
             <th>Membresia</th>
             <th>Dias restantes</th>
             <th>Fecha de expiracion</th>
+            <th>PDF de seguro</th>
           </thead>
           <tbody>
-            <tr v-for="(d, index) in datos" :key="index">
-              <td>{{ d.id }}</td>
-              <td>{{ d.name }} {{ d.last_name }}</td>
+            <tr v-for="(user, index) in datos" :key="index">
+              <td>{{ user.id }}</td>
+              <td>{{ user.name }} {{ user.last_name }}</td>
               <td>
                 <!-- <q-toggle
                   disabled="true"
@@ -233,7 +237,7 @@ const addMembership = async () => {
                   :false-value="0"
                 /> -->
                 <q-icon
-                  v-if="d.membresia.status_num == 1"
+                  v-if="user.membresia.status_num == 1"
                   name="check_circle"
                   color="primary"
                   size="2rem"
@@ -241,10 +245,16 @@ const addMembership = async () => {
                 <q-icon v-else name="cancel" color="red" size="2rem" />
               </td>
               <td>
-                {{ d.membresia.days }}
+                {{ user.membresia.days }}
               </td>
               <td>
-                {{ d.membresia.fecha_cobro }}
+                {{ user.membresia.fecha_cobro }}
+              </td>
+              <td>
+                {{ user.membresia.fecha_cobro }}
+              </td>
+              <td>
+                <q-btn label="pdf" color="primary" @click="openPDF(user.id)" />
               </td>
             </tr>
           </tbody>

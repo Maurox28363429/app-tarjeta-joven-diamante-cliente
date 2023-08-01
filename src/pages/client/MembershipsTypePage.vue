@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { userAuth } from 'src/composables/userAuth';
 import logo from '../../assets/images/t.webp';
 
@@ -18,19 +18,26 @@ const getDate = (fechaString) => {
   return `${day}/${month}/${year}`;
 };
 
-const activationDate = getDate(userData.value?.membresia?.updated_at);
-const expirationDate = getDate(userData.value?.membresia?.fecha_cobro);
+const activationDate = ref('');
+const expirationDate = ref('');
+
+watch(userData, () => {
+  if (userData.value?.membresia?.fecha_cobro && !isLoadingUser.value) {
+    activationDate.value = getDate(userData.value?.membresia?.updated_at);
+    expirationDate.value = getDate(userData.value?.membresia?.fecha_cobro);
+  }
+});
 </script>
 
 <template>
   <q-inner-loading :showing="isLoadingUser">
     <q-spinner-gears size="50px" color="primary" />
   </q-inner-loading>
-  <div class="full-width q-py-xl row justify-center items-center relative">
-    <div
-      class="column items-center absolute-center full-width"
-      v-if="!isLoadingUser"
-    >
+  <div
+    v-if="!isLoadingUser"
+    class="full-width q-py-xl row justify-center items-center relative"
+  >
+    <div class="column items-center absolute-center full-width">
       <q-img
         :src="logo"
         spinner-color="dark"
