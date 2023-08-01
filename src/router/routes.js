@@ -279,6 +279,10 @@ const routes = [
             path: 'ecommerceOrders',
             component: () => import('pages/admin/EcommerceOrden.vue'),
           },
+          {
+            path: 'settings',
+            component: () => import('pages/admin/SettingsPage.vue'),
+          },
         ],
       },
       {

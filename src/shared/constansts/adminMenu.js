@@ -69,4 +69,9 @@ export const ADMIN_MENU_DESKTOP = [
     icon: 'category',
     label: 'Categorias de productos',
   },
+  {
+    path: '/admin/settings',
+    icon: 'settings',
+    label: 'Configuración',
+  },
 ];
