@@ -12,7 +12,7 @@ import { policySchema } from 'src/schemas/policySchema';
 import { useProductCart } from 'src/stores/useProductCart';
 import { useGetNotificationsQuery } from 'src/querys/notificationsQuery';
 import { useAuthStore } from 'src/stores/useAuthStore';
-
+import deleteNotify from 'src/api/deleteNotify.js';
 import {
   CLIENT_MENU_DESKTOP,
   CLIENT_MENU_MOBILE,
@@ -74,8 +74,10 @@ const {
   refetch,
 } = useGetNotificationsQuery({ id: user?.id, page: pageNotification });
 
-const redirectNotification = (item) => {
+const redirectNotification = async (item) => {
   currenNotification.value = item;
+  await deleteNotify(item.id);
+  refetch();
   if (item.type === 'universidad') {
     push({
       name: item.type,
@@ -245,12 +247,13 @@ pb.collection('tarjetajoven_mensajes').subscribe('*', function (e) {
     textColor: 'black',
     avatar: avatar_img,
     actions: [
-      {
+      /* {
         label: 'Ver',
         color: 'black',
-        handler: () => {
+        handler: async () => {
           const id = e.record.id_post;
-          console.log(id);
+          await deleteNotify(e.record.id);
+          refetch();
           if (e.record.type === 'universidad') {
             push('cliente/OffersForUniversitys/Panamá');
           }
@@ -264,7 +267,7 @@ pb.collection('tarjetajoven_mensajes').subscribe('*', function (e) {
             push('cliente/OffersForUniversitys/Panamá');
           }
         },
-      },
+      }, */
     ],
   });
 });
