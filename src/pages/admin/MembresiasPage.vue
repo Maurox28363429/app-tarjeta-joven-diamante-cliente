@@ -355,20 +355,19 @@ const openPDF = (id) => {
     </q-card>
   </q-dialog>
     <q-dialog v-model="dialogConecutivos">
-      <q-card>
+      <q-card style="width:300px">
         <q-card-section class="text-h6 text-weight-bold">
           Consecutivos
+          <hr>
         </q-card-section>
         <q-card-section>
           <table>
             <thead>
-              <th>Consecutivo</th>
-              <th>Fecha</th>
+              <th style="text-align:left"></th>
             </thead>
             <tbody>
               <tr v-for="(data, index) in userConsecutivos" :key="index">
                 <td>{{ data }}</td>
-                <td></td>
               </tr>
             </tbody>
           </table>
