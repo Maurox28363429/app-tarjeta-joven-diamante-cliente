@@ -10,6 +10,11 @@ export const useProductCart = defineStore('productCart', {
     saveLocalStorage() {
       localStorage.setItem('cart', JSON.stringify(this.cart));
     },
+    findProduct(id) {
+      const product = this.cart.find((product) => product.id === id);
+
+      return product;
+    },
     setProduct(product) {
       const productExist = this.cart.findIndex(
         (productCart) => productCart.id === product.id
@@ -17,9 +22,10 @@ export const useProductCart = defineStore('productCart', {
 
       if (productExist !== -1) {
         this.cart[productExist].cantidad += 1;
+        this.cart[productExist].stock = this.cart[productExist].stock - 1;
         this.saveLocalStorage();
       } else {
-        this.cart.push({ ...product, cantidad: 1 });
+        this.cart.push({ ...product, cantidad: 1, stock: product.stock - 1 });
         this.saveLocalStorage();
       }
     },
@@ -31,11 +37,14 @@ export const useProductCart = defineStore('productCart', {
 
       if (productExist !== -1) {
         if (products.cantidad > 1) {
+          this.cart[productExist].stock = this.cart[productExist].stock + 1;
           this.cart[productExist].cantidad -= 1;
+
           this.saveLocalStorage();
           return;
         }
         if (products.cantidad === 1) {
+          this.cart[productExist].stock = this.cart[productExist].stock + 1;
           this.cart = this.cart.filter((product) => product.id !== id);
           this.saveLocalStorage();
           return;

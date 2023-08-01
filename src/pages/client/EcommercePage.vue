@@ -48,6 +48,8 @@ const addToCart = (item) => {
   triggerPositive('Producto agregado al carrito');
   store.setProduct(item);
 };
+
+console.log(store.cart);
 </script>
 
 <template>
@@ -124,7 +126,11 @@ const addToCart = (item) => {
 
       <div v-if="!isLoadingNews" class="row wrap q-gutter-sm justify-center">
         <template v-for="item in products?.data" :key="item.id">
-          <q-card style="width: 160px; height: 300px" class="column">
+          <q-card
+            v-if="Number(item.stock) >= 1"
+            style="width: 160px; min-height: 300px"
+            class="column"
+          >
             <router-link :to="'ecommerce/' + item.id">
               <img
                 :src="item.img"
@@ -138,10 +144,20 @@ const addToCart = (item) => {
               <p class="q-ma-none text-weight-medium text-body1">
                 ${{ item.precio }}
               </p>
+              <p class="q-ma-none">
+                Stock: {{ store.findProduct(item.id)?.stock ?? item.stock }}
+              </p>
             </q-card-section>
             <q-card-actions class="full-width q-py-none" style="flex: 1">
               <q-btn
-                label="Comprar"
+                :disable="
+                  (store.findProduct(item.id)?.stock ?? item.stock) <= 0
+                "
+                :label="
+                  (store.findProduct(item.id)?.stock ?? item.stock) <= 0
+                    ? 'Sin stock'
+                    : 'Agregar al carrito'
+                "
                 color="secondary"
                 size="sm"
                 @click="addToCart(item)"

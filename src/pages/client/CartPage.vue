@@ -43,7 +43,7 @@ const sendPay = () => {
   createOrder({
     json_productos: products,
     client_id: user.id,
-    total: store.priceTotal,
+    total: store.getTotalPrice(),
     estado: 'pendiente',
     tipo_pago: typePay.value,
     img: referencia.value,
@@ -110,6 +110,7 @@ const lessProduct = (product) => {
                 <q-btn
                   icon="remove"
                   color="primary"
+                  :disable="item?.cantidad <= 1"
                   size="sm"
                   @click="lessProduct(item.id)"
                 />
@@ -118,6 +119,7 @@ const lessProduct = (product) => {
                   icon="add"
                   color="primary"
                   size="sm"
+                  :disable="item?.stock === 0"
                   @click="addProduct(item)"
                 />
               </div>
