@@ -1,10 +1,23 @@
 <script setup>
 import { ref, watchEffect } from 'vue';
-import { useGetPromotions } from 'src/querys/promotionsQuerys';
+import { useGetPromotions, useGetPromotion } from 'src/querys/promotionsQuerys';
+import { useRouter } from 'vue-router';
 
 const openModal = ref(false);
 const modalCurrent = ref({});
 const currentPaginate = ref(1);
+
+const { currentRoute } = useRouter();
+
+const { data: promotionData, isLoading: isLoadingPromotion } =
+  useGetPromotion(currentRoute);
+
+watchEffect(() => {
+  if (promotionData.value && !isLoadingPromotion.value) {
+    modalCurrent.value = promotionData.value;
+    openModal.value = true;
+  }
+});
 
 const pages = ref(1);
 const search = ref('');

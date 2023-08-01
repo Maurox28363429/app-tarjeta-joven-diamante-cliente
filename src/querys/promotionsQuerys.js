@@ -3,11 +3,18 @@ import getNews from 'src/api/getNews';
 import createPromotion from 'src/api/createPromotion';
 import editPromotions from 'src/api/editPromotions';
 import deletePromotion from 'src/api/deletePromotion';
+import getPromotion from 'src/api/getPromotion';
 import { useToast } from 'src/composables/useToast';
 
 export const useGetPromotions = ({ search, pages = {} }) => {
   return useQuery(['promotions', pages], () =>
     getNews({ search: search.value, pages: pages.value })
+  );
+};
+
+export const useGetPromotion = (route) => {
+  return useQuery(['promotions', route], () =>
+    getPromotion(route.value.params.id)
   );
 };
 

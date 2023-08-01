@@ -101,6 +101,7 @@ const routes = [
             component: () => import('pages/client/GiftsPage.vue'),
           },
           {
+            name: 'premios',
             path: 'gifts/:id',
             component: () => import('pages/client/GiftDetailPage.vue'),
           },
@@ -149,8 +150,12 @@ const routes = [
             component: () => import('components/TransactionsTable.vue'),
           },
           {
-            name: 'promotions',
             path: 'promotions',
+            component: () => import('pages/client/PromotionsPage.vue'),
+          },
+          {
+            name: 'promociones',
+            path: 'promotions/:id',
             component: () => import('pages/client/PromotionsPage.vue'),
           },
           {

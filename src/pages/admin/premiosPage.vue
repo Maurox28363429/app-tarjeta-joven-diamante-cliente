@@ -128,7 +128,10 @@ const convertFormdata = (obj) => {
   return formData2;
 };
 const crearPremio = async () => {
-  const senData = convertFormdata(formData.value);
+  const senData = convertFormdata({
+    ...formData.value,
+    ganador_id: formData.value.ganador_id?.value,
+  });
   let data = null;
   if (formData.value.id != null) {
     data = await editarPremio(formData.value.id, senData);
