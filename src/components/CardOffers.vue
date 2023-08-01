@@ -3,6 +3,14 @@ import { defineProps, ref } from 'vue';
 import wazeIcon from '../assets/images/wazeIcon.jpg';
 
 const props = defineProps({
+  typeOffer: {
+    type: String,
+    required: false,
+  },
+  id: {
+    type: String,
+    required: false,
+  },
   mapLink: {
     type: Object,
     required: true,
@@ -51,6 +59,7 @@ const handleBuy = () => {
 
 const showModal = () => {
   openModal.value = true;
+  console.log(showModal, props.id);
 };
 
 const links = props.mapLink.filter((element) => {

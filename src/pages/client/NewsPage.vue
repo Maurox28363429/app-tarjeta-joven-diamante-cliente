@@ -1,16 +1,13 @@
 <script setup>
 import { ref, watchEffect } from 'vue';
 import { useGetNewsInformative } from 'src/querys/newsQuerys';
-import { useGetNewInformative } from '../../querys/newsQuerys';
-import { useRoute } from 'vue-router';
 
-const openModal = ref(false);
 const modalCurrent = ref({});
 const currentPaginate = ref(1);
 
 const pages = ref(1);
+const openModal = ref(false);
 const search = ref('');
-const { params } = useRoute();
 
 const {
   data: NewsData,
@@ -23,17 +20,6 @@ const showModal = (modalInfo) => {
   modalCurrent.value = modalInfo;
   openModal.value = true;
 };
-
-const { data: newData, isLoading: isLoadingData } = useGetNewInformative(
-  params.id
-);
-
-watchEffect(() => {
-  if (newData.value && params.id && !isLoadingData.value) {
-    openModal.value = true;
-    currentPaginate.value = newData.value;
-  }
-});
 
 watchEffect(() => {
   if (NewsData.value) {

@@ -21,8 +21,10 @@ export const useGetOffers = ({ name, page, id }) => {
   );
 };
 
-export const useGetOffer = (id) => {
-  return useQuery(['offers'], () => getOffer(id));
+export const useGetOffer = (currentRoute) => {
+  return useQuery(['offers', currentRoute], () =>
+    getOffer(currentRoute.value.params.id)
+  );
 };
 export const useGetUniversitiesById = (id) => {
   return useQuery(['universities'], () => getUniversityById(id));

@@ -13,8 +13,8 @@ export const useGetNewsInformative = ({ search, pages = {} }) => {
   );
 };
 
-export const useGetNewInformative = (id) => {
-  return useQuery(['news'], () => getNew(id));
+export const useGetNewInformative = (router) => {
+  return useQuery(['news', router], () => getNew(router.value.params.id));
 };
 
 export const useCreateNewMutation = () => {

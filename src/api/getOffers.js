@@ -9,7 +9,7 @@ export default async function getOffers({ page = 1, search = '', dir } = {}) {
 
   const newData = data?.data?.map((element) => {
     let linkMap = element.link_map;
-    let img = element.img_array_url;
+    let img_array_url = element.img_array_url;
 
     if (typeof linkMap === 'string' && linkMap !== 'undefined') {
       try {
@@ -22,9 +22,9 @@ export default async function getOffers({ page = 1, search = '', dir } = {}) {
       }
     }
 
-    if (typeof img === 'string') {
+    if (typeof img_array_url === 'string') {
       try {
-        img = JSON.parse(img);
+        img_array_url = JSON.parse(img_array_url);
       } catch (error) {
         console.error(
           `Error parsing link_map for element with ID ${element.id}:`,
@@ -34,12 +34,12 @@ export default async function getOffers({ page = 1, search = '', dir } = {}) {
     }
 
     if (
-      typeof img === 'string' &&
+      typeof img_array_url === 'string' &&
       typeof linkMap === 'string' &&
       linkMap !== 'undefined'
     ) {
       try {
-        img = JSON.parse(img);
+        img_array_url = JSON.parse(img_array_url);
         linkMap = JSON.parse(linkMap);
       } catch (error) {
         console.error(
@@ -62,7 +62,7 @@ export default async function getOffers({ page = 1, search = '', dir } = {}) {
     return {
       ...element,
       link_map: linkMap,
-      img_array_url: img,
+      img_array_url,
     };
   });
 

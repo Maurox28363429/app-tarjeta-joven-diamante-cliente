@@ -1,6 +1,6 @@
 <script setup>
 import { ref, watchEffect } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRouter } from 'vue-router';
 import { useGetOffersFromBusiness, useGetOffer } from 'src/querys/offersQuerys';
 
 import CardOffers from 'src/components/CardOffers.vue';
@@ -10,8 +10,8 @@ const currentPaginate = ref(1);
 const pages = ref(0);
 const search = ref('');
 
-const { params } = useRoute();
-const state = ref(params.countryName);
+const { currentRoute } = useRouter();
+const state = ref(currentRoute.value.params.countryName);
 const openModal = ref(false);
 
 const { data, isLoading, refetch, isFetching } = useGetOffersFromBusiness({
@@ -20,12 +20,12 @@ const { data, isLoading, refetch, isFetching } = useGetOffersFromBusiness({
   dir: state,
 });
 
-const { data: offer, isLoading: isLoadingOffer } = useGetOffer(params.id);
+const { data: offer, isLoading: isLoadingOffer } = useGetOffer(currentRoute);
 
 const links = ref([]);
 
 watchEffect(() => {
-  if (offer.value && params.id && !isLoadingOffer.value) {
+  if (offer.value && currentRoute.value.params.id && !isLoadingOffer.value) {
     openModal.value = true;
   }
 
@@ -126,6 +126,8 @@ watchEffect(() => {
             :key="id"
           >
             <CardOffers
+              type-offer="ofetas"
+              :id="id"
               :commerceName="comercio.name"
               :description="description"
               :images="img_array_url"
@@ -156,15 +158,15 @@ watchEffect(() => {
     </div>
   </div>
 
-  <q-dialog v-model="openModal">
+  <q-dialog v-model="openModal" v-if="!isLoadingOffer">
     <q-card class="news-card modal-card">
       <q-card-section class="q-py-xs q-px-md">
-        <div class="news-title">{{ offer.nombre }}</div>
+        <div class="news-title">{{ offer?.nombre }}</div>
       </q-card-section>
       <q-separator />
 
       <q-card-section class="q-pt-none scroll" style="max-height: 50vh">
-        <img :src="offer.img_array_url[0]" class="news-image" />
+        <img :src="offer?.img_array_url" class="news-image" />
         <q-separator />
         <div class="body-medium" v-html="offer.description" />
         <div>

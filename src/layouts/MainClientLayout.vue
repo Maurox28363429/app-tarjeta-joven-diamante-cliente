@@ -12,6 +12,7 @@ import { policySchema } from 'src/schemas/policySchema';
 import { useProductCart } from 'src/stores/useProductCart';
 import { useGetNotificationsQuery } from 'src/querys/notificationsQuery';
 import { useAuthStore } from 'src/stores/useAuthStore';
+import NewDetail from 'src/components/NewDetail.vue';
 
 import {
   CLIENT_MENU_DESKTOP,
@@ -63,7 +64,10 @@ const isNoMembership = ref(false);
 const isSoonExpires = ref(false);
 const messageToGetMembership = ref('');
 
-const { push, go } = useRouter();
+const showModalNew = ref(false);
+const currenNotification = ref({});
+
+const { push, go, currentRoute } = useRouter();
 const pageNotification = ref(1);
 const {
   data: notifications,
@@ -72,6 +76,7 @@ const {
 } = useGetNotificationsQuery({ id: user?.id, page: pageNotification });
 
 const redirectNotification = (item) => {
+  currenNotification.value = item;
   if (item.type === 'universidad') {
     push({
       name: item.type,
@@ -93,10 +98,23 @@ const redirectNotification = (item) => {
   }
   if (item.type === 'noticias') {
     push({ name: item.type, params: { id: item.id_post } });
+    showModalNew.value = true;
   } else {
     push({ name: item.type, params: { id: item.id_post } });
   }
 };
+
+watchEffect(() => {
+  console.log(
+    'currentRoute',
+    currentRoute.value.params.id,
+    currenNotification.value.id_post
+  );
+  if (currentRoute.value.params.id === currenNotification.value.id_post) {
+    console.log('modal', 'entro');
+    showModalNew.value = true;
+  }
+});
 
 const MESSAGES_TO_GET_MEMBERSHIP = {
   messageToNewUsers:
@@ -709,6 +727,13 @@ pb.collection('tarjetajoven_mensajes').subscribe('*', function (e) {
     <q-img :src="triangle" class="trianguloTop" spinner-color="dark" />
     <q-img :src="triangle" class="trianguloBottom" spinner-color="dark" />
   </q-layout>
+
+  <q-dialog v-model="showModalNew">
+    <NewDetail
+      :modalCurrent="currenNotification.data"
+      v-if="!isLoadingNotification"
+    />
+  </q-dialog>
 </template>
 
 <style>
