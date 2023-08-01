@@ -26,6 +26,8 @@ watchEffect(() => {
   }
 });
 
+const options = ['Consecutivo_seguro'];
+
 const submit = () => {
   validateForm();
   uploadConsecutive({ ...useForm.value, id: consecutive.value.data[0].id });
@@ -49,10 +51,11 @@ const submit = () => {
               </p>
             </q-card-section>
             <q-card-section class="q-gutter-y-md full-width">
-              <q-input
+              <q-select
                 label="Nombre"
                 name="nombre"
                 outlined
+                :options="options"
                 v-model="useForm.nombre"
                 :value="consecutive.data.nombre"
               />
