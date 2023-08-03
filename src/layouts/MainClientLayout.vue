@@ -106,13 +106,7 @@ const redirectNotification = async (item) => {
 };
 
 watchEffect(() => {
-  console.log(
-    'currentRoute',
-    currentRoute.value.params.id,
-    currenNotification.value.id_post
-  );
   if (currentRoute.value.params.id === currenNotification.value.id_post) {
-    console.log('modal', 'entro');
     showModalNew.value = true;
   }
 });
@@ -180,7 +174,6 @@ watchEffect(() => {
       userData.value.dni_text === null ||
       userData.value.parentesco === ''
     ) {
-      console.log('sin poliza');
       policyRequestForm.value = true;
     }
   }

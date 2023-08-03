@@ -16,8 +16,6 @@ const state = ref(params.countryName);
 
 const openModal = ref(false);
 
-console.log('univerdad', params);
-
 const { data, isLoading, refetch, isFetching } = useGetUniversities({
   search,
   page: currentPaginate,

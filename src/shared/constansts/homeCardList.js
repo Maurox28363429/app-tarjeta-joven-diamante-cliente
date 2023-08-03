@@ -54,7 +54,7 @@ export const HOME_CARD_LIST = [
     title: 'Premios',
     icon: disableIcon,
     link: '/cliente/gifts',
-    enabled: true,
+    enabled: false,
   },
   {
     id: 7,

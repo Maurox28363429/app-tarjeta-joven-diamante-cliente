@@ -13,11 +13,12 @@ const search = ref('');
 
 const { currentRoute } = useRouter();
 
-const { data: newData, isLoading: isLoadingData } =
-  useGetNewInformative(currentRoute);
+const id = ref(currentRoute.value.params.id);
+
+const { data: newData, isLoading: isLoadingData } = useGetNewInformative(id);
 
 watchEffect(() => {
-  if (newData.value && !isLoadingData.value) {
+  if (newData.value && !isLoadingData.value && id.value) {
     modalCurrent.value = newData.value;
     openModal.value = true;
   }

@@ -1,11 +1,10 @@
 <script setup>
-const props = defineProps({
+defineProps({
   modalCurrent: {
     type: Object,
     required: true,
   },
 });
-console.log(props.modalCurrent.value, 'modalCurrent.value');
 
 const thereAreRedes = (redes) => {
   return (

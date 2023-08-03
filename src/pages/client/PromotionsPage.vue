@@ -9,8 +9,10 @@ const currentPaginate = ref(1);
 
 const { currentRoute } = useRouter();
 
+const id = ref(currentRoute.value.params.id);
+
 const { data: promotionData, isLoading: isLoadingPromotion } =
-  useGetPromotion(currentRoute);
+  useGetPromotion(id);
 
 watchEffect(() => {
   if (promotionData.value && !isLoadingPromotion.value) {

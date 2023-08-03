@@ -96,11 +96,6 @@ const handleModal = (id) => {
     ...currentNews.value,
     category_id: findCategory(currentNews.value?.category_id),
   };
-  console.log(
-    useForm.value,
-    currentNews.value,
-    findCategory(currentNews.value?.category_id)
-  );
 };
 
 const createNew = () => {

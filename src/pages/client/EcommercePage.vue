@@ -48,8 +48,6 @@ const addToCart = (item) => {
   triggerPositive('Producto agregado al carrito');
   store.setProduct(item);
 };
-
-console.log(store.cart);
 </script>
 
 <template>

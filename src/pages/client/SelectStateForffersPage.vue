@@ -53,7 +53,6 @@ const openOffers = ({ state, offers, universidades }) => {
   if (props.typeOffers === 'Offers') {
     if (offers !== 0) {
       router.push(`/cliente/${props.typeOffers}/${state}`);
-      console.log('hay ofertas');
     } else {
       console.log('no hay ofertas', offers);
     }

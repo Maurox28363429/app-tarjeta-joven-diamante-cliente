@@ -14,7 +14,7 @@ export const useGetNewsInformative = ({ search, pages = {} }) => {
 };
 
 export const useGetNewInformative = (router) => {
-  return useQuery(['news', router], () => getNew(router.value.params.id));
+  return useQuery(['news', router], () => getNew(router.value));
 };
 
 export const useCreateNewMutation = () => {

@@ -12,6 +12,7 @@ const search = ref('');
 
 const { currentRoute } = useRouter();
 const state = ref(currentRoute.value.params.countryName);
+const id = ref(currentRoute.value.params.id);
 const openModal = ref(false);
 
 const { data, isLoading, refetch, isFetching } = useGetOffersFromBusiness({
@@ -20,7 +21,7 @@ const { data, isLoading, refetch, isFetching } = useGetOffersFromBusiness({
   dir: state,
 });
 
-const { data: offer, isLoading: isLoadingOffer } = useGetOffer(currentRoute);
+const { data: offer, isLoading: isLoadingOffer } = useGetOffer(id);
 
 const links = ref([]);
 

@@ -55,7 +55,6 @@ const currentSosNumber = computed(() => {
 const ACCEPTED_TYPES_FOR_DNI = ['image/jpeg', 'image/png', 'image/jpg', 'jpg'];
 
 watchEffect(() => {
-  console.log('sosData', sosData.value?.pagination?.itemsPerPage);
   if (!sosLoading.value && sosData?.value?.pagination) {
     currentPage.value = sosData?.value?.pagination?.currentPage;
     itemsPerPage.value = [sosData?.value?.pagination?.itemsPerPage];

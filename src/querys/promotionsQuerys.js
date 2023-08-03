@@ -13,9 +13,7 @@ export const useGetPromotions = ({ search, pages = {} }) => {
 };
 
 export const useGetPromotion = (route) => {
-  return useQuery(['promotions', route], () =>
-    getPromotion(route.value.params.id)
-  );
+  return useQuery(['promotions', route], () => getPromotion(route.value));
 };
 
 export const useCreatePromotionMutation = () => {

@@ -8,7 +8,6 @@ import { useToast } from 'src/composables/useToast';
 const ERROR_MESSAGE = 'Ha ocurrido un error';
 
 export const useGetDirectivo = ({ page, search }) => {
-  console.log('useGetDirectivo', page.value);
   return useQuery(['directivo', page], () =>
     getDirectivos({ page: page.value, search: search.value })
   );

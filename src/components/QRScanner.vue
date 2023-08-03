@@ -107,7 +107,6 @@ function addPermision() {
         if (status.hasPermission) {
           // El permiso ha sido concedido
           permision.value = true;
-          console.log('tiene permiso');
         } else {
           // El permiso ha sido denegado
           triggerWarning(

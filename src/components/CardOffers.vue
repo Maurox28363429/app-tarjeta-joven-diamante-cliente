@@ -59,7 +59,6 @@ const handleBuy = () => {
 
 const showModal = () => {
   openModal.value = true;
-  console.log(showModal, props.id);
 };
 
 const links = props.mapLink.filter((element) => {
