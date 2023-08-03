@@ -32,7 +32,7 @@ const textError = ref(false);
 const showPayment = ref(false);
 
 const { go } = useRouter();
-
+var interval='';
 const props = defineProps({
   price: {
     type: String,
@@ -77,7 +77,6 @@ const HandlePayment = () => {
       target,
       options
     );
-
     // Puedes manejar eventos del navegador incorporado, si lo deseas
     inAppBrowser.addEventListener('loadstart', (event) => {
       console.log('InAppBrowser: loadstart', event);
@@ -96,7 +95,37 @@ const HandlePayment = () => {
     });
   } else {
     console.warn('Cordova no está disponible');
-    window.open(url);
+    // var miVentana=window.open(url);
+    // Obtener las dimensiones de la pantalla
+    const screenWidth = screen.width;
+    const screenHeight = screen.height;
+
+    // Calcular la posición de la ventana para centrarla en la pantalla
+    const windowWidth = 500;
+    const windowHeight = 500;
+    const windowLeft = (screenWidth - windowWidth) / 2;
+    const windowTop = (screenHeight - windowHeight) / 2;
+    // Abrir la ventana emergente centrada en la pantalla
+    var ventana = window.open(
+      "https://api.tarjetajovendiamante.com/cerrar.php",
+      'nombreVentana',
+      'width=' + windowWidth + ',height=' + windowHeight + ',left=' + windowLeft + ',top=' + windowTop,
+      'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=no',
+      'noopener'
+      );
+     interval = setInterval(function () {
+      if (ventana.closed) {
+        clearInterval(interval);
+      }else{
+        console.log('ventana abierta: ');
+        const validate = ventana.document.innerHTML;
+        if(validate === '<h5>Listo</h5>'){
+
+          ventana.close();
+          clearInterval(interval);
+        }
+      }
+    }, 1000);
   }
 };
 const isFree = Boolean(props.name === 'free') || props.price <= 0;

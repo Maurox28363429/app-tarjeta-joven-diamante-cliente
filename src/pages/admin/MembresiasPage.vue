@@ -14,7 +14,12 @@ const current = ref(1);
 const maxpage = ref(1);
 const datos = ref([]);
 const search = ref('');
-
+const userConsecutivos = ref([]);
+const dialogConecutivos = ref(false);
+const openConsecutivos = (data)=>{
+  dialogConecutivos.value = true;
+  userConsecutivos.value =data;
+}
 const showAssignMembershipModal = ref(false);
 
 const { data: users, isLoading } = useGetUsersQuery();
@@ -191,7 +196,7 @@ const openPDF = (id) => {
             style="max-width: 400px"
             outlined
             type="search"
-            label="Buscar ofertas"
+            label="Buscar"
             color="primary"
           >
             <q-btn
@@ -218,6 +223,7 @@ const openPDF = (id) => {
             <th>Dias restantes</th>
             <th>Fecha de expiracion</th>
             <th>PDF de seguro</th>
+            <th>Consecutivos</th>
           </thead>
           <tbody>
             <tr v-for="(user, index) in datos" :key="index">
@@ -251,10 +257,14 @@ const openPDF = (id) => {
                 {{ user.membresia.fecha_cobro }}
               </td>
               <td>
-                {{ user.membresia.fecha_cobro }}
+                <q-btn label="pdf" color="primary" @click="openPDF(user.id)" />
               </td>
               <td>
-                <q-btn label="pdf" color="primary" @click="openPDF(user.id)" />
+                <q-btn
+                  label="Consecutivos"
+                  color="primary"
+                  @click="openConsecutivos(user.json_consecutivos)"
+                />
               </td>
             </tr>
           </tbody>
@@ -344,6 +354,26 @@ const openPDF = (id) => {
       </q-card-section>
     </q-card>
   </q-dialog>
+    <q-dialog v-model="dialogConecutivos">
+      <q-card style="width:300px">
+        <q-card-section class="text-h6 text-weight-bold">
+          Consecutivos
+          <hr>
+        </q-card-section>
+        <q-card-section>
+          <table>
+            <thead>
+              <th style="text-align:left"></th>
+            </thead>
+            <tbody>
+              <tr v-for="(data, index) in userConsecutivos" :key="index">
+                <td>{{ data }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </q-card-section>
+      </q-card>
+    </q-dialog>
 </template>
 <style scoped>
 table {

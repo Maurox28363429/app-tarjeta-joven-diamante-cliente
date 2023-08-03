@@ -23,7 +23,7 @@ const INITIAL_VALUES = {
   phone: '',
   sex: GENDER_OPTIONS[0],
   password: '',
-  vendedor: '',
+  vendedor: 'Promotor 4',
   provincia: [],
 };
 
