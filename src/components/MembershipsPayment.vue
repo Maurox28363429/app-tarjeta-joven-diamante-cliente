@@ -32,7 +32,7 @@ const textError = ref(false);
 const showPayment = ref(false);
 
 const { go } = useRouter();
-var interval='';
+let interval = '';
 const props = defineProps({
   price: {
     type: String,
@@ -106,21 +106,27 @@ const HandlePayment = () => {
     const windowLeft = (screenWidth - windowWidth) / 2;
     const windowTop = (screenHeight - windowHeight) / 2;
     // Abrir la ventana emergente centrada en la pantalla
-    var ventana = window.open(
-      "https://api.tarjetajovendiamante.com/cerrar.php",
+    const ventana = window.open(
+      url,
       'nombreVentana',
-      'width=' + windowWidth + ',height=' + windowHeight + ',left=' + windowLeft + ',top=' + windowTop,
+      'width=' +
+        windowWidth +
+        ',height=' +
+        windowHeight +
+        ',left=' +
+        windowLeft +
+        ',top=' +
+        windowTop,
       'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=no',
       'noopener'
-      );
-     interval = setInterval(function () {
+    );
+    interval = setInterval(function () {
       if (ventana.closed) {
         clearInterval(interval);
-      }else{
+      } else {
         console.log('ventana abierta: ');
         const validate = ventana.document.innerHTML;
-        if(validate === '<h5>Listo</h5>'){
-
+        if (validate === '<h5>Listo</h5>') {
           ventana.close();
           clearInterval(interval);
         }
@@ -533,6 +539,7 @@ const updateForm = ({ key, value }) => {
   .payment {
     padding: 20px 50px;
   }
+
   .paymentGrid section {
     display: block;
     margin: 0;
