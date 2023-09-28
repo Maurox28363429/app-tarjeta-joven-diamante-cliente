@@ -61,6 +61,8 @@ const handledFreePayment = () => {
 };
 const HandlePayment = () => {
   const userId = userData.value?.id || '';
+  const urlDev =
+    'https://pagosbg.bgeneral.com?merchantId=5ff812ac-cc77-4d2f-9d68-a8be2e5e74e8&total=1.17&subtotal=1.00&taxes=0.17&shipping=0.00&discount=0.00&donation=no&paymentDate=1694127120000&paymentMethod=YAP&transactionType=VEN&orderId=12345&successUrl=https%253A%252F%252Fff53-200-82-171-81.ngrok-free.app%252F%2523%252Flogin&failUrl=https%253A%252F%252Fff53-200-82-171-81.ngrok-free.app%252F%2523%252Flogin&domain=https%253A%252F%252Fyappymicroservicio.phoenixtechsa.com&jwtToken=eyJhbGciOiJSU0EtT0FFUCIsImVuYyI6IkEyNTZHQ00ifQ.V79a6qth_tPZBiivV4_jV-NCIAVQWy63y8z0tikjIOjNpmfV3kDOCW4xubl2ZSbMqXeO0Z-C7GI3iaPG46uWOSUaDeu1S67ysZbxreiwzw7awX3UevjDTj2xbj0ZexGPAec8qTI9tntux4UlxUdLywPuSQZZC7XhXnMw8N8cS_s.19Ax8lzMYaG4Ryac.skCMltyCqdXnklcrzhgo3BfT2X8y68aNA9lmGk1-VgMhtLuF9HxEoZAEduQeFO5VUt2kiQXotXXoTMGTxy2U4OUMnJHCtOaDDxzR9e-ZXh7FTvu5LA.rFssTs240UHz0wpx1GjuDw&cancelUrl=https%253A%252F%252Fff53-200-82-171-81.ngrok-free.app%252F%2523%252Flogin&platform=desarrollopropionode&signature=9f6bd67878dbc1f190e9ea859bf248f2ac553d5d96484526e8b37e0729790367&sbx=no&tel=62088987';
   const url =
     'https://api.tarjetajovendiamante.com/pago/Payment_Controller.php?user_id=' +
     `${userId}`;
@@ -107,7 +109,7 @@ const HandlePayment = () => {
     const windowTop = (screenHeight - windowHeight) / 2;
     // Abrir la ventana emergente centrada en la pantalla
     const ventana = window.open(
-      url,
+      urlDev,
       'nombreVentana',
       'width=' +
         windowWidth +

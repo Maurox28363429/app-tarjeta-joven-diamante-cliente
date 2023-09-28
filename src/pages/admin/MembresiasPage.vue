@@ -16,10 +16,10 @@ const datos = ref([]);
 const search = ref('');
 const userConsecutivos = ref([]);
 const dialogConecutivos = ref(false);
-const openConsecutivos = (data)=>{
+const openConsecutivos = (data) => {
   dialogConecutivos.value = true;
-  userConsecutivos.value =data;
-}
+  userConsecutivos.value = data;
+};
 const showAssignMembershipModal = ref(false);
 
 const { data: users, isLoading } = useGetUsersQuery();
@@ -354,26 +354,26 @@ const openPDF = (id) => {
       </q-card-section>
     </q-card>
   </q-dialog>
-    <q-dialog v-model="dialogConecutivos">
-      <q-card style="width:300px">
-        <q-card-section class="text-h6 text-weight-bold">
-          Consecutivos
-          <hr>
-        </q-card-section>
-        <q-card-section>
-          <table>
-            <thead>
-              <th style="text-align:left"></th>
-            </thead>
-            <tbody>
-              <tr v-for="(data, index) in userConsecutivos" :key="index">
-                <td>{{ data }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </q-card-section>
-      </q-card>
-    </q-dialog>
+  <q-dialog v-model="dialogConecutivos">
+    <q-card style="width: 300px">
+      <q-card-section class="text-h6 text-weight-bold">
+        Consecutivos
+        <hr />
+      </q-card-section>
+      <q-card-section>
+        <table>
+          <thead>
+            <th style="text-align: left"></th>
+          </thead>
+          <tbody>
+            <tr v-for="(data, index) in userConsecutivos" :key="index">
+              <td>{{ data }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </q-card-section>
+    </q-card>
+  </q-dialog>
 </template>
 <style scoped>
 table {

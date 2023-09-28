@@ -21,8 +21,9 @@ const pages = ref(1);
 const lastPage = ref(1);
 const itemsPerPage = ref([]);
 
-const state = ref('todos');
 const editorRef = ref(null);
+
+const provinceFilter = ref('todos');
 
 const {
   data: offers,
@@ -31,7 +32,7 @@ const {
 } = useGetOffersFromBusiness({
   page: pages,
   search,
-  dir: state,
+  dir: provinceFilter,
 });
 
 const { mutate: createOffer, isLoading: isLoadingCreate } =
@@ -266,46 +267,66 @@ const onPaste = (evt) => {
     onPasteStripFormattingIEPaste = false;
   }
 };
-const exporExcel=()=>{
-  window.open(process.env.VUE_APP_API_URL+'comercio-ofertas?excel=1');
-}
+const exporExcel = () => {
+  window.open(
+    `${process.env.VUE_APP_API_URL}comercio-ofertas?excel=1&dir=${provinceFilter.value}`
+  );
+};
 </script>
 <template>
   <q-page class="flex">
     <section class="row full-width q-px-md">
       <div class="col-12">
-        <q-form
-          class="full-width row justify-center"
-          @submit="buscar"
-          style="padding: 1em"
-        >
-          <q-input
-            class="full-width"
-            rounded
-            dense
-            v-model="search"
-            style="max-width: 400px"
-            outlined
-            type="search"
-            label="Buscar ofertas"
-            color="primary"
+        <div class="row full-width justify-center">
+          <q-form
+            class="full-width row justify-center"
+            @submit="buscar"
+            style="padding: 1em; max-width: 400px"
           >
-            <q-btn
-              type="submit"
-              size="md"
-              style="
-                right: -12px;
-                bottom: 0;
-                top: 0;
-                border-radius: 0 26px 26px 0;
-              "
+            <q-input
+              class="full-width"
+              rounded
+              dense
+              v-model="search"
+              style="max-width: 400px"
+              outlined
+              type="search"
+              label="Buscar ofertas"
               color="primary"
-              label="Buscar"
-              icon="search"
-              class="absolute"
-            />
-          </q-input>
-        </q-form>
+            >
+              <q-btn
+                type="submit"
+                size="md"
+                style="
+                  right: -12px;
+                  bottom: 0;
+                  top: 0;
+                  border-radius: 0 26px 26px 0;
+                "
+                color="primary"
+                label="Buscar"
+                icon="search"
+                class="absolute"
+              />
+            </q-input>
+          </q-form>
+          <q-select
+            outlined
+            v-model="provinceFilter"
+            use-input
+            input-debounce="0"
+            label="Provincia"
+            :options="options"
+            @filter="filterFn"
+            behavior="menu"
+          >
+            <template v-slot:no-option>
+              <q-item>
+                <q-item-section class="text-grey"> No results </q-item-section>
+              </q-item>
+            </template>
+          </q-select>
+        </div>
         <q-table
           flat
           bordered
@@ -582,7 +603,16 @@ const exporExcel=()=>{
     <!--Floating button-->
     <q-page-sticky position="bottom-right" style="margin: 12px; bottom: 60px">
       <q-btn fab icon="add" color="primary" @click="createNew" />
-      <q-btn fab icon="download" @click="exporExcel" style="margin-left:0.5em;background-color: rgb(4, 137, 15);color:white" />
+      <q-btn
+        fab
+        icon="download"
+        @click="exporExcel"
+        style="
+          margin-left: 0.5em;
+          background-color: rgb(4, 137, 15);
+          color: white;
+        "
+      />
     </q-page-sticky>
   </q-page>
 </template>
