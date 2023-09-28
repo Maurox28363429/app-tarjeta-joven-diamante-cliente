@@ -233,15 +233,16 @@ const columns = [
   { name: 'description', label: 'DESCRIPCION', field: 'description' },
   { name: 'descuento', label: 'DESCUENTO', field: 'descuento' },
   { name: 'price_total', label: 'PRECIO TOTAL', field: 'price_total' },
+
+  { name: 'stock', label: 'STOCK', field: 'stock', sortable: true },
+  { name: 'prioridad', label: 'PRIORIDAD', field: 'prioridad' },
+  { name: 'link_map', label: 'LINK MAP', field: 'link_map' },
+  { name: 'created_at', label: 'FECHA', field: 'created_at' },
   {
     name: 'fecha_tope_descuento',
     label: 'FECHA TOPE',
     field: 'fecha_tope_descuento',
   },
-  { name: 'stock', label: 'STOCK', field: 'stock', sortable: true },
-  { name: 'prioridad', label: 'PRIORIDAD', field: 'prioridad' },
-  { name: 'link_map', label: 'LINK MAP', field: 'link_map' },
-  { name: 'created_at', label: 'FECHA', field: 'created_at' },
   { name: 'action', label: 'ACTION', field: 'action' },
 ];
 
@@ -265,6 +266,9 @@ const onPaste = (evt) => {
     onPasteStripFormattingIEPaste = false;
   }
 };
+const exporExcel=()=>{
+  window.open(process.env.VUE_APP_API_URL+'comercio-ofertas?excel=1');
+}
 </script>
 <template>
   <q-page class="flex">
@@ -350,11 +354,6 @@ const onPaste = (evt) => {
               <q-td key="price_total" :props="props">
                 ${{ props.row?.price_total }}
               </q-td>
-              <q-td key="fecha_tope_descuento" :props="props">
-                {{
-                  new Date(props.row?.fecha_tope_descuento).toLocaleDateString()
-                }}
-              </q-td>
               <q-td key="stock" :props="props">
                 {{ props.row?.stock }}
               </q-td>
@@ -378,6 +377,11 @@ const onPaste = (evt) => {
               </q-td>
               <q-td key="created_at" :props="props">
                 {{ new Date(props.row?.created_at).toLocaleDateString() }}
+              </q-td>
+              <q-td key="fecha_tope_descuento" :props="props">
+                {{
+                  new Date(props.row?.fecha_tope_descuento).toLocaleDateString()
+                }}
               </q-td>
               <q-td key="action" :props="props">
                 <q-btn flat icon="more_vert">
@@ -578,6 +582,7 @@ const onPaste = (evt) => {
     <!--Floating button-->
     <q-page-sticky position="bottom-right" style="margin: 12px; bottom: 60px">
       <q-btn fab icon="add" color="primary" @click="createNew" />
+      <q-btn fab icon="download" @click="exporExcel" style="margin-left:0.5em;background-color: rgb(4, 137, 15);color:white" />
     </q-page-sticky>
   </q-page>
 </template>
