@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, watchEffect } from 'vue';
-import { useValidateForm } from 'src/composables/useValidateForm.js';
+import { useValidateForm } from 'src/composables/useValidateForm';
 
 import {
   useGetPromotions,
@@ -9,17 +9,26 @@ import {
   useDeletePromotionMutation,
 } from 'src/querys/promotionsQuerys';
 
-import { promotionsSchema } from 'src/schemas/promotionsSchema.js';
-import { checkFileType } from 'src/utils/checkFileType';
+import { useToast } from 'src/composables/useToast';
+
+import { promotionsSchema } from 'src/schemas/promotionsSchema';
+
+import FileInput from 'src/forms/FileInput.vue';
+import TextInput from 'src/forms/TextInput.vue';
+import TextareaInput from 'src/forms/TextareaInput.vue';
+
+import PROMOTIONS_TABLE from 'src/shared/constansts/tables/promotionsTable';
 
 const formulario = ref(false);
 const edit_id = ref(null);
-const editorRef = ref(null);
 
 const pages = ref(1);
-const itemsPerPage = ref([]);
-const lastPage = ref(1);
 const search = ref('');
+
+const itemsPerPage = ref([0]);
+const lastPage = ref(1);
+
+const { triggerWarning } = useToast();
 
 const {
   data: promotionsData,
@@ -54,18 +63,17 @@ const initialValues = () => ({
   link_otros: '',
 });
 
-const { useForm, validatInput } = useValidateForm({
-  initialValue: initialValues(),
-  schema: promotionsSchema,
-});
+const { useForm, validatInput, validateMessage, validateForm } =
+  useValidateForm({
+    initialValue: initialValues(),
+    schema: promotionsSchema,
+  });
 
 const currentNews = computed(() => {
   return promotionsData?.value?.data?.find(({ id }) => {
     return id === edit_id.value;
   });
 });
-
-const ACCEPTED_TYPES_FOR_DNI = ['image/jpeg', 'image/png', 'image/jpg', 'jpg'];
 
 const handleModal = (id) => {
   edit_id.value = id;
@@ -80,57 +88,21 @@ const createNew = () => {
 };
 
 const handleNews = () => {
-  edit_id.value
-    ? editNewInformative({ ...useForm.value, id: edit_id.value })
-    : createNewInformative(useForm.value);
-};
-
-const deleteNew = (id) => {
-  deleteNewInformative(id);
-};
-
-const columns = [
-  {
-    name: 'id',
-    required: true,
-    label: 'ID',
-    align: 'left',
-  },
-  { name: 'img_url', align: 'center', label: 'IMG', field: 'img_url' },
-  { name: 'titulo', label: 'TITULO', field: 'titulo' },
-  {
-    name: 'descripcion',
-    label: 'DESCRIPCION',
-    field: 'descripcion',
-    sortable: true,
-  },
-  { name: 'prioridad', label: 'PRIORIDAD', field: 'prioridad' },
-  { name: 'categoria', label: 'CATEGORIA', field: 'categoria' },
-  { name: 'created_at', label: 'FECHA', field: 'created_at' },
-  { name: 'action', label: 'ACTION', field: 'action' },
-];
-
-const onPaste = (evt) => {
-  // Let inputs do their thing, so we don't break pasting of links.
-  if (evt.target.nodeName === 'INPUT') return;
-  let text, onPasteStripFormattingIEPaste;
-  evt.preventDefault();
-  evt.stopPropagation();
-  if (evt.originalEvent && evt.originalEvent.clipboardData.getData) {
-    text = evt.originalEvent.clipboardData.getData('text/plain');
-    editorRef.value.runCmd('insertText', text);
-  } else if (evt.clipboardData && evt.clipboardData.getData) {
-    text = evt.clipboardData.getData('text/plain');
-    editorRef.value.runCmd('insertText', text);
-  } else if (window.clipboardData && window.clipboardData.getData) {
-    if (!onPasteStripFormattingIEPaste) {
-      onPasteStripFormattingIEPaste = true;
-      editorRef.value.runCmd('ms-pasteTextOnly', text);
-    }
-    onPasteStripFormattingIEPaste = false;
+  validateForm();
+  if (validateMessage.value.isvalid) {
+    formulario.value = false;
+    return edit_id.value
+      ? editNewInformative({ ...useForm.value, id: edit_id.value })
+      : createNewInformative(useForm.value);
   }
+  triggerWarning('Por favor, rellene los campos correctamente');
+};
+
+const updateForm = ({ key, value }) => {
+  useForm.value[key] = value;
 };
 </script>
+
 <template>
   <q-page class="flex">
     <section class="row full-width q-px-md">
@@ -172,9 +144,9 @@ const onPaste = (evt) => {
           bordered
           :rows-per-page-options="itemsPerPage"
           title="Promociones"
-          :loading="isLoading && !itemsPerPage.length > 0"
+          :loading="isLoading && !itemsPerPage > 0"
           :rows="promotionsData?.data ?? []"
-          :columns="columns"
+          :columns="PROMOTIONS_TABLE"
           row-key="name"
         >
           <template v-slot:body="props">
@@ -219,7 +191,8 @@ const onPaste = (evt) => {
                         >
                       </q-item>
                       <q-item clickable v-close-popup>
-                        <q-item-section @click="deleteNew(props.row?.id)"
+                        <q-item-section
+                          @click="deleteNewInformative(props.row?.id)"
                           >Eliminar</q-item-section
                         >
                       </q-item>
@@ -262,118 +235,119 @@ const onPaste = (evt) => {
 
           <q-card-section class="row full-width" style="gap: 14px">
             <div class="col-12">
-              <q-input
-                outlined
-                v-model="useForm.titulo"
-                label="Titulo"
-                @blur="validatInput('titulo')"
-                @keypress="validatInput('titulo')"
+              <TextInput
+                label="titulo"
+                name="titulo"
+                :initial-value="useForm.titulo"
+                @update:model-value="updateForm($event)"
+                :validat-input="validatInput"
+                :error-message="validateMessage.errors.titulo"
               />
             </div>
             <div class="col-12">
-              <q-input
-                outlined
-                v-model="useForm.categoria"
-                label="Categoria"
-                @blur="validatInput('categoria')"
-                @keypress="validatInput('categoria')"
+              <TextInput
+                label="categoria"
+                name="categoria"
+                :initial-value="useForm.categoria"
+                @update:model-value="updateForm($event)"
+                :validat-input="validatInput"
+                :error-message="validateMessage.errors.categoria"
               />
             </div>
             <div class="col-12">
-              <q-editor
-                ref="editorRef"
-                @paste="onPaste"
-                v-model="useForm.descripcion"
-                @blur="validatInput('descripcion')"
-                @keypress="validatInput('descripcion')"
+              <TextareaInput
+                label="descripcion"
+                name="descripcion"
+                :initial-value="useForm.descripcion"
+                @update:model-value="updateForm($event)"
+                :validat-input="validatInput"
+                :error-message="validateMessage.errors.descripcion"
               />
             </div>
             <div class="col-12 col-md-5">
-              <q-input
-                outlined
-                v-model="useForm.prioridad"
+              <TextInput
                 label="Prioridad"
-                @blur="validatInput('prioridad')"
-                @keypress="validatInput('prioridad')"
+                type="number"
+                :initial-value="useForm.prioridad"
+                @update:model-value="updateForm($event)"
+                :validat-input="validatInput"
+                :error-message="validateMessage.errors.prioridad"
+                name="prioridad"
               />
             </div>
             <div class="col-12 col-md-5">
-              <q-input
-                outlined
-                v-model="useForm.link_youtube"
+              <TextInput
+                :initial-value="useForm.link_youtube"
+                @update:model-value="updateForm($event)"
+                :validat-input="validatInput"
+                :error-message="validateMessage.errors.link_youtube"
+                name="link_youtube"
                 label="Link youtube"
-                @blur="validatInput('link_youtube')"
-                @keypress="validatInput('link_youtube')"
               >
-                <template v-slot:prepend>
-                  <q-icon name="la la-youtube" />
-                </template>
-              </q-input>
+                <q-icon name="la la-youtube" />
+              </TextInput>
             </div>
             <div class="col-12 col-md-5">
-              <q-input
-                outlined
-                v-model="useForm.link_facebook"
+              <TextInput
+                :initial-value="useForm.link_facebook"
+                @update:model-value="updateForm($event)"
+                :validat-input="validatInput"
+                :error-message="validateMessage.errors.link_facebook"
+                name="link_facebook"
                 label="Link facebook"
-                @blur="validatInput('link_facebook')"
-                @keypress="validatInput('link_facebook')"
               >
-                <template v-slot:prepend>
-                  <q-icon name="facebook" />
-                </template>
-              </q-input>
+                <q-icon name="facebook" />
+              </TextInput>
             </div>
             <div class="col-12 col-md-5">
-              <q-input
-                outlined
-                v-model="useForm.link_instragram"
+              <TextInput
+                :validat-input="validatInput"
+                :error-message="validateMessage.errors.link_instragram"
+                name="link_instragram"
+                @update:model-value="updateForm($event)"
+                :initial-value="useForm.link_instragram"
                 label="Link instragram"
-                @blur="validatInput('link_instragram')"
-                @keypress="validatInput('link_instragram')"
               >
-                <template v-slot:prepend>
-                  <q-icon name="la la-instagram" />
-                </template>
-              </q-input>
+                <q-icon name="la la-instagram" />
+              </TextInput>
             </div>
             <div class="col-12 col-md-5">
-              <q-input
-                outlined
-                v-model="useForm.link_web"
-                label="Link webidad"
-                @blur="validatInput('link_web')"
-                @keypress="validatInput('link_web')"
+              <TextInput
+                :initial-value="useForm.link_web"
+                label="Link web"
+                @update:model-value="updateForm($event)"
+                :validat-input="validatInput"
+                :error-message="validateMessage.errors.link_web"
+                name="link_web"
               >
-                <template v-slot:prepend>
-                  <q-icon name="public" />
-                </template>
-              </q-input>
+                <q-icon name="public" />
+              </TextInput>
             </div>
             <div class="col-12 col-md-5">
-              <q-input
-                outlined
-                v-model="useForm.link_otros"
+              <TextInput
+                :initial-value="useForm.link_otros"
                 label="Link otrosad"
-                @blur="validatInput('link_otros')"
-                @keypress="validatInput('link_otros')"
+                @update:model-value="updateForm($event)"
+                :validat-input="validatInput"
+                :error-message="validateMessage.errors.link_otros"
+                name="link_otros"
               >
-                <template v-slot:prepend>
-                  <q-icon name="link" />
-                </template>
-              </q-input>
+                <q-icon name="link" />
+              </TextInput>
             </div>
             <div class="col-12">
-              <q-file
-                outlined
-                :filter="checkFileType(ACCEPTED_TYPES_FOR_DNI)"
-                max-files="1"
-                v-model="useForm.img"
+              <FileInput
+                name="img"
+                :validate-input="validatInput"
+                :error-message="validateMessage.errors.img"
+                @update:model-value="updateForm($event)"
+                :initial-value="useForm.img"
                 label="Imagen"
               >
                 <template v-slot:prepend>
                   <q-icon name="cloud_upload" />
                 </template>
-              </q-file>
+              </FileInput>
             </div>
           </q-card-section>
 
@@ -384,7 +358,6 @@ const onPaste = (evt) => {
               type="submit"
               flat
               label="Enviar"
-              v-close-popup
             />
           </q-card-actions>
         </q-form>

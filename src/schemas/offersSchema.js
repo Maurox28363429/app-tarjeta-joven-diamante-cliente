@@ -2,11 +2,14 @@ import { object, string, mixed } from 'yup';
 
 const REQUIRED_MESSAGE = 'Este campo es requerido';
 
-export const promotionsSchema = object({
-  titulo: string().required(REQUIRED_MESSAGE),
-  categoria: string().required(REQUIRED_MESSAGE),
-  descripcion: string().required(REQUIRED_MESSAGE),
+const offersSchema = object({
+  descuento: string().required(REQUIRED_MESSAGE),
+  price_total: string().required(REQUIRED_MESSAGE),
+  description: string().required(REQUIRED_MESSAGE),
   prioridad: string().required(REQUIRED_MESSAGE),
+  stock: string().required(REQUIRED_MESSAGE),
+  nombre: string().required(REQUIRED_MESSAGE),
+  fecha_tope_descuento: string().nonNullable().required(REQUIRED_MESSAGE),
   img: mixed()
     .required(REQUIRED_MESSAGE)
     .test(
@@ -21,9 +24,6 @@ export const promotionsSchema = object({
         );
       }
     ),
-  link_youtube: string().required(REQUIRED_MESSAGE),
-  link_facebook: string().required(REQUIRED_MESSAGE),
-  link_instragram: string().required(REQUIRED_MESSAGE),
-  link_web: string().required(REQUIRED_MESSAGE),
-  link_otros: string().required(REQUIRED_MESSAGE),
 });
+
+export default offersSchema;

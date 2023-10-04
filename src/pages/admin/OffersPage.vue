@@ -1,8 +1,8 @@
 <script setup>
+import { useQuasar } from 'quasar';
 import { ref, computed, watchEffect } from 'vue';
 import { useValidateForm } from 'src/composables/useValidateForm.js';
-import { newSchema } from 'src/schemas/newSchema.js';
-import { checkFileType } from 'src/utils/checkFileType';
+import offersSchema from 'src/schemas/offersSchema';
 import {
   useGetOffersFromBusiness,
   useDeleteOfferMutation,
@@ -12,18 +12,27 @@ import {
 } from 'src/querys/offersQuerys';
 import { useGetBusiness } from 'src/querys/businessQuerys';
 
+import { useToast } from 'src/composables/useToast';
+
+import OFFERS_TABLE from 'src/shared/constansts/tables/offersTable';
+
+import TextInput from 'src/forms/TextInput.vue';
+import TextareInput from 'src/forms/TextareaInput.vue';
+import DateInput from 'src/forms/DateInput.vue';
+import FileInput from 'src/forms/FileInput.vue';
+
 const formulario = ref(false);
 const edit_id = ref(null);
+
+const $q = useQuasar();
 
 const search = ref('');
 
 const pages = ref(1);
-const lastPage = ref(1);
-const itemsPerPage = ref([]);
-
-const editorRef = ref(null);
 
 const provinceFilter = ref('todos');
+
+const { triggerWarning } = useToast();
 
 const {
   data: offers,
@@ -52,7 +61,21 @@ const businessId = computed(() => {
   });
 });
 
-const initialValues = ref({});
+const initialValues = ref({
+  price_total: 0.0,
+  descuento: 0.0,
+  description: '',
+  comercio_id: {
+    label: '',
+    value: '',
+  },
+  nombre: '',
+  fecha_tope_descuento: '',
+  active: '1',
+  stock: 0,
+  link_map: [],
+  prioridad: 0,
+});
 
 watchEffect(() => {
   const listOfBusiness = businessId.value;
@@ -63,19 +86,20 @@ watchEffect(() => {
       description: '',
       comercio_id: businessId.value[0],
       nombre: '',
-      fecha_tope_descuento: '2029/10/19',
+      fecha_tope_descuento: '',
       active: '1',
-      stock: 8.0,
+      stock: 0,
       link_map: [],
-      prioridad: 3,
+      prioridad: 0,
     };
   }
 });
 
-const { useForm } = useValidateForm({
-  initialValue: initialValues.value,
-  schema: newSchema,
-});
+const { useForm, validatInput, validateMessage, validateForm } =
+  useValidateForm({
+    initialValue: initialValues.value,
+    schema: offersSchema,
+  });
 
 const findBusiness = (id) => {
   return businessId.value?.find((element) => {
@@ -99,33 +123,30 @@ const currentNews = computed(() => {
   });
 });
 
-const ACCEPTED_TYPES_FOR_DNI = ['image/jpeg', 'image/png', 'image/jpg', 'jpg'];
-
 watchEffect(() => {
   pages.value = offers?.value?.pagination?.currentPage;
-  lastPage.value = offers?.value?.pagination?.lastPage;
-  itemsPerPage.value = [offers?.value?.pagination?.itemsPerPage];
 });
-
-const buscar = () => {
-  refetch();
-};
 
 const map = ref([]);
 
 const handleNews = () => {
-  edit_id.value
-    ? editOffer({
-        ...useForm.value,
-        id: edit_id.value,
-        link_map: map.value,
-        comercio_id: useForm.value.comercio_id.value,
-      })
-    : createOffer({
-        ...useForm.value,
-        link_map: map.value,
-        comercio_id: useForm.value.comercio_id.value,
-      });
+  validateForm();
+  if (validateMessage.value.isvalid) {
+    formulario.value = false;
+    return edit_id.value
+      ? editOffer({
+          ...useForm.value,
+          id: edit_id.value,
+          link_map: map.value,
+          comercio_id: useForm.value.comercio_id.value,
+        })
+      : createOffer({
+          ...useForm.value,
+          link_map: map.value,
+          comercio_id: useForm.value.comercio_id.value,
+        });
+  }
+  triggerWarning('Por favor, rellene los campos correctamente');
 };
 
 const deleteNew = (id) => {
@@ -194,7 +215,18 @@ const handleModal = (id) => {
 
 const createNew = () => {
   edit_id.value = null;
-  useForm.value = initialValues.value;
+  useForm.value = {
+    price_total: 0.0,
+    descuento: 0.0,
+    description: '',
+    comercio_id: businessId.value[0],
+    nombre: '',
+    fecha_tope_descuento: '',
+    active: '1',
+    stock: 0,
+    link_map: [],
+    prioridad: 0,
+  };
   map.value = newLinkMap.value;
   formulario.value = true;
 };
@@ -215,64 +247,17 @@ const deleteLink = (index) => {
   map.value.splice(index, 1);
 };
 
-const columns = [
-  {
-    name: 'id',
-    required: true,
-    label: 'ID',
-    align: 'left',
-  },
-  { name: 'active', align: 'center', label: 'ACTIVO', field: 'active' },
-  { name: 'nombre', align: 'center', label: 'NOMBRE', field: 'nombre' },
-  { name: 'comercio', align: 'center', label: 'COMERCIO', field: 'comercio' },
-  {
-    name: 'img_array_url',
-    align: 'center',
-    label: 'IMG',
-    field: 'img_array_url',
-  },
-  { name: 'description', label: 'DESCRIPCION', field: 'description' },
-  { name: 'descuento', label: 'DESCUENTO', field: 'descuento' },
-  { name: 'price_total', label: 'PRECIO TOTAL', field: 'price_total' },
-
-  { name: 'stock', label: 'STOCK', field: 'stock', sortable: true },
-  { name: 'prioridad', label: 'PRIORIDAD', field: 'prioridad' },
-  { name: 'link_map', label: 'LINK MAP', field: 'link_map' },
-  { name: 'created_at', label: 'FECHA', field: 'created_at' },
-  {
-    name: 'fecha_tope_descuento',
-    label: 'FECHA TOPE',
-    field: 'fecha_tope_descuento',
-  },
-  { name: 'action', label: 'ACTION', field: 'action' },
-];
-
-const onPaste = (evt) => {
-  // Let inputs do their thing, so we don't break pasting of links.
-  if (evt.target.nodeName === 'INPUT') return;
-  let text, onPasteStripFormattingIEPaste;
-  evt.preventDefault();
-  evt.stopPropagation();
-  if (evt.originalEvent && evt.originalEvent.clipboardData.getData) {
-    text = evt.originalEvent.clipboardData.getData('text/plain');
-    editorRef.value.runCmd('insertText', text);
-  } else if (evt.clipboardData && evt.clipboardData.getData) {
-    text = evt.clipboardData.getData('text/plain');
-    editorRef.value.runCmd('insertText', text);
-  } else if (window.clipboardData && window.clipboardData.getData) {
-    if (!onPasteStripFormattingIEPaste) {
-      onPasteStripFormattingIEPaste = true;
-      editorRef.value.runCmd('ms-pasteTextOnly', text);
-    }
-    onPasteStripFormattingIEPaste = false;
-  }
-};
 const exporExcel = () => {
   window.open(
     `${process.env.VUE_APP_API_URL}comercio-ofertas?excel=1&dir=${provinceFilter.value}`
   );
 };
+
+const updateForm = ({ key, value }) => {
+  useForm.value[key] = value;
+};
 </script>
+
 <template>
   <q-page class="flex">
     <section class="row full-width q-px-md">
@@ -280,7 +265,7 @@ const exporExcel = () => {
         <div class="row full-width justify-center">
           <q-form
             class="full-width row justify-center"
-            @submit="buscar"
+            @submit="refetch"
             style="padding: 1em; max-width: 400px"
           >
             <q-input
@@ -332,9 +317,9 @@ const exporExcel = () => {
           bordered
           title="Ofertas"
           :rows="offers?.data"
-          :columns="columns"
+          :columns="OFFERS_TABLE"
           v-if="!isLoadingOffers && !isLoadingStates"
-          :rows-per-page-options="itemsPerPage"
+          :rows-per-page-options="[offers?.pagination?.itemsPerPage]"
           row-key="name"
         >
           <template v-slot:body="props">
@@ -427,9 +412,9 @@ const exporExcel = () => {
         </q-table>
         <article style="margin: 1em">
           <q-pagination
-            v-if="!isLoadingOffers && offers?.data"
+            v-if="!isLoadingOffers && offers?.pagination"
             v-model="pages"
-            :max="lastPage"
+            :max="offers?.pagination?.lastPage"
             direction-links
             outline
             color="blue"
@@ -460,38 +445,60 @@ const exporExcel = () => {
             </div>
           </q-card-section>
 
-          <q-card-section class="q-pt-none q-gutter-md">
+          <q-card-section class="q-pt-none q-gutter-md full-width">
             <q-radio v-model="useForm.active" val="1" label="Activo" />
             <q-radio v-model="useForm.active" val="0" label="No activo" />
-            <q-input outlined v-model="useForm.nombre" label="Nombre" />
-            <q-input
-              type="number"
-              outlined
-              v-model="useForm.stock"
+            <TextInput
+              @update:modelValue="updateForm($event)"
+              name="nombre"
+              :validatInput="validatInput"
+              label="Nombre"
+              :errorMessage="validateMessage.errors.nombre"
+              :initial-value="useForm.nombre"
+            />
+            <TextInput
+              @update:modelValue="updateForm($event)"
+              name="stock"
+              :validatInput="validatInput"
               label="Stock"
-            />
-            <q-input
               type="number"
-              outlined
-              v-model="useForm.descuento"
+              :errorMessage="validateMessage.errors.stock"
+              :initial-value="useForm.stock"
+            />
+            <TextInput
+              @update:modelValue="updateForm($event)"
+              name="descuento"
+              :validatInput="validatInput"
               label="Descuento"
-            />
-            <q-input
-              outlined
               type="number"
-              v-model="useForm.price_total"
+              :errorMessage="validateMessage.errors.descuento"
+              :initial-value="useForm.descuento"
+            />
+            <TextInput
+              @update:modelValue="updateForm($event)"
+              name="price_total"
+              :validatInput="validatInput"
               label="Precio total"
-            />
-            <q-editor
-              ref="editorRef"
-              @paste="onPaste"
-              v-model="useForm.description"
-            />
-            <q-input
-              outlined
               type="number"
-              v-model="useForm.prioridad"
+              :errorMessage="validateMessage.errors.price_total"
+              :initial-value="useForm.price_total"
+            />
+            <TextareInput
+              name="description"
+              :validatInput="validatInput"
+              label="Descripcion"
+              @update:modelValue="updateForm($event)"
+              :errorMessage="validateMessage.errors.description"
+              :initial-value="useForm.description"
+            />
+            <TextInput
+              @update:modelValue="updateForm($event)"
+              name="prioridad"
+              :validatInput="validatInput"
               label="Prioridad"
+              type="number"
+              :errorMessage="validateMessage.errors.prioridad"
+              :initial-value="useForm.prioridad"
             />
             <div class="q-ml-none">
               <p class="q-ml-md text-body1">Link de ubicaciones</p>
@@ -571,20 +578,27 @@ const exporExcel = () => {
 
             <div>
               <p class="text-body1">Fecha tope</p>
-              <q-date v-model="useForm.fecha_tope_descuento" />
+
+              <DateInput
+                name="fecha_tope_descuento"
+                label="Fecha tope"
+                @update:modelValue="updateForm($event)"
+                :validateInput="validatInput"
+                :errorMessage="validateMessage.errors.fecha_tope_descuento"
+                :initial-value="useForm.fecha_tope_descuento"
+              />
             </div>
 
-            <q-file
-              outlined
-              max-files="2"
-              :filter="checkFileType(ACCEPTED_TYPES_FOR_DNI)"
-              v-model="useForm.img"
+            <FileInput
+              name="img"
+              @update:modelValue="updateForm($event)"
+              :initial-value="useForm.img"
+              :validateInput="validatInput"
+              :errorMessage="validateMessage.errors.img"
               label="Imagen"
             >
-              <template v-slot:prepend>
-                <q-icon name="cloud_upload" />
-              </template>
-            </q-file>
+              <q-icon name="cloud_upload" />
+            </FileInput>
           </q-card-section>
 
           <q-card-actions align="right" class="text-primary">
@@ -594,7 +608,6 @@ const exporExcel = () => {
               type="submit"
               flat
               label="Enviar"
-              v-close-popup
             />
           </q-card-actions>
         </q-form>
