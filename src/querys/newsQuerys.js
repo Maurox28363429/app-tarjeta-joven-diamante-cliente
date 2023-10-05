@@ -26,8 +26,12 @@ export const useCreateNewMutation = () => {
       triggerPositive('Noticia creada con éxito');
       queryClient.invalidateQueries({ queryKey: ['news'] });
     },
-    onError: () => {
-      triggerWarning(ERROR_MESSAGE);
+    onError: (error) => {
+      if (error.response.status === 409) {
+        triggerWarning(
+          'Por favor, verifique que la noticia no exista o que los  datos sean correctos'
+        );
+      }
     },
   });
 };

@@ -113,13 +113,20 @@ export const useEditUniversityOfferMutation = () => {
 };
 
 export const useCreateOfferMutation = () => {
-  const { triggerPositive } = useToast();
+  const { triggerPositive, triggerWarning } = useToast();
   const queryClient = useQueryClient();
 
   return useMutation(createOffer, {
     onSuccess: () => {
       triggerPositive('Oferta creada con éxito');
       queryClient.invalidateQueries({ queryKey: ['offersFromBusiness'] });
+    },
+    onError: (error) => {
+      if (error.response.status === 409) {
+        triggerWarning(
+          'Por favor, verifique que la oferta no exista o que los  datos sean correctos'
+        );
+      }
     },
   });
 };
