@@ -26,7 +26,13 @@ export const useCreatePromotionMutation = () => {
         queryKey: ['promotions'],
       });
     },
-    onError: () => {
+    onError: (error) => {
+      if (error.response.status === 409) {
+        triggerWarning(
+          'Por favor, verifique que la promoción no exista o que los  datos sean correctos'
+        );
+        return;
+      }
       triggerWarning('Ah ocurrido un error, intente nuevamente');
     },
   });

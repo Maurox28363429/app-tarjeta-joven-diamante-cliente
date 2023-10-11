@@ -71,7 +71,7 @@ const initialValues = ref({
   },
   nombre: '',
   fecha_tope_descuento: '',
-  active: '1',
+  active: 1,
   stock: 0,
   link_map: [],
   prioridad: 0,
@@ -87,7 +87,7 @@ watchEffect(() => {
       comercio_id: businessId.value[0],
       nombre: '',
       fecha_tope_descuento: '',
-      active: '1',
+      active: 1,
       stock: 0,
       link_map: [],
       prioridad: 0,
@@ -209,6 +209,7 @@ const handleModal = (id) => {
   const updatedForm = { ...currentNews.value };
   updatedForm.description = currentNews.value.description ?? '';
   updatedForm.comercio_id = findBusiness(Number(currentNews.value.comercio_id));
+  updatedForm.active = Number(currentNews.value.active);
 
   useForm.value = updatedForm;
 };
@@ -222,7 +223,7 @@ const createNew = () => {
     comercio_id: businessId.value[0],
     nombre: '',
     fecha_tope_descuento: '',
-    active: '1',
+    active: 1,
     stock: 0,
     link_map: [],
     prioridad: 0,
@@ -446,8 +447,8 @@ const updateForm = ({ key, value }) => {
           </q-card-section>
 
           <q-card-section class="q-pt-none q-gutter-md full-width">
-            <q-radio v-model="useForm.active" val="1" label="Activo" />
-            <q-radio v-model="useForm.active" val="0" label="No activo" />
+            <q-radio v-model="useForm.active" :val="1" label="Activo" />
+            <q-radio v-model="useForm.active" :val="0" label="No activo" />
             <TextInput
               @update:modelValue="updateForm($event)"
               name="nombre"
