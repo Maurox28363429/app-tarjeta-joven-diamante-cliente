@@ -32,6 +32,8 @@ const pages = ref(1);
 
 const provinceFilter = ref('todos');
 
+const searchBusiness = ref('');
+
 const { triggerWarning } = useToast();
 
 const {
@@ -50,7 +52,9 @@ const { data: states, isLoading: isLoadingStates } = useGetStates({});
 const { mutate: deleteOffer } = useDeleteOfferMutation();
 const { mutate: editOffer, isLoading: isLoadingEdit } = useEditOfferMutation();
 
-const { data: businessData } = useGetBusiness();
+const { data: businessData } = useGetBusiness({
+  search: searchBusiness,
+});
 
 const businessId = computed(() => {
   return businessData?.value?.data?.map((element) => {
@@ -565,6 +569,7 @@ const updateForm = ({ key, value }) => {
               input-debounce="0"
               label="Comercio"
               :options="optionsBusiness"
+              @input-value="(value) => (searchBusiness = value)"
               @filter="filterBusiness"
               behavior="menu"
             >

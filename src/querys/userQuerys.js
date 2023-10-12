@@ -13,7 +13,11 @@ import { useToast } from 'src/composables/useToast';
 const ERROR_MESSAGE = 'Ah ocurrido un error, intente nuevamente';
 
 export const useGetUserQuery = ({ id }) => {
-  return useQuery(['user'], () => getUser(id));
+  return useQuery(['user'], () => getUser(id), {
+    staleTime: Infinity,
+    cacheTime: Infinity,
+    refetchOnWindowFocus: false,
+  });
 };
 
 export const useUpdateUserMutation = () => {

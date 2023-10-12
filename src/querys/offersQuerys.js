@@ -35,7 +35,9 @@ export const useGetOffersFromBusiness = ({ search, page, dir }) => {
 };
 
 export const useGetStates = ({ sort_ofertas = 0, sort_uni = 0 }) => {
-  return useQuery(['states'], () => getStates({ sort_ofertas, sort_uni }));
+  return useQuery(['states'], () => getStates({ sort_ofertas, sort_uni }), {
+    refetchOnWindowFocus: false,
+  });
 };
 
 export const useGetUniversities = ({ search, page, dir }) => {
