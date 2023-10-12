@@ -52,17 +52,21 @@ const { data: states, isLoading: isLoadingStates } = useGetStates({});
 const { mutate: deleteOffer } = useDeleteOfferMutation();
 const { mutate: editOffer, isLoading: isLoadingEdit } = useEditOfferMutation();
 
-const { data: businessData } = useGetBusiness({
+const { data: businessData, isLoading: isLoadingBusiness } = useGetBusiness({
   search: searchBusiness,
 });
 
-const businessId = computed(() => {
-  return businessData?.value?.data?.map((element) => {
-    return {
-      label: element.name,
-      value: element.id,
-    };
-  });
+const businessId = ref([]);
+
+watchEffect(() => {
+  if (businessData?.value?.data && !isLoadingBusiness.value) {
+    businessId.value = businessData?.value?.data?.map((element) => {
+      return {
+        label: element.name,
+        value: element.id,
+      };
+    });
+  }
 });
 
 const initialValues = ref({
@@ -186,9 +190,11 @@ const filterBusiness = (val, update) => {
 
   update(() => {
     const needle = val.toLowerCase();
-    optionsBusiness.value = businessId.value.filter(
-      (v) => v.toLowerCase().indexOf(needle) > -1
-    );
+    console.log(needle, 'needle');
+    optionsBusiness.value = businessId?.value?.filter((v) => {
+      console.log(v, 'value');
+      return v?.label.toLowerCase().indexOf(needle) > -1;
+    });
   });
 };
 
