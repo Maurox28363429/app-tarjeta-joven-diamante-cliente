@@ -623,7 +623,7 @@ pb.collection('tarjetajoven_mensajes').subscribe('*', function (e) {
       <q-dialog v-model="isNoMembership" persistent>
         <q-card
           class="column justify-center"
-          style="width: 90vw; height: 400px"
+          style="width: 90vw; min-height: 400px"
         >
           <q-card-section align="center">
             <div align="center">
