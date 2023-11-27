@@ -1,12 +1,18 @@
+import { useQuery, useMutation, useQueryClient } from '@tanstack/vue-query';
+
 import getHelpNumber from 'src/api/getHelpNumber';
 import createSos from 'src/api/createSos';
 import updateSos from 'src/api/updateSos';
 import deleteSos from 'src/api/deleteSos';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/vue-query';
+
 import { useToast } from 'src/composables/useToast';
 
+import TOAST_MESSAGE from 'src/shared/constansts/toastMessage';
+
+const SOS_KEY = 'sos';
+
 export const useGetHelpNumber = ({ page, search = '' }) => {
-  return useQuery(['sos', page, search], async () =>
+  return useQuery([SOS_KEY, page, search], async () =>
     getHelpNumber({ page: page.value, search: search.value })
   );
 };
@@ -17,13 +23,11 @@ export const createSosMutate = () => {
 
   return useMutation(createSos, {
     onSuccess: () => {
-      triggerPositive('Creado con éxito');
-      queryClient.invalidateQueries({
-        queryKey: ['sos'],
-      });
+      triggerPositive(TOAST_MESSAGE.CREATE);
+      queryClient.invalidateQueries([SOS_KEY]);
     },
     onError: () => {
-      triggerWarning('Ah ocurrido un error, intente nuevamente');
+      triggerWarning(TOAST_MESSAGE.ERROR.DEFAULT);
     },
   });
 };
@@ -35,13 +39,11 @@ export const updateSosMutate = () => {
 
   return useMutation(updateSos, {
     onSuccess: () => {
-      triggerPositive('Actualizado con éxito');
-      queryClient.invalidateQueries({
-        queryKey: ['sos'],
-      });
+      triggerPositive(TOAST_MESSAGE.UPDATE);
+      queryClient.invalidateQueries([SOS_KEY]);
     },
     onError: () => {
-      triggerWarning('Ah ocurrido un error, intente nuevamente');
+      triggerWarning(TOAST_MESSAGE.ERROR.DEFAULT);
     },
   });
 };
@@ -52,13 +54,11 @@ export const deleteSosMutate = () => {
 
   return useMutation(deleteSos, {
     onSuccess: () => {
-      triggerPositive('Eliminado con éxito');
-      queryClient.invalidateQueries({
-        queryKey: ['sos'],
-      });
+      triggerPositive(TOAST_MESSAGE.DELETE);
+      queryClient.invalidateQueries([SOS_KEY]);
     },
     onError: () => {
-      triggerWarning('Ah ocurrido un error, intente nuevamente');
+      triggerWarning(TOAST_MESSAGE.ERROR.DEFAULT);
     },
   });
 };

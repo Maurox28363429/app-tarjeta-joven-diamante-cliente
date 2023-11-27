@@ -1,19 +1,25 @@
 import { useQuery, useQueryClient, useMutation } from '@tanstack/vue-query';
+
+import { useToast } from 'src/composables/useToast';
+
 import getNews from 'src/api/getNews';
 import createPromotion from 'src/api/createPromotion';
 import editPromotions from 'src/api/editPromotions';
 import deletePromotion from 'src/api/deletePromotion';
 import getPromotion from 'src/api/getPromotion';
-import { useToast } from 'src/composables/useToast';
+
+import TOAST_MESSAGE from 'src/shared/constansts/toastMessage';
+
+const PROMOTIONS_KEY = 'promotions';
 
 export const useGetPromotions = ({ search, pages = {} }) => {
-  return useQuery(['promotions', pages], () =>
+  return useQuery([PROMOTIONS_KEY, pages], () =>
     getNews({ search: search.value, pages: pages.value })
   );
 };
 
 export const useGetPromotion = (route) => {
-  return useQuery(['promotions', route], () => getPromotion(route.value));
+  return useQuery([PROMOTIONS_KEY, route], () => getPromotion(route.value));
 };
 
 export const useCreatePromotionMutation = () => {
@@ -21,10 +27,8 @@ export const useCreatePromotionMutation = () => {
   const { triggerPositive, triggerWarning } = useToast();
   return useMutation((data) => createPromotion(data), {
     onSuccess: () => {
-      triggerPositive('Creado con éxito');
-      queryClient.invalidateQueries({
-        queryKey: ['promotions'],
-      });
+      triggerPositive(TOAST_MESSAGE.CREATE);
+      queryClient.invalidateQueries([PROMOTIONS_KEY]);
     },
     onError: (error) => {
       if (error.response.status === 409) {
@@ -33,7 +37,7 @@ export const useCreatePromotionMutation = () => {
         );
         return;
       }
-      triggerWarning('Ah ocurrido un error, intente nuevamente');
+      triggerWarning(TOAST_MESSAGE.ERROR.DEFAULT);
     },
   });
 };
@@ -43,13 +47,11 @@ export const useEditPromotionMutation = () => {
   const { triggerPositive, triggerWarning } = useToast();
   return useMutation((data) => editPromotions(data), {
     onSuccess: () => {
-      triggerPositive('Editado con éxito');
-      queryClient.invalidateQueries({
-        queryKey: ['promotions'],
-      });
+      triggerPositive(TOAST_MESSAGE.UPDATE);
+      queryClient.invalidateQueries([PROMOTIONS_KEY]);
     },
     onError: () => {
-      triggerWarning('Ah ocurrido un error, intente nuevamente');
+      triggerWarning(TOAST_MESSAGE.ERROR.DEFAULT);
     },
   });
 };
@@ -59,13 +61,11 @@ export const useDeletePromotionMutation = () => {
   const { triggerPositive, triggerWarning } = useToast();
   return useMutation((data) => deletePromotion(data), {
     onSuccess: () => {
-      triggerPositive('Eliminado con éxito');
-      queryClient.invalidateQueries({
-        queryKey: ['promotions'],
-      });
+      triggerPositive(TOAST_MESSAGE.DELETE);
+      queryClient.invalidateQueries([PROMOTIONS_KEY]);
     },
     onError: () => {
-      triggerWarning('Ah ocurrido un error, intente nuevamente');
+      triggerWarning(TOAST_MESSAGE.ERROR.DEFAULT);
     },
   });
 };

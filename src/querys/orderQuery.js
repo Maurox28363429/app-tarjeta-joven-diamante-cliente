@@ -1,22 +1,29 @@
 import { useQuery, useQueryClient, useMutation } from '@tanstack/vue-query';
+
 import { useToast } from 'src/composables/useToast';
+
 import deleteProduct from 'src/api/deleteProduct';
 import editProduct from 'src/api/editProduct';
 import getProducts from 'src/api/getProducts';
 import getProductById from 'src/api/getProductById';
 import createOrder from 'src/api/createOrder';
+
 import { useProductCart } from 'src/stores/useProductCart';
 
-const ERROR_MESSAGE = 'Ah ocurrido un error, intente nuevamente';
+import TOAST_MESSAGE from 'src/shared/constansts/toastMessage';
+
+const PRODUCTS_KEY = 'products';
+const ORDER_KEY = 'order';
+const PRODUCT_KEY = 'product';
 
 export const useGetProducts = ({ search, pages }) => {
-  return useQuery(['products', pages], () =>
+  return useQuery([PRODUCTS_KEY, pages], () =>
     getProducts({ search: search.value, pages: pages.value })
   );
 };
 
 export const useGetProductById = (id) => {
-  return useQuery(['product', id], () => getProductById(id));
+  return useQuery([PRODUCT_KEY, id], () => getProductById(id));
 };
 
 export const useCreateOrderMutation = () => {
@@ -26,12 +33,12 @@ export const useCreateOrderMutation = () => {
 
   return useMutation(createOrder, {
     onSuccess: () => {
-      triggerPositive('Orden creada con éxito');
+      triggerPositive(TOAST_MESSAGE.CREATE);
       store.clearCart();
-      queryClient.invalidateQueries({ queryKey: ['order'] });
+      queryClient.invalidateQueries([ORDER_KEY]);
     },
     onError: () => {
-      triggerWarning(ERROR_MESSAGE);
+      triggerWarning(TOAST_MESSAGE.ERROR.DEFAULT);
     },
   });
 };
@@ -42,11 +49,11 @@ export const useEditProductMutation = () => {
 
   return useMutation(editProduct, {
     onSuccess: () => {
-      triggerPositive('Producto actualizado con éxito');
-      queryClient.invalidateQueries({ queryKey: ['products'] });
+      triggerPositive(TOAST_MESSAGE.UPDATE);
+      queryClient.invalidateQueries([PRODUCTS_KEY]);
     },
     onError: () => {
-      triggerWarning(ERROR_MESSAGE);
+      triggerWarning(TOAST_MESSAGE.ERROR.DEFAULT);
     },
   });
 };
@@ -57,11 +64,11 @@ export const useDeleteProductMutation = () => {
 
   return useMutation(deleteProduct, {
     onSuccess: () => {
-      triggerPositive('Producto eliminado con éxito');
-      queryClient.invalidateQueries({ queryKey: ['products'] });
+      triggerPositive(TOAST_MESSAGE.DELETE);
+      queryClient.invalidateQueries([PRODUCTS_KEY]);
     },
     onError: () => {
-      triggerWarning(ERROR_MESSAGE);
+      triggerWarning(TOAST_MESSAGE.ERROR.DEFAULT);
     },
   });
 };

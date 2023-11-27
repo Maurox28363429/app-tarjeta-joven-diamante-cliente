@@ -43,7 +43,6 @@ const value = ref(props.initialValue);
 const handledChange = (e) => {
   updateValue(props.name, e);
   props.validateInput(props.name);
-  console.log(e, 'hanlde change');
 };
 </script>
 

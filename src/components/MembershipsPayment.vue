@@ -126,7 +126,6 @@ const HandlePayment = () => {
       if (ventana.closed) {
         clearInterval(interval);
       } else {
-        console.log('ventana abierta: ');
         const validate = ventana.document.innerHTML;
         if (validate === '<h5>Listo</h5>') {
           ventana.close();
@@ -156,7 +155,6 @@ const sendPay = () => {
 
 const updateForm = ({ key, value }) => {
   useForm.value[key] = value;
-  console.log({ key, value }, 'updateForm');
 };
 </script>
 

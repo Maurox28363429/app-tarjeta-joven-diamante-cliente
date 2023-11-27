@@ -39,14 +39,12 @@ const value = ref(props.initialValue);
 watch(
   () => props.initialValue,
   (newValue) => {
-    console.log(newValue, 'new value');
     value.value = newValue;
   }
 );
 
 const handledChange = (e) => {
   updateValue(props.name, e);
-  console.log(e, 'hanlde change');
 };
 </script>
 

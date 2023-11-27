@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/vue-query';
+
 import getProductsOrder from 'src/api/getProductsOrder';
 
 export const useGetBusiness = ({ search, page }) => {

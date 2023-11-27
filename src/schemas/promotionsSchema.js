@@ -13,7 +13,6 @@ export const promotionsSchema = object({
       'formato',
       'Solo se aceptan los siguientes formatos: .jpeg, .jpg y .png',
       (value) => {
-        console.log(value, 'value');
         return (
           !value ||
           (value &&

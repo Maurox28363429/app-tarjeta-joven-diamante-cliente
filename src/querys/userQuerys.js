@@ -1,5 +1,8 @@
 import { useRouter } from 'vue-router';
+
 import { useMutation, useQueryClient, useQuery } from '@tanstack/vue-query';
+
+import { useToast } from 'src/composables/useToast';
 
 import updateUser from 'src/api/updateUser';
 import getCodeForRecoveryPassword from 'src/api/getCodeForRecoveryPassword';
@@ -8,9 +11,7 @@ import changePassword from 'src/api/changePassword';
 import getUser from 'src/api/getUser';
 import getUsers from 'src/api/getUsers';
 
-import { useToast } from 'src/composables/useToast';
-
-const ERROR_MESSAGE = 'Ah ocurrido un error, intente nuevamente';
+import TOAST_MESSAGE from 'src/shared/constansts/toastMessage';
 
 export const useGetUserQuery = ({ id }) => {
   return useQuery(['user'], () => getUser(id), {
@@ -33,7 +34,7 @@ export const useUpdateUserMutation = () => {
       });
     },
     onError: () => {
-      triggerWarning(ERROR_MESSAGE);
+      triggerWarning(TOAST_MESSAGE.ERROR.DEFAULT);
     },
   });
 };
@@ -50,7 +51,7 @@ export const useSendEmail = () => {
       });
     },
     onError: () => {
-      triggerWarning(ERROR_MESSAGE);
+      triggerWarning(TOAST_MESSAGE.ERROR.DEFAULT);
     },
   });
 };
@@ -65,7 +66,7 @@ export const useChangePassword = () => {
       router.push({ name: 'login' });
     },
     onError: () => {
-      triggerWarning(ERROR_MESSAGE);
+      triggerWarning(TOAST_MESSAGE.ERROR.DEFAULT);
     },
   });
 };
@@ -84,7 +85,7 @@ export const useValidatePasswordAndCode = () => {
       });
     },
     onError: () => {
-      triggerWarning(ERROR_MESSAGE);
+      triggerWarning(TOAST_MESSAGE.ERROR.DEFAULT);
     },
   });
 };
@@ -101,7 +102,7 @@ export const useSendEmailAgain = () => {
       });
     },
     onError: () => {
-      triggerWarning(ERROR_MESSAGE);
+      triggerWarning(TOAST_MESSAGE.ERROR.DEFAULT);
     },
   });
 };

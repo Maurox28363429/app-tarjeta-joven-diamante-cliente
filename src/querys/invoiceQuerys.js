@@ -1,6 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/vue-query';
-import invoiceOffer from 'src/api/invoiceOffer';
+
 import { useToast } from 'src/composables/useToast';
+
+import invoiceOffer from 'src/api/invoiceOffer';
 
 export const useInvoiceOfferMutation = () => {
   const { triggerPositive, triggerWarning } = useToast();
@@ -14,8 +16,7 @@ export const useInvoiceOfferMutation = () => {
         queryKey: ['offers', 'transactionsClient', 'transactionsBusiness'],
       });
     },
-    onError: (error) => {
-      console.error(error, 'error');
+    onError: () => {
       triggerWarning('Ha ocurrido un error al crear la factura de oferta');
     },
   });

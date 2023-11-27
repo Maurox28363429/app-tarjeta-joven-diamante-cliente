@@ -1,10 +1,17 @@
 <script setup>
 import { defineProps } from 'vue';
+import { useRouter } from 'vue-router';
+
 import { userAuth } from 'src/composables/userAuth';
 
-const { userData } = userAuth();
+import { useToast } from 'src/composables/useToast';
 
-defineProps({
+const { userData } = userAuth();
+const { push } = useRouter();
+
+const { triggerWarning } = useToast();
+
+const props = defineProps({
   benefits: {
     type: Array,
     required: true,
@@ -31,6 +38,21 @@ defineProps({
 });
 
 const baseurl = '/memberships/';
+
+const toGoMemberShip = () => {
+  if (userData?.value?.membresia?.status === 'activa') {
+    triggerWarning('Ya tienes una membresia activa');
+    return;
+  }
+  if (
+    props.price <= 0 &&
+    userData?.value?.membresia?.type !== 'permitir_gratuita'
+  ) {
+    triggerWarning('Ya optaste por la membresia gratuita');
+    return;
+  }
+  push(baseurl + props.id);
+};
 </script>
 
 <template>
@@ -82,15 +104,11 @@ const baseurl = '/memberships/';
     </p>
     <div class="full-width button">
       <q-btn
-        :disable="
-          userData?.membresia?.status === 'activa' ||
-          (price <= 0 && userData?.membresia?.type !== 'permitir_gratuita')
-        "
+        @click="toGoMemberShip"
         outline
         color="secondary"
         :label="price > 0 ? 'Comprar' : 'Obtener'"
         class="full-width"
-        :to="baseurl + id"
       />
     </div>
   </div>

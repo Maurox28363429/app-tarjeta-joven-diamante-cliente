@@ -190,9 +190,8 @@ const filterBusiness = (val, update) => {
 
   update(() => {
     const needle = val.toLowerCase();
-    console.log(needle, 'needle');
+
     optionsBusiness.value = businessId?.value?.filter((v) => {
-      console.log(v, 'value');
       return v?.label.toLowerCase().indexOf(needle) > -1;
     });
   });

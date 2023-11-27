@@ -1,5 +1,7 @@
 import { useQuery, useQueryClient, useMutation } from '@tanstack/vue-query';
+
 import { useToast } from 'src/composables/useToast';
+
 import deleteProduct from 'src/api/deleteProduct';
 import editProduct from 'src/api/editProduct';
 import getProducts from 'src/api/getProducts';
@@ -11,10 +13,15 @@ import deleteEcommerceCategory from 'src/api/deleteEcommerceCategory';
 import getEcommerceCategories from 'src/api/getEcommerceCategories';
 import getCategoryById from 'src/api/getCategoryById';
 
-const ERROR_MESSAGE = 'Ah ocurrido un error, intente nuevamente';
+import TOAST_MESSAGE from 'src/shared/constansts/toastMessage';
+
+const PRODUCTS_KEY = 'products';
+const PRODUCT_KEY = 'product';
+const PRODUCT_CATEGORIES_KEY = 'productCategories';
+const PRODUCT_CATEGORY_KEY = 'productCategory';
 
 export const useGetProducts = ({ search, pages, category_id }) => {
-  return useQuery(['products', pages, category_id], () => {
+  return useQuery([PRODUCTS_KEY, pages, category_id], () => {
     const params = category_id
       ? {
           search: search.value,
@@ -27,7 +34,7 @@ export const useGetProducts = ({ search, pages, category_id }) => {
 };
 
 export const useGetProductById = (id) => {
-  return useQuery(['product', id], () => getProductById(id));
+  return useQuery([PRODUCT_KEY, id], () => getProductById(id));
 };
 
 export const useCreateProductMutation = () => {
@@ -36,11 +43,11 @@ export const useCreateProductMutation = () => {
 
   return useMutation(createProduct, {
     onSuccess: () => {
-      triggerPositive('Producto creado con éxito');
-      queryClient.invalidateQueries({ queryKey: ['products'] });
+      triggerPositive(TOAST_MESSAGE.CREATE);
+      queryClient.invalidateQueries([PRODUCTS_KEY]);
     },
     onError: () => {
-      triggerWarning(ERROR_MESSAGE);
+      triggerWarning(TOAST_MESSAGE.ERROR.DEFAULT);
     },
   });
 };
@@ -51,11 +58,11 @@ export const useEditProductMutation = () => {
 
   return useMutation(editProduct, {
     onSuccess: () => {
-      triggerPositive('Producto actualizado con éxito');
-      queryClient.invalidateQueries({ queryKey: ['products'] });
+      triggerPositive(TOAST_MESSAGE.UPDATE);
+      queryClient.invalidateQueries([PRODUCTS_KEY]);
     },
     onError: () => {
-      triggerWarning(ERROR_MESSAGE);
+      triggerWarning(TOAST_MESSAGE.ERROR.DEFAULT);
     },
   });
 };
@@ -66,17 +73,17 @@ export const useDeleteProductMutation = () => {
 
   return useMutation(deleteProduct, {
     onSuccess: () => {
-      triggerPositive('Producto eliminado con éxito');
-      queryClient.invalidateQueries({ queryKey: ['products'] });
+      triggerPositive(TOAST_MESSAGE.DELETE);
+      queryClient.invalidateQueries([PRODUCTS_KEY]);
     },
     onError: () => {
-      triggerWarning(ERROR_MESSAGE);
+      triggerWarning(TOAST_MESSAGE.ERROR.DEFAULT);
     },
   });
 };
 
 export const useGetProductCategories = ({ page, search }) => {
-  return useQuery(['productCategories', page], () =>
+  return useQuery([PRODUCT_CATEGORIES_KEY, page], () =>
     getEcommerceCategories({ page: page.value, search: search.value })
   );
 };
@@ -87,11 +94,11 @@ export const useCreateProductCategoryMutation = () => {
 
   return useMutation(createEcommerceCategory, {
     onSuccess: () => {
-      triggerPositive('Categoría creada con éxito');
-      queryClient.invalidateQueries({ queryKey: ['productCategories'] });
+      triggerPositive(TOAST_MESSAGE.CREATE);
+      queryClient.invalidateQueries([PRODUCT_CATEGORIES_KEY]);
     },
     onError: () => {
-      triggerWarning(ERROR_MESSAGE);
+      triggerWarning(TOAST_MESSAGE.ERROR.DEFAULT);
     },
   });
 };
@@ -102,11 +109,11 @@ export const useUploadProductCategoryMutation = () => {
 
   return useMutation(uploadEcommerceCategory, {
     onSuccess: () => {
-      triggerPositive('Categoría actualizada con éxito');
-      queryClient.invalidateQueries({ queryKey: ['productCategories'] });
+      triggerPositive(TOAST_MESSAGE.UPDATE);
+      queryClient.invalidateQueries([PRODUCT_CATEGORIES_KEY]);
     },
     onError: () => {
-      triggerWarning(ERROR_MESSAGE);
+      triggerWarning(TOAST_MESSAGE.ERROR.DEFAULT);
     },
   });
 };
@@ -117,15 +124,15 @@ export const useDeleteProductCategoryMutation = () => {
 
   return useMutation(deleteEcommerceCategory, {
     onSuccess: () => {
-      triggerPositive('Categoría eliminada con éxito');
-      queryClient.invalidateQueries({ queryKey: ['productCategories'] });
+      triggerPositive(TOAST_MESSAGE.DELETE);
+      queryClient.invalidateQueries([PRODUCT_CATEGORIES_KEY]);
     },
     onError: () => {
-      triggerWarning(ERROR_MESSAGE);
+      triggerWarning(TOAST_MESSAGE.ERROR.DEFAULT);
     },
   });
 };
 
 export const useGetProductCategoryById = (id) => {
-  return useQuery(['productCategory', id], () => getCategoryById(id));
+  return useQuery([PRODUCT_CATEGORY_KEY, id], () => getCategoryById(id));
 };

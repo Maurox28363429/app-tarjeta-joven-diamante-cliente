@@ -1,14 +1,18 @@
 import { useQuery, useQueryClient, useMutation } from '@tanstack/vue-query';
+
+import { useToast } from 'src/composables/useToast';
+
 import getDirectivos from 'src/api/getDirectivos';
 import deleteDirectivo from 'src/api/deleteDirectivo';
 import createDirectivo from 'src/api/createDirectivo';
 import uploadDirectivo from 'src/api/uploadDirectivo';
-import { useToast } from 'src/composables/useToast';
 
-const ERROR_MESSAGE = 'Ha ocurrido un error';
+import TOAST_MESSAGE from 'src/shared/constansts/toastMessage';
+
+const TELEPHONE_DIRECTORY_KEY = 'directivo';
 
 export const useGetDirectivo = ({ page, search }) => {
-  return useQuery(['directivo', page], () =>
+  return useQuery([TELEPHONE_DIRECTORY_KEY, page], () =>
     getDirectivos({ page: page.value, search: search.value })
   );
 };
@@ -19,11 +23,11 @@ export const useDeleteDirectivoMutation = () => {
 
   return useMutation(deleteDirectivo, {
     onSuccess: () => {
-      triggerPositive('Directivo eliminada con éxito');
-      queryClient.invalidateQueries({ queryKey: ['directivo'] });
+      triggerPositive(TOAST_MESSAGE.DELETE);
+      queryClient.invalidateQueries([TELEPHONE_DIRECTORY_KEY]);
     },
     onError: () => {
-      triggerWarning(ERROR_MESSAGE);
+      triggerWarning(TOAST_MESSAGE.ERROR.DEFAULT);
     },
   });
 };
@@ -34,11 +38,11 @@ export const useCreateDirectivoMutation = () => {
 
   return useMutation(createDirectivo, {
     onSuccess: () => {
-      triggerPositive('Directivo creado con éxito');
-      queryClient.invalidateQueries({ queryKey: ['directivo'] });
+      triggerPositive(TOAST_MESSAGE.CREATE);
+      queryClient.invalidateQueries([TELEPHONE_DIRECTORY_KEY]);
     },
     onError: () => {
-      triggerWarning(ERROR_MESSAGE);
+      triggerWarning(TOAST_MESSAGE.ERROR.DEFAULT);
     },
   });
 };
@@ -49,11 +53,11 @@ export const useUploadDirectivoMutation = () => {
 
   return useMutation(uploadDirectivo, {
     onSuccess: () => {
-      triggerPositive('Directivo actualizado con éxito');
-      queryClient.invalidateQueries({ queryKey: ['directivo'] });
+      triggerPositive(TOAST_MESSAGE.UPDATE);
+      queryClient.invalidateQueries([TELEPHONE_DIRECTORY_KEY]);
     },
     onError: () => {
-      triggerWarning(ERROR_MESSAGE);
+      triggerWarning(TOAST_MESSAGE.ERROR.DEFAULT);
     },
   });
 };

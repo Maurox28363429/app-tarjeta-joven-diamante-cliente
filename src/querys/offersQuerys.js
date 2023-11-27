@@ -1,9 +1,10 @@
 import { useQuery, useQueryClient, useMutation } from '@tanstack/vue-query';
-import deleteOffer from 'src/api/deleteOffer';
+
 import { useToast } from 'src/composables/useToast';
+
+import deleteOffer from 'src/api/deleteOffer';
 import editOffer from 'src/api/editOffer';
 import createOffer from 'src/api/createOffer';
-
 import getOffersFromStore from 'src/api/getOffersFromStore';
 import getOffers from 'src/api/getOffers';
 import getStates from 'src/api/getStates';
@@ -15,33 +16,43 @@ import getUniversitiesRole from 'src/api/getUniversitiesRole';
 import getOffer from 'src/api/getOffer';
 import getUniversityById from 'src/api/getUniversityById';
 
+import TOAST_MESSAGE from 'src/shared/constansts/toastMessage';
+
+const OFFERS_KEY = 'offers';
+const OFFERS_FROM_BUSINESS_KEY = 'offersFromBusiness';
+const UNIVERSITIES_KEY = 'universities';
+const STATES_KEY = 'states';
+const UNIVERSITIES_ROLES = 'universitiesRoles';
+
 export const useGetOffers = ({ name, page, id }) => {
-  return useQuery(['offers', page], () =>
+  return useQuery([OFFERS_KEY, page], () =>
     getOffersFromStore({ name, page, id })
   );
 };
 
 export const useGetOffer = (currentRoute) => {
-  return useQuery(['offers', currentRoute], () => getOffer(currentRoute.value));
+  return useQuery([OFFERS_KEY, currentRoute], () =>
+    getOffer(currentRoute.value)
+  );
 };
 export const useGetUniversitiesById = (id) => {
-  return useQuery(['universities'], () => getUniversityById(id));
+  return useQuery([UNIVERSITIES_KEY], () => getUniversityById(id));
 };
 
 export const useGetOffersFromBusiness = ({ search, page, dir }) => {
-  return useQuery(['offersFromBusiness', page, dir], () =>
+  return useQuery([OFFERS_FROM_BUSINESS_KEY, page, dir], () =>
     getOffers({ search: search.value, page: page.value, dir: dir?.value })
   );
 };
 
 export const useGetStates = ({ sort_ofertas = 0, sort_uni = 0 }) => {
-  return useQuery(['states'], () => getStates({ sort_ofertas, sort_uni }), {
+  return useQuery([STATES_KEY], () => getStates({ sort_ofertas, sort_uni }), {
     refetchOnWindowFocus: false,
   });
 };
 
 export const useGetUniversities = ({ search, page, dir }) => {
-  return useQuery(['universities', dir, page], () =>
+  return useQuery([UNIVERSITIES_KEY, dir, page], () =>
     getUniversities({
       search: search.value,
       page: page.value,
@@ -51,7 +62,7 @@ export const useGetUniversities = ({ search, page, dir }) => {
 };
 
 export const useGetUniversitiesRoles = () => {
-  return useQuery(['universitiesRoles'], getUniversitiesRole);
+  return useQuery([UNIVERSITIES_ROLES], getUniversitiesRole);
 };
 
 export const useDeleteOfferMutation = () => {
@@ -60,8 +71,8 @@ export const useDeleteOfferMutation = () => {
 
   return useMutation(deleteOffer, {
     onSuccess: () => {
-      triggerPositive('Oferta eliminada con éxito');
-      queryClient.invalidateQueries({ queryKey: ['offersFromBusiness'] });
+      triggerPositive(TOAST_MESSAGE.DELETE);
+      queryClient.invalidateQueries([OFFERS_FROM_BUSINESS_KEY]);
     },
   });
 };
@@ -72,8 +83,8 @@ export const useDeleteUniversityOfferMutation = () => {
 
   return useMutation(deleteUniversity, {
     onSuccess: () => {
-      triggerPositive('Oferta eliminada con éxito');
-      queryClient.invalidateQueries({ queryKey: ['universities'] });
+      triggerPositive(TOAST_MESSAGE.DELETE);
+      queryClient.invalidateQueries([UNIVERSITIES_KEY]);
     },
   });
 };
@@ -84,8 +95,8 @@ export const useCreateUniversityOfferMutation = () => {
 
   return useMutation(createUniversityOffer, {
     onSuccess: () => {
-      triggerPositive('Oferta creada con éxito');
-      queryClient.invalidateQueries({ queryKey: ['universities'] });
+      triggerPositive(TOAST_MESSAGE.CREATE);
+      queryClient.invalidateQueries([UNIVERSITIES_KEY]);
     },
   });
 };
@@ -96,8 +107,8 @@ export const useEditOfferMutation = () => {
 
   return useMutation(editOffer, {
     onSuccess: () => {
-      triggerPositive('Oferta actualizada con éxito');
-      queryClient.invalidateQueries({ queryKey: ['offersFromBusiness'] });
+      triggerPositive(TOAST_MESSAGE.UPDATE);
+      queryClient.invalidateQueries([OFFERS_FROM_BUSINESS_KEY]);
     },
   });
 };
@@ -108,8 +119,8 @@ export const useEditUniversityOfferMutation = () => {
 
   return useMutation(editUniversityOffer, {
     onSuccess: () => {
-      triggerPositive('Oferta actualizada con éxito');
-      queryClient.invalidateQueries({ queryKey: ['universities'] });
+      triggerPositive(TOAST_MESSAGE.UPDATE);
+      queryClient.invalidateQueries([UNIVERSITIES_KEY]);
     },
   });
 };
@@ -120,8 +131,8 @@ export const useCreateOfferMutation = () => {
 
   return useMutation(createOffer, {
     onSuccess: () => {
-      triggerPositive('Oferta creada con éxito');
-      queryClient.invalidateQueries({ queryKey: ['offersFromBusiness'] });
+      triggerPositive(TOAST_MESSAGE.CREATE);
+      queryClient.invalidateQueries([OFFERS_FROM_BUSINESS_KEY]);
     },
     onError: (error) => {
       if (error.response.status === 409) {

@@ -1,20 +1,25 @@
 import { useQuery, useQueryClient, useMutation } from '@tanstack/vue-query';
+
 import { useToast } from 'src/composables/useToast';
+
 import getNewsPachama from 'src/api/getNewsPachama';
 import createNoticiaPachama from 'src/api/createNoticiaPachama.js';
 import editNoticiaPachama from 'src/api/editNoticiaPachama.js';
 import getPachamaNew from 'src/api/getPachamaNew';
 import deletePachamaNew from 'src/api/deletePachamaNew';
 
-const ERROR_MESSAGE = 'Ah ocurrido un error, intente nuevamente';
+import TOAST_MESSAGE from 'src/shared/constansts/toastMessage';
+
+const PACHAMA_NEWS_KEY = 'pachamaNews';
+
 export const useGetPachamaNews = ({ search, pages = {} }) => {
-  return useQuery(['pachamaNews', pages], () =>
+  return useQuery([PACHAMA_NEWS_KEY, pages], () =>
     getNewsPachama({ search: search.value, pages: pages.value.current })
   );
 };
 
 export const useGetPachamaNew = (id) => {
-  return useQuery(['pachamaNews'], () => getPachamaNew(id));
+  return useQuery([PACHAMA_NEWS_KEY], () => getPachamaNew(id));
 };
 
 export const useCreateNewMutation = () => {
@@ -23,11 +28,11 @@ export const useCreateNewMutation = () => {
 
   return useMutation(createNoticiaPachama, {
     onSuccess: () => {
-      triggerPositive('Noticia creada con éxito');
-      queryClient.invalidateQueries({ queryKey: ['pachamaNews'] });
+      triggerPositive(TOAST_MESSAGE.CREATE);
+      queryClient.invalidateQueries([PACHAMA_NEWS_KEY]);
     },
     onError: () => {
-      triggerWarning(ERROR_MESSAGE);
+      triggerWarning(TOAST_MESSAGE.ERROR.DEFAULT);
     },
   });
 };
@@ -38,11 +43,11 @@ export const useEditNewMutation = () => {
 
   return useMutation(editNoticiaPachama, {
     onSuccess: () => {
-      triggerPositive('Noticia actualizada con éxito');
-      queryClient.invalidateQueries({ queryKey: ['pachamaNews'] });
+      triggerPositive(TOAST_MESSAGE.UPDATE);
+      queryClient.invalidateQueries([PACHAMA_NEWS_KEY]);
     },
     onError: () => {
-      triggerWarning(ERROR_MESSAGE);
+      triggerWarning(TOAST_MESSAGE.ERROR.DEFAULT);
     },
   });
 };
@@ -53,11 +58,11 @@ export const useDeletePachamaNewMutation = () => {
 
   return useMutation(deletePachamaNew, {
     onSuccess: () => {
-      triggerPositive('Noticia eliminada con éxito');
-      queryClient.invalidateQueries({ queryKey: ['pachamaNews'] });
+      triggerPositive(TOAST_MESSAGE.DELETE);
+      queryClient.invalidateQueries([PACHAMA_NEWS_KEY]);
     },
     onError: () => {
-      triggerWarning(ERROR_MESSAGE);
+      triggerWarning(TOAST_MESSAGE.ERROR.DEFAULT);
     },
   });
 };

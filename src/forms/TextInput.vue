@@ -42,7 +42,6 @@ const value = ref(props.initialValue);
 
 const handledChange = (e) => {
   updateValue(name, e);
-  console.log(e, 'hanlde change');
 };
 </script>
 

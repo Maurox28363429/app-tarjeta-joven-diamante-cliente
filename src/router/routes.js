@@ -1,3 +1,7 @@
+import CUSTOMER from 'src/router/modules/customer';
+import BUSSINES from 'src/router/modules/bussines';
+import ADMIN from 'src/router/modules/admin';
+
 const clientAuthMeta = { requiresAuth: true, role: 'cliente' };
 const bussinesAuthMeta = { requiresAuth: true, role: 'empresa' };
 const adminAuthMeta = { requiresAuth: true, role: 'admin' };
@@ -34,256 +38,19 @@ const routes = [
         path: 'cliente',
         meta: clientAuthMeta,
         component: () => import('src/layouts/MainClientLayout.vue'),
-        children: [
-          {
-            path: 'Offers/:countryName',
-            params: { countryName: 'Panamá' },
-            component: () => import('src/pages/client/OffersPage.vue'),
-          },
-          {
-            name: 'ofertas',
-            path: 'Offers/:countryName/:id',
-            params: { countryName: 'Panamá' },
-            component: () => import('src/pages/client/OffersPage.vue'),
-          },
-          {
-            path: 'OffersForUniversitys/:countryName',
-            params: { countryName: 'Panamá' },
-            component: () =>
-              import('src/pages/client/SelectUniversityPage.vue'),
-          },
-          {
-            name: 'universidad',
-            path: 'OffersForUniversitys/:countryName/:id',
-            params: { countryName: 'Panamá' },
-            component: () =>
-              import('src/pages/client/SelectUniversityPage.vue'),
-          },
-          {
-            path: 'Offers',
-            component: () =>
-              import('src/pages/client/SelectStateForffersPage.vue'),
-            props: { typeOffers: 'Offers' },
-          },
-          {
-            path: 'services/:countryName',
-            component: () => import('src/pages/client/ServicesPage.vue'),
-          },
-          {
-            path: 'services',
-            component: () =>
-              import('src/pages/client/SelectStateForffersPage.vue'),
-            props: { typeOffers: 'services' },
-          },
-          {
-            path: 'OffersForUniversitys',
-            component: () =>
-              import('src/pages/client/SelectStateForffersPage.vue'),
-            props: { typeOffers: 'OffersForUniversitys' },
-          },
-          {
-            path: 'OffersForUniversitys',
-            component: () =>
-              import('src/pages/client/SelectStateForffersPage.vue'),
-            props: { typeOffers: 'OffersForUniversitys' },
-          },
-          {
-            path: 'pachama',
-            component: () => import('pages/client/PachamaPage.vue'),
-          },
-          {
-            name: 'pachama',
-            path: 'pachama/:id',
-            component: () => import('pages/client/PachamaPage.vue'),
-          },
-          {
-            path: 'gifts',
-            component: () => import('pages/client/GiftsPage.vue'),
-          },
-          {
-            name: 'premios',
-            path: 'gifts/:id',
-            component: () => import('pages/client/GiftDetailPage.vue'),
-          },
-          {
-            path: 'ecommerce',
-            component: () => import('pages/client/EcommercePage.vue'),
-          },
-          {
-            path: 'sos',
-            component: () => import('pages/client/SosPage.vue'),
-          },
-          {
-            path: 'contact',
-            component: () => import('pages/client/ContactPage.vue'),
-          },
-          {
-            path: 'memberships-type',
-            component: () => import('pages/client/MembershipsTypePage.vue'),
-          },
-          {
-            path: '',
-            component: () => import('pages/client/HomePage.vue'),
-          },
-          {
-            path: 'home',
-            component: () => import('pages/client/HomePage.vue'),
-          },
-          {
-            path: 'account',
-            children: [
-              {
-                path: '',
-                component: () => import('components/UserAccount.vue'),
-                props: { user: 'client' },
-              },
-              {
-                path: 'profile',
-                component: () => import('components/ProfileComponent.vue'),
-                props: { user: 'client' },
-              },
-            ],
-          },
-          {
-            name: 'transactionsTable',
-            path: 'transactionsTable',
-            component: () => import('components/TransactionsTable.vue'),
-          },
-          {
-            path: 'promotions',
-            component: () => import('pages/client/PromotionsPage.vue'),
-          },
-          {
-            name: 'promociones',
-            path: 'promotions/:id',
-            component: () => import('pages/client/PromotionsPage.vue'),
-          },
-          {
-            path: 'news',
-            component: () => import('pages/client/NewsPage.vue'),
-          },
-          {
-            name: 'noticias',
-            path: 'news/:id',
-            component: () => import('pages/client/NewsPage.vue'),
-          },
-          {
-            name: 'producto',
-            path: 'ecommerce/:id',
-            component: () => import('pages/client/productDetail.vue'),
-          },
-          {
-            path: 'cart',
-            component: () => import('pages/client/CartPage.vue'),
-          },
-        ],
+        children: CUSTOMER,
       },
       {
         path: 'empresa',
         meta: bussinesAuthMeta,
         component: () => import('layouts/MainBussinesLaout.vue'),
-        children: [
-          {
-            path: '',
-            component: () => import('pages/business/DashboardPage.vue'),
-          },
-          {
-            path: 'account',
-            children: [
-              {
-                path: '',
-                component: () => import('components/UserAccount.vue'),
-                props: { user: 'business' },
-              },
-              {
-                path: 'profile',
-                component: () => import('components/ProfileComponent.vue'),
-                props: { user: 'business' },
-              },
-            ],
-          },
-          {
-            name: 'orders',
-            path: 'orders',
-            component: () => import('components/TransactionsTable.vue'),
-          },
-          {
-            name: 'create-order',
-            path: 'create-order',
-            component: () => import('pages/business/CreateOrderPage.vue'),
-          },
-        ],
+        children: BUSSINES,
       },
       {
         path: 'admin',
         meta: adminAuthMeta,
         component: () => import('layouts/MainAndminLayout.vue'),
-        children: [
-          {
-            path: '',
-            component: () => import('pages/admin/AdminHomePage.vue'),
-          },
-          {
-            path: 'universities',
-            component: () => import('pages/admin/UniversitiesPage.vue'),
-          },
-          {
-            path: 'noticias',
-            component: () => import('pages/admin/NewsPage.vue'),
-          },
-          {
-            path: 'noticias_pachama',
-            component: () => import('pages/admin/NewsPachamaPage.vue'),
-          },
-          {
-            path: 'offers',
-            component: () => import('pages/admin/OffersPage.vue'),
-          },
-          {
-            path: 'membresias',
-            component: () => import('pages/admin/MembresiasPage.vue'),
-          },
-          {
-            path: 'premios',
-            component: () => import('pages/admin/premiosPage.vue'),
-          },
-          {
-            path: 'users',
-            component: () => import('pages/admin/AdminUsers.vue'),
-          },
-          {
-            path: 'create_user',
-            component: () => import('pages/admin/CreateUserPage.vue'),
-          },
-          {
-            path: 'sos',
-            component: () => import('pages/admin/AdminSos.vue'),
-          },
-          {
-            path: 'promotions',
-            component: () => import('pages/admin/PromotionsPage.vue'),
-          },
-          {
-            path: 'ecommerce',
-            component: () => import('pages/admin/EcommercePage.vue'),
-          },
-          {
-            path: 'directivos',
-            component: () => import('pages/admin/DirectivosPage.vue'),
-          },
-          {
-            path: 'ecommerceCategory',
-            component: () => import('pages/admin/EcommerceCategory.vue'),
-          },
-          {
-            path: 'ecommerceOrders',
-            component: () => import('pages/admin/EcommerceOrden.vue'),
-          },
-          {
-            path: 'settings',
-            component: () => import('pages/admin/SettingsPage.vue'),
-          },
-        ],
+        children: ADMIN,
       },
       {
         path: 'memberships',

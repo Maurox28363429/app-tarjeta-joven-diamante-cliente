@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/vue-query';
+
 import getNotifications from 'src/api/getNotifications';
 
 export const useGetNotificationsQuery = ({ id, page = {} }) => {

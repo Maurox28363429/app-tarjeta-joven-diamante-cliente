@@ -1,20 +1,25 @@
 import { useQuery, useQueryClient, useMutation } from '@tanstack/vue-query';
+
 import { useToast } from 'src/composables/useToast';
+
 import getNewsInformative from 'src/api/getNewsInformative';
 import createNoticiaInformativa from 'src/api/createNoticiaInformativa.js';
 import editNoticiaInformativa from 'src/api/editNoticiaInformativa.js';
 import deleteNew from 'src/api/deleteNew';
 import getNew from 'src/api/getNew';
 
-const ERROR_MESSAGE = 'Ah ocurrido un error, intente nuevamente';
+import TOAST_MESSAGE from 'src/shared/constansts/toastMessage';
+
+const NEWS_KEY = 'news';
+
 export const useGetNewsInformative = ({ search, pages = {} }) => {
-  return useQuery(['news', pages], () =>
+  return useQuery([NEWS_KEY, pages], () =>
     getNewsInformative({ search: search.value, pages: pages.value.current })
   );
 };
 
 export const useGetNewInformative = (router) => {
-  return useQuery(['news', router], () => getNew(router.value));
+  return useQuery([NEWS_KEY, router], () => getNew(router.value));
 };
 
 export const useCreateNewMutation = () => {
@@ -23,8 +28,8 @@ export const useCreateNewMutation = () => {
 
   return useMutation(createNoticiaInformativa, {
     onSuccess: () => {
-      triggerPositive('Noticia creada con éxito');
-      queryClient.invalidateQueries({ queryKey: ['news'] });
+      triggerPositive(TOAST_MESSAGE.CREATE);
+      queryClient.invalidateQueries([NEWS_KEY]);
     },
     onError: (error) => {
       if (error.response.status === 409) {
@@ -42,11 +47,11 @@ export const useEditNewMutation = () => {
 
   return useMutation(editNoticiaInformativa, {
     onSuccess: () => {
-      triggerPositive('Noticia actualizada con éxito');
-      queryClient.invalidateQueries({ queryKey: ['news'] });
+      triggerPositive(TOAST_MESSAGE.UPDATE);
+      queryClient.invalidateQueries([NEWS_KEY]);
     },
     onError: () => {
-      triggerWarning(ERROR_MESSAGE);
+      triggerWarning(TOAST_MESSAGE.ERROR.DEFAULT);
     },
   });
 };
@@ -57,11 +62,11 @@ export const useDeleteNewMutation = () => {
 
   return useMutation(deleteNew, {
     onSuccess: () => {
-      triggerPositive('Noticia eliminada con éxito');
-      queryClient.invalidateQueries({ queryKey: ['news'] });
+      triggerPositive(TOAST_MESSAGE.DELETE);
+      queryClient.invalidateQueries([NEWS_KEY]);
     },
     onError: () => {
-      triggerWarning(ERROR_MESSAGE);
+      triggerWarning(TOAST_MESSAGE.ERROR.DEFAULT);
     },
   });
 };

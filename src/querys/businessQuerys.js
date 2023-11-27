@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/vue-query';
+
 import getBusiness from 'src/api/getBusiness';
 
 export const useGetBusiness = ({ search = '' }) => {
