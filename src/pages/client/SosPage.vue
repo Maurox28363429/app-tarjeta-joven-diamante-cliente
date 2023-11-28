@@ -5,7 +5,7 @@ import { useGetHelpNumber } from 'src/querys/sosQuerys';
 const search = ref('');
 const page = ref(1);
 
-const { data, isLoading } = useGetHelpNumber({ page, search });
+const { data, isLoading, refetch } = useGetHelpNumber({ page, search });
 const handleNumber = (phone) => {
   window.open(`https://wa.me/507${phone}`, '_blank');
 };
@@ -25,7 +25,10 @@ const handleNumber = (phone) => {
         width="207px"
         height="167px"
       />
-      <div class="full-width q-my-md row justify-center">
+      <q-form
+        @submit.prevent="refetch"
+        class="full-width q-my-md row justify-center"
+      >
         <q-input
           class="full-width"
           rounded
@@ -52,7 +55,7 @@ const handleNumber = (phone) => {
             class="absolute"
           />
         </q-input>
-      </div>
+      </q-form>
       <p class="full-width text-justify text-subtitle2">
         Personas que pueden ayudarte:
       </p>

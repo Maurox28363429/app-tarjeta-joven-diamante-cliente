@@ -1,9 +1,13 @@
 import { object, string } from 'yup';
 
-const REQUIRED_MESSAGE = 'Este campo es requerido';
-const EMAIL_MESSAGE = 'Ingrese un email valido';
+import SCHEMAS_MESSAGE from 'src/shared/constansts/schemasMessage';
+
+const password = string().required(SCHEMAS_MESSAGE.required);
+const email = string()
+  .email(SCHEMAS_MESSAGE.invalidEmail)
+  .required(SCHEMAS_MESSAGE.required);
 
 export const loginSchema = object({
-  email: string().email(EMAIL_MESSAGE).required(REQUIRED_MESSAGE),
-  password: string().required(REQUIRED_MESSAGE),
+  email,
+  password,
 });

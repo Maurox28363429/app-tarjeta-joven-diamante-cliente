@@ -1,15 +1,17 @@
 import { object, string } from 'yup';
 
-const REQUIRED_MESSAGE = 'Este campo es requerido';
+import SCHEMAS_MESSAGE from 'src/shared/constansts/schemasMessage';
+
+const requiredText = string().required(SCHEMAS_MESSAGE.required);
 
 export const newSchema = object({
-  titulo: string().required(REQUIRED_MESSAGE),
-  descripcion: string().required(REQUIRED_MESSAGE),
-  prioridad: string().required(REQUIRED_MESSAGE),
-  img: string().required(REQUIRED_MESSAGE),
-  link_youtube: string().required(REQUIRED_MESSAGE),
-  link_facebook: string().required(REQUIRED_MESSAGE),
-  link_instragram: string().required(REQUIRED_MESSAGE),
-  link_web: string().required(REQUIRED_MESSAGE),
-  link_otros: string().required(REQUIRED_MESSAGE),
+  titulo: requiredText,
+  descripcion: requiredText,
+  prioridad: requiredText,
+  img: requiredText,
+  link_youtube: requiredText,
+  link_facebook: requiredText,
+  link_instragram: requiredText,
+  link_web: requiredText,
+  link_otros: requiredText,
 });

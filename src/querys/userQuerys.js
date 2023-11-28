@@ -13,8 +13,11 @@ import getUsers from 'src/api/getUsers';
 
 import TOAST_MESSAGE from 'src/shared/constansts/toastMessage';
 
+const USER_KEY = 'user';
+const USERS_KEY = 'users';
+
 export const useGetUserQuery = ({ id }) => {
-  return useQuery(['user'], () => getUser(id), {
+  return useQuery([USER_KEY], () => getUser(id), {
     staleTime: Infinity,
     cacheTime: Infinity,
     refetchOnWindowFocus: false,
@@ -29,9 +32,7 @@ export const useUpdateUserMutation = () => {
   return useMutation(updateUser, {
     onSuccess: () => {
       triggerPositive('Usuario actualizado con éxito');
-      queryClient.invalidateQueries({
-        queryKey: ['user'],
-      });
+      queryClient.invalidateQueries([USER_KEY]);
     },
     onError: () => {
       triggerWarning(TOAST_MESSAGE.ERROR.DEFAULT);
@@ -108,5 +109,5 @@ export const useSendEmailAgain = () => {
 };
 
 export const useGetUsersQuery = () => {
-  return useQuery(['users'], getUsers);
+  return useQuery([USERS_KEY], getUsers);
 };

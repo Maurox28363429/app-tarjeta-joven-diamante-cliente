@@ -1,9 +1,11 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/vue-query';
 
-import getHelpNumber from 'src/api/getHelpNumber';
-import createSos from 'src/api/createSos';
-import updateSos from 'src/api/updateSos';
-import deleteSos from 'src/api/deleteSos';
+import {
+  createSos,
+  deleteSos,
+  getHelpNumber,
+  updateSos,
+} from 'src/api/sos/index';
 
 import { useToast } from 'src/composables/useToast';
 
@@ -11,9 +13,9 @@ import TOAST_MESSAGE from 'src/shared/constansts/toastMessage';
 
 const SOS_KEY = 'sos';
 
-export const useGetHelpNumber = ({ page, search = '' }) => {
-  return useQuery([SOS_KEY, page, search], async () =>
-    getHelpNumber({ page: page.value, search: search.value })
+export const useGetHelpNumber = ({ page, search }) => {
+  return useQuery([SOS_KEY, page], async () =>
+    getHelpNumber({ page: page?.value, search: search?.value })
   );
 };
 

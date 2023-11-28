@@ -1,13 +1,17 @@
 import { object, string } from 'yup';
 
-const REQUIRED_MESSAGE = 'Este campo es requerido';
-const EMAIL_MESSAGE = 'Ingrese un email valido';
+import SCHEMAS_MESSAGE from 'src/shared/constansts/schemasMessage';
+
+const requiredText = string().required(SCHEMAS_MESSAGE.required);
+const email = string()
+  .email(SCHEMAS_MESSAGE.invalidEmail)
+  .required(SCHEMAS_MESSAGE.required);
 
 export const updateProfileShema = object({
-  name: string().required(REQUIRED_MESSAGE),
-  email: string().email(EMAIL_MESSAGE).required(REQUIRED_MESSAGE),
-  last_name: string().required(REQUIRED_MESSAGE),
-  phone: string().required(REQUIRED_MESSAGE),
+  name: requiredText,
+  email,
+  last_name: requiredText,
+  phone: requiredText,
   sex: string(),
   address: string(),
   dni: string(),

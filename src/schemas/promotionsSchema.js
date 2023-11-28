@@ -1,28 +1,26 @@
 import { object, string, mixed } from 'yup';
+import SCHEMAS_MESSAGE from 'src/shared/constansts/schemasMessage';
 
-const REQUIRED_MESSAGE = 'Este campo es requerido';
+const requiredText = string().required(SCHEMAS_MESSAGE.required);
+
+export const img = mixed()
+  .required(SCHEMAS_MESSAGE.required)
+  .test('formato', SCHEMAS_MESSAGE.invalidImageFormat, (value) => {
+    return (
+      !value ||
+      (value && ['image/jpeg', 'image/png', 'image/jpg'].includes(value.type))
+    );
+  });
 
 export const promotionsSchema = object({
-  titulo: string().required(REQUIRED_MESSAGE),
-  categoria: string().required(REQUIRED_MESSAGE),
-  descripcion: string().required(REQUIRED_MESSAGE),
-  prioridad: string().required(REQUIRED_MESSAGE),
-  img: mixed()
-    .required(REQUIRED_MESSAGE)
-    .test(
-      'formato',
-      'Solo se aceptan los siguientes formatos: .jpeg, .jpg y .png',
-      (value) => {
-        return (
-          !value ||
-          (value &&
-            ['image/jpeg', 'image/png', 'image/jpg'].includes(value.type))
-        );
-      }
-    ),
-  link_youtube: string().required(REQUIRED_MESSAGE),
-  link_facebook: string().required(REQUIRED_MESSAGE),
-  link_instragram: string().required(REQUIRED_MESSAGE),
-  link_web: string().required(REQUIRED_MESSAGE),
-  link_otros: string().required(REQUIRED_MESSAGE),
+  titulo: requiredText,
+  categoria: requiredText,
+  descripcion: requiredText,
+  prioridad: requiredText,
+  img,
+  link_youtube: requiredText,
+  link_facebook: requiredText,
+  link_instragram: requiredText,
+  link_web: requiredText,
+  link_otros: requiredText,
 });

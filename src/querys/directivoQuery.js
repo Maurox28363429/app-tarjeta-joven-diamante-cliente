@@ -2,10 +2,12 @@ import { useQuery, useQueryClient, useMutation } from '@tanstack/vue-query';
 
 import { useToast } from 'src/composables/useToast';
 
-import getDirectivos from 'src/api/getDirectivos';
-import deleteDirectivo from 'src/api/deleteDirectivo';
-import createDirectivo from 'src/api/createDirectivo';
-import uploadDirectivo from 'src/api/uploadDirectivo';
+import {
+  createDirectivo,
+  deleteDirectivo,
+  getDirectivos,
+  uploadDirectivo,
+} from 'src/api/directory/index';
 
 import TOAST_MESSAGE from 'src/shared/constansts/toastMessage';
 
@@ -13,7 +15,7 @@ const TELEPHONE_DIRECTORY_KEY = 'directivo';
 
 export const useGetDirectivo = ({ page, search }) => {
   return useQuery([TELEPHONE_DIRECTORY_KEY, page], () =>
-    getDirectivos({ page: page.value, search: search.value })
+    getDirectivos({ page: page?.value, search: search?.value })
   );
 };
 

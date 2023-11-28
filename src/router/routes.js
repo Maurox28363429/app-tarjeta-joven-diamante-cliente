@@ -83,6 +83,10 @@ const routes = [
     component: () => import('pages/ErrorNotFound.vue'),
     props: true,
   },
+  {
+    path: '/:catchAll(.*)*',
+    component: () => import('pages/ErrorNotFound.vue'),
+  },
 ];
 
 export default routes;

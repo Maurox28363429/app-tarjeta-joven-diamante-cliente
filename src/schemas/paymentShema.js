@@ -1,20 +1,27 @@
 import { object, string, number } from 'yup';
 
-const REQUIRED_MESSAGE = 'Este campo es requerido';
+import SCHEMAS_MESSAGE from 'src/shared/constansts/schemasMessage';
+
+const requiredText = string().required(SCHEMAS_MESSAGE.required);
+const requiredNumber = number().required(SCHEMAS_MESSAGE.required);
+
+const membresia_id = object()
+  .shape({ label: string(), value: number() })
+  .required(SCHEMAS_MESSAGE.required);
+
+const user_id = object()
+  .shape({ label: string(), value: number() })
+  .required(SCHEMAS_MESSAGE.required);
 
 export const paymentShema = object().shape({
-  img: string().required(REQUIRED_MESSAGE),
+  img: requiredText,
   referencia: number(),
-  membresia_id: number().required(REQUIRED_MESSAGE),
-  payment: number().required(REQUIRED_MESSAGE),
-  user_id: number().required(REQUIRED_MESSAGE),
+  membresia_id: requiredNumber,
+  payment: requiredNumber,
+  user_id: requiredNumber,
 });
 
 export const paymentShemaUpdate = object().shape({
-  membresia_id: object()
-    .shape({ label: string(), value: number() })
-    .required(REQUIRED_MESSAGE),
-  user_id: object()
-    .shape({ label: string(), value: number() })
-    .required(REQUIRED_MESSAGE),
+  membresia_id,
+  user_id,
 });

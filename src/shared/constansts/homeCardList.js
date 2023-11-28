@@ -9,7 +9,7 @@ import newsIcon from '../../assets/images/newsIcon.png';
 import iconoTarjeta from '../../assets/images/t.webp';
 import profileIcon from '../../assets/images/profileIcon.png';
 import ecommerceIcon from '../../assets/images/ecommerce.png';
-// import campeonIcon from '../../assets/images/campeon.png';
+
 import disableIcon from '../../assets/images/bandImage.png';
 
 export const HOME_CARD_LIST = [
@@ -63,13 +63,6 @@ export const HOME_CARD_LIST = [
     link: '/cliente/promotions',
     enabled: true,
   },
-  /*   {
-    id: 8,
-    title: 'Compras',
-    icon: bagIcon,
-    link: '/cliente/transactionsTable',
-    enabled: true,
-  }, */
   {
     id: 9,
     title: '',

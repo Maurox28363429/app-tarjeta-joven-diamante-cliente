@@ -2,24 +2,26 @@ import { useQuery, useQueryClient, useMutation } from '@tanstack/vue-query';
 
 import { useToast } from 'src/composables/useToast';
 
-import getNewsInformative from 'src/api/getNewsInformative';
-import createNoticiaInformativa from 'src/api/createNoticiaInformativa.js';
-import editNoticiaInformativa from 'src/api/editNoticiaInformativa.js';
-import deleteNew from 'src/api/deleteNew';
-import getNew from 'src/api/getNew';
+import {
+  createNoticiaInformativa,
+  getNewsInformative,
+  editNoticiaInformativa,
+  deleteNew,
+  getNew,
+} from 'src/api/informativeNews/index';
 
 import TOAST_MESSAGE from 'src/shared/constansts/toastMessage';
 
 const NEWS_KEY = 'news';
 
-export const useGetNewsInformative = ({ search, pages = {} }) => {
+export const useGetNewsInformative = ({ search, pages }) => {
   return useQuery([NEWS_KEY, pages], () =>
-    getNewsInformative({ search: search.value, pages: pages.value.current })
+    getNewsInformative({ search: search?.value, pages: pages?.value?.current })
   );
 };
 
 export const useGetNewInformative = (router) => {
-  return useQuery([NEWS_KEY, router], () => getNew(router.value));
+  return useQuery([NEWS_KEY, router], () => getNew(router?.value));
 };
 
 export const useCreateNewMutation = () => {

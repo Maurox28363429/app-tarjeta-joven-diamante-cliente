@@ -2,9 +2,11 @@ import { useQuery } from '@tanstack/vue-query';
 
 import getBusiness from 'src/api/getBusiness';
 
-export const useGetBusiness = ({ search = '' }) => {
+const BUSINESS_KEY = 'business';
+
+export const useGetBusiness = ({ search }) => {
   return useQuery(
-    ['business', search],
+    [BUSINESS_KEY, search],
     () => getBusiness({ search: search?.value }),
     {
       staleTime: Infinity,

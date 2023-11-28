@@ -18,7 +18,7 @@ const PRODUCT_KEY = 'product';
 
 export const useGetProducts = ({ search, pages }) => {
   return useQuery([PRODUCTS_KEY, pages], () =>
-    getProducts({ search: search.value, pages: pages.value })
+    getProducts({ search: search?.value, pages: pages?.value })
   );
 };
 

@@ -722,13 +722,6 @@ pb.collection('tarjetajoven_mensajes').subscribe('*', function (e) {
     <q-img :src="triangle" class="trianguloTop" spinner-color="dark" />
     <q-img :src="triangle" class="trianguloBottom" spinner-color="dark" />
   </q-layout>
-
-  <!-- <q-dialog v-model="showModalNew">
-    <NewDetail
-      :modalCurrent="currenNotification.data"
-      v-if="!isLoadingNotification"
-    />
-  </q-dialog> -->
 </template>
 
 <style>

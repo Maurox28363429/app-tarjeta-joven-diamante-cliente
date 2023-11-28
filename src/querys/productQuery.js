@@ -24,11 +24,11 @@ export const useGetProducts = ({ search, pages, category_id }) => {
   return useQuery([PRODUCTS_KEY, pages, category_id], () => {
     const params = category_id
       ? {
-          search: search.value,
-          pages: pages.value,
-          category_id: category_id.value,
+          search: search?.value,
+          pages: pages?.value,
+          category_id: category_id?.value,
         }
-      : { search: search.value, pages: pages.value };
+      : { search: search?.value, pages: pages?.value };
     return getProducts(params);
   });
 };
@@ -84,7 +84,7 @@ export const useDeleteProductMutation = () => {
 
 export const useGetProductCategories = ({ page, search }) => {
   return useQuery([PRODUCT_CATEGORIES_KEY, page], () =>
-    getEcommerceCategories({ page: page.value, search: search.value })
+    getEcommerceCategories({ page: page?.value, search: search?.value })
   );
 };
 

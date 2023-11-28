@@ -1,8 +1,9 @@
 import { object, string } from 'yup';
+import SCHEMAS_MESSAGE from 'src/shared/constansts/schemasMessage';
 
-const REQUIRED_MESSAGE = 'Este campo es requerido';
+const requiredText = string().required(SCHEMAS_MESSAGE.required);
 
 export const sendPaymentShema = object({
-  img: string().required(REQUIRED_MESSAGE),
-  referencia: string().required(REQUIRED_MESSAGE),
+  img: requiredText,
+  referencia: requiredText,
 });

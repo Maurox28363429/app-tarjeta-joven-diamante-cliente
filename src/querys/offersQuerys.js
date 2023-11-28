@@ -18,7 +18,7 @@ import getUniversityById from 'src/api/getUniversityById';
 
 import TOAST_MESSAGE from 'src/shared/constansts/toastMessage';
 
-const OFFERS_KEY = 'offers';
+export const OFFERS_KEY = 'offers';
 const OFFERS_FROM_BUSINESS_KEY = 'offersFromBusiness';
 const UNIVERSITIES_KEY = 'universities';
 const STATES_KEY = 'states';
@@ -32,7 +32,7 @@ export const useGetOffers = ({ name, page, id }) => {
 
 export const useGetOffer = (currentRoute) => {
   return useQuery([OFFERS_KEY, currentRoute], () =>
-    getOffer(currentRoute.value)
+    getOffer(currentRoute?.value)
   );
 };
 export const useGetUniversitiesById = (id) => {
@@ -41,7 +41,7 @@ export const useGetUniversitiesById = (id) => {
 
 export const useGetOffersFromBusiness = ({ search, page, dir }) => {
   return useQuery([OFFERS_FROM_BUSINESS_KEY, page, dir], () =>
-    getOffers({ search: search.value, page: page.value, dir: dir?.value })
+    getOffers({ search: search?.value, page: page?.value, dir: dir?.value })
   );
 };
 
@@ -54,9 +54,9 @@ export const useGetStates = ({ sort_ofertas = 0, sort_uni = 0 }) => {
 export const useGetUniversities = ({ search, page, dir }) => {
   return useQuery([UNIVERSITIES_KEY, dir, page], () =>
     getUniversities({
-      search: search.value,
-      page: page.value,
-      dir: dir.value,
+      search: search?.value,
+      page: page?.value,
+      dir: dir?.value,
     })
   );
 };

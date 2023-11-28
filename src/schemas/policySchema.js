@@ -1,11 +1,14 @@
 import { object, string } from 'yup';
 
-const REQUIRED_MESSAGE = 'Este campo es requerido';
+import SCHEMAS_MESSAGE from 'src/shared/constansts/schemasMessage';
+
+const requiredText = string().required(SCHEMAS_MESSAGE.required);
+const parentesco = string().required(SCHEMAS_MESSAGE.required);
 
 export const policySchema = object({
-  dni: string().required(REQUIRED_MESSAGE),
-  beneficiario_poliza_cedula: string().required(REQUIRED_MESSAGE),
-  beneficiario_poliza_name: string().required(REQUIRED_MESSAGE),
-  dni_text: string().required(REQUIRED_MESSAGE),
-  parentesco: object().required(REQUIRED_MESSAGE),
+  dni: requiredText,
+  beneficiario_poliza_cedula: requiredText,
+  beneficiario_poliza_name: requiredText,
+  dni_text: requiredText,
+  parentesco,
 });

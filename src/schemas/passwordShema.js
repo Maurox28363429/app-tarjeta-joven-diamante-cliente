@@ -1,7 +1,9 @@
 import { object, string } from 'yup';
 
-const REQUIRED_MESSAGE = 'Este campo es requerido';
+import SCHEMAS_MESSAGE from 'src/shared/constansts/schemasMessage';
+
+const requiredText = string().required(SCHEMAS_MESSAGE.required);
 
 export const passwordSchema = object({
-  password: string().required(REQUIRED_MESSAGE),
+  password: requiredText,
 });

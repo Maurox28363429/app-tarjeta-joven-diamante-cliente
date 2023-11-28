@@ -1,28 +1,24 @@
-import { object, string, mixed } from 'yup';
+import { object, string } from 'yup';
 
-const REQUIRED_MESSAGE = 'Este campo es requerido';
+import { img } from './promotionsSchema';
+
+import SCHEMAS_MESSAGE from 'src/shared/constansts/schemasMessage';
+
+const requiredText = string().required(SCHEMAS_MESSAGE.required);
+
+const fecha_tope_descuento = string()
+  .nonNullable()
+  .required(SCHEMAS_MESSAGE.required);
 
 const offersSchema = object({
-  descuento: string().required(REQUIRED_MESSAGE),
-  price_total: string().required(REQUIRED_MESSAGE),
-  description: string().required(REQUIRED_MESSAGE),
-  prioridad: string().required(REQUIRED_MESSAGE),
-  stock: string().required(REQUIRED_MESSAGE),
-  nombre: string().required(REQUIRED_MESSAGE),
-  fecha_tope_descuento: string().nonNullable().required(REQUIRED_MESSAGE),
-  img: mixed()
-    .required(REQUIRED_MESSAGE)
-    .test(
-      'formato',
-      'Solo se aceptan los siguientes formatos: .jpeg, .jpg y .png',
-      (value) => {
-        return (
-          !value ||
-          (value &&
-            ['image/jpeg', 'image/png', 'image/jpg'].includes(value.type))
-        );
-      }
-    ),
+  descuento: requiredText,
+  price_total: requiredText,
+  description: requiredText,
+  prioridad: requiredText,
+  stock: requiredText,
+  nombre: requiredText,
+  fecha_tope_descuento,
+  img,
 });
 
 export default offersSchema;

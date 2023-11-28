@@ -136,13 +136,7 @@ const drawerClick = (e) => {
 
             <q-item-section>Mi perfil</q-item-section>
           </q-item>
-          <!--           <q-item clickable v-ripple to="/empresa/orders">
-            <q-item-section avatar>
-              <q-icon name="receipt_long" />
-            </q-item-section>
 
-            <q-item-section>Ordenes</q-item-section>
-          </q-item> -->
           <q-item clickable v-ripple to="/empresa/create-order">
             <q-item-section avatar>
               <q-icon name="border_color" />
@@ -229,15 +223,6 @@ const drawerClick = (e) => {
         to="/empresa/account"
         exact
       />
-      <!--       <q-route-tab
-        name="Ordenes"
-        label="Ordenes"
-        color="white"
-        class="text-capitalize q-px-none"
-        icon="receipt_long"
-        to="/empresa/orders"
-        exact
-      /> -->
       <q-route-tab
         name="Escaner QR"
         to="/empresa/create-order"

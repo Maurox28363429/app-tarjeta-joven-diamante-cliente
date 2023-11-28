@@ -1,8 +1,8 @@
 import { object, string } from 'yup';
-
-const REQUIRED_MESSAGE = 'Este campo es requerido';
-const EMAIL_MESSAGE = 'Ingrese un email valido';
+import SCHEMAS_MESSAGE from 'src/shared/constansts/schemasMessage';
 
 export const emailSchema = object({
-  email: string().email(EMAIL_MESSAGE).required(REQUIRED_MESSAGE),
+  email: string()
+    .email(SCHEMAS_MESSAGE.invalidEmail)
+    .required(SCHEMAS_MESSAGE.required),
 });
