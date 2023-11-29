@@ -2,16 +2,21 @@ import { useQuery, useQueryClient, useMutation } from '@tanstack/vue-query';
 
 import { useToast } from 'src/composables/useToast';
 
-import deleteProduct from 'src/api/deleteProduct';
-import editProduct from 'src/api/editProduct';
-import getProducts from 'src/api/getProducts';
-import createProduct from 'src/api/createProduct';
-import getProductById from 'src/api/getProductById';
-import uploadEcommerceCategory from 'src/api/uploadEcommerceCategory';
-import createEcommerceCategory from 'src/api/createEcommerceCategory';
-import deleteEcommerceCategory from 'src/api/deleteEcommerceCategory';
-import getEcommerceCategories from 'src/api/getEcommerceCategories';
-import getCategoryById from 'src/api/getCategoryById';
+import {
+  uploadEcommerceCategory,
+  createEcommerceCategory,
+  deleteEcommerceCategory,
+  getEcommerceCategories,
+  getCategoryById,
+} from 'src/api/productCategory';
+
+import {
+  createProduct,
+  deleteProduct,
+  editProduct,
+  getProducts,
+  getProductById,
+} from 'src/api/products';
 
 import TOAST_MESSAGE from 'src/shared/constansts/toastMessage';
 

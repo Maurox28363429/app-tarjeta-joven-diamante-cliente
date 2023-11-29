@@ -2,11 +2,14 @@ import { useQuery, useQueryClient, useMutation } from '@tanstack/vue-query';
 
 import { useToast } from 'src/composables/useToast';
 
-import deleteProduct from 'src/api/deleteProduct';
-import editProduct from 'src/api/editProduct';
-import getProducts from 'src/api/getProducts';
-import getProductById from 'src/api/getProductById';
-import createOrder from 'src/api/createOrder';
+import {
+  getProducts,
+  getProductById,
+  editProduct,
+  deleteProduct,
+} from 'src/api/products';
+
+import { createOrder } from 'src/api/productsOrder';
 
 import { useProductCart } from 'src/stores/useProductCart';
 

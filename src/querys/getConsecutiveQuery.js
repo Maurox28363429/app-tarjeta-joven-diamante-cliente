@@ -2,8 +2,7 @@ import { useQuery, useQueryClient, useMutation } from '@tanstack/vue-query';
 
 import { useToast } from 'src/composables/useToast';
 
-import getConsecutivo from 'src/api/getConsecutivo';
-import uploadConsecutive from 'src/api/uploadConsecutive';
+import { getConsecutivo, uploadConsecutive } from 'src/api/consecutive';
 
 import TOAST_MESSAGE from 'src/shared/constansts/toastMessage';
 

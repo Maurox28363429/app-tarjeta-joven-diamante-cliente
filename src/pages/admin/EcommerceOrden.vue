@@ -122,8 +122,8 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useQuasar } from 'quasar';
-import GetPaginatorOrder from 'src/api/GetPaginatorOrder.js';
-import UpdateEcommerceOrder from 'src/api/UpdateEcommerceOrder.js';
+import { GetPaginatorOrder, UpdateEcommerceOrder } from 'src/api/productsOrder';
+
 const $q = useQuasar();
 const page = ref(1);
 const lastPage = ref(1);
